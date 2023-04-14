@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    group:
+      default: 'common'
+      dev: 'common'
+      prod: 'common'
+
+---
+
+spring:
+  config:
+    import:
+      - application-default.yaml
+      - application-dev.yaml
+      - application-prod.yaml
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: 'common'
