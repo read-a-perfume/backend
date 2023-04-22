@@ -1,12 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.0.5"
+    id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
-    kotlin("jvm") version "1.8.0"
-    kotlin("plugin.spring") version "1.8.0"
-    kotlin("plugin.jpa") version "1.8.0"
+    id("org.graalvm.buildtools.native") version "0.9.21"
+    kotlin("jvm") version "1.8.20"
+    kotlin("plugin.spring") version "1.8.20"
+    kotlin("plugin.jpa") version "1.8.20"
 }
 
 group = "io.perfume"
@@ -35,26 +36,26 @@ subprojects {
 
     dependencies {
         // spring boot
-        implementation("org.springframework.boot:spring-boot-starter")
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+        implementation("org.springframework.boot:spring-boot-starter:3.0.6")
+        implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.6")
 
         // kotlin
-        implementation("org.jetbrains.kotlin:kotlin-reflect")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.20-RC")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20-RC")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
         // lombok
         compileOnly("org.projectlombok:lombok:1.18.26")
         annotationProcessor("org.projectlombok:lombok:1.18.26")
 
         // test
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.4")
     }
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "17"
+            jvmTarget = "19"
         }
     }
 
