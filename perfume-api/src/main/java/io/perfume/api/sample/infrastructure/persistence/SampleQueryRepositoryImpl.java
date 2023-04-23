@@ -19,7 +19,7 @@ public class SampleQueryRepositoryImpl implements SampleQueryRepository {
 
     @Override
     public List<Sample> find() {
-        return jpaQueryFactory.selectFrom(sample).fetch();
+        return jpaQueryFactory.selectFrom(sample).where(sample.deletedAt.isNull()).fetch();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class SampleQueryRepositoryImpl implements SampleQueryRepository {
         Sample savedSample =
                 jpaQueryFactory
                         .selectFrom(sample)
-                        .where(sample.id.eq(id))
+                        .where(sample.id.eq(id).and(sample.deletedAt.isNull()))
                         .fetchOne();
 
         return Optional.ofNullable(savedSample);
