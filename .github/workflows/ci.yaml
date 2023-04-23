@@ -23,10 +23,3 @@ jobs:
 
       - name: Run tests
         run: ./gradlew :perfume-core:clean :perfume-api:clean :perfume-core:test :perfume-api:test
-
-      - name: Check code style
-        uses: dbelyaev/action-checkstyle@v0.7.4
-        with:
-          github_token: ${{ secrets.TOKEN }}
-          reporter: github-pr-review
-          level: warning
