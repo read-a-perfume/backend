@@ -50,16 +50,12 @@ public class SampleService {
 
     @Transactional
     public SampleResult deleteSample(Long id) {
-        try {
-            Sample sample = sampleQueryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-            LocalDateTime now = LocalDateTime.now();
+        Sample sample = sampleQueryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        LocalDateTime now = LocalDateTime.now();
 
-            sample.markDeleted(now);
+        sample.delete(now);
 
-            return toDto(sample);
-        } catch (IllegalAccessException exception) {
-            throw new AccessDeniedException();
-        }
+        return toDto(sample);
     }
 
     private SampleResult toDto(Sample sample) {
