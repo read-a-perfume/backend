@@ -1,9 +1,10 @@
 package io.perfume.api.sample.domain;
 
-import jakarta.persistence.*;
+import io.perfume.api.base.BaseTimeEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,42 +12,16 @@ import java.time.LocalDateTime;
 
 @Entity(name = "sample")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-@Access(AccessType.FIELD)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Sample {
-
-    @NotNull
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
-    @EqualsAndHashCode.Include
-    private Long id;
+public class Sample extends BaseTimeEntity {
 
     @NotNull
     @Column(nullable = false)
     private String name;
 
-    @NotNull
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @NotNull
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column()
-    private LocalDateTime deletedAt;
-
     @Builder
-    public Sample(@NotNull String name, @NotNull LocalDateTime now) {
+    public Sample(@NotNull Long id, @NotNull String name, @NotNull LocalDateTime createdAt, LocalDateTime deletedAt) {
+        super(id, createdAt, deletedAt);
         this.name = name;
-        this.createdAt = now;
-        this.updatedAt = now;
-    }
-
-    @NotNull
-    public Long getId() {
-        return id;
     }
 
     @NotNull
@@ -62,10 +37,7 @@ public class Sample {
         this.name = name;
     }
 
-    public void markDeleted(LocalDateTime now) throws IllegalAccessException {
-        if (this.deletedAt != null) {
-            throw new IllegalAccessException();
-        }
-        this.deletedAt = now;
+    public void delete(LocalDateTime now) {
+        this.makeDeletedAt(now);
     }
 }
