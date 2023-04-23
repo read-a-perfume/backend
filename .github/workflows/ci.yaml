@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Java 19
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '19'
+
+      - name: Build with Gradle
+        run: ./gradlew :perfume-core:clean :perfume-api:clean :perfume-api:build
+
+      - name: Run tests
+        run: ./gradlew :perfume-core:clean :perfume-api:clean :perfume-core:test :perfume-api:test
+
+      - name: Check code style
+        uses: dbelyaev/action-checkstyle@v0.7.4
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          reporter: github-pr-review
+          level: warning
