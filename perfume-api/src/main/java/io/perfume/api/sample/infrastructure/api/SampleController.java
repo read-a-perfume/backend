@@ -1,0 +1,60 @@
+package io.perfume.api.sample.infrastructure.api;
+
+
+import io.perfume.api.sample.application.SampleService;
+import io.perfume.api.sample.application.dto.SampleResult;
+import io.perfume.api.sample.infrastructure.api.dto.CreateSampleRequestDto;
+import io.perfume.api.sample.infrastructure.api.dto.SampleResponseDto;
+import io.perfume.api.sample.infrastructure.api.dto.UpdateSampleRequestDto;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/v1/samples")
+@RequiredArgsConstructor
+public class SampleController {
+
+    private final SampleService sampleService;
+
+    @GetMapping
+    public ResponseEntity<List<SampleResponseDto>> samples() {
+        return ResponseEntity.ok(sampleService.getSamples().stream().map(this::toDto).toList());
+    }
+
+    @PostMapping
+    public ResponseEntity<SampleResponseDto> createSample(@RequestBody @Valid CreateSampleRequestDto dto) {
+        SampleResult result = sampleService.createSample(dto.name());
+
+        return ResponseEntity.ok(toDto(result));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<SampleResponseDto> updateSample(@PathVariable("id") @Min(1) Long id, @RequestBody @Valid UpdateSampleRequestDto dto) {
+        SampleResult result = sampleService.updateSample(id, dto.name());
+
+        return ResponseEntity.ok(toDto(result));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SampleResponseDto> sample(@PathVariable("id") @Min(1) Long id) {
+        SampleResult result = sampleService.getSample(id);
+
+        return ResponseEntity.ok(toDto(result));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SampleResponseDto> deleteSample(@PathVariable("id") @Min(1) Long id) {
+        SampleResult result = sampleService.deleteSample(id);
+
+        return ResponseEntity.ok(toDto(result));
+    }
+
+    private SampleResponseDto toDto(SampleResult sampleResult) {
+        return new SampleResponseDto(sampleResult.id(), sampleResult.name());
+    }
+}
