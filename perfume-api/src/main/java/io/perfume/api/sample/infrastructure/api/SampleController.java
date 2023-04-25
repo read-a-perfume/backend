@@ -9,6 +9,7 @@ import io.perfume.api.sample.infrastructure.api.dto.UpdateSampleRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class SampleController {
     public ResponseEntity<SampleResponseDto> createSample(@RequestBody @Valid CreateSampleRequestDto dto) {
         SampleResult result = sampleService.createSample(dto.name());
 
-        return ResponseEntity.ok(toDto(result));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(result));
     }
 
     @PatchMapping("/{id}")
