@@ -1,7 +1,6 @@
 package io.perfume.api.sample.application;
 
 import io.perfume.api.sample.application.dto.SampleResult;
-import io.perfume.api.sample.application.exception.AccessDeniedException;
 import io.perfume.api.sample.application.exception.EntityNotFoundException;
 import io.perfume.api.sample.application.port.SampleQueryRepository;
 import io.perfume.api.sample.application.port.SampleRepository;
