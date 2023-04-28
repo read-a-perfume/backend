@@ -48,8 +48,17 @@ jobs:
           chmod 600 private_key.pem
           scp -i private_key.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r perfume-api/build/libs/*.jar $USER@$HOST:/tmp
           ssh -i private_key.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $USER@$HOST << EOF
-            sudo systemctl stop my-spring-boot-app
-            sudo mv /tmp/*.jar /app/my-spring-boot-app.jar
-            sudo systemctl start my-spring-boot-app
+            sudo systemctl stop webapp
+            sudo mv /tmp/*.jar /app/webapp.jar
+            sudo systemctl start webapp
           EOF
           rm -f private_key.pem
+
+      - name: Notify Slack
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEV_DEPLOY_SLACK_WEBHOOK_URL }}
