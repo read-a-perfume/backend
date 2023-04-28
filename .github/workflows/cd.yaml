@@ -46,7 +46,7 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r perfume-api/build/libs/*.jar $USER@$HOST:/tmp
+          scp -i private_key.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r perfume-api/build/libs/perfume-api-0.0.1.jar $USER@$HOST:/tmp
           ssh -i private_key.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $USER@$HOST << EOF
             sudo systemctl stop webapp
             sudo mv /tmp/*.jar /app/webapp.jar
