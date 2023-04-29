@@ -4,6 +4,3 @@ import jakarta.validation.constraints.NotBlank;
 
 public record CreateSampleRequestDto (@NotBlank String name) {
 }
-
-// { "name": "Beyongju, Shin" }
-// { "firName", "", "lastName": "" }
