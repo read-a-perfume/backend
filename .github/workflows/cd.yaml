@@ -1,4 +1,4 @@
-name: Deploy to dev server
+name: CD
 
 on:
   push:
