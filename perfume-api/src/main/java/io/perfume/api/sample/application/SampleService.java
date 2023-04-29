@@ -58,6 +58,6 @@ public class SampleService {
     }
 
     private SampleResult toDto(Sample sample) {
-        return new SampleResult(sample.getId(), sample.getName());
+        return new SampleResult(sample.getId(), sample.getName(), sample.getCreatedAt());
     }
 }

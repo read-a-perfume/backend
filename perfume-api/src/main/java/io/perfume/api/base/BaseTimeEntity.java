@@ -42,4 +42,8 @@ public abstract class BaseTimeEntity extends BaseEntity {
 
         this.deletedAt = now;
     }
+
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
 }

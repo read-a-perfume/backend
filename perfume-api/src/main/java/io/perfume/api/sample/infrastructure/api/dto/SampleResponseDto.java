@@ -1,4 +1,6 @@
 package io.perfume.api.sample.infrastructure.api.dto;
 
-public record SampleResponseDto (Long id, String name) {
+import java.time.LocalDateTime;
+
+public record SampleResponseDto (Long id, String name, LocalDateTime createdAt) {
 }

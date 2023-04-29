@@ -56,6 +56,6 @@ public class SampleController {
     }
 
     private SampleResponseDto toDto(SampleResult sampleResult) {
-        return new SampleResponseDto(sampleResult.id(), sampleResult.name());
+        return new SampleResponseDto(sampleResult.id(), sampleResult.name(), sampleResult.createdAt());
     }
 }
