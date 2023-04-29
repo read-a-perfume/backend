@@ -13,10 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(SampleController.class)
 class SampleControllerTest {
@@ -33,7 +34,8 @@ class SampleControllerTest {
     @Test
     void samples() throws Exception {
         // given
-        SampleResult sampleResult = new SampleResult(1L, "sample");
+        LocalDateTime now = LocalDateTime.now();
+        SampleResult sampleResult = new SampleResult(1L, "sample", now);
         given(sampleService.getSamples()).willReturn(List.of(sampleResult));
 
         // when & then
@@ -42,14 +44,19 @@ class SampleControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("[0].id").value("1"))
+                .andExpect(jsonPath("[0].name").value("sample"))
+                .andExpect(jsonPath("[0].createdAt").value(now.toString()));
     }
 
     @Test
     void createSample() throws Exception {
         // given
         CreateSampleRequestDto createSampleRequestDto = new CreateSampleRequestDto("name");
-        SampleResult sampleResult = new SampleResult(1L, "sample");
+        LocalDateTime now = LocalDateTime.now();
+        SampleResult sampleResult = new SampleResult(1L, "sample", now);
         given(sampleService.createSample("name")).willReturn((sampleResult));
 
         // when & then
@@ -59,14 +66,19 @@ class SampleControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createSampleRequestDto))
                 )
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("sample"))
+                .andExpect(jsonPath("$.createdAt").value(now.toString()));
     }
 
     @Test
     void updateSample() throws Exception {
         // given
         UpdateSampleRequestDto updateSampleRequestDto = new UpdateSampleRequestDto("name");
-        SampleResult sampleResult = new SampleResult(1L, "sample");
+        LocalDateTime now = LocalDateTime.now();
+        SampleResult sampleResult = new SampleResult(1L, "sample", now);
         given(sampleService.updateSample(1L, "name")).willReturn(sampleResult);
 
         // when & then
@@ -76,13 +88,18 @@ class SampleControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateSampleRequestDto))
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("sample"))
+                .andExpect(jsonPath("$.createdAt").value(now.toString()));
     }
 
     @Test
     void sample() throws Exception {
         // given
-        SampleResult sampleResult = new SampleResult(1L, "sample");
+        LocalDateTime now = LocalDateTime.now();
+        SampleResult sampleResult = new SampleResult(1L, "sample", now);
         given(sampleService.getSample(1L)).willReturn(sampleResult);
 
         // when & then
@@ -91,13 +108,18 @@ class SampleControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("sample"))
+                .andExpect(jsonPath("$.createdAt").value(now.toString()));
     }
 
     @Test
     void deleteSample() throws Exception {
         // given
-        SampleResult sampleResult = new SampleResult(1L, "sample");
+        LocalDateTime now = LocalDateTime.now();
+        SampleResult sampleResult = new SampleResult(1L, "sample", now);
         given(sampleService.deleteSample(1L)).willReturn(sampleResult);
 
         // when & then
@@ -106,6 +128,10 @@ class SampleControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("sample"))
+                .andExpect(jsonPath("$.createdAt").value(now.toString()));
     }
 }
