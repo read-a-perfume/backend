@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 
-@Entity(name = "user")
+@Entity(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class User extends BaseTimeEntity {
     // NotNull : ""허용
