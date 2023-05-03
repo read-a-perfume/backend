@@ -7,14 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-
+import lombok.ToString;
 
 @Entity(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@ToString(onlyExplicitlyIncluded = true)
 public class User extends BaseTimeEntity {
     // NotNull : ""허용
     // NotEmpty : " " 허용
@@ -22,6 +22,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @NotNull
@@ -40,7 +41,16 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private ROLE role;
+
+    private User(String username, String email, String password, String name, ROLE role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.role = role;
+    }
 
     // todo: 참조 엔티 file, business 당장에 작업 불가
     // todo: length 정책
@@ -49,15 +59,7 @@ public class User extends BaseTimeEntity {
         USER, BUSINESS
     }
 
-    @Builder
-    public User(Long id, String username, String email, String password, String name, ROLE role,
-                @NotNull LocalDateTime createAt, @NotNull LocalDateTime updateAt) {
-        super(id, createAt, updateAt);
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.role = role;
+    public static User generalUserJoin(String username, String email, String password, String name, ROLE role) {
+        return new User(username, email, password, name, role);
     }
 }
