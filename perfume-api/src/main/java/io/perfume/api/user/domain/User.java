@@ -1,4 +1,4 @@
-package io.perfume.api.sample.domain;
+package io.perfume.api.user.domain;
 
 import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.*;
