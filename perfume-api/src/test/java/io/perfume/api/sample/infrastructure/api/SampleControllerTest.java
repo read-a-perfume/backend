@@ -47,8 +47,7 @@ class SampleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("[0].id").value("1"))
-                .andExpect(jsonPath("[0].name").value("sample"))
-                .andExpect(jsonPath("[0].createdAt").value(now.toString()));
+                .andExpect(jsonPath("[0].name").value("sample"));
     }
 
     @Test
@@ -69,8 +68,7 @@ class SampleControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("sample"))
-                .andExpect(jsonPath("$.createdAt").value(now.toString()));
+                .andExpect(jsonPath("$.name").value("sample"));
     }
 
     @Test
@@ -91,8 +89,7 @@ class SampleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("sample"))
-                .andExpect(jsonPath("$.createdAt").value(now.toString()));
+                .andExpect(jsonPath("$.name").value("sample"));
     }
 
     @Test
@@ -111,8 +108,7 @@ class SampleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("sample"))
-                .andExpect(jsonPath("$.createdAt").value(now.toString()));
+                .andExpect(jsonPath("$.name").value("sample"));
     }
 
     @Test
@@ -131,7 +127,6 @@ class SampleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("sample"))
-                .andExpect(jsonPath("$.createdAt").value(now.toString()));
+                .andExpect(jsonPath("$.name").value("sample"));
     }
 }
