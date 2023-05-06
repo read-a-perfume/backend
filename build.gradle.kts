@@ -5,9 +5,9 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.21"
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "1.8.21"
     kotlin("plugin.spring") version "1.8.20"
-    kotlin("plugin.jpa") version "1.8.20"
+    kotlin("plugin.jpa") version "1.8.21"
 }
 
 group = "io.perfume"
@@ -24,10 +24,6 @@ allprojects {
     repositories { mavenCentral() }
 }
 
-dependencies {
-    implementation("mysql:mysql-connector-java:8.0.32")
-}
-
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "org.springframework.boot")
@@ -35,18 +31,13 @@ subprojects {
     apply(plugin = "kotlin-spring")
 
     dependencies {
-        // spring boot
-        implementation("org.springframework.boot:spring-boot-starter:3.0.6")
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.6")
-
         // kotlin
         implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.20-RC")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20-RC")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
-        // lombok
-        compileOnly("org.projectlombok:lombok:1.18.26")
-        annotationProcessor("org.projectlombok:lombok:1.18.26")
+        // spring boot
+        implementation("org.springframework.boot:spring-boot-starter:3.0.6")
 
         // test
         testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.4")

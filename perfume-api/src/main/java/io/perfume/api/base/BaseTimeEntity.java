@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseTimeEntity extends BaseEntity {
+public abstract class BaseTimeEntity {
 
     @NotNull
     @CreatedDate
@@ -28,8 +28,7 @@ public abstract class BaseTimeEntity extends BaseEntity {
 
     protected BaseTimeEntity() {}
 
-    protected BaseTimeEntity(@NotNull Long id, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt) {
-        super(id);
+    protected BaseTimeEntity(@NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt) {
         this.createdAt = createdAt;
         this.updatedAt = createdAt;
         this.deletedAt = null;
