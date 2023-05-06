@@ -40,7 +40,7 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter:3.0.6")
 
         // test
-        testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.4")
+        testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.6")
     }
 
     tasks.withType<KotlinCompile> {
