@@ -14,7 +14,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.0.1")
 
     testImplementation("com.h2database:h2:2.1.214")
-    testImplementation("org.mockito:mockito-core:5.1.1")
+    testImplementation("org.mockito:mockito-core:5.3.1")
 
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
