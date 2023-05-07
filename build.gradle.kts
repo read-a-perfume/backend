@@ -6,7 +6,7 @@ plugins {
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.21"
     kotlin("jvm") version "1.8.21"
-    kotlin("plugin.spring") version "1.8.20"
+    kotlin("plugin.spring") version "1.8.21"
     kotlin("plugin.jpa") version "1.8.21"
 }
 
@@ -32,15 +32,15 @@ subprojects {
 
     dependencies {
         // kotlin
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.20-RC")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20-RC")
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.21")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0")
 
         // spring boot
         implementation("org.springframework.boot:spring-boot-starter:3.0.6")
 
         // test
-        testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.4")
+        testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.6")
     }
 
     tasks.withType<KotlinCompile> {
