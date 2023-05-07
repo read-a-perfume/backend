@@ -17,8 +17,7 @@ public class BaseTimeDomain {
 
     private LocalDateTime deletedAt;
 
-    @Builder
-    public BaseTimeDomain(@NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, LocalDateTime deletedAt) {
+    protected BaseTimeDomain(@NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
