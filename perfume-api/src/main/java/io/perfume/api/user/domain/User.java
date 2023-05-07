@@ -26,6 +26,7 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @NotNull
+    @Column(updatable = false)
     private String username;
 
     @NotNull
@@ -42,9 +43,9 @@ public class User extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private ROLE role;
+    private Role role;
 
-    private User(String username, String email, String password, String name, ROLE role) {
+    private User(String username, String email, String password, String name, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -55,11 +56,7 @@ public class User extends BaseTimeEntity {
     // todo: 참조 엔티 file, business 당장에 작업 불가
     // todo: length 정책
 
-    public enum ROLE {
-        USER, BUSINESS
-    }
-
-    public static User generalUserJoin(String username, String email, String password, String name, ROLE role) {
+    public static User generalUserJoin(String username, String email, String password, String name, Role role) {
         return new User(username, email, password, name, role);
     }
 }
