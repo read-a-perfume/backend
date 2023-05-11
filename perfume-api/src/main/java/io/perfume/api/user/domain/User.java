@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 public class User extends BaseTimeDomain {
 
-    // todo 상태가 더 많아지면 VO로 캡슐화 해도 좋지 않을까?
     private Long id;
     private String username;
     private String email;

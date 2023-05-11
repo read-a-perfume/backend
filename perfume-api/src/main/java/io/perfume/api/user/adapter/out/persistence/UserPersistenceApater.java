@@ -5,6 +5,8 @@ import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 class UserPersistenceApater implements UserRepository {
 
@@ -12,9 +14,8 @@ class UserPersistenceApater implements UserRepository {
     private final UserMapper userMapper;
 
     @Override
-    public User loadUser(long userId) {
-        UserJpaEntity userJpaEntity = userJpaRepository.findById(userId)
-                .orElseThrow(EntityNotFoundException::new);
-        return userMapper.toUser(userJpaEntity);
+    public Optional<User> loadUser(long userId) {
+        return Optional.of(userMapper.toUser(userJpaRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new)));
     }
 }

@@ -17,7 +17,7 @@ import lombok.*;
                 @Index(name = "idx_thumbnail_id", columnList = "thumbnailId")
         },
         uniqueConstraints = {
-                @UniqueConstraint(name = "idx_email", columnNames = "email")
+                @UniqueConstraint(name = "uni_email", columnNames = "email")
         }
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
@@ -38,7 +38,7 @@ class UserJpaEntity extends BaseTimeEntity {
 
     @NotNull
     @Email      // 제약조건 설정?  --> @Email "" 는 통과
-    @Column(unique = true, updatable = false)
+    @Column(updatable = false)
     private String email;
 
     @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
