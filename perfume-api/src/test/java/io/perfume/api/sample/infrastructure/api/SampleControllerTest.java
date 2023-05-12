@@ -5,24 +5,33 @@ import io.perfume.api.sample.application.SampleService;
 import io.perfume.api.sample.application.dto.SampleResult;
 import io.perfume.api.sample.infrastructure.api.dto.CreateSampleRequestDto;
 import io.perfume.api.sample.infrastructure.api.dto.UpdateSampleRequestDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @WebMvcTest(SampleController.class)
 class SampleControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -30,6 +39,13 @@ class SampleControllerTest {
 
     @MockBean
     private SampleService sampleService;
+
+    @BeforeEach
+    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(documentationConfiguration(restDocumentation))
+                .build();
+    }
 
     @Test
     void samples() throws Exception {
@@ -59,7 +75,7 @@ class SampleControllerTest {
         given(sampleService.createSample("name")).willReturn((sampleResult));
 
         // when & then
-        mockMvc
+        this.mockMvc
                 .perform(MockMvcRequestBuilders.post("/v1/samples")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -68,7 +84,8 @@ class SampleControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("sample"));
+                .andExpect(jsonPath("$.name").value("sample"))
+                .andDo(document("index"));
     }
 
     @Test
