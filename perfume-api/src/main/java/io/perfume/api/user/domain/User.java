@@ -1,62 +1,61 @@
 package io.perfume.api.user.domain;
 
-import io.perfume.api.base.BaseTimeEntity;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import io.perfume.api.base.BaseTimeDomain;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Entity(name = "users")
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-@ToString(onlyExplicitlyIncluded = true)
-public class User extends BaseTimeEntity {
-    // NotNull : ""허용
-    // NotEmpty : " " 허용
-    // NotBlank : " " 허용 x
+import java.time.LocalDateTime;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
+@Getter
+public class User extends BaseTimeDomain {
+
     private Long id;
-
-    @NotNull
-    @Column(updatable = false)
     private String username;
-
-    @NotNull
-    @Email      // 제약조건 설정?  --> @Email "" 는 통과
-    @Column(unique = true, updatable = false)
     private String email;
-
-    @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
     private String password;
-
-    @NotEmpty
-    @Column(updatable = false)
     private String name;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
     private Role role;
+    private Long businessId;
+    private Long thumbnailId;
 
-    private User(String username, String email, String password, String name, Role role) {
+    
+    // 기업 사용자가 아닌 경우 회원가입시에 사용됩니다.
+    public static User generalUserJoin(String username, String email, String password, String name, Role role) {
+        return User.builder()
+                .username(username)
+                .email(email)
+                .password(password)
+                .name(name)
+                .role(role)
+                .build();
+    }
+
+    // Only Adapter
+    public static User withId(Long id, String username, String email, String password, String name, Role role, Long businessId, Long thumbnailId) {
+        return User.builder()
+                .id(id)
+                .username(username)
+                .email(email)
+                .password(password)
+                .name(name)
+                .role(role)
+                .businessId(businessId)
+                .thumbnailId(thumbnailId)
+                .build();
+    }
+
+    @Builder
+    private User(Long id, String username, String email, String password, String name, Role role, Long businessId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        super(createdAt, updatedAt, deletedAt);
+        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
-    }
-
-    // todo: 참조 엔티 file, business 당장에 작업 불가
-    // todo: length 정책
-
-    public static User generalUserJoin(String username, String email, String password, String name, Role role) {
-        return new User(username, email, password, name, role);
+        this.businessId = businessId;
+        this.thumbnailId = thumbnailId;
     }
 }
