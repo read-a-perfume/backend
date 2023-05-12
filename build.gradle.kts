@@ -4,7 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
-    id("org.graalvm.buildtools.native") version "0.9.21"
+    id("org.graalvm.buildtools.native") version "0.9.22"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
     kotlin("jvm") version "1.8.21"
     kotlin("plugin.spring") version "1.8.21"
