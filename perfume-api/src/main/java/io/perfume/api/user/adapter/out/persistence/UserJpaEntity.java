@@ -17,7 +17,8 @@ import lombok.*;
                 @Index(name = "idx_thumbnail_id", columnList = "thumbnailId")
         },
         uniqueConstraints = {
-                @UniqueConstraint(name = "uni_email", columnNames = "email")
+                @UniqueConstraint(name = "uni_email", columnNames = "email"),
+                @UniqueConstraint(name = "uni_username", columnNames = "username"),
         }
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
