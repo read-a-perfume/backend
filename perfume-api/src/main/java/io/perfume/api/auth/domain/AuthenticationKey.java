@@ -43,4 +43,13 @@ public class AuthenticationKey extends BaseTimeDomain {
     public boolean isExpired(LocalDateTime now) {
         return getCreatedAt().isBefore(now.minusMinutes(EXPIRED_MINUTES));
     }
+
+    public boolean matchKey(String key, LocalDateTime now) {
+        if (this.key.equals(key)) {
+            this.verifiedAt = now;
+            return true;
+        }
+
+        return false;
+    }
 }
