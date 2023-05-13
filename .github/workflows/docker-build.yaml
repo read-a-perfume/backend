@@ -39,4 +39,4 @@ jobs:
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           name: aci-${{ env.WEBAPP_NAME }}
-          location: 'west us'
+          location: 'Korea South'
