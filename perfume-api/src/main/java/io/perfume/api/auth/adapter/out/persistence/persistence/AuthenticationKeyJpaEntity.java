@@ -1,11 +1,9 @@
-package io.perfume.api.auth.domain.adapter.out.persistence;
+package io.perfume.api.auth.adapter.out.persistence.persistence;
 
 import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
+@Getter
 public class AuthenticationKeyJpaEntity extends BaseTimeEntity {
 
     @Id
@@ -29,4 +28,12 @@ public class AuthenticationKeyJpaEntity extends BaseTimeEntity {
     private String key;
 
     private LocalDateTime verifiedAt;
+
+    public AuthenticationKeyJpaEntity(Long id, Long userId, String key, LocalDateTime verifiedAt, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, @NotNull LocalDateTime deletedAt) {
+        super(createdAt, updatedAt, deletedAt);
+        this.id = id;
+        this.userId = userId;
+        this.key = key;
+        this.verifiedAt = verifiedAt;
+    }
 }
