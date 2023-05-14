@@ -17,4 +17,14 @@ class UserMapper {
                 userJpaEntity.getBusinessId(),
                 userJpaEntity.getThumbnailId());
     }
+
+    public UserJpaEntity toUserJpaEntity(User user) {
+        return UserJpaEntity.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .name(user.getName())
+                .role(user.getRole())
+                .build();
+    }
 }

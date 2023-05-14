@@ -1,10 +1,8 @@
 package io.perfume.api.user.domain;
 
 import io.perfume.api.base.BaseTimeDomain;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -20,15 +18,15 @@ public class User extends BaseTimeDomain {
     private Long businessId;
     private Long thumbnailId;
 
-    
+
     // 기업 사용자가 아닌 경우 회원가입시에 사용됩니다.
-    public static User generalUserJoin(String username, String email, String password, String name, Role role) {
+    public static User generalUserJoin(String username, String email, String password, String name) {
         return User.builder()
                 .username(username)
                 .email(email)
                 .password(password)
                 .name(name)
-                .role(role)
+                .role(Role.USER)
                 .build();
     }
 
