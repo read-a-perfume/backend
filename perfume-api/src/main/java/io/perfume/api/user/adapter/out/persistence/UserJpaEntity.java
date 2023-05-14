@@ -53,12 +53,18 @@ class UserJpaEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @NotNull
+    private Boolean marketingConsent = false;
+
+    @NotNull
+    private Boolean promotionConsent = false;
+
     private Long businessId;
 
     private Long thumbnailId;
 
     @Builder(access = AccessLevel.PACKAGE)
-    private UserJpaEntity(Long id, String username, String email, String password, String name, Role role) {
+    private UserJpaEntity(Long id, String username, String email, String password, String name, Role role, Boolean marketingConsent, Boolean promotionConsent) {
         super();
         this.id = id;
         this.username = username;
@@ -66,5 +72,7 @@ class UserJpaEntity extends BaseTimeEntity {
         this.password = password;
         this.name = name;
         this.role = role;
+        this.marketingConsent = marketingConsent;
+        this.promotionConsent = promotionConsent;
     }
 }
