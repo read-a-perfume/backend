@@ -95,6 +95,48 @@ class AuthenticationKeyTest {
     }
 
     @Test
-    void matchKey() {
+    @DisplayName("이미 인증한 인증키인 경우 인증키와 매칭키가 동일해도 false를 반환한다.")
+    void testMatchKeyWhenAlreadyVerified() {
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        AuthenticationKey authenticationKey = new AuthenticationKey(
+                1L,
+                1L,
+                "code",
+                "key",
+                now,
+                now,
+                now,
+                null
+        );
+
+        // when
+        boolean result = authenticationKey.matchKey("code", "key", now);
+
+        // then
+        assertFalse(result);
+    }
+
+    @Test
+    @DisplayName("이미 인증한 인증키인 경우 true를 반환한다.")
+    void testIsVerifiedWhenAlreadyVerified() {
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        AuthenticationKey authenticationKey = new AuthenticationKey(
+                1L,
+                1L,
+                "code",
+                "key",
+                now,
+                now,
+                now,
+                null
+        );
+
+        // when
+        boolean result = authenticationKey.isVerified();
+
+        // then
+        assertTrue(result);
     }
 }

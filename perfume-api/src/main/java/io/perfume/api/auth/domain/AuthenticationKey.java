@@ -50,12 +50,16 @@ public class AuthenticationKey extends BaseTimeDomain {
     }
 
     public boolean matchKey(String code, String key, LocalDateTime now) {
-        boolean isValid = !this.isExpired(now) && this.key.equals(key) && this.code.equals(code);
+        boolean isValid = !this.isVerified() && !this.isExpired(now) && this.key.equals(key) && this.code.equals(code);
         if (isValid) {
             this.verifiedAt = now;
             return true;
         }
 
         return false;
+    }
+
+    public boolean isVerified() {
+        return verifiedAt != null;
     }
 }
