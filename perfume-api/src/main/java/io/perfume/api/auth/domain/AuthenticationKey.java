@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class AuthenticationKey extends BaseTimeDomain {
 
-    private static final int EXPIRED_MINUTES = 3;
+    public static final int EXPIRED_MINUTES = 3;
 
     private final Long id;
 
@@ -45,7 +45,8 @@ public class AuthenticationKey extends BaseTimeDomain {
     }
 
     public boolean isExpired(LocalDateTime now) {
-        return getCreatedAt().isBefore(now.minusMinutes(EXPIRED_MINUTES));
+        LocalDateTime expiredAt = now.minusMinutes(EXPIRED_MINUTES);
+        return getCreatedAt().isEqual(expiredAt) || getCreatedAt().isBefore(expiredAt);
     }
 
     public boolean matchKey(String code, String key, LocalDateTime now) {
