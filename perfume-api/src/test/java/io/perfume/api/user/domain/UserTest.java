@@ -13,16 +13,18 @@ class UserTest {
         String password = "userPw1!";
         String name = "perfumer";
 
-        User createdGenenralUser = User
+        User createdGeneralUser = User
                 .generalUserJoin(
                         username,
                         email,
                         password,
-                        name);
+                        name,
+                        true,
+                        true);
 
-        assertEquals(username, createdGenenralUser.getUsername());
-        assertEquals(email, createdGenenralUser.getEmail());
-        assertEquals(password, createdGenenralUser.getPassword());
-        assertEquals(name, createdGenenralUser.getName());
+        assertEquals(username, createdGeneralUser.getUsername());
+        assertEquals(email, createdGeneralUser.getEmail());
+        assertEquals(password, createdGeneralUser.getPassword());
+        assertEquals(name, createdGeneralUser.getName());
     }
 }
