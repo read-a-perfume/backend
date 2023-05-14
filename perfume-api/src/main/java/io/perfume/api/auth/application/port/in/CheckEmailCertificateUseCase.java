@@ -9,4 +9,3 @@ public interface CheckEmailCertificateUseCase {
 
     CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand, LocalDateTime now);
 }
-
