@@ -25,6 +25,8 @@ class UserMapper {
                 .password(user.getPassword())
                 .name(user.getName())
                 .role(user.getRole())
+                .promotionConsent(user.isPromotionConsent())
+                .marketingConsent(user.isMarketingConsent())
                 .build();
     }
 }

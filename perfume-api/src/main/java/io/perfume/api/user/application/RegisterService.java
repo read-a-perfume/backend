@@ -21,7 +21,9 @@ public class RegisterService {
                 registerDto.username(),
                 registerDto.email(),
                 registerDto.password(), // TODO : Password encoding 추가하기
-                registerDto.name());
+                registerDto.name(),
+                registerDto.marketingConsent(),
+                registerDto.promotionConsent());
 
         return toDto(userRepository.save(user).orElseThrow(EntityNotFoundException::new));
     }
