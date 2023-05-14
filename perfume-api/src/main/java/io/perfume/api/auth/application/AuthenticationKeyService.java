@@ -9,11 +9,13 @@ import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.domain.AuthenticationKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AuthenticationKeyService implements CheckEmailCertificateUseCase {
 
     private final AuthenticationKeyRepository authenticationKeyRepository;
@@ -21,6 +23,7 @@ public class AuthenticationKeyService implements CheckEmailCertificateUseCase {
     private final AuthenticationKeyQueryRepository authenticationKeyQueryRepository;
 
     @Override
+    @Transactional
     public CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand, LocalDateTime now) {
         AuthenticationKey authenticationKey = authenticationKeyQueryRepository
                 .findByUserId(checkEmailCertificateCommand.userId())
@@ -30,7 +33,7 @@ public class AuthenticationKeyService implements CheckEmailCertificateUseCase {
             return CheckEmailCertificateResult.EXPIRED;
         }
 
-        if (!authenticationKey.matchKey(checkEmailCertificateCommand.key(), now)) {
+        if (!authenticationKey.matchKey(checkEmailCertificateCommand.key(), checkEmailCertificateCommand.code(), now)) {
             return CheckEmailCertificateResult.NOT_MATCH;
         }
 
