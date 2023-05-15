@@ -8,7 +8,6 @@ import io.perfume.api.sample.fixture.StubSampleCommandRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,10 +27,9 @@ class SampleServiceTest {
     @Test
     void getSamples() {
         // given
-        LocalDateTime now = LocalDateTime.now();
-        stubSampleRepository.add(Sample.builder().id(1L).name("sample 1").createdAt(now).build());
-        stubSampleRepository.add(Sample.builder().id(2L).name("sample 2").createdAt(now).build());
-        stubSampleRepository.add(Sample.builder().id(3L).name("sample 3").createdAt(now).build());
+        stubSampleRepository.add(Sample.builder().id(1L).name("sample 1").build());
+        stubSampleRepository.add(Sample.builder().id(2L).name("sample 2").build());
+        stubSampleRepository.add(Sample.builder().id(3L).name("sample 3").build());
 
         // when
         List<SampleResult> sampleResult = sampleService.getSamples();
@@ -43,10 +41,9 @@ class SampleServiceTest {
     @Test
     void getSample() {
         // given
-        LocalDateTime now = LocalDateTime.now();
-        stubSampleRepository.add(Sample.builder().id(1L).name("sample 1").createdAt(now).build());
-        stubSampleRepository.add(Sample.builder().id(2L).name("sample 2").createdAt(now).build());
-        stubSampleRepository.add(Sample.builder().id(3L).name("sample 3").createdAt(now).build());
+        stubSampleRepository.add(Sample.builder().id(1L).name("sample 1").build());
+        stubSampleRepository.add(Sample.builder().id(2L).name("sample 2").build());
+        stubSampleRepository.add(Sample.builder().id(3L).name("sample 3").build());
         Long targetId = 2L;
 
         // when
@@ -72,8 +69,7 @@ class SampleServiceTest {
     @Test
     void updateSample() {
         // given
-        LocalDateTime now = LocalDateTime.now();
-        Sample sample = Sample.builder().id(1L).name("sample 1").createdAt(now).build();
+        Sample sample = Sample.builder().id(1L).name("sample 1").build();
         stubSampleRepository.add(sample);
 
         // when
@@ -93,8 +89,7 @@ class SampleServiceTest {
     @Test
     void deleteSample() {
         // given
-        LocalDateTime now = LocalDateTime.now();
-        Sample sample = Sample.builder().id(1L).name("sample 1").createdAt(now).build();
+        Sample sample = Sample.builder().id(1L).name("sample 1").build();
         stubSampleRepository.add(sample);
 
         // when
