@@ -1,10 +1,10 @@
 package io.perfume.api.sample.application;
 
-import io.perfume.api.sample.application.dto.SampleResult;
-import io.perfume.api.sample.application.exception.EntityNotFoundException;
-import io.perfume.api.sample.application.port.SampleQueryRepository;
+import io.perfume.api.sample.application.port.in.dto.SampleResult;
+import io.perfume.api.sample.application.exception.UserNotFoundException;
+import io.perfume.api.sample.application.service.SampleService;
 import io.perfume.api.sample.domain.Sample;
-import io.perfume.api.sample.fixture.StubSampleRepository;
+import io.perfume.api.sample.fixture.StubSampleCommandRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SampleServiceTest {
 
-    private final StubSampleRepository stubSampleRepository = new StubSampleRepository();
+    private final StubSampleCommandRepository stubSampleRepository = new StubSampleCommandRepository();
 
     private final SampleService sampleService = new SampleService(stubSampleRepository, stubSampleRepository);
 
@@ -87,7 +87,7 @@ class SampleServiceTest {
     @Test
     void testUpdateSampleIfNotExists() {
         // when & then
-        assertThrows(EntityNotFoundException.class, () -> sampleService.updateSample(1L, "sample 1"));
+        assertThrows(UserNotFoundException.class, () -> sampleService.updateSample(1L, "sample 1"));
     }
 
     @Test

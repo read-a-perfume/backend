@@ -1,4 +1,4 @@
-package io.perfume.api.sample.infrastructure.api.dto;
+package io.perfume.api.sample.adapter.in.dto;
 
 import java.time.LocalDateTime;
 

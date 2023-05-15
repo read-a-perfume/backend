@@ -1,10 +1,11 @@
 package io.perfume.api.sample.infrastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.sample.application.SampleService;
-import io.perfume.api.sample.application.dto.SampleResult;
-import io.perfume.api.sample.infrastructure.api.dto.CreateSampleRequestDto;
-import io.perfume.api.sample.infrastructure.api.dto.UpdateSampleRequestDto;
+import io.perfume.api.sample.adapter.in.SampleController;
+import io.perfume.api.sample.application.service.SampleService;
+import io.perfume.api.sample.application.port.in.dto.SampleResult;
+import io.perfume.api.sample.adapter.in.dto.CreateSampleRequestDto;
+import io.perfume.api.sample.adapter.in.dto.UpdateSampleRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,7 +1,7 @@
 package io.perfume.api.configuration;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.perfume.api.sample.infrastructure.persistence.SampleQueryRepositoryImpl;
+import io.perfume.api.sample.adapter.out.persistence.SampleQueryRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.boot.test.context.TestConfiguration;

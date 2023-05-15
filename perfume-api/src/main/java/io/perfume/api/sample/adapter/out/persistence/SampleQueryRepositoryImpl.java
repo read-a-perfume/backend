@@ -1,7 +1,7 @@
-package io.perfume.api.sample.infrastructure.persistence;
+package io.perfume.api.sample.adapter.out.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.perfume.api.sample.application.port.SampleQueryRepository;
+import io.perfume.api.sample.application.port.out.SampleQueryRepository;
 import io.perfume.api.sample.domain.Sample;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
