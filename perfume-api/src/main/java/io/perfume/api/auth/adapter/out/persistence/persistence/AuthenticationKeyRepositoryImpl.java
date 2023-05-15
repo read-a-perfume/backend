@@ -31,7 +31,10 @@ public class AuthenticationKeyRepositoryImpl implements AuthenticationKeyReposit
         AuthenticationKeyJpaEntity authenticationKeyJpaEntity =
                 jpaQueryFactory
                         .selectFrom(QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity)
-                        .where(QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.userId.eq(userId))
+                        .where(
+                                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.userId.eq(userId),
+                                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.deletedAt.isNull()
+                        )
                         .fetchFirst();
 
         if (authenticationKeyJpaEntity == null) {
