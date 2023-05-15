@@ -1,11 +1,11 @@
-package io.perfume.api.sample.infrastructure.api;
+package io.perfume.api.sample.adapter.in;
 
 
-import io.perfume.api.sample.application.SampleService;
-import io.perfume.api.sample.application.dto.SampleResult;
-import io.perfume.api.sample.infrastructure.api.dto.CreateSampleRequestDto;
-import io.perfume.api.sample.infrastructure.api.dto.SampleResponseDto;
-import io.perfume.api.sample.infrastructure.api.dto.UpdateSampleRequestDto;
+import io.perfume.api.sample.application.service.SampleService;
+import io.perfume.api.sample.application.port.in.dto.SampleResult;
+import io.perfume.api.sample.adapter.in.dto.CreateSampleRequestDto;
+import io.perfume.api.sample.adapter.in.dto.SampleResponseDto;
+import io.perfume.api.sample.adapter.in.dto.UpdateSampleRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

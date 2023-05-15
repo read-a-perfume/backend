@@ -1,6 +1,7 @@
 package io.perfume.api.sample.infrastructure.persistence;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
+import io.perfume.api.sample.adapter.out.persistence.SampleQueryRepositoryImpl;
 import io.perfume.api.sample.domain.Sample;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;

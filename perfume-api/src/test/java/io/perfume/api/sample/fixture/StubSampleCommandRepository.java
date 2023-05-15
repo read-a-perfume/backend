@@ -1,7 +1,7 @@
 package io.perfume.api.sample.fixture;
 
-import io.perfume.api.sample.application.port.SampleQueryRepository;
-import io.perfume.api.sample.application.port.SampleRepository;
+import io.perfume.api.sample.application.port.out.SampleQueryRepository;
+import io.perfume.api.sample.application.port.out.SampleCommandRepository;
 import io.perfume.api.sample.domain.Sample;
 
 import java.util.HashSet;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class StubSampleRepository implements SampleRepository, SampleQueryRepository {
+public class StubSampleCommandRepository implements SampleCommandRepository, SampleQueryRepository {
 
     private Set<Sample> memoryDatabase = new HashSet<>();
 

@@ -1,6 +1,6 @@
 package io.perfume.api.sample.infrastructure.persistence;
 
-import io.perfume.api.sample.application.port.SampleRepository;
+import io.perfume.api.sample.application.port.out.SampleCommandRepository;
 import io.perfume.api.sample.domain.Sample;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SampleJPARepositoryTest {
 
     @Autowired
-    private SampleRepository sampleRepository;
+    private SampleCommandRepository sampleRepository;
 
     @Test
     @DisplayName("Sample entity 를 영속화한다.")
