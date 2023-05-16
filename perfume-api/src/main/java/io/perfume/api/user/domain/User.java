@@ -36,7 +36,10 @@ public class User extends BaseTimeDomain {
     }
 
     // Only Adapter
-    public static User withId(Long id, String username, String email, String password, String name, Role role, Long businessId, Long thumbnailId) {
+    public static User withId(
+            Long id, String username, String email,
+            String password, String name, Role role,
+            Long businessId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         return User.builder()
                 .id(id)
                 .username(username)
@@ -46,11 +49,17 @@ public class User extends BaseTimeDomain {
                 .role(role)
                 .businessId(businessId)
                 .thumbnailId(thumbnailId)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .deletedAt(deletedAt)
                 .build();
     }
 
     @Builder
-    private User(Long id, String username, String email, String password, String name, Role role, Long businessId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
+    private User(Long id, String username, String email, String password,
+                 String name, Role role, Long businessId,
+                 Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
+                 LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
         super(createdAt, updatedAt, deletedAt);
         this.id = id;
         this.username = username;

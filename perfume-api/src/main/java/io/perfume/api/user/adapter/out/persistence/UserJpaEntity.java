@@ -10,6 +10,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "users")
 @Table(
         indexes = {
@@ -63,9 +65,12 @@ class UserJpaEntity extends BaseTimeEntity {
 
     private Long thumbnailId;
 
+    // Mapper Library 필요
     @Builder(access = AccessLevel.PACKAGE)
-    private UserJpaEntity(Long id, String username, String email, String password, String name, Role role, Boolean marketingConsent, Boolean promotionConsent) {
-        super();
+    private UserJpaEntity(Long id, String username, String email, String password,
+                          String name, Role role, Boolean marketingConsent,
+                          Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        super(createdAt, updatedAt, deletedAt);
         this.id = id;
         this.username = username;
         this.email = email;

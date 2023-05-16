@@ -1,7 +1,7 @@
 package io.perfume.api.user.adapter.out.persistence;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.user.application.exception.EntityNotFoundException;
+import io.perfume.api.user.application.exception.FailedRegisterException;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ class UserPersistenceAdapter implements UserRepository {
     @Override
     public Optional<User> loadUser(long userId) {
         return Optional.of(userMapper.toUser(userJpaRepository.findById(userId)
-                .orElseThrow(EntityNotFoundException::new)));
+                .orElseThrow(FailedRegisterException::new)));
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
         UserJpaEntity userJpaEntity = userJpaRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(FailedRegisterException::new);
         return Optional.ofNullable(userMapper.toUser(userJpaEntity));
     }
 
