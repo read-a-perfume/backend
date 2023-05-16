@@ -1,7 +1,7 @@
 package io.perfume.api.user.application.service;
 
 import io.perfume.api.user.application.dto.UserResult;
-import io.perfume.api.user.application.exception.EntityNotFoundException;
+import io.perfume.api.user.application.exception.FailedRegisterException;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import io.perfume.api.user.infrastructure.api.dto.RegisterDto;
@@ -25,7 +25,7 @@ public class RegisterService {
                 registerDto.marketingConsent(),
                 registerDto.promotionConsent());
 
-        return toDto(userRepository.save(user).orElseThrow(EntityNotFoundException::new));
+        return toDto(userRepository.save(user).orElseThrow(FailedRegisterException::new));
     }
 
     public boolean validDuplicateUsername(String username) {
