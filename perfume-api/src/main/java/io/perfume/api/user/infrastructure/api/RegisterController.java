@@ -1,7 +1,7 @@
 package io.perfume.api.user.infrastructure.api;
 
 
-import io.perfume.api.user.application.RegisterService;
+import io.perfume.api.user.application.service.RegisterService;
 import io.perfume.api.user.application.dto.UserResult;
 import io.perfume.api.user.infrastructure.api.dto.RegisterDto;
 import jakarta.validation.Valid;

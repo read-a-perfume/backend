@@ -1,4 +1,4 @@
-package io.perfume.api.user.application;
+package io.perfume.api.user.application.service;
 
 import io.perfume.api.user.application.dto.UserResult;
 import io.perfume.api.user.application.exception.EntityNotFoundException;
