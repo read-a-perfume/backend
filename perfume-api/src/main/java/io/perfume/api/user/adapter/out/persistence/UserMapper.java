@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 class UserMapper {
 
     public User toUser(UserJpaEntity userJpaEntity) {
+        if (userJpaEntity == null) {
+            return null;
+        }
         return User.withId(
                 userJpaEntity.getId(),
                 userJpaEntity.getUsername(),
@@ -22,6 +25,9 @@ class UserMapper {
     }
 
     public UserJpaEntity toUserJpaEntity(User user) {
+        if (user == null) {
+            return null;
+        }
         return UserJpaEntity.builder()
                 .id(user.getId())
                 .username(user.getUsername())
