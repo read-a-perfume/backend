@@ -3,6 +3,7 @@ package io.perfume.api.base;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@Getter
 public abstract class BaseTimeEntity {
 
     @NotNull
@@ -33,6 +35,12 @@ public abstract class BaseTimeEntity {
         this.createdAt = createdAt;
         this.updatedAt = createdAt;
         this.deletedAt = null;
+    }
+
+    protected BaseTimeEntity(LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
     protected void makeDeletedAt(LocalDateTime now) {
