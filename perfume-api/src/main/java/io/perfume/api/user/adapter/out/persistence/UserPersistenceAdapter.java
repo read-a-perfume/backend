@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+
 @RequiredArgsConstructor
 @PersistenceAdapter
 class UserPersistenceAdapter implements UserRepository {
