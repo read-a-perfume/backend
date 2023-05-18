@@ -48,13 +48,6 @@ public class SampleController {
         return ResponseEntity.ok(toDto(result));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SampleResponseDto> deleteSample(@PathVariable("id") @Min(1) Long id) {
-        SampleResult result = sampleService.deleteSample(id);
-
-        return ResponseEntity.ok(toDto(result));
-    }
-
     private SampleResponseDto toDto(SampleResult sampleResult) {
         return new SampleResponseDto(sampleResult.id(), sampleResult.name(), sampleResult.createdAt());
     }

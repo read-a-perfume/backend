@@ -3,6 +3,7 @@ package io.perfume.api.base;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,11 +28,9 @@ public abstract class BaseTimeEntity {
 
     private LocalDateTime deletedAt;
 
-    protected void makeDeletedAt(LocalDateTime now) {
-        if (this.deletedAt != null) {
-            return;
-        }
-
-        this.deletedAt = now;
+    protected BaseTimeEntity(@NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, @NotNull LocalDateTime deletedAt) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 }

@@ -85,17 +85,4 @@ class SampleServiceTest {
         // when & then
         assertThrows(UserNotFoundException.class, () -> sampleService.updateSample(1L, "sample 1"));
     }
-
-    @Test
-    void deleteSample() {
-        // given
-        Sample sample = Sample.builder().id(1L).name("sample 1").build();
-        stubSampleRepository.add(sample);
-
-        // when
-        SampleResult sampleResult = sampleService.deleteSample(1L);
-
-        // then
-        assertThat(sampleResult.id()).isEqualTo(1L);
-    }
 }

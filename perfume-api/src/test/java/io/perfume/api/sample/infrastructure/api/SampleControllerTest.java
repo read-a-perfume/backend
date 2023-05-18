@@ -128,23 +128,4 @@ class SampleControllerTest {
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("sample"));
     }
-
-    @Test
-    void deleteSample() throws Exception {
-        // given
-        LocalDateTime now = LocalDateTime.now();
-        SampleResult sampleResult = new SampleResult(1L, "sample", now);
-        given(sampleService.deleteSample(1L)).willReturn(sampleResult);
-
-        // when & then
-        mockMvc
-                .perform(MockMvcRequestBuilders.delete("/v1/samples/1")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("sample"));
-    }
 }

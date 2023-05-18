@@ -34,8 +34,4 @@ public class Sample extends BaseTimeEntity {
 
         this.name = name;
     }
-
-    public void delete(LocalDateTime now) {
-        this.makeDeletedAt(now);
-    }
 }
