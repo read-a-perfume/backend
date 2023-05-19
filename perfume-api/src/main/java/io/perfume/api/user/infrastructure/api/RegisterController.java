@@ -2,11 +2,10 @@ package io.perfume.api.user.infrastructure.api;
 
 
 import io.perfume.api.user.application.dto.UserResult;
-import io.perfume.api.user.application.port.in.dto.SendEmailVerifyCodeRequestDto;
+import io.perfume.api.user.infrastructure.api.dto.*;
+import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
+import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.service.RegisterService;
-import io.perfume.api.user.infrastructure.api.dto.EmailVerifyConfirmRequestDto;
-import io.perfume.api.user.infrastructure.api.dto.EmailVerifyConfirmResponseDto;
-import io.perfume.api.user.infrastructure.api.dto.RegisterDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,7 +41,13 @@ public class RegisterController {
     }
 
     @PostMapping("/email-verify/request")
-    public ResponseEntity<Void> requestEmailVerify(@RequestBody @Valid SendEmailVerifyCodeRequestDto dto) {
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<SendEmailVerifyCodeResponseDto> requestEmailVerify(@RequestBody @Valid SendEmailVerifyCodeRequestDto dto) {
+        LocalDateTime now = LocalDateTime.now();
+        SendVerificationCodeCommand command = new SendVerificationCodeCommand(dto.email(), now);
+        SendVerificationCodeResult result = registerService.sendEmailVerifyCode(command);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new SendEmailVerifyCodeResponseDto(result.key(), result.sentAt()));
     }
 }

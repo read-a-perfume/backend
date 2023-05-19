@@ -1,7 +1,7 @@
 package io.perfume.api.user.infrastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.user.application.port.in.dto.SendEmailVerifyCodeRequestDto;
+import io.perfume.api.user.infrastructure.api.dto.SendEmailVerifyCodeRequestDto;
 import io.perfume.api.user.application.service.RegisterService;
 import io.perfume.api.user.infrastructure.api.dto.EmailVerifyConfirmRequestDto;
 import org.junit.jupiter.api.BeforeEach;

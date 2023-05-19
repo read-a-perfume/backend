@@ -1,4 +1,4 @@
-package io.perfume.api.user.application.port.in.dto;
+package io.perfume.api.user.infrastructure.api.dto;
 
 import jakarta.validation.constraints.Email;
 

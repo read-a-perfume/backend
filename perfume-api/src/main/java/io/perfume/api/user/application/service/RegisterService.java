@@ -65,6 +65,7 @@ public class RegisterService {
     public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
         CreateVerificationCodeCommand createVerificationCodeCommand = new CreateVerificationCodeCommand(command.email(), command.now());
         CreateVerificationCodeResult result = createVerificationCodeUseCase.createVerificationCode(createVerificationCodeCommand);
+
         LocalDateTime sentAt = mailSender.send(command.email(), "이메일 인증을 완료해주세요.", result.code());
 
         return new SendVerificationCodeResult(result.signKey(), sentAt);
