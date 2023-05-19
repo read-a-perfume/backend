@@ -44,7 +44,7 @@ public class AuthenticationKeyService implements CheckEmailCertificateUseCase, C
             return CheckEmailCertificateResult.EXPIRED;
         }
 
-        if (!authenticationKey.matchKey(command.key(), command.code(), command.confirmedAt())) {
+        if (!authenticationKey.matchKey(command.code(), command.key(), command.confirmedAt())) {
             return CheckEmailCertificateResult.NOT_MATCH;
         }
 
@@ -75,6 +75,15 @@ public class AuthenticationKeyService implements CheckEmailCertificateUseCase, C
         String sb = metadata + SEPERATE_STRING + now;
         try {
             return twoWayEncryptor.encrypt(sb);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String extractEmailFromSignKey(String key) {
+        try {
+            String decrypt = twoWayEncryptor.decrypt(key);
+            return decrypt.split(SEPERATE_STRING)[0];
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

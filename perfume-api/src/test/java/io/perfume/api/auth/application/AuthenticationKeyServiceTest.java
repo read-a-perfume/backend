@@ -1,5 +1,8 @@
 package io.perfume.api.auth.application;
 
+import io.perfume.api.auth.application.exception.NotFoundKeyException;
+import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
+import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeCommand;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.auth.domain.AuthenticationKey;
@@ -8,6 +11,7 @@ import io.perfume.api.auth.stub.StubAuthenticationKeyRepository;
 import io.perfume.api.auth.stub.StubGenerator;
 import io.perfume.api.auth.stub.StubTwoWayEncryptor;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -30,6 +34,60 @@ class AuthenticationKeyServiceTest {
     void setUp() {
         generator.clear();
         authenticationKeyRepository.clear();
+        authenticationKeyQueryRepository.clear();
+    }
+
+    @Test
+    @DisplayName("본인인증키를 검증한다.")
+    void testCheckEmailCertificate() {
+        // given
+        authenticationKeyQueryRepository.add(AuthenticationKey.createAuthenticationKey("code", "key", LocalDateTime.now()));
+        CheckEmailCertificateCommand command = new CheckEmailCertificateCommand("key", "code", LocalDateTime.now());
+
+        // when
+        CheckEmailCertificateResult result = authenticationKeyService.checkEmailCertificate(command);
+
+        // then
+        assertEquals(CheckEmailCertificateResult.MATCH, result);
+    }
+
+    @Test
+    @DisplayName("없는 인증키인 경우 NotFoundKeyException을 발생시킨다.")
+    void testCheckEmailCertificateWhenNotFoundKey() {
+        // given
+        CheckEmailCertificateCommand command = new CheckEmailCertificateCommand("key", "code", LocalDateTime.now());
+
+        // when & then
+        assertThrows(NotFoundKeyException.class, () -> authenticationKeyService.checkEmailCertificate(command));
+    }
+
+    @Test
+    @DisplayName("인증키가 만료된 경우 EXPIRED를 반환한다.")
+    void testCheckEmailCertificateWhenExpired() {
+        // given
+        int EXPIRED_MINUTES = 3;
+        authenticationKeyQueryRepository.add(AuthenticationKey.createAuthenticationKey("code", "key", LocalDateTime.now().minusMinutes(EXPIRED_MINUTES)));
+        CheckEmailCertificateCommand command = new CheckEmailCertificateCommand("key", "code", LocalDateTime.now());
+
+        // when
+        CheckEmailCertificateResult result = authenticationKeyService.checkEmailCertificate(command);
+
+        // then
+        assertEquals(CheckEmailCertificateResult.EXPIRED, result);
+    }
+
+    @Test
+    @DisplayName("CODE가 불일치할 경우 NOT_MATCH를 반환한다.")
+    void testCheckEmailCertificateWhenNotMatchedCode() {
+        // given
+        authenticationKeyQueryRepository.add(AuthenticationKey.createAuthenticationKey("edoc", "key", LocalDateTime.now()));
+        CheckEmailCertificateCommand command = new CheckEmailCertificateCommand("key", "code", LocalDateTime.now());
+
+        // when
+        CheckEmailCertificateResult result = authenticationKeyService.checkEmailCertificate(command);
+
+        // then
+        assertEquals(CheckEmailCertificateResult.NOT_MATCH, result);
     }
 
     @Test
