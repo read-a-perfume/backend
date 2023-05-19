@@ -1,6 +1,7 @@
 package io.perfume.api.user.infrastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.perfume.api.user.application.port.in.dto.SendEmailVerifyCodeRequestDto;
 import io.perfume.api.user.application.service.RegisterService;
 import io.perfume.api.user.infrastructure.api.dto.EmailVerifyConfirmRequestDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,5 +65,39 @@ class RegisterControllerTest {
                 .andDo(MockMvcRestDocumentation.document("confirm-email-verify",
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint())));
+    }
+
+    @Test
+    @DisplayName("본인인증 이메일 요청 API")
+    void testEmailVerifyRequest()  throws Exception {
+        // given
+        String email = "sample@mail.com";
+        SendEmailVerifyCodeRequestDto dto = new SendEmailVerifyCodeRequestDto(email);
+
+        // when & then
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/v1/signup/email-verify/request")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                )
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("잘못된 이메일 형식을 요청한 경우 BAD_PARAMETER 응답을 한다.")
+    void testEmailVerifyRequestIfInvalidEmailFormat()  throws Exception {
+        // given
+        String email = "sample";
+        SendEmailVerifyCodeRequestDto dto = new SendEmailVerifyCodeRequestDto(email);
+
+        // when & then
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/v1/signup/email-verify/request")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                )
+                .andExpect(status().isBadRequest());
     }
 }
