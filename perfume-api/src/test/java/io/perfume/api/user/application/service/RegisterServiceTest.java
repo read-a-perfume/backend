@@ -2,6 +2,8 @@ package io.perfume.api.user.application.service;
 
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
+import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
+import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.stub.StubCheckEmailCertificateUseCase;
 import io.perfume.api.user.stub.StubUserRepository;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RegisterServiceTest {
 
@@ -40,5 +43,21 @@ class RegisterServiceTest {
 
         // then
         assertEquals(result.email(), "");
+    }
+
+    @Test
+    @DisplayName("본인인증 이메일을 발송한다.")
+    void testSendEmailVerifyCode() {
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        SendVerificationCodeCommand command = new SendVerificationCodeCommand("email", now);
+
+        // when
+        SendVerificationCodeResult result = registerService.sendEmailVerifyCode(command);
+
+        // then
+        assertNotNull(result);
+        assertEquals(result.key(), "sample key");
+        assertEquals(result.sentAt(), now);
     }
 }

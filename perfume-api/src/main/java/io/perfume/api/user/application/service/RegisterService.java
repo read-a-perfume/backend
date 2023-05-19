@@ -6,6 +6,8 @@ import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.user.application.dto.UserResult;
 import io.perfume.api.user.application.exception.FailedRegisterException;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
+import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
+import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import io.perfume.api.user.infrastructure.api.dto.RegisterDto;
@@ -54,5 +56,9 @@ public class RegisterService {
 
     private UserResult toDto(User user) {
         return new UserResult(user.getUsername(), user.getEmail(), user.getName(), user.getCreatedAt());
+    }
+
+    public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
+        return null;
     }
 }
