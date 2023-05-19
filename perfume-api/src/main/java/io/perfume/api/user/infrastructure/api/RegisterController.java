@@ -1,7 +1,9 @@
 package io.perfume.api.user.infrastructure.api;
 
 
+import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.user.application.dto.UserResult;
+import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.infrastructure.api.dto.*;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
@@ -37,7 +39,10 @@ public class RegisterController {
 
     @PostMapping("/email-verify/confirm")
     public ResponseEntity<EmailVerifyConfirmResponseDto> confirmEmail(@RequestBody @Valid EmailVerifyConfirmRequestDto dto) {
-        return ResponseEntity.ok(new EmailVerifyConfirmResponseDto("example@mail.com", LocalDateTime.now()));
+        LocalDateTime now = LocalDateTime.now();
+        ConfirmEmailVerifyResult result = registerService.confirmEmailVerify(dto.key(), dto.code(), now);
+
+        return ResponseEntity.ok(new EmailVerifyConfirmResponseDto(result.email(), result.verifiedAt()));
     }
 
     @PostMapping("/email-verify/request")
@@ -47,7 +52,6 @@ public class RegisterController {
         SendVerificationCodeResult result = registerService.sendEmailVerifyCode(command);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new SendEmailVerifyCodeResponseDto(result.key(), result.sentAt()));
+                .ok(new SendEmailVerifyCodeResponseDto(result.key(), result.sentAt()));
     }
 }
