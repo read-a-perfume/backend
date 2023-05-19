@@ -13,28 +13,24 @@ public class AuthenticationKey extends BaseTimeDomain {
 
     private final Long id;
 
-    private final Long userId;
-
     private final String code;
 
     private final String key;
 
     private LocalDateTime verifiedAt;
 
-    public AuthenticationKey(Long id, Long userId, String code, String key, LocalDateTime verifiedAt, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+    public AuthenticationKey(Long id, String code, String key, LocalDateTime verifiedAt, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         super(createdAt, updatedAt, deletedAt);
 
         this.id = id;
-        this.userId = userId;
         this.code = code;
         this.key = key;
         this.verifiedAt = verifiedAt;
     }
 
-    static AuthenticationKey createAuthenticationKey(@NotNull Long userId, @NotNull String code, @NotNull String key, @NotNull LocalDateTime now) {
+    static AuthenticationKey createAuthenticationKey(@NotNull String code, @NotNull String key, @NotNull LocalDateTime now) {
         return new AuthenticationKey(
                 null,
-                userId,
                 code,
                 key,
                 null,

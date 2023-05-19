@@ -27,12 +27,12 @@ public class AuthenticationKeyRepositoryImpl implements AuthenticationKeyReposit
     }
 
     @Override
-    public Optional<AuthenticationKey> findByUserId(Long userId) {
+    public Optional<AuthenticationKey> findByKey(String key) {
         AuthenticationKeyJpaEntity authenticationKeyJpaEntity =
                 jpaQueryFactory
                         .selectFrom(QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity)
                         .where(
-                                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.userId.eq(userId),
+                                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.key.eq(key),
                                 QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.deletedAt.isNull()
                         )
                         .fetchFirst();

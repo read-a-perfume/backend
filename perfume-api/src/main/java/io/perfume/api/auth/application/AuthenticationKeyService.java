@@ -26,7 +26,7 @@ public class AuthenticationKeyService implements CheckEmailCertificateUseCase {
     @Transactional
     public CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand, LocalDateTime now) {
         AuthenticationKey authenticationKey = authenticationKeyQueryRepository
-                .findByUserId(checkEmailCertificateCommand.userId())
+                .findByKey(checkEmailCertificateCommand.key())
                 .orElseThrow(NotFoundKeyException::new);
 
         if (authenticationKey.isExpired(now)) {

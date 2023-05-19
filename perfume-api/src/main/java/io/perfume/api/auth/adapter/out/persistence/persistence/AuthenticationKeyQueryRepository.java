@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface AuthenticationKeyQueryRepository {
 
-    Optional<AuthenticationKey> findByUserId(Long userId);
+    Optional<AuthenticationKey> findByKey(String key);
 }

@@ -15,7 +15,7 @@ class AuthenticationKeyTest {
     void testIsExpiredIfValid() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey(1L, "code", "key", now);
+        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey("code", "key", now);
 
         // when
         boolean result = authenticationKey.isExpired(now);
@@ -29,7 +29,7 @@ class AuthenticationKeyTest {
     void testIsExpiredIfInvalid() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey(1L, "code", "key", now.minusMinutes(AuthenticationKey.EXPIRED_MINUTES));
+        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey("code", "key", now.minusMinutes(AuthenticationKey.EXPIRED_MINUTES));
 
         // when
         boolean result = authenticationKey.isExpired(now);
@@ -43,7 +43,7 @@ class AuthenticationKeyTest {
     void testMatchKey() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey(1L, "code", "key", now);
+        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey("code", "key", now);
 
         // when
         boolean result = authenticationKey.matchKey("code", "key", now);
@@ -57,7 +57,7 @@ class AuthenticationKeyTest {
     void testMatchKeyWhenNotMatchKey() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey(1L, "code", "key", now);
+        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey("code", "key", now);
 
         // when
         boolean result = authenticationKey.matchKey("code", "yek", now);
@@ -71,7 +71,7 @@ class AuthenticationKeyTest {
     void testMatchKeyWhenNotMatchCode() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey(1L, "code", "key", now);
+        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey("code", "key", now);
 
         // when
         boolean result = authenticationKey.matchKey("edoc", "key", now);
@@ -85,7 +85,7 @@ class AuthenticationKeyTest {
     void testMatchKeyWhenExpiredKey() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey(1L, "code", "key", now.minusMinutes(AuthenticationKey.EXPIRED_MINUTES));
+        AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey("code", "key", now.minusMinutes(AuthenticationKey.EXPIRED_MINUTES));
 
         // when
         boolean result = authenticationKey.matchKey("code", "key", now);
@@ -100,7 +100,6 @@ class AuthenticationKeyTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         AuthenticationKey authenticationKey = new AuthenticationKey(
-                1L,
                 1L,
                 "code",
                 "key",
@@ -123,7 +122,6 @@ class AuthenticationKeyTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         AuthenticationKey authenticationKey = new AuthenticationKey(
-                1L,
                 1L,
                 "code",
                 "key",

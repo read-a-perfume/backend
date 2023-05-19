@@ -13,7 +13,6 @@ public class AuthenticationKeyMapper {
 
         return new AuthenticationKey(
                 authenticationKeyJpaEntity.getId(),
-                authenticationKeyJpaEntity.getUserId(),
                 authenticationKeyJpaEntity.getCode(),
                 authenticationKeyJpaEntity.getKey(),
                 authenticationKeyJpaEntity.getVerifiedAt(),
@@ -30,7 +29,6 @@ public class AuthenticationKeyMapper {
 
         return new AuthenticationKeyJpaEntity(
                 authenticationKey.getId(),
-                authenticationKey.getUserId(),
                 authenticationKey.getCode(),
                 authenticationKey.getKey(),
                 authenticationKey.getVerifiedAt(),

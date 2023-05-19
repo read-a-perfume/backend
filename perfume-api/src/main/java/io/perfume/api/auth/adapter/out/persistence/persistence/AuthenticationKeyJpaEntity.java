@@ -24,9 +24,6 @@ public class AuthenticationKeyJpaEntity extends BaseTimeEntity {
     private Long id;
 
     @Column(updatable = false)
-    private Long userId;
-
-    @Column(updatable = false)
     private String code;
 
     @Column(updatable = false)
@@ -34,10 +31,9 @@ public class AuthenticationKeyJpaEntity extends BaseTimeEntity {
 
     private LocalDateTime verifiedAt;
 
-    public AuthenticationKeyJpaEntity(Long id, Long userId, String code, String key, LocalDateTime verifiedAt, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, @NotNull LocalDateTime deletedAt) {
+    public AuthenticationKeyJpaEntity(Long id, String code, String key, LocalDateTime verifiedAt, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, @NotNull LocalDateTime deletedAt) {
         super(createdAt, updatedAt, deletedAt);
         this.id = id;
-        this.userId = userId;
         this.code = code;
         this.key = key;
         this.verifiedAt = verifiedAt;
