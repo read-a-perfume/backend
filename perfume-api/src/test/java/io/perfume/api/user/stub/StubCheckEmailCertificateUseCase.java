@@ -21,7 +21,7 @@ public class StubCheckEmailCertificateUseCase implements CheckEmailCertificateUs
         store.add(checkEmailCertificateResult);
     }
 
-    public void clearn() {
+    public void clear() {
         store.clear();
     }
 }

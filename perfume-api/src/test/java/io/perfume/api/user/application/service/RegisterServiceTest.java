@@ -1,11 +1,14 @@
 package io.perfume.api.user.application.service;
 
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
+import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.stub.StubCheckEmailCertificateUseCase;
+import io.perfume.api.user.stub.StubCreateVerificationCodeUseCase;
+import io.perfume.api.user.stub.StubMailSender;
 import io.perfume.api.user.stub.StubUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,11 +25,17 @@ class RegisterServiceTest {
 
     private UserRepository userRepository = new StubUserRepository();
 
-    private RegisterService registerService = new RegisterService(userRepository, checkEmailCertificateUseCase);
+    private StubMailSender stubMailSender = new StubMailSender();
+
+    private StubCreateVerificationCodeUseCase createVerificationCodeUseCase = new StubCreateVerificationCodeUseCase();
+
+    private RegisterService registerService = new RegisterService(userRepository, checkEmailCertificateUseCase, createVerificationCodeUseCase, stubMailSender);
 
     @BeforeEach
     void setUp() {
-        this.checkEmailCertificateUseCase.clearn();
+        this.checkEmailCertificateUseCase.clear();
+        this.stubMailSender.clear();
+        this.createVerificationCodeUseCase.clear();
     }
 
     @Test
@@ -51,6 +60,9 @@ class RegisterServiceTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         SendVerificationCodeCommand command = new SendVerificationCodeCommand("email", now);
+        CreateVerificationCodeResult createVerificationCodeResult = new CreateVerificationCodeResult("sample code", "", "sample key", now);
+        createVerificationCodeUseCase.setCreateVerificationCodeResult(createVerificationCodeResult);
+        stubMailSender.setSentAt(now);
 
         // when
         SendVerificationCodeResult result = registerService.sendEmailVerifyCode(command);
