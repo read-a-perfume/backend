@@ -4,7 +4,6 @@ import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class StubCheckEmailCertificateUseCase implements CheckEmailCertificateUs
     private final List<CheckEmailCertificateResult> store = new ArrayList<>();
 
     @Override
-    public CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand, LocalDateTime now) {
+    public CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand) {
         return store.remove(0);
     }
 

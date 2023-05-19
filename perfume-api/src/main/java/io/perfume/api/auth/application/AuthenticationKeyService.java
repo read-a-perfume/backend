@@ -35,16 +35,16 @@ public class AuthenticationKeyService implements CheckEmailCertificateUseCase, C
 
     @Override
     @Transactional
-    public CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand, LocalDateTime now) {
+    public CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand command) {
         AuthenticationKey authenticationKey = authenticationKeyQueryRepository
-                .findByKey(checkEmailCertificateCommand.key())
+                .findByKey(command.key())
                 .orElseThrow(NotFoundKeyException::new);
 
-        if (authenticationKey.isExpired(now)) {
+        if (authenticationKey.isExpired(command.confirmedAt())) {
             return CheckEmailCertificateResult.EXPIRED;
         }
 
-        if (!authenticationKey.matchKey(checkEmailCertificateCommand.key(), checkEmailCertificateCommand.code(), now)) {
+        if (!authenticationKey.matchKey(command.key(), command.code(), command.confirmedAt())) {
             return CheckEmailCertificateResult.NOT_MATCH;
         }
 

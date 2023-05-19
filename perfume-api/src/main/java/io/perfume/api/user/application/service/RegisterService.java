@@ -56,8 +56,8 @@ public class RegisterService {
     }
 
     public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
-        CheckEmailCertificateCommand command = new CheckEmailCertificateCommand(code, key);
-        CheckEmailCertificateResult result = checkEmailCertificateUseCase.checkEmailCertificate(command, now);
+        CheckEmailCertificateCommand command = new CheckEmailCertificateCommand(code, key, now);
+        CheckEmailCertificateResult result = checkEmailCertificateUseCase.checkEmailCertificate(command);
 
         return new ConfirmEmailVerifyResult("", now, "");
     }
