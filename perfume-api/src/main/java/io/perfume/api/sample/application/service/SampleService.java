@@ -1,16 +1,15 @@
 package io.perfume.api.sample.application.service;
 
+import io.perfume.api.sample.application.exception.UserNotFoundException;
 import io.perfume.api.sample.application.port.in.*;
 import io.perfume.api.sample.application.port.in.dto.SampleResult;
-import io.perfume.api.sample.application.exception.UserNotFoundException;
-import io.perfume.api.sample.application.port.out.SampleQueryRepository;
 import io.perfume.api.sample.application.port.out.SampleCommandRepository;
+import io.perfume.api.sample.application.port.out.SampleQueryRepository;
 import io.perfume.api.sample.domain.Sample;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -54,14 +53,8 @@ public class SampleService implements CreateSampleUseCase, DeleteSampleUseCase,
     }
 
     @Override
-    @Transactional
     public SampleResult deleteSample(Long id) {
-        Sample sample = sampleQueryRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        LocalDateTime now = LocalDateTime.now();
-
-        sample.delete(now);
-
-        return toDto(sample);
+        return null;
     }
 
     private SampleResult toDto(Sample sample) {

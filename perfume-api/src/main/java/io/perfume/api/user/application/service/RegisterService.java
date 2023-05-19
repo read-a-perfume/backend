@@ -1,7 +1,11 @@
 package io.perfume.api.user.application.service;
 
+import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
+import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
+import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.user.application.dto.UserResult;
 import io.perfume.api.user.application.exception.FailedRegisterException;
+import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import io.perfume.api.user.infrastructure.api.dto.RegisterDto;
@@ -9,11 +13,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RegisterService {
+
     private final UserRepository userRepository;
+
+    private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
 
     @Transactional
     public UserResult signUpGeneralUserByEmail(RegisterDto registerDto) {
@@ -34,6 +43,13 @@ public class RegisterService {
         } catch (Exception e) {
             return true;
         }
+    }
+
+    public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
+        CheckEmailCertificateCommand command = new CheckEmailCertificateCommand(code, key);
+        CheckEmailCertificateResult result = checkEmailCertificateUseCase.checkEmailCertificate(command, now);
+
+        return new ConfirmEmailVerifyResult("", now, "");
     }
 
     private UserResult toDto(User user) {

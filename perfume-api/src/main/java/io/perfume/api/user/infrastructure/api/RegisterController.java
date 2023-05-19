@@ -1,8 +1,10 @@
 package io.perfume.api.user.infrastructure.api;
 
 
-import io.perfume.api.user.application.service.RegisterService;
 import io.perfume.api.user.application.dto.UserResult;
+import io.perfume.api.user.application.service.RegisterService;
+import io.perfume.api.user.infrastructure.api.dto.EmailVerifyConfirmRequestDto;
+import io.perfume.api.user.infrastructure.api.dto.EmailVerifyConfirmResponseDto;
 import io.perfume.api.user.infrastructure.api.dto.RegisterDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -30,5 +33,10 @@ public class RegisterController {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @PostMapping("/email-verify/confirm")
+    public ResponseEntity<EmailVerifyConfirmResponseDto> confirmEmail(@RequestBody @Valid EmailVerifyConfirmRequestDto dto) {
+        return ResponseEntity.ok(new EmailVerifyConfirmResponseDto("example@mail.com", LocalDateTime.now()));
     }
 }
