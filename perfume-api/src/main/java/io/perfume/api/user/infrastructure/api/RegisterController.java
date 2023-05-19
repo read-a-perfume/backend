@@ -1,13 +1,12 @@
 package io.perfume.api.user.infrastructure.api;
 
 
-import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.user.application.dto.UserResult;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
-import io.perfume.api.user.infrastructure.api.dto.*;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.service.RegisterService;
+import io.perfume.api.user.infrastructure.api.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

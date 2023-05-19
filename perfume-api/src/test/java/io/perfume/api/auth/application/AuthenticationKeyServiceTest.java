@@ -53,13 +53,16 @@ class AuthenticationKeyServiceTest {
     }
 
     @Test
-    @DisplayName("없는 인증키인 경우 NotFoundKeyException을 발생시킨다.")
+    @DisplayName("없는 인증키인 경우 NOT_FOUND를 반환한다.")
     void testCheckEmailCertificateWhenNotFoundKey() {
         // given
         CheckEmailCertificateCommand command = new CheckEmailCertificateCommand("key", "code", LocalDateTime.now());
 
-        // when & then
-        assertThrows(NotFoundKeyException.class, () -> authenticationKeyService.checkEmailCertificate(command));
+        // when
+        CheckEmailCertificateResult result = authenticationKeyService.checkEmailCertificate(command);
+
+        // then
+        assertEquals(CheckEmailStatus.NOT_FOUND, result.status());
     }
 
     @Test
