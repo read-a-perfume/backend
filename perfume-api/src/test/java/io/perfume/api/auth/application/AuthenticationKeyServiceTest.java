@@ -5,6 +5,7 @@ import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeCommand;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
+import io.perfume.api.auth.application.type.CheckEmailStatus;
 import io.perfume.api.auth.domain.AuthenticationKey;
 import io.perfume.api.auth.stub.StubAuthenticationKeyQueryRepository;
 import io.perfume.api.auth.stub.StubAuthenticationKeyRepository;
@@ -48,7 +49,7 @@ class AuthenticationKeyServiceTest {
         CheckEmailCertificateResult result = authenticationKeyService.checkEmailCertificate(command);
 
         // then
-        assertEquals(CheckEmailCertificateResult.MATCH, result);
+        assertEquals(CheckEmailStatus.MATCH, result.status());
     }
 
     @Test
@@ -73,7 +74,7 @@ class AuthenticationKeyServiceTest {
         CheckEmailCertificateResult result = authenticationKeyService.checkEmailCertificate(command);
 
         // then
-        assertEquals(CheckEmailCertificateResult.EXPIRED, result);
+        assertEquals(CheckEmailStatus.EXPIRED, result.status());
     }
 
     @Test
@@ -87,7 +88,7 @@ class AuthenticationKeyServiceTest {
         CheckEmailCertificateResult result = authenticationKeyService.checkEmailCertificate(command);
 
         // then
-        assertEquals(CheckEmailCertificateResult.NOT_MATCH, result);
+        assertEquals(CheckEmailStatus.NOT_MATCH, result.status());
     }
 
     @Test

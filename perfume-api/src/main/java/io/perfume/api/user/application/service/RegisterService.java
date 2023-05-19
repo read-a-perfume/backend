@@ -16,6 +16,8 @@ import io.perfume.api.user.domain.User;
 import io.perfume.api.user.infrastructure.api.dto.RegisterDto;
 import lombok.RequiredArgsConstructor;
 import mailer.MailSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,8 @@ public class RegisterService {
     private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
 
     private final MailSender mailSender;
+
+    private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
 
     @Transactional
     public UserResult signUpGeneralUserByEmail(RegisterDto registerDto) {
@@ -56,10 +60,12 @@ public class RegisterService {
     }
 
     public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
+        logger.info("confirmEmailVerify code = {}, key = {}, now = {}", code, key, now);
+
         CheckEmailCertificateCommand command = new CheckEmailCertificateCommand(code, key, now);
         CheckEmailCertificateResult result = checkEmailCertificateUseCase.checkEmailCertificate(command);
 
-        return new ConfirmEmailVerifyResult("", now, "");
+        return new ConfirmEmailVerifyResult(result.email(), now);
     }
 
     public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
@@ -67,6 +73,8 @@ public class RegisterService {
         CreateVerificationCodeResult result = createVerificationCodeUseCase.createVerificationCode(createVerificationCodeCommand);
 
         LocalDateTime sentAt = mailSender.send(command.email(), "이메일 인증을 완료해주세요.", result.code());
+
+        logger.info("sendEmailVerifyCode email = {}, code = {}, key = {}, now = {}", command.email(), result.code(), result.signKey(), sentAt);
 
         return new SendVerificationCodeResult(result.signKey(), sentAt);
     }

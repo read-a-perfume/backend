@@ -2,6 +2,7 @@ package io.perfume.api.user.application.service;
 
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
+import io.perfume.api.auth.application.type.CheckEmailStatus;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
@@ -45,13 +46,13 @@ class RegisterServiceTest {
         String code = "code";
         String key = "key";
         LocalDateTime now = LocalDateTime.now();
-        this.checkEmailCertificateUseCase.add(CheckEmailCertificateResult.MATCH);
+        this.checkEmailCertificateUseCase.add(new CheckEmailCertificateResult(CheckEmailStatus.MATCH, "sample@mail.com"));
 
         // when
         ConfirmEmailVerifyResult result = registerService.confirmEmailVerify(code, key, now);
 
         // then
-        assertEquals(result.email(), "");
+        assertEquals(result.email(), "sample@mail.com");
     }
 
     @Test

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public record ConfirmEmailVerifyResult(
         String email,
-        LocalDateTime verifiedAt,
-        String signKey
+        LocalDateTime verifiedAt
 ) {
 }

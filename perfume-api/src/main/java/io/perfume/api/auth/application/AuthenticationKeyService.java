@@ -2,21 +2,22 @@ package io.perfume.api.auth.application;
 
 import encryptor.TwoWayEncryptor;
 import generator.Generator;
-import io.perfume.api.auth.application.port.out.AuthenticationKeyQueryRepository;
-import io.perfume.api.auth.application.port.out.AuthenticationKeyRepository;
-import io.perfume.api.auth.application.exception.NotFoundKeyException;
 import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
 import io.perfume.api.auth.application.port.in.CreateVerificationCodeUseCase;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeCommand;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
+import io.perfume.api.auth.application.port.out.AuthenticationKeyQueryRepository;
+import io.perfume.api.auth.application.port.out.AuthenticationKeyRepository;
+import io.perfume.api.auth.application.type.CheckEmailStatus;
 import io.perfume.api.auth.domain.AuthenticationKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,25 +37,27 @@ public class AuthenticationKeyService implements CheckEmailCertificateUseCase, C
     @Override
     @Transactional
     public CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand command) {
-        AuthenticationKey authenticationKey = authenticationKeyQueryRepository
-                .findByKey(command.key())
-                .orElseThrow(NotFoundKeyException::new);
-
-        if (authenticationKey.isExpired(command.confirmedAt())) {
-            return CheckEmailCertificateResult.EXPIRED;
+        Optional<AuthenticationKey> authenticationKey = authenticationKeyQueryRepository
+                .findByKey(command.key());
+        if (authenticationKey.isEmpty()) {
+            return new CheckEmailCertificateResult(CheckEmailStatus.NOT_FOUND, null);
         }
 
-        if (!authenticationKey.matchKey(command.code(), command.key(), command.confirmedAt())) {
-            return CheckEmailCertificateResult.NOT_MATCH;
+        AuthenticationKey unwraapedAuthenticationKey = authenticationKey.get();
+        String email = this.extractEmailFromSignKey(unwraapedAuthenticationKey.getKey());
+        if (unwraapedAuthenticationKey.isExpired(command.confirmedAt())) {
+            return new CheckEmailCertificateResult(CheckEmailStatus.EXPIRED, email);
         }
-
-        authenticationKeyRepository.save(authenticationKey);
-        return CheckEmailCertificateResult.MATCH;
+        if (!unwraapedAuthenticationKey.matchKey(command.code(), command.key(), command.confirmedAt())) {
+            return new CheckEmailCertificateResult(CheckEmailStatus.NOT_MATCH, email);
+        }
+        authenticationKeyRepository.save(unwraapedAuthenticationKey);
+        return new CheckEmailCertificateResult(CheckEmailStatus.MATCH, email);
     }
 
     @Override
     public CreateVerificationCodeResult createVerificationCode(CreateVerificationCodeCommand createVerificationCodeCommand) {
-        String signKey =  getSignKey(createVerificationCodeCommand.metadata(), createVerificationCodeCommand.now());
+        String signKey = getSignKey(createVerificationCodeCommand.metadata(), createVerificationCodeCommand.now());
         String randomCode = generator.generate(6);
 
         AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey(
