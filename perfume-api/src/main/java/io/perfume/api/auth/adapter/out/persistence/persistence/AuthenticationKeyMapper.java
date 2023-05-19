@@ -14,7 +14,7 @@ public class AuthenticationKeyMapper {
         return new AuthenticationKey(
                 authenticationKeyJpaEntity.getId(),
                 authenticationKeyJpaEntity.getCode(),
-                authenticationKeyJpaEntity.getKey(),
+                authenticationKeyJpaEntity.getSignKey(),
                 authenticationKeyJpaEntity.getVerifiedAt(),
                 authenticationKeyJpaEntity.getCreatedAt(),
                 authenticationKeyJpaEntity.getUpdatedAt(),

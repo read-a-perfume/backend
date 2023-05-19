@@ -21,7 +21,7 @@ public class AuthenticationKeyQueryRepositoryImpl implements AuthenticationKeyQu
                 jpaQueryFactory
                         .selectFrom(QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity)
                         .where(
-                                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.key.eq(key),
+                                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.signKey.eq(key),
                                 QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.deletedAt.isNull()
                         )
                         .fetchFirst();

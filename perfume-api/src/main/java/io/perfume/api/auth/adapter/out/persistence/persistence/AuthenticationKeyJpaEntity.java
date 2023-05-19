@@ -8,9 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.LocalDateTime;
 
 @Entity(name = "authentication_key")
-@Table(name = "authentication_key", indexes = {
-        @Index(name = "idx_authentication_key_user_id", columnList = "userId"),
-})
+@Table(name = "authentication_key")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
@@ -23,19 +21,19 @@ public class AuthenticationKeyJpaEntity extends BaseTimeEntity {
     @ToString.Include
     private Long id;
 
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private String code;
 
-    @Column(updatable = false)
-    private String key;
+    @Column(updatable = false, nullable = false)
+    private String signKey;
 
     private LocalDateTime verifiedAt;
 
-    public AuthenticationKeyJpaEntity(Long id, String code, String key, LocalDateTime verifiedAt, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, @NotNull LocalDateTime deletedAt) {
+    public AuthenticationKeyJpaEntity(Long id, @NotNull String code, @NotNull String key, LocalDateTime verifiedAt, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, LocalDateTime deletedAt) {
         super(createdAt, updatedAt, deletedAt);
         this.id = id;
         this.code = code;
-        this.key = key;
+        this.signKey = key;
         this.verifiedAt = verifiedAt;
     }
 }
