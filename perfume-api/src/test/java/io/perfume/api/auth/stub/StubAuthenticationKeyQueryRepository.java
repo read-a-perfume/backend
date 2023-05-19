@@ -1,6 +1,6 @@
 package io.perfume.api.auth.stub;
 
-import io.perfume.api.auth.adapter.out.persistence.persistence.AuthenticationKeyQueryRepository;
+import io.perfume.api.auth.application.port.out.AuthenticationKeyQueryRepository;
 import io.perfume.api.auth.domain.AuthenticationKey;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package io.perfume.api.auth.adapter.out.persistence.persistence;
+package io.perfume.api.auth.application.port.out;
 
 import io.perfume.api.auth.domain.AuthenticationKey;
 

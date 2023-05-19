@@ -1,5 +1,6 @@
 package io.perfume.api.auth.adapter.out.persistence.persistence;
 
+import io.perfume.api.auth.application.port.out.AuthenticationKeyRepository;
 import io.perfume.api.auth.domain.AuthenticationKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

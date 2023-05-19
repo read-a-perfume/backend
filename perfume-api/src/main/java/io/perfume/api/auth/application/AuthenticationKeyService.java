@@ -2,8 +2,8 @@ package io.perfume.api.auth.application;
 
 import encryptor.TwoWayEncryptor;
 import generator.Generator;
-import io.perfume.api.auth.adapter.out.persistence.persistence.AuthenticationKeyQueryRepository;
-import io.perfume.api.auth.adapter.out.persistence.persistence.AuthenticationKeyRepository;
+import io.perfume.api.auth.application.port.out.AuthenticationKeyQueryRepository;
+import io.perfume.api.auth.application.port.out.AuthenticationKeyRepository;
 import io.perfume.api.auth.application.exception.NotFoundKeyException;
 import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
 import io.perfume.api.auth.application.port.in.CreateVerificationCodeUseCase;
