@@ -24,3 +24,7 @@ dependencies {
     annotationProcessor("jakarta.annotation:jakarta.annotation-api:2.1.1")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
 }
+
+tasks.jar {
+    enabled = false
+}
