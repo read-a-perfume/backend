@@ -11,7 +11,7 @@ public class NumberGenerator implements Generator {
         Random random = new Random();
 
         StringBuilder result = new StringBuilder(length);
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             int digit = random.nextInt(10);
             result.append(digit);
         }

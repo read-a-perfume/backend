@@ -2,7 +2,6 @@ package io.perfume.api.user.adapter.out.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.user.application.exception.FailedRegisterException;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import jakarta.persistence.EntityNotFoundException;

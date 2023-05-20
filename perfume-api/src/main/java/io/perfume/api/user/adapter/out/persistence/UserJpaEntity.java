@@ -2,7 +2,6 @@ package io.perfume.api.user.adapter.out.persistence;
 
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.user.domain.Role;
-import io.perfume.api.user.domain.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

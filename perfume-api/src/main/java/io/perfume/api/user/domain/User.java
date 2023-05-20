@@ -1,7 +1,6 @@
 package io.perfume.api.user.domain;
 
 import io.perfume.api.base.BaseTimeDomain;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,6 +20,24 @@ public class User extends BaseTimeDomain {
     private Long businessId;
     private Long thumbnailId;
 
+
+    @Builder
+    private User(Long id, String username, String email, String password,
+                 String name, Role role, Long businessId,
+                 Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
+                 LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
+        super(createdAt, updatedAt, deletedAt);
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.role = role;
+        this.businessId = businessId;
+        this.thumbnailId = thumbnailId;
+        this.marketingConsent = marketingConsent;
+        this.promotionConsent = promotionConsent;
+    }
 
     // 기업 사용자가 아닌 경우 회원가입시에 사용됩니다.
     public static User generalUserJoin(String username, String email, String password, String name, boolean marketingConsent, boolean promotionConsent) {
@@ -53,23 +70,5 @@ public class User extends BaseTimeDomain {
                 .updatedAt(updatedAt)
                 .deletedAt(deletedAt)
                 .build();
-    }
-
-    @Builder
-    private User(Long id, String username, String email, String password,
-                 String name, Role role, Long businessId,
-                 Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
-                 LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
-        super(createdAt, updatedAt, deletedAt);
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.role = role;
-        this.businessId = businessId;
-        this.thumbnailId = thumbnailId;
-        this.marketingConsent = marketingConsent;
-        this.promotionConsent = promotionConsent;
     }
 }

@@ -1,17 +1,17 @@
 package io.perfume.api.sample.application;
 
-import io.perfume.api.sample.application.port.in.dto.SampleResult;
 import io.perfume.api.sample.application.exception.UserNotFoundException;
+import io.perfume.api.sample.application.port.in.dto.SampleResult;
 import io.perfume.api.sample.application.service.SampleService;
 import io.perfume.api.sample.domain.Sample;
-import io.perfume.api.sample.fixture.StubSampleCommandRepository;
+import io.perfume.api.sample.stub.StubSampleCommandRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SampleServiceTest {
 
