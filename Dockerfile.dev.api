@@ -5,6 +5,6 @@ RUN ./gradlew :perfume-core:clean :perfume-api:clean :perfume-api:build
 
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/perfume-api/build/libs/*.jar /app/app.jar
+COPY --from=build /app/perfume-api/build/libs/*.jar /app/webapp.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-Xmx70m", "-Dspring.profiles.active=dev", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-Xmx70m", "-Dspring.profiles.active=dev", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/webapp.jar"]
