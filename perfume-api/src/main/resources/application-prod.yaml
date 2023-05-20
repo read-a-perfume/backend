@@ -7,3 +7,6 @@ spring:
     url: ''
     username: ''
     password: ''
+
+whitelist:
+  cors:

@@ -7,3 +7,7 @@ spring:
     url: ''
     username: ''
     password: ''
+
+whitelist:
+  cors:
+    - http://localhost:3000

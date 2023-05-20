@@ -5,6 +5,9 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.0")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.1.0")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.0.4")
+
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.0")
 
     compileOnly("org.projectlombok:lombok:1.18.26")
