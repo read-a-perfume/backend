@@ -6,6 +6,7 @@ import io.perfume.api.sample.adapter.in.http.dto.UpdateSampleRequestDto;
 import io.perfume.api.sample.application.port.in.dto.SampleResult;
 import io.perfume.api.sample.application.service.SampleService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
@@ -126,5 +128,26 @@ class SampleControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("sample"));
+    }
+
+    @Test
+    @DisplayName("정의된 http exception를 처리하는지 확인")
+    void testCustomHttpExceptionHandler() throws Exception {
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        SampleResult sampleResult = new SampleResult(1L, "sample", now);
+        given(sampleService.getSample(1L)).willReturn(sampleResult);
+
+        // when & then
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/v1/samples/exception/teapot")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isIAmATeapot())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value("I'm a teapot"))
+                .andExpect(jsonPath("$.statusCode").value(418))
+                .andExpect(jsonPath("$.error").value("I AM A TEAPOT"));
     }
 }
