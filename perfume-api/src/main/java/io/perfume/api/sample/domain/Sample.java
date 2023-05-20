@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.LocalDateTime;
-
 @Entity(name = "sample")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter

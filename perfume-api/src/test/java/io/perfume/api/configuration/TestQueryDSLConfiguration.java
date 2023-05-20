@@ -1,8 +1,8 @@
 package io.perfume.api.configuration;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.perfume.api.auth.adapter.out.persistence.persistence.AuthenticationKeyMapper;
-import io.perfume.api.auth.adapter.out.persistence.persistence.AuthenticationKeyQueryRepositoryImpl;
+import io.perfume.api.auth.adapter.out.persistence.AuthenticationKeyMapper;
+import io.perfume.api.auth.adapter.out.persistence.AuthenticationKeyQueryRepositoryImpl;
 import io.perfume.api.sample.adapter.out.persistence.SampleQueryRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

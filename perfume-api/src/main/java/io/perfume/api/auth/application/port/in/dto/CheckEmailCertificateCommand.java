@@ -6,4 +6,5 @@ public record CheckEmailCertificateCommand(
         String key,
         String code,
         LocalDateTime confirmedAt
-) {}
+) {
+}
