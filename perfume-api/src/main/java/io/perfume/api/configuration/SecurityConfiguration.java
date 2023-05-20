@@ -16,17 +16,17 @@ import java.util.List;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, WhiteListConfiguration whiteListConfiguration) throws Exception {
         http
-                .cors(c -> c.configurationSource(corsConfigurationSource()));
+                .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfiguration.getCors())));
 
         return http.build();
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource(List<String> whitelistCors) {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(whitelistCors);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
 
