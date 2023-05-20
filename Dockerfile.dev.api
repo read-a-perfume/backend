@@ -1,9 +1,9 @@
-FROM openjdk:17-jdk-slim AS build
+FROM openjdk:17.0.2-jdk-slim AS build
 WORKDIR /app
 COPY . .
 RUN ./gradlew :perfume-core:clean :perfume-api:clean :perfume-api:build
 
-FROM openjdk:17-jdk-slim
+FROM openjdk:17.0.2-jdk-slim
 WORKDIR /app
 COPY --from=build /app/perfume-api/build/libs/*.jar /app/webapp.jar
 EXPOSE 8080
