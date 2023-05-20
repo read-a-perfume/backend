@@ -28,7 +28,7 @@ public class AuthenticationKey extends BaseTimeDomain {
         this.verifiedAt = verifiedAt;
     }
 
-    static AuthenticationKey createAuthenticationKey(@NotNull String code, @NotNull String key, @NotNull LocalDateTime now) {
+    public static AuthenticationKey createAuthenticationKey(@NotNull String code, @NotNull String key, @NotNull LocalDateTime now) {
         return new AuthenticationKey(
                 null,
                 code,

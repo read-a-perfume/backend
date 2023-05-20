@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 
 public interface CheckEmailCertificateUseCase {
 
-    CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand, LocalDateTime now);
+    CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand);
 }
