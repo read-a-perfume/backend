@@ -11,8 +11,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "users")
+@Entity(name = "member")
 @Table(
+        name = "member",
         indexes = {
                 @Index(name = "idx_business_id", columnList = "businessId"),
                 @Index(name = "idx_thumbnail_id", columnList = "thumbnailId")
