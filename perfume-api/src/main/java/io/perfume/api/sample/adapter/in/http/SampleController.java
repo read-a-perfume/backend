@@ -4,6 +4,7 @@ package io.perfume.api.sample.adapter.in.http;
 import io.perfume.api.sample.adapter.in.http.dto.CreateSampleRequestDto;
 import io.perfume.api.sample.adapter.in.http.dto.SampleResponseDto;
 import io.perfume.api.sample.adapter.in.http.dto.UpdateSampleRequestDto;
+import io.perfume.api.sample.adapter.in.http.exception.CustomSampleException;
 import io.perfume.api.sample.application.port.in.dto.SampleResult;
 import io.perfume.api.sample.application.service.SampleService;
 import jakarta.validation.Valid;
@@ -32,6 +33,11 @@ public class SampleController {
         SampleResult result = sampleService.createSample(dto.name());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(result));
+    }
+
+    @GetMapping("/exception/teapot")
+    public ResponseEntity<Void> throwCustomHttpException() {
+        throw new CustomSampleException();
     }
 
     @PatchMapping("/{id}")
