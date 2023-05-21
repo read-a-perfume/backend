@@ -23,6 +23,8 @@ dependencies {
     annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api:2.1.1")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
+
+    implementation("org.flywaydb:flyway-mysql:9.16.0")
 }
 
 tasks.jar {

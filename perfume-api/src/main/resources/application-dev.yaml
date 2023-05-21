@@ -2,23 +2,22 @@ spring:
   config:
     activate:
       on-profile: 'dev'
+
   datasource:
     driver-class-name: 'com.mysql.cj.jdbc.Driver'
-    url: ${DB_HOST}
+    url: 'jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}'
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
       maximum-pool-size: 5
       max-lifetime: 1800000
-      minimum-idle: 2
+      minimum-idle: 5
       idle-timeout: 30000
       connection-timeout: 15000
       leak-detection-threshold: 60000
       pool-name: 'perfume-db-pool'
+
   jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -26,3 +25,13 @@ spring:
 whitelist:
   cors:
     - http://localhost:3000
+
+flyway:
+  enabled: true
+  url: 'jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}'
+  user: ${DB_USERNAME}
+  password: ${DB_PASSWORD}
+  locations: 'classpath:db/migration'
+  validate-on-migrate: true
+  baseline-on-migrate: true
+  baseline-version: 1

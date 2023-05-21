@@ -2,11 +2,27 @@ spring:
   config:
     activate:
       on-profile: 'prod'
+
   datasource:
     driver-class-name: 'com.mysql.cj.jdbc.Driver'
     url: ''
     username: ''
     password: ''
 
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
 whitelist:
   cors:
+
+flyway:
+  enabled: true
+  url: ''
+  user: ''
+  password: ''
+  locations: 'classpath:db/migration'
+  validate-on-migrate: true
+  baseline-on-migrate: true
+  baseline-version: 1
