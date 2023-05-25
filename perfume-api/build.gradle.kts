@@ -10,8 +10,8 @@ dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.0")
 
-    compileOnly("org.projectlombok:lombok:1.18.26")
-    annotationProcessor("org.projectlombok:lombok:1.18.26")
+    compileOnly("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
 
     implementation("mysql:mysql-connector-java:8.0.33")
     implementation("com.zaxxer:HikariCP:5.0.1")
