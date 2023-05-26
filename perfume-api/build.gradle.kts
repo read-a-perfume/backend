@@ -28,3 +28,31 @@ dependencies {
 tasks.jar {
     enabled = false
 }
+
+// for rest docs
+val asciidoctorExt: Configuration by configurations.creating
+dependencies {
+    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
+}
+
+val snippetsDir by extra { file("./build/generated-snippets") }
+
+tasks.test {
+    outputs.dir(snippetsDir)
+}
+
+tasks.asciidoctor {
+    inputs.dir(snippetsDir)
+    configurations(asciidoctorExt.name)
+    dependsOn(tasks.test)
+    doLast {
+        copy {
+            from("build/docs/asciidoc")
+            into("src/main/resources/static/docs")
+        }
+    }
+}
+
+tasks.build {
+    dependsOn(tasks.asciidoctor)
+}

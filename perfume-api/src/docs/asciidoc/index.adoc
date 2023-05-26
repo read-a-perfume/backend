@@ -1,0 +1,24 @@
+= Read A Perfume API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 이메일 인증
+=== 요청
+include::{snippets}/confirm-email-verify/http-request.adoc[]
+include::{snippets}/confirm-email-verify/request-body.adoc[]
+=== 응답
+include::{snippets}/confirm-email-verify/http-response.adoc[]
+include::{snippets}/confirm-email-verify/response-body.adoc[]
+
+== 샘플
+=== 요청
+include::{snippets}/index/http-request.adoc[]
+include::{snippets}/index/request-body.adoc[]
+
+=== 응답
+include::{snippets}/index/http-response.adoc[]
+include::{snippets}/index/response-body.adoc[]

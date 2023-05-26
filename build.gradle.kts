@@ -60,32 +60,4 @@ subprojects {
     tasks.withType<Test> {
         useJUnitPlatform()
     }
-
-    val asciidoctorExt: Configuration by configurations.creating
-    dependencies {
-        asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
-    }
-
-    val snippetsDir by extra { file("build/generated-snippets") }
-    tasks {
-        test {
-            outputs.dir(snippetsDir)
-        }
-
-        asciidoctor {
-            inputs.dir(snippetsDir)
-            configurations(asciidoctorExt.name)
-            dependsOn(test)
-            doLast {
-                copy {
-                    from("build/docs/asciidoc")
-                    into("src/main/resources/static/docs")
-                }
-            }
-        }
-
-        build {
-            dependsOn(asciidoctor)
-        }
-    }
 }
