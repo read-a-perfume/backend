@@ -1,4 +1,4 @@
-package io.perfume.api.configuration;
+package io.perfume.api.common.configurations;
 
 import encryptor.TwoWayEncryptor;
 import encryptor.impl.AESEncryptor;

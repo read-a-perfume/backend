@@ -1,4 +1,4 @@
-package io.perfume.api.configuration;
+package io.perfume.api.common.configurations;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

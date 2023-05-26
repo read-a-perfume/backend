@@ -1,4 +1,4 @@
-package io.perfume.api.configuration;
+package io.perfume.api.common.configurations;
 
 import mailer.MailSender;
 import mailer.impl.SESMailSender;
