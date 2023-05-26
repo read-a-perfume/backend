@@ -53,6 +53,6 @@ tasks.asciidoctor {
     }
 }
 
-tasks.build {
+tasks.bootJar {
     dependsOn(tasks.asciidoctor)
 }
