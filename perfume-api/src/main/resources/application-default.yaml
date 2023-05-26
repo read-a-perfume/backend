@@ -22,6 +22,17 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 'google-client-id'
+            client-secret: 'google-client-secret'
+            scope:
+              - profile
+              - email
+              - openid
 
 whitelist:
   cors:
