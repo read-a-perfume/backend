@@ -32,7 +32,6 @@ spring:
             scope:
               - profile
               - email
-              - openid
 
 whitelist:
   cors:
