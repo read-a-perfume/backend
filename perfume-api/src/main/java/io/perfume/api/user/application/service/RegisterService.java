@@ -7,7 +7,7 @@ import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeCommand;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.user.application.exception.FailedRegisterException;
-import io.perfume.api.user.application.port.in.CreateOAuth2UserUseCase;
+import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.dto.*;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class RegisterService implements CreateOAuth2UserUseCase {
+public class RegisterService implements CreateUserUseCase {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
     private final UserRepository userRepository;
