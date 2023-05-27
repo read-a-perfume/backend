@@ -9,6 +9,7 @@ import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.user.application.exception.FailedRegisterException;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.dto.*;
+import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class RegisterService implements CreateUserUseCase {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
     private final UserRepository userRepository;
+    private final UserQueryRepository userQueryRepository;
     private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
     private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
     private final MailSender mailSender;
@@ -46,7 +48,7 @@ public class RegisterService implements CreateUserUseCase {
 
     public boolean validDuplicateUsername(String username) {
         try {
-            return userRepository.findByUsername(username).isEmpty();
+            return userQueryRepository.findByUsername(username).isEmpty();
         } catch (Exception e) {
             return true;
         }
