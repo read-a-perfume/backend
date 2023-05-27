@@ -2,6 +2,7 @@ spring:
   config:
     activate:
       on-profile: 'default'
+
   datasource:
     driver-class-name: 'com.mysql.cj.jdbc.Driver'
     url: 'jdbc:mysql://localhost:3307/test'
@@ -15,6 +16,7 @@ spring:
       connection-timeout: 15000
       leak-detection-threshold: 60000
       pool-name: 'perfume-db-pool'
+
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -26,3 +28,7 @@ spring:
 whitelist:
   cors:
     - http://localhost:3000
+
+flyway:
+  enabled: false
+  validate-on-migrate: false
