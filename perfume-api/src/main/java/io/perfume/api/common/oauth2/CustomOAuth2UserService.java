@@ -1,4 +1,4 @@
-package io.perfume.api.common.configurations;
+package io.perfume.api.common.oauth2;
 
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
