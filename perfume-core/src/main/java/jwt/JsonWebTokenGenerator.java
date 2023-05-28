@@ -64,6 +64,37 @@ public class JsonWebTokenGenerator {
                 .getSubject();
     }
 
+    public Object getClaim(String jwt, String key) {
+        assert jwt != null;
+        assert !jwt.isEmpty();
+        assert key != null;
+        assert !key.isEmpty();
+
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(secret)
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody()
+                .get(key);
+    }
+
+    public Boolean verify(String jwt, LocalDateTime now) {
+        assert jwt != null;
+        assert !jwt.isEmpty();
+
+        try {
+            Jwts
+                    .parserBuilder()
+                    .setSigningKey(secret)
+                    .build()
+                    .parseClaimsJws(jwt);
+            return !this.isExpired(jwt, now);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private Date toDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant());
     }
