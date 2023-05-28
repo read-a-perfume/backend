@@ -1,9 +1,10 @@
 package io.perfume.api.common.oauth2;
 
-import jwt.JsonWebTokenGenerator;
+import io.perfume.api.common.properties.JsonWebTokenProperties;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jwt.JsonWebTokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,8 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
 
     private final JsonWebTokenGenerator jsonWebTokenGenerator;
 
+    private final JsonWebTokenProperties jsonWebTokenProperties;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -33,8 +36,8 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
     }
 
     @NotNull
-    private static String getRedirectUri(String accessToken) {
-        return UriComponentsBuilder.fromHttpUrl("http://localhost:3000/oauth2/redirect")
+    private String getRedirectUri(String accessToken) {
+        return UriComponentsBuilder.fromHttpUrl(jsonWebTokenProperties.redirectUri())
                 .queryParam("accessToken", accessToken)
                 .build()
                 .toUriString();
@@ -45,7 +48,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         return jsonWebTokenGenerator.create(
                 oAuth2User.getAttributes().get("email").toString(),
                 Map.of("roles", List.of("ROLE_USER")),
-                60 * 60 * 2,
+                jsonWebTokenProperties.accessTokenValidityInSeconds(),
                 LocalDateTime.now()
         );
     }

@@ -39,3 +39,5 @@ whitelist:
 
 jwt:
   secret-key: ''
+  redirect-uri: ''
+  access-token-validity-in-seconds: 0
