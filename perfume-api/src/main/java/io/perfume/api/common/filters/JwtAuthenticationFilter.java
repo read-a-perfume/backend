@@ -39,6 +39,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     @NotNull
     private Authentication getAuthentication(String jwt) {
+        if (jwt == null) {
+            return new UsernamePasswordAuthenticationToken("", "", List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
+        }
+
         String email = jsonWebTokenGenerator.getSubject(jwt);
         List<? extends GrantedAuthority> roles = getRoles(jwt);
         return new UsernamePasswordAuthenticationToken(email, "", roles);
@@ -52,13 +56,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     private String getTokenFromHeader(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
-            throw new RuntimeException("JWT Token is missing");
+            return null;
         }
 
         String authenticationToken = header.substring(7).trim();
         LocalDateTime now = LocalDateTime.now();
         if (!jsonWebTokenGenerator.verify(authenticationToken, now)) {
-            throw new RuntimeException("JWT Token is invalid");
+            return null;
         }
 
         return authenticationToken;
