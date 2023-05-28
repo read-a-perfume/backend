@@ -36,3 +36,8 @@ spring:
 whitelist:
   cors:
     - http://localhost:3000
+
+jwt:
+  secret-key: ''
+  redirect-uri: ''
+  access-token-validity-in-seconds: 0
