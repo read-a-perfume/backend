@@ -1,6 +1,10 @@
 package io.perfume.api.common.oauth2;
 
 import io.perfume.api.common.properties.JsonWebTokenProperties;
+import io.perfume.api.user.application.port.in.CreateUserUseCase;
+import io.perfume.api.user.application.port.in.FindUserUseCase;
+import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
+import io.perfume.api.user.application.port.in.dto.UserResult;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,10 +31,17 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
 
     private final JsonWebTokenProperties jsonWebTokenProperties;
 
+    private final FindUserUseCase findUserUseCase;
+
+    private final CreateUserUseCase createUserUseCase;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        String accessToken = createJsonWebToken(oAuth2User);
+        UserResult userResult = newUserIfNotExists(oAuth2User);
+
+        String accessToken = createJsonWebToken(userResult.email());
+
         String targetUrl = getRedirectUri(accessToken);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
@@ -44,12 +55,36 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
     }
 
     @NotNull
-    private String createJsonWebToken(OAuth2User oAuth2User) {
+    private String createJsonWebToken(String email) {
         return jsonWebTokenGenerator.create(
-                oAuth2User.getAttributes().get("email").toString(),
+                email,
                 Map.of("roles", List.of("ROLE_USER")),
                 jsonWebTokenProperties.accessTokenValidityInSeconds(),
                 LocalDateTime.now()
         );
+    }
+
+    private UserResult newUserIfNotExists(OAuth2User oAuth2User) {
+        String email = oAuth2User.getAttributes().get("email").toString();
+        if (email == null) {
+            throw new RuntimeException("Email not found from OAuth2 provider");
+        }
+
+        String name = oAuth2User.getAttributes().get("name").toString();
+        if (name == null) {
+            throw new RuntimeException("Name not found from OAuth2 provider");
+        }
+
+        return findUserUseCase.findOneByEmail(email).orElseGet(() -> {
+            SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
+                    null,
+                    null,
+                    email,
+                    false,
+                    false,
+                    name
+            );
+            return createUserUseCase.signUpGeneralUserByEmail(command);
+        });
     }
 }
