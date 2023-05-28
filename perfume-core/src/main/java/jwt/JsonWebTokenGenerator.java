@@ -1,4 +1,4 @@
-package encryptor.impl;
+package jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
-public class JwtUtil {
+public class JsonWebTokenGenerator {
 
     private final Key secret;
 
-    public JwtUtil(String secret) {
+    public JsonWebTokenGenerator(String secret) {
         assert secret != null;
         assert !secret.isEmpty();
         assert secret.length() >= 32;
