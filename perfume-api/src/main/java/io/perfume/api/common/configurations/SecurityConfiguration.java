@@ -1,5 +1,7 @@
 package io.perfume.api.common.configurations;
 
+import io.perfume.api.common.filters.JwtAuthenticationFilter;
+import jwt.JsonWebTokenGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,6 +36,7 @@ public class SecurityConfiguration {
             AuthenticationSuccessHandler authenticationSuccessHandler,
             AuthenticationFailureHandler authenticationFailureHandler,
             OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService,
+            JsonWebTokenGenerator jsonWebTokenGenerator,
             WhiteListConfiguration whiteListConfig
     ) throws Exception {
         httpSecurity
@@ -58,7 +62,8 @@ public class SecurityConfiguration {
                                 )
                                 .successHandler(authenticationSuccessHandler)
                                 .failureHandler(authenticationFailureHandler)
-                );
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(jsonWebTokenGenerator), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
