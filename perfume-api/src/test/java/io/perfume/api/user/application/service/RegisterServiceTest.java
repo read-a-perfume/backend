@@ -6,6 +6,7 @@ import io.perfume.api.auth.application.type.CheckEmailStatus;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
+import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.stub.StubCheckEmailCertificateUseCase;
 import io.perfume.api.user.stub.StubCreateVerificationCodeUseCase;
@@ -26,11 +27,13 @@ class RegisterServiceTest {
 
     private UserRepository userRepository = new StubUserRepository();
 
+    private UserQueryRepository userQueryRepository = new StubUserRepository();
+
     private StubMailSender stubMailSender = new StubMailSender();
 
     private StubCreateVerificationCodeUseCase createVerificationCodeUseCase = new StubCreateVerificationCodeUseCase();
 
-    private RegisterService registerService = new RegisterService(userRepository, checkEmailCertificateUseCase, createVerificationCodeUseCase, stubMailSender);
+    private RegisterService registerService = new RegisterService(userRepository, userQueryRepository, checkEmailCertificateUseCase, createVerificationCodeUseCase, stubMailSender);
 
     @BeforeEach
     void setUp() {
