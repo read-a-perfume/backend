@@ -1,5 +1,6 @@
 package io.perfume.api.user.application.service;
 
+import encryptor.OneWayEncryptor;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.auth.application.type.CheckEmailStatus;
@@ -8,10 +9,7 @@ import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
-import io.perfume.api.user.stub.StubCheckEmailCertificateUseCase;
-import io.perfume.api.user.stub.StubCreateVerificationCodeUseCase;
-import io.perfume.api.user.stub.StubMailSender;
-import io.perfume.api.user.stub.StubUserRepository;
+import io.perfume.api.user.stub.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,9 +29,11 @@ class RegisterServiceTest {
 
     private StubMailSender stubMailSender = new StubMailSender();
 
+    private OneWayEncryptor oneWayEncryptor = new StubEncryptor();
+
     private StubCreateVerificationCodeUseCase createVerificationCodeUseCase = new StubCreateVerificationCodeUseCase();
 
-    private RegisterService registerService = new RegisterService(userRepository, userQueryRepository, checkEmailCertificateUseCase, createVerificationCodeUseCase, stubMailSender);
+    private RegisterService registerService = new RegisterService(userRepository, userQueryRepository, checkEmailCertificateUseCase, createVerificationCodeUseCase, stubMailSender, oneWayEncryptor);
 
     @BeforeEach
     void setUp() {
