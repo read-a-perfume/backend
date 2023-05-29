@@ -4,6 +4,7 @@ import io.perfume.api.common.filters.JwtAuthenticationFilter;
 import jwt.JsonWebTokenGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -28,6 +29,16 @@ import java.util.List;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration {
+
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    public SecurityConfiguration(
+            AuthenticationManagerBuilder authenticationManagerBuilder,
+            JwtAuthenticationProvider jwtAuthenticationProvider
+    ) {
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(
@@ -63,7 +74,7 @@ public class SecurityConfiguration {
                                 .successHandler(authenticationSuccessHandler)
                                 .failureHandler(authenticationFailureHandler)
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jsonWebTokenGenerator), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(authenticationManagerBuilder.getOrBuild()), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
