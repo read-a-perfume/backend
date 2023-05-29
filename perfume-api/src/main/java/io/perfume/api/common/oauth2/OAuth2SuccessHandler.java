@@ -41,7 +41,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
     private final Generator generator;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, @NotNull Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         UserResult userResult = newUserIfNotExists(oAuth2User);
 
@@ -69,7 +69,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         );
     }
 
-    private UserResult newUserIfNotExists(OAuth2User oAuth2User) {
+    private UserResult newUserIfNotExists(@NotNull OAuth2User oAuth2User) {
         String email = oAuth2User.getAttributes().get("email").toString();
         if (email == null) {
             throw new RuntimeException("Email not found from OAuth2 provider");
@@ -93,11 +93,13 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         });
     }
 
+    @NotNull
     private Long unixTime() {
         return Instant.now().getEpochSecond();
     }
 
-     private String createUsername(String email, Long unixTime) {
+    @NotNull
+    private String createUsername(String email, Long unixTime) {
         if (Objects.isNull(email) || !email.contains("@")) {
             throw new IllegalArgumentException(email + " 올바른 이메일 형식이 아닙니다.");
         }
