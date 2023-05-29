@@ -24,6 +24,14 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         super.setAuthenticated(true);
     }
 
+    static JwtAuthenticationToken unauthorized() {
+        return new JwtAuthenticationToken("");
+    }
+
+    static JwtAuthenticationToken authorized(Object principal, Collection<? extends GrantedAuthority> authorities) {
+        return new JwtAuthenticationToken(principal, "", authorities);
+    }
+
     @Override
     public Object getCredentials() {
         return credentials;

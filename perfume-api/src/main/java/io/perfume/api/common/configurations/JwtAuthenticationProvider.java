@@ -9,7 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Component
@@ -23,11 +25,18 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        if (authentication.getCredentials() == null) {
-            return authentication;
+        Object credentials = authentication.getCredentials();
+        if (!(Objects.requireNonNull(credentials) instanceof String)) {
+            return JwtAuthenticationToken.unauthorized();
         }
 
-        return getAuthentication(authentication.getCredentials().toString());
+        String jwt = Objects.toString(credentials);
+        LocalDateTime now = LocalDateTime.now();
+        if (!jsonWebTokenGenerator.verify(jwt, now)) {
+            return JwtAuthenticationToken.unauthorized();
+        }
+
+        return getAuthentication(jwt);
     }
 
     @Override
@@ -39,7 +48,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     private Authentication getAuthentication(String jwt) {
         String email = jsonWebTokenGenerator.getSubject(jwt);
         List<? extends GrantedAuthority> roles = getRoles(jwt);
-        return new JwtAuthenticationToken(email, "", roles);
+        return JwtAuthenticationToken.authorized(email, roles);
     }
 
     @NotNull
