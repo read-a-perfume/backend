@@ -3,18 +3,18 @@ package io.perfume.api.common.filters;
 import io.perfume.api.common.configurations.JwtAuthenticationToken;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 
-public class JwtAuthenticationFilter extends GenericFilterBean {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final AuthenticationManager authenticationManager;
 
@@ -23,12 +23,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String jwt = getTokenFromHeader((HttpServletRequest) request);
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String jwt = getTokenFromHeader(request);
         Authentication authentication = authenticationManager.authenticate(new JwtAuthenticationToken(jwt));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 
     private String getTokenFromHeader(HttpServletRequest request) {
