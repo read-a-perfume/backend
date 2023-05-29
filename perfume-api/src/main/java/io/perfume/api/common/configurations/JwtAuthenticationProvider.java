@@ -10,9 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
@@ -53,6 +53,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @NotNull
     private List<SimpleGrantedAuthority> getRoles(String authenticationToken) {
-        return Stream.of(jsonWebTokenGenerator.getClaim(authenticationToken, "roles")).map(Object::toString).map(SimpleGrantedAuthority::new).toList();
+        ArrayList<?> roles = jsonWebTokenGenerator.getClaim(authenticationToken, "roles", ArrayList.class);
+
+        return roles.stream().map(String::valueOf).map(SimpleGrantedAuthority::new).toList();
     }
 }

@@ -95,10 +95,9 @@ class JsonWebTokenGeneratorTest {
         String jwt = jsonWebTokenGenerator.create(subject, claims, expirationSeconds, now);
 
         // when
-        Object userId = jsonWebTokenGenerator.getClaim(jwt, "userId");
+        Integer userId = jsonWebTokenGenerator.getClaim(jwt, "userId", Integer.class);
 
         // then
-        assertInstanceOf(Integer.class, userId);
         assertEquals(userId, 1);
     }
 

@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class JsonWebTokenGenerator {
@@ -64,7 +65,7 @@ public class JsonWebTokenGenerator {
                 .getSubject();
     }
 
-    public Object getClaim(String jwt, String key) {
+    public <T> T getClaim(String jwt, String key, Class<T> requiredType) {
         assert jwt != null;
         assert !jwt.isEmpty();
         assert key != null;
@@ -76,7 +77,7 @@ public class JsonWebTokenGenerator {
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody()
-                .get(key);
+                .get(key, requiredType);
     }
 
     public Boolean verify(String jwt, LocalDateTime now) {

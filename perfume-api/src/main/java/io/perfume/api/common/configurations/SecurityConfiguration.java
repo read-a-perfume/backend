@@ -1,10 +1,10 @@
 package io.perfume.api.common.configurations;
 
 import io.perfume.api.common.filters.JwtAuthenticationFilter;
-import jwt.JsonWebTokenGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -27,6 +27,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+@EnableMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration {
@@ -48,7 +49,6 @@ public class SecurityConfiguration {
             AuthenticationSuccessHandler authenticationSuccessHandler,
             AuthenticationFailureHandler authenticationFailureHandler,
             OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService,
-            JsonWebTokenGenerator jsonWebTokenGenerator,
             WhiteListConfiguration whiteListConfig
     ) throws Exception {
         httpSecurity
@@ -104,7 +104,7 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new SimpleUrlAuthenticationFailureHandler("/");
+        return new SimpleUrlAuthenticationFailureHandler();
     }
 
     @Bean
