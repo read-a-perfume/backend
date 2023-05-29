@@ -1,8 +1,6 @@
 package io.perfume.api.user.adapter.out.persistence;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
-import io.perfume.api.sample.adapter.out.persistence.SampleQueryRepositoryImpl;
-import io.perfume.api.sample.domain.Sample;
 import io.perfume.api.user.domain.Role;
 import io.perfume.api.user.domain.User;
 import jakarta.persistence.EntityManager;
@@ -14,12 +12,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @Import(TestQueryDSLConfiguration.class)

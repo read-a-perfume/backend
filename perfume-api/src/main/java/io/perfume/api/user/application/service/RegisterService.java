@@ -1,5 +1,6 @@
 package io.perfume.api.user.application.service;
 
+import encryptor.OneWayEncryptor;
 import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
 import io.perfume.api.auth.application.port.in.CreateVerificationCodeUseCase;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
@@ -32,13 +33,14 @@ public class RegisterService implements CreateUserUseCase {
     private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
     private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
     private final MailSender mailSender;
+    private final OneWayEncryptor oneWayEncryptor;
 
     @Transactional
     public UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command) {
         User user = User.generalUserJoin(
                 command.username(),
                 command.email(),
-                command.password(), // TODO : Password encoding 추가하기
+                oneWayEncryptor.hash(command.password()),
                 command.name(),
                 command.marketingConsent(),
                 command.promotionConsent());

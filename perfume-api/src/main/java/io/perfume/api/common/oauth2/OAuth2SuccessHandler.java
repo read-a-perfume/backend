@@ -1,5 +1,6 @@
 package io.perfume.api.common.oauth2;
 
+import generator.Generator;
 import io.perfume.api.common.properties.JsonWebTokenProperties;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
@@ -19,9 +20,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -34,6 +37,8 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
     private final FindUserUseCase findUserUseCase;
 
     private final CreateUserUseCase createUserUseCase;
+
+    private final Generator generator;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -77,8 +82,8 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
 
         return findUserUseCase.findOneByEmail(email).orElseGet(() -> {
             SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
-                    null,
-                    null,
+                    createUsername(email, unixTime()),
+                    generator.generate(30),
                     email,
                     false,
                     false,
@@ -86,5 +91,17 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
             );
             return createUserUseCase.signUpGeneralUserByEmail(command);
         });
+    }
+
+    private Long unixTime() {
+        return Instant.now().getEpochSecond();
+    }
+
+     private String createUsername(String email, Long unixTime) {
+        if (Objects.isNull(email) || !email.contains("@")) {
+            throw new IllegalArgumentException(email + " 올바른 이메일 형식이 아닙니다.");
+        }
+
+        return email.split("@")[0] + unixTime;
     }
 }
