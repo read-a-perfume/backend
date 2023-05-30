@@ -57,7 +57,7 @@ class LoginAuthenticationFilterTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-        
+
         String token = mvcResult.getResponse().getHeader("Authorization");
 
         assertNotNull(token);
