@@ -16,6 +16,7 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
+
     private static final String TOKEN_PREFIX = "Bearer";
     private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     public String create(String subject, List<String> roles, LocalDateTime now) {

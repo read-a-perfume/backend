@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @PersistenceAdapter
-class UserPersistenceAdapter implements UserRepository {
+public class UserPersistenceAdapter implements UserRepository {
 
     private final UserJpaRepository userJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;

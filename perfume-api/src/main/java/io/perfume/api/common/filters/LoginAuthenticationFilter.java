@@ -15,8 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
 import java.io.IOException;
 
@@ -28,6 +30,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     public LoginAuthenticationFilter(AuthenticationManager authenticationManager,
                                      JwtProvider jwtProvider,
                                      ObjectMapper objectMapper) {
+
         this.jwtProvider = jwtProvider;
         this.objectMapper = objectMapper;
         super.setAuthenticationManager(authenticationManager);
@@ -51,8 +54,8 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
             throw new IllegalArgumentException();
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-
+        UsernamePasswordAuthenticationToken authenticationToken
+                = new UsernamePasswordAuthenticationToken(username, password);
         return this.getAuthenticationManager().authenticate(authenticationToken);
     }
 
@@ -72,6 +75,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
                                             HttpServletResponse response,
                                             FilterChain filter,
                                             Authentication authResult) throws IOException, ServletException {
+
         SecurityContextHolder.getContext().setAuthentication(authResult);
         jwtProvider.applyHeader(response, (UserDetails) authResult.getPrincipal());
 
@@ -83,8 +87,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-
-        filter.doFilter(request, response);
+//        filter.doFilter(request, response);
     }
 
     @Override
@@ -94,7 +97,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        String errorMessage = "";
+        String errorMessage = "Authentication failed: " + failed.getMessage();
         response.getWriter().write(
                 objectMapper.writeValueAsString(errorMessage));
     }
