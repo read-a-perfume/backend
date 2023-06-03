@@ -4,7 +4,7 @@ import io.perfume.api.user.domain.User;
 import org.springframework.stereotype.Component;
 
 @Component
-class UserMapper {
+public class UserMapper {
 
     public User toUser(UserJpaEntity userJpaEntity) {
         if (userJpaEntity == null) {

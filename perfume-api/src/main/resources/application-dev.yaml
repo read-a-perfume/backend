@@ -4,7 +4,7 @@ spring:
       on-profile: 'dev'
   datasource:
     driver-class-name: 'com.mysql.cj.jdbc.Driver'
-    url: ${DB_HOST}
+    url: 'jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}'
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
@@ -22,7 +22,27 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 'google-client-id'
+            client-secret: 'google-client-secret'
+            scope:
+              - profile
+              - email
 
 whitelist:
   cors:
     - http://localhost:3000
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  redirect-uri: ${JWT_REDIRECT_URI}
+  access-token-validity-in-seconds: ${JWT_ACCESS_TOKEN_VALIDITY_IN_SECONDS}
+  refresh-token-validity-in-seconds: ${JWT_REFRESH_TOKEN_VALIDITY_IN_SECONDS}
+
+encryption:
+  aes:
+    secret-key: ${AES_SECRET_KEY}
