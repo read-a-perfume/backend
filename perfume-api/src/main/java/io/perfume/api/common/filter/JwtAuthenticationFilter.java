@@ -1,6 +1,6 @@
-package io.perfume.api.common.filters;
+package io.perfume.api.common.filter;
 
-import io.perfume.api.common.configurations.JwtAuthenticationToken;
+import io.perfume.api.common.config.JwtAuthenticationToken;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

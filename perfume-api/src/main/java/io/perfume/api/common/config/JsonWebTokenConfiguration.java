@@ -1,6 +1,6 @@
-package io.perfume.api.common.configurations;
+package io.perfume.api.common.config;
 
-import io.perfume.api.common.properties.JsonWebTokenProperties;
+import io.perfume.api.common.property.JsonWebTokenProperties;
 import jwt.JsonWebTokenGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package io.perfume.api.common.configurations;
+package io.perfume.api.common.config;
 
-import io.perfume.api.common.filters.JwtAuthenticationFilter;
+import io.perfume.api.common.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,7 +27,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration {

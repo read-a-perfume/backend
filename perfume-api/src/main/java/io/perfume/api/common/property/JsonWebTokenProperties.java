@@ -1,4 +1,4 @@
-package io.perfume.api.common.properties;
+package io.perfume.api.common.property;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;

@@ -1,12 +1,11 @@
 package io.perfume.api.common.oauth2;
 
 import generator.Generator;
-import io.perfume.api.common.properties.JsonWebTokenProperties;
+import io.perfume.api.common.property.JsonWebTokenProperties;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jwt.JsonWebTokenGenerator;
@@ -41,7 +40,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
     private final Generator generator;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, @NotNull Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, @NotNull Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         UserResult userResult = newUserIfNotExists(oAuth2User);
 
