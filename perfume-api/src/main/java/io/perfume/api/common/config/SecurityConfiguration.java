@@ -55,7 +55,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authorizeHttpRequests ->
                                 authorizeHttpRequests
-                                        .anyRequest().permitAll()
+                                        .requestMatchers(
+                                                "/oauth2/**",
+                                                "/login/oauth2/code/**",
+                                                "/v1/auth/**"
+                                        ).permitAll()
+                                        .anyRequest().authenticated()
                 )
                 .csrf(CsrfConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfig.getCors())))
@@ -67,7 +72,7 @@ public class SecurityConfiguration {
                                                 .authorizationRequestRepository(requestAuthorizationRequestRepository))
                                 .redirectionEndpoint(redirectionEndpointConfig ->
                                         redirectionEndpointConfig
-                                                .baseUri("/login/oauth2/code/*"))
+                                                .baseUri("/login/oauth2/code/**"))
                                 .userInfoEndpoint(userInfoEndpointConfig ->
                                         userInfoEndpointConfig
                                                 .userService(oAuth2UserService)
@@ -75,6 +80,14 @@ public class SecurityConfiguration {
                                 .successHandler(authenticationSuccessHandler)
                                 .failureHandler(authenticationFailureHandler)
                 )
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint(
+                                        (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(401)
+                                )
+                                .accessDeniedHandler(
+                                        (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(403)
+                                ))
                 .sessionManagement(sessionManagement ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
