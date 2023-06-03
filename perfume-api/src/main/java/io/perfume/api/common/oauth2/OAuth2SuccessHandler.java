@@ -53,7 +53,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
 
     private void setResponseToken(HttpServletResponse response, UserResult userResult) {
         String accessToken = createAccessToken(userResult.email());
-        response.setHeader("Authorization", accessToken);
+        response.setHeader("Authorization", "Bearer " + accessToken);
 
         String refreshToken = createRefreshToken(accessToken);
         Cookie cookie = new Cookie("X-Refresh-Token", refreshToken);
