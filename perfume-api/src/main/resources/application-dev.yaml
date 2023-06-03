@@ -41,6 +41,7 @@ jwt:
   secret-key: ''
   redirect-uri: ''
   access-token-validity-in-seconds: 0
+  refresh-token-validity-in-seconds: 0
 
 encryption:
   aes:

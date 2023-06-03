@@ -13,6 +13,8 @@ public record JsonWebTokenProperties(
         @NotEmpty
         String redirectUri,
         @Min(60 * 60 * 2)
-        int accessTokenValidityInSeconds
+        int accessTokenValidityInSeconds,
+        @Min(60 * 60 * 24 * 7)
+        int refreshTokenValidityInSeconds
 ) {
 }

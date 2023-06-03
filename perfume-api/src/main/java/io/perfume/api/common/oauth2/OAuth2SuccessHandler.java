@@ -6,6 +6,7 @@ import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jwt.JsonWebTokenGenerator;
@@ -44,26 +45,45 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         UserResult userResult = newUserIfNotExists(oAuth2User);
 
-        String accessToken = createJsonWebToken(userResult.email());
+        setResponseToken(response, userResult);
 
-        String targetUrl = getRedirectUri(accessToken);
+        String targetUrl = getRedirectUri();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
+    private void setResponseToken(HttpServletResponse response, UserResult userResult) {
+        String accessToken = createAccessToken(userResult.email());
+        response.setHeader("Authorization", accessToken);
+
+        String refreshToken = createRefreshToken(accessToken);
+        Cookie cookie = new Cookie("X-Refresh-Token", refreshToken);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+    }
+
     @NotNull
-    private String getRedirectUri(String accessToken) {
+    private String getRedirectUri() {
         return UriComponentsBuilder.fromHttpUrl(jsonWebTokenProperties.redirectUri())
-                .queryParam("accessToken", accessToken)
                 .build()
                 .toUriString();
     }
 
     @NotNull
-    private String createJsonWebToken(String email) {
+    private String createAccessToken(String email) {
         return jsonWebTokenGenerator.create(
                 email,
                 Map.of("roles", List.of("ROLE_USER")),
                 jsonWebTokenProperties.accessTokenValidityInSeconds(),
+                LocalDateTime.now()
+        );
+    }
+
+    @NotNull
+    private String createRefreshToken(String pairAccessToken) {
+        return jsonWebTokenGenerator.create(
+                pairAccessToken,
+                Map.of(),
+                jsonWebTokenProperties.refreshTokenValidityInSeconds(),
                 LocalDateTime.now()
         );
     }
