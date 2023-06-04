@@ -19,22 +19,18 @@ public class JwtProvider {
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
 
-    public void applyHeader(HttpServletResponse response, UserDetails principal) {
-        String token = create(principal);
-        response.addHeader("Authorization", "Bearer " + token);
-    }
-
     /**
-     *
-     * @param userDetails
-     * @return when user logged in, create and send token to client server
+     * when user logged in, create and send access token to client server
+     * @param response send to client
+     * @param principal create token using it
      */
-    private String create(UserDetails userDetails) {
-        List<String> authorities = userDetails.getAuthorities().stream()
+    public void sendAccessToken(HttpServletResponse response, UserDetails principal) {
+        List<String> authorities = principal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        return jwtUtil.create(userDetails.getUsername(), authorities, LocalDateTime.now());
+        String token = jwtUtil.create(principal.getUsername(), authorities, LocalDateTime.now());
+        response.addHeader("Authorization", token);
     }
 
     /**

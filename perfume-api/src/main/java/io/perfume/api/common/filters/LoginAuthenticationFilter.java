@@ -1,11 +1,9 @@
 package io.perfume.api.common.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micrometer.common.util.StringUtils;
 import io.perfume.api.common.jwt.JwtProvider;
-import io.perfume.api.common.jwt.UserPrincipal;
+import io.perfume.api.common.filters.login.LoginDto;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -16,8 +14,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -32,11 +32,11 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         this.objectMapper = objectMapper;
         super.setAuthenticationManager(authenticationManager);
     }
+
     /**
-     *
-     * @param request from which to extract parameters and perform the authentication
+     * @param request  from which to extract parameters and perform the authentication
      * @param response the response, which may be needed if the implementation has to do a
-     * redirect as part of a multi-stage authentication process (such as OIDC).
+     *                 redirect as part of a multi-stage authentication process (such as OIDC).
      * @return Authentication Object based on username and password
      * @throws AuthenticationException
      */
@@ -44,37 +44,36 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         // request로부터 user 정보 얻기
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-            throw new IllegalArgumentException();
+        LoginDto loginDto;
+        try {
+            loginDto = objectMapper.readValue(StreamUtils.copyToString(
+                    request.getInputStream(), StandardCharsets.UTF_8), LoginDto.class);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
         }
 
         UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(username, password);
+                = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         return this.getAuthenticationManager().authenticate(authenticationToken);
     }
 
     /**
-     *
      * @param request
      * @param response
      * @param filter
      * @param authResult the object returned from the <tt>attemptAuthentication</tt>
-     * method.
-     * authenticated result comes from AuthenticationProvider.
-     * deliver JWT to the LoginSuccessHandler!
-     * @throws IOException
+     *                   method.
+     *                   authenticated result comes from AuthenticationProvider.
+     *                   deliver JWT to the LoginSuccessHandler!
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain filter,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) {
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
-        jwtProvider.applyHeader(response, (UserDetails) authResult.getPrincipal());
+        jwtProvider.sendAccessToken(response, (UserDetails) authResult.getPrincipal());
 
         try {
             response.getWriter().write(
@@ -84,7 +83,6 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-//        filter.doFilter(request, response);
     }
 
     @Override

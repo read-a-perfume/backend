@@ -1,4 +1,4 @@
-package io.perfume.api.common.filters;
+package io.perfume.api.common.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

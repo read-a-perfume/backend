@@ -1,5 +1,6 @@
 package io.perfume.api.common.filters;
 
+import encryptor.impl.JwtUtil;
 import io.perfume.api.common.jwt.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,19 +20,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
 
+    private final JwtUtil jwtUtil = new JwtUtil();
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
-        String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer")) {
-            throw new RuntimeException("JWT is missing");
+        String token = jwtUtil.getToken(request.getHeader("Authorization"));
+        if (token != null) {
+            Authentication authentication = jwtProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
-        String token = header.substring(7);
-        Authentication authentication = jwtProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }

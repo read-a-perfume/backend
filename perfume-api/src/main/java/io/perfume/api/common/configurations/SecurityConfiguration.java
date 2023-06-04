@@ -2,11 +2,12 @@ package io.perfume.api.common.configurations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.common.config.WhiteListConfiguration;
-import io.perfume.api.common.filters.JwtAccessDeniedHandler;
-import io.perfume.api.common.filters.JwtAuthenticationEntryPoint;
+import io.perfume.api.common.filters.ExceptionHandlerFilter;
+import io.perfume.api.common.jwt.CustomUserDetailsService;
+import io.perfume.api.common.jwt.JwtAccessDeniedHandler;
+import io.perfume.api.common.jwt.JwtAuthenticationEntryPoint;
 import io.perfume.api.common.filters.JwtAuthenticationFilter;
 import io.perfume.api.common.filters.LoginAuthenticationFilter;
-import io.perfume.api.common.jwt.CustomUserDetailsService;
 import io.perfume.api.common.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,8 +42,9 @@ public class SecurityConfiguration {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtProvider jwtProvider;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService customUserDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
     public SecurityFilterChain filterChain(
@@ -50,16 +53,12 @@ public class SecurityConfiguration {
             WhiteListConfiguration whiteListConfig
     ) throws Exception {
         httpSecurity
-                .authorizeHttpRequests(
-                        authorizeHttpRequests ->
-                                authorizeHttpRequests
-                                        .anyRequest().permitAll()
-                )
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfig.getCors())))
                 // form login disable
                 .formLogin(AbstractHttpConfigurer::disable)
+                .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 // STATELESS로 설정하여 Session 사용　X
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // handle 401, 403 Exception
@@ -68,6 +67,7 @@ public class SecurityConfiguration {
                         .accessDeniedHandler(jwtAccessDeniedHandler))
                 .addFilter(loginAuthenticationFilter())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .authorizeHttpRequests(
                         request -> request.requestMatchers("/v1/signup/email").permitAll()
                                 .anyRequest().authenticated()
