@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -56,13 +58,17 @@ public class SecurityConfiguration {
                         authorizeHttpRequests ->
                                 authorizeHttpRequests
                                         .requestMatchers(
-                                                "/oauth2/**",
-                                                "/login/oauth2/code/**",
-                                                "/v1/auth/**"
+                                                new AntPathRequestMatcher("/v1/signup/**"),
+                                                new AntPathRequestMatcher("/oauth2/**"),
+                                                new AntPathRequestMatcher("/login/oauth2/code/**"),
+                                                new AntPathRequestMatcher("/v1/signup/**"),
+                                                new AntPathRequestMatcher("/error")
                                         ).permitAll()
                                         .anyRequest().authenticated()
                 )
                 .csrf(CsrfConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfig.getCors())))
                 .oauth2Login(oAuth2LoginConfigurer ->
                         oAuth2LoginConfigurer
