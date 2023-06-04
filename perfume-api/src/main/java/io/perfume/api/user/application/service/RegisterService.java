@@ -56,6 +56,7 @@ public class RegisterService implements CreateUserUseCase {
         }
     }
 
+    @Transactional
     public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
         logger.info("confirmEmailVerify code = {}, key = {}, now = {}", code, key, now);
 
@@ -65,6 +66,7 @@ public class RegisterService implements CreateUserUseCase {
         return new ConfirmEmailVerifyResult(result.email(), now);
     }
 
+    @Transactional
     public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
         CreateVerificationCodeCommand createVerificationCodeCommand = new CreateVerificationCodeCommand(command.email(), command.now());
         CreateVerificationCodeResult result = createVerificationCodeUseCase.createVerificationCode(createVerificationCodeCommand);
