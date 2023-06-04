@@ -2,6 +2,7 @@ package io.perfume.api.common.config;
 
 import jwt.JsonWebTokenGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -13,9 +14,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
+
+    public static final Authentication ANONYMOUS =
+            new AnonymousAuthenticationToken(
+                    "anonymous",
+                    "anonymous",
+                    Set.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
 
     private final JsonWebTokenGenerator jsonWebTokenGenerator;
 
@@ -26,14 +34,14 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Object credentials = authentication.getCredentials();
-        if (!(Objects.requireNonNull(credentials) instanceof String)) {
-            return JwtAuthenticationToken.unauthorized();
+        if (!(credentials instanceof String)) {
+            return ANONYMOUS;
         }
 
         String jwt = Objects.toString(credentials);
         LocalDateTime now = LocalDateTime.now();
         if (!jsonWebTokenGenerator.verify(jwt, now)) {
-            return JwtAuthenticationToken.unauthorized();
+            return ANONYMOUS;
         }
 
         return getAuthentication(jwt);
