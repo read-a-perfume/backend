@@ -46,3 +46,7 @@ jwt:
 encryption:
   aes:
     secret-key: ''
+
+sentry:
+  dsn: ''
+  traces-sample-rate: 1.0

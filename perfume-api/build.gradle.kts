@@ -2,6 +2,7 @@ val asciidoctorExt: Configuration by configurations.creating
 
 dependencies {
     implementation(project(":perfume-core"))
+    implementation(project(":perfume-support"))
 
     implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
