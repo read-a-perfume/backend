@@ -4,6 +4,7 @@ spring:
       default: 'common'
       dev: 'common'
       prod: 'common'
+      jwt: 'common'
 
 ---
 
@@ -13,7 +14,7 @@ spring:
       - application-default.yaml
       - application-dev.yaml
       - application-prod.yaml
-
+      - application-jwt.yaml
 ---
 
 spring:

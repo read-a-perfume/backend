@@ -1,0 +1,3 @@
+jwt:
+  redirect-uri: '/'
+  access-token-validity-in-seconds: 7200
