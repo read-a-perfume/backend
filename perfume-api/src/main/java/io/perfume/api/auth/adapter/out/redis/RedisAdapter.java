@@ -16,16 +16,16 @@ public class RedisAdapter implements RememberMeQueryRepository, RememberMeReposi
     private final RedisRepository redisRepository;
     @Override
     public Optional<RefreshToken> getRefreshToken(String accessToken) {
-        return Optional.empty();
+        return redisRepository.findById(accessToken);
     }
 
     @Override
     public RefreshToken saveRefreshToken(RefreshToken refreshToken) {
-        return null;
+        return redisRepository.save(refreshToken);
     }
 
     @Override
     public void RemoveRememberMe(String accessToken) {
-
+        redisRepository.deleteById(accessToken);
     }
 }

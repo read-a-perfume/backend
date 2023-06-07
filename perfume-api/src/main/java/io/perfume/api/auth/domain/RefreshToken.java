@@ -13,9 +13,8 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken {
     @Id
-    private Long userId;
-    private LocalDateTime expiredTime;
     private String accessToken;
+    private LocalDateTime expiredTime;
 
     public void updateAccessToken(String accessToken) {
         this.accessToken = accessToken;

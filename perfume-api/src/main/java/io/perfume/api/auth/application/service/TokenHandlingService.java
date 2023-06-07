@@ -6,10 +6,15 @@ import io.perfume.api.auth.application.port.in.MakeNewAccessTokenUseCase;
 import io.perfume.api.auth.application.port.out.RememberMeQueryRepository;
 import io.perfume.api.auth.application.port.out.RememberMeRepository;
 import io.perfume.api.auth.domain.RefreshToken;
+import io.perfume.api.common.property.JsonWebTokenProperties;
+import jwt.JsonWebTokenGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 /**
  * token 발급, 무효같은 기능을 제공
@@ -19,8 +24,8 @@ import java.time.LocalDateTime;
 public class TokenHandlingService implements MakeNewAccessTokenUseCase {
     private final RememberMeQueryRepository rememberMeQueryRepository;
     private final RememberMeRepository rememberMeRepository;
-    private final LocalDateTime now;
-
+    private final JsonWebTokenGenerator tokenGenerator;
+    private final JsonWebTokenProperties jsonWebTokenProperties;
     /**
      * RefreshToken을 확인하고 새로운 AccessToken을 반환
      *
@@ -33,9 +38,14 @@ public class TokenHandlingService implements MakeNewAccessTokenUseCase {
                 .getRefreshToken(accessToken)
                 .orElseThrow(NotFoundRefreshTokenException::new);
 
-        if(refreshToken.canIssueAccessToken(now, accessToken)) {
-            String newToken = ""; // TODO : core module 로직 사용하기
-            refreshToken.updateAccessToken(newToken);
+        if(refreshToken.canIssueAccessToken(LocalDateTime.now(), accessToken)) {
+            String newAccessToken = tokenGenerator.create(
+                    tokenGenerator.getSubject(accessToken),
+                    Map.of("roles", List.of("ROLE_USER")),
+                    jsonWebTokenProperties.accessTokenValidityInSeconds(),
+                    LocalDateTime.now());
+
+            refreshToken.updateAccessToken(newAccessToken);
             return rememberMeRepository
                     .saveRefreshToken(refreshToken)
                     .getAccessToken();

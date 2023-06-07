@@ -13,13 +13,11 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 class InMemoryAdapter implements RememberMeQueryRepository, RememberMeRepository {
-    // TODO : 괜찮은 InMemory 찾아보기
     private final InMemoryRepository inMemoryRepository;
     @Override
     public Optional<RefreshToken> getRefreshToken(String accessToken) {
         return inMemoryRepository.findByAccessToken(accessToken);
     }
-
     @Override
     public RefreshToken saveRefreshToken(RefreshToken refreshToken) {
         return inMemoryRepository.save(refreshToken);
@@ -27,6 +25,6 @@ class InMemoryAdapter implements RememberMeQueryRepository, RememberMeRepository
 
     @Override
     public void RemoveRememberMe(String accessToken) {
-
+        inMemoryRepository.delete(accessToken);
     }
 }

@@ -17,4 +17,9 @@ class InMemoryRepository {
     RefreshToken save(RefreshToken refreshToken) {
         return db.put(refreshToken.getAccessToken(), refreshToken);
     }
+
+    RefreshToken delete(String accessToken) {
+        return db.remove(accessToken);
+    }
+
 }

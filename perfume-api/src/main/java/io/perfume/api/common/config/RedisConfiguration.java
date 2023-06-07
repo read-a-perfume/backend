@@ -1,4 +1,4 @@
-package io.perfume.api.configuration;
+package io.perfume.api.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
