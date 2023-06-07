@@ -19,17 +19,8 @@ public class RefreshToken {
     public void updateAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
-    public boolean canIssueAccessToken(LocalDateTime now, String accessToken) {
-        return isExpired(now) && isMatch(accessToken);
-    }
-    private boolean isExpired(LocalDateTime now) {
-        return now.isAfter(expiredTime);
-    }
-    private boolean isMatch(String accessToken) {
-        if(accessToken == null || this.accessToken == null) {
-            return false;
-        }
-        return Objects.equals(accessToken, this.accessToken);
+    public boolean canIssueAccessToken(LocalDateTime now) {
+        return now.isBefore(expiredTime);
     }
     public static RefreshToken Login(String accessToken, LocalDateTime expiredTime) {
         RefreshToken refreshToken = new RefreshToken();
