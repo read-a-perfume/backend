@@ -1,18 +1,16 @@
 package io.perfume.api.auth.domain;
 
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
+@ToString
 @RedisHash
-@RequiredArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken {
     @Id
     private Long userId;
