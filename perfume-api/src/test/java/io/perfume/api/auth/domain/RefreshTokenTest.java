@@ -21,7 +21,7 @@ public class RefreshTokenTest {
     }
 
     @Test
-    public void 만료기간이_지나지_않았다면_새로운_액세스_토큰을_발급_받을_수_없는가() {
+    public void 만료기간이_지나지_않았다면_새로운_액세스_토큰을_발급_받을_수_있는가() {
         String accessToken = "tmp-token";
         LocalDateTime oldTime = LocalDateTime.now().plusSeconds(40);
         RefreshToken sut = RefreshToken.Login(accessToken, oldTime);
