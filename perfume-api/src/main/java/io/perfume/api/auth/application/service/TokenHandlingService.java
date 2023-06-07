@@ -37,6 +37,7 @@ public class TokenHandlingService implements MakeNewAccessTokenUseCase {
         RefreshToken refreshToken = rememberMeQueryRepository
                 .getRefreshToken(accessToken)
                 .orElseThrow(NotFoundRefreshTokenException::new);
+        rememberMeRepository.RemoveRememberMe(accessToken);
 
         if(refreshToken.canIssueAccessToken(LocalDateTime.now(), accessToken)) {
             String newAccessToken = tokenGenerator.create(

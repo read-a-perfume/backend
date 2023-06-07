@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Profile({"dev", "test"})
+@Profile("!prod")
 @Repository
 @RequiredArgsConstructor
 class InMemoryAdapter implements RememberMeQueryRepository, RememberMeRepository {

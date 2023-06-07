@@ -1,8 +1,11 @@
 package io.perfume.api.auth.adapter.out.inmemory;
 
 import io.perfume.api.auth.domain.RefreshToken;
+import jakarta.annotation.PostConstruct;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -15,7 +18,8 @@ class InMemoryRepository {
     }
 
     RefreshToken save(RefreshToken refreshToken) {
-        return db.put(refreshToken.getAccessToken(), refreshToken);
+        db.put(refreshToken.getAccessToken(), refreshToken);
+        return db.get(refreshToken.getAccessToken());
     }
 
     RefreshToken delete(String accessToken) {

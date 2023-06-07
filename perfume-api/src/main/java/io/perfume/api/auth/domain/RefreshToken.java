@@ -1,7 +1,7 @@
 package io.perfume.api.auth.domain;
 
-import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
@@ -30,5 +30,11 @@ public class RefreshToken {
             return false;
         }
         return Objects.equals(accessToken, this.accessToken);
+    }
+    public static RefreshToken Login(String accessToken, LocalDateTime expiredTime) {
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.accessToken = accessToken;
+        refreshToken.expiredTime = expiredTime;
+        return refreshToken;
     }
 }
