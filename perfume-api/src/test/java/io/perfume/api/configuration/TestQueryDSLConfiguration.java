@@ -4,6 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.auth.adapter.out.persistence.AuthenticationKeyMapper;
 import io.perfume.api.auth.adapter.out.persistence.AuthenticationKeyQueryRepositoryImpl;
 import io.perfume.api.sample.adapter.out.persistence.SampleQueryRepositoryImpl;
+import io.perfume.api.user.adapter.out.persistence.UserMapper;
+import io.perfume.api.user.adapter.out.persistence.UserQueryPersistenceAdapter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -26,12 +28,12 @@ public class TestQueryDSLConfiguration {
     }
 
     @Bean
-    public AuthenticationKeyMapper authenticationKeyMapper() {
-        return new AuthenticationKeyMapper();
+    public AuthenticationKeyQueryRepositoryImpl authenticationKeyQueryRepository(JPAQueryFactory jpaQueryFactory) {
+        return new AuthenticationKeyQueryRepositoryImpl(new AuthenticationKeyMapper(), jpaQueryFactory);
     }
 
     @Bean
-    public AuthenticationKeyQueryRepositoryImpl authenticationKeyQueryRepository(JPAQueryFactory jpaQueryFactory, AuthenticationKeyMapper mapper) {
-        return new AuthenticationKeyQueryRepositoryImpl(mapper, jpaQueryFactory);
+    public UserQueryPersistenceAdapter userQueryPersistenceAdapter(JPAQueryFactory jpaQueryFactory) {
+        return new UserQueryPersistenceAdapter(jpaQueryFactory, new UserMapper());
     }
 }

@@ -2,10 +2,7 @@ package io.perfume.api.user.adapter.in.http;
 
 
 import io.perfume.api.user.adapter.in.http.dto.*;
-import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
-import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
-import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
-import io.perfume.api.user.application.port.in.dto.UserResult;
+import io.perfume.api.user.application.port.in.dto.*;
 import io.perfume.api.user.application.service.RegisterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +22,15 @@ public class RegisterController {
     @PostMapping("/email")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResult signUpByEmail(@RequestBody @Valid RegisterDto registerDto) {
-        return registerService.signUpGeneralUserByEmail(registerDto);
+        SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
+                registerDto.username(),
+                registerDto.password(),
+                registerDto.email(),
+                registerDto.marketingConsent(),
+                registerDto.promotionConsent(),
+                registerDto.name()
+        );
+        return registerService.signUpGeneralUserByEmail(command);
     }
 
     @PostMapping("/check-username")

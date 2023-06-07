@@ -1,3 +1,3 @@
 rootProject.name = "perfume-backend"
 
-include("perfume-api", "perfume-core")
+include("perfume-api", "perfume-core", "perfume-support")

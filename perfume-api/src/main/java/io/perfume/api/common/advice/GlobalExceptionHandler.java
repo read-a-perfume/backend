@@ -1,4 +1,4 @@
-package io.perfume.api.advice;
+package io.perfume.api.common.advice;
 
 import io.perfume.api.base.CustomHttpException;
 import io.perfume.api.base.LogLevel;

@@ -1,5 +1,8 @@
+val asciidoctorExt: Configuration by configurations.creating
+
 dependencies {
     implementation(project(":perfume-core"))
+    implementation(project(":perfume-support"))
 
     implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
@@ -7,6 +10,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-security:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.1.0")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.1.0")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.0")
@@ -24,16 +28,12 @@ dependencies {
     annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api:2.1.1")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
+
+    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
 }
 
 tasks.jar {
     enabled = false
-}
-
-// for rest docs
-val asciidoctorExt: Configuration by configurations.creating
-dependencies {
-    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
 }
 
 val snippetsDir by extra { file("./build/generated-snippets") }

@@ -1,4 +1,4 @@
-package io.perfume.api.configuration;
+package io.perfume.api.common.config;
 
 import generator.Generator;
 import generator.impl.NumberGenerator;
