@@ -35,8 +35,8 @@ subprojects {
 
     dependencies {
         // kotlin
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.21")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.22")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
         // spring boot
