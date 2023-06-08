@@ -7,7 +7,7 @@ plugins {
     id("org.graalvm.buildtools.native") version "0.9.22"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
     kotlin("jvm") version "1.8.21"
-    kotlin("plugin.spring") version "1.8.21"
+    kotlin("plugin.spring") version "1.8.22"
     kotlin("plugin.jpa") version "1.8.21"
 }
 
