@@ -1,42 +1,35 @@
 package io.perfume.api.common.filter;
 
-import io.perfume.api.common.config.JwtAuthenticationToken;
+import encryptor.impl.JwtUtil;
+import io.perfume.api.common.jwt.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.security.authentication.AuthenticationManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
+    private final JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwt = getTokenFromHeader(request);
-        Authentication authentication = authenticationManager.authenticate(new JwtAuthenticationToken(jwt));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        filterChain.doFilter(request, response);
-    }
-
-    private String getTokenFromHeader(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer ")) {
-            return null;
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        String token = jwtUtil.getToken(request.getHeader("Authorization"));
+        if (token != null) {
+            Authentication authentication = jwtProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        return header.substring(7).trim();
+        filterChain.doFilter(request, response);
     }
 }

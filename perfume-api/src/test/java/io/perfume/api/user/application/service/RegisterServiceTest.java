@@ -13,6 +13,7 @@ import io.perfume.api.user.stub.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -29,11 +30,11 @@ class RegisterServiceTest {
 
     private StubMailSender stubMailSender = new StubMailSender();
 
-    private OneWayEncryptor oneWayEncryptor = new StubEncryptor();
+    private PasswordEncoder passwordEncoder = new StubEncryptor();
 
     private StubCreateVerificationCodeUseCase createVerificationCodeUseCase = new StubCreateVerificationCodeUseCase();
 
-    private RegisterService registerService = new RegisterService(userRepository, userQueryRepository, checkEmailCertificateUseCase, createVerificationCodeUseCase, stubMailSender, oneWayEncryptor);
+    private RegisterService registerService = new RegisterService(userRepository, userQueryRepository, checkEmailCertificateUseCase, createVerificationCodeUseCase, stubMailSender, passwordEncoder);
 
     @BeforeEach
     void setUp() {

@@ -1,15 +1,20 @@
 package io.perfume.api.common.config;
 
+import encryptor.impl.JwtUtil;
 import io.perfume.api.common.property.JsonWebTokenProperties;
 import jwt.JsonWebTokenGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class JsonWebTokenConfiguration {
+public class JwtConfiguration {
+    @Bean
+    public JwtUtil jwtUtil(JsonWebTokenProperties jsonWebTokenProperties) {
+        return new JwtUtil();
+    }
 
     @Bean
-    public JsonWebTokenGenerator jwtUtil(JsonWebTokenProperties jsonWebTokenProperties) {
+    public JsonWebTokenGenerator jsonWebTokenGenerator(JsonWebTokenProperties jsonWebTokenProperties) {
         return new JsonWebTokenGenerator(jsonWebTokenProperties.secretKey());
     }
 }

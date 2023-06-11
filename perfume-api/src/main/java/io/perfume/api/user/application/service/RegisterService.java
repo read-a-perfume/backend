@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import mailer.MailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,14 +33,14 @@ public class RegisterService implements CreateUserUseCase {
     private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
     private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
     private final MailSender mailSender;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command) {
         User user = User.generalUserJoin(
                 command.username(),
                 command.email(),
-                bCryptPasswordEncoder.encode(command.password()),
+                passwordEncoder.encode(command.password()),
                 command.name(),
                 command.marketingConsent(),
                 command.promotionConsent());

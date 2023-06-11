@@ -3,6 +3,7 @@ package jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class JsonWebTokenGenerator {
 
     private final Key secret;

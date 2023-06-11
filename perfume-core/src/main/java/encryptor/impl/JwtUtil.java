@@ -1,5 +1,6 @@
 package encryptor.impl;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,13 +38,12 @@ public class JwtUtil {
         return TOKEN_PREFIX + token;
     }
 
-    public String getUsername(String token){
+    public Claims getClaims(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .get("username", String.class);
+                .getBody();
     }
 
     public boolean expirationToken(String token)  {

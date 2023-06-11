@@ -1,8 +1,21 @@
 package io.perfume.api.common.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import encryptor.impl.JwtUtil;
+import io.perfume.api.common.filter.ExceptionHandlerFilter;
 import io.perfume.api.common.filter.JwtAuthenticationFilter;
+import io.perfume.api.common.filter.SignInAuthenticationFilter;
+import io.perfume.api.common.filter.oauth.OAuthJwtAuthenticationFilter;
+import io.perfume.api.common.jwt.CustomUserDetailsService;
+import io.perfume.api.common.jwt.JwtAccessDeniedHandler;
+import io.perfume.api.common.jwt.JwtAuthenticationEntryPoint;
+import io.perfume.api.common.jwt.JwtProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +23,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -32,17 +47,17 @@ import java.util.List;
 @EnableMethodSecurity()
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    public SecurityConfiguration(
-            AuthenticationManagerBuilder authenticationManagerBuilder,
-            JwtAuthenticationProvider jwtAuthenticationProvider
-    ) {
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
-    }
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtProvider jwtProvider;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain filterChain(
@@ -67,10 +82,14 @@ public class SecurityConfiguration {
                                         ).permitAll()
                                         .anyRequest().authenticated()
                 )
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
+                .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfig.getCors())))
+                // form login disable
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
-                .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfig.getCors())))
+                // STATELESS로 설정하여 Session 사용　X
+                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(oAuth2LoginConfigurer ->
                         oAuth2LoginConfigurer
                                 .authorizationEndpoint(authorizationEndpointConfig ->
@@ -87,18 +106,15 @@ public class SecurityConfiguration {
                                 .successHandler(authenticationSuccessHandler)
                                 .failureHandler(authenticationFailureHandler)
                 )
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling
-                                .authenticationEntryPoint(
-                                        (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(401)
-                                )
-                                .accessDeniedHandler(
-                                        (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(403)
-                                ))
-                .sessionManagement(sessionManagement ->
-                        sessionManagement
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtAuthenticationFilter(authenticationManagerBuilder.getOrBuild()), UsernamePasswordAuthenticationFilter.class);
+                // handle 401, 403 Exception
+                .exceptionHandling(configurer -> configurer
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler))
+                .addFilter(loginAuthenticationFilter())
+                .addFilterBefore(new OAuthJwtAuthenticationFilter(oauthAuthenticationManager()),
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
@@ -130,5 +146,37 @@ public class SecurityConfiguration {
     @Bean
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
         return new DefaultOAuth2UserService();
+    }
+
+    @Bean
+    public SignInAuthenticationFilter loginAuthenticationFilter() {
+        SignInAuthenticationFilter signInAuthenticationFilter = new SignInAuthenticationFilter(authenticationManager(), jwtProvider,
+                new ObjectMapper());
+        signInAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/v1/login", "POST"));
+        return signInAuthenticationFilter;
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtProvider, jwtUtil);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(customUserDetailsService);
+        return new ProviderManager(provider);
+    }
+
+    @Bean
+    public AuthenticationManager oauthAuthenticationManager() {
+        this.authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
+        return this.authenticationManagerBuilder.getOrBuild();
+    }
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

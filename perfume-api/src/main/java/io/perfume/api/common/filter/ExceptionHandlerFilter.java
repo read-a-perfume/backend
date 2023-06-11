@@ -1,4 +1,4 @@
-package io.perfume.api.common.filters;
+package io.perfume.api.common.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.base.CustomHttpException;

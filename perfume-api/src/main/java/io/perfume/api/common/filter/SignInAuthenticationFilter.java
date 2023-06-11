@@ -1,8 +1,8 @@
-package io.perfume.api.common.filters;
+package io.perfume.api.common.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.common.jwt.JwtProvider;
-import io.perfume.api.common.filters.login.LoginDto;
+import io.perfume.api.common.filter.signin.SignInDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,14 +19,14 @@ import org.springframework.util.StreamUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
 
-    public LoginAuthenticationFilter(AuthenticationManager authenticationManager,
-                                     JwtProvider jwtProvider,
-                                     ObjectMapper objectMapper) {
+    public SignInAuthenticationFilter(AuthenticationManager authenticationManager,
+                                      JwtProvider jwtProvider,
+                                      ObjectMapper objectMapper) {
 
         this.jwtProvider = jwtProvider;
         this.objectMapper = objectMapper;
@@ -44,16 +44,16 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         // request로부터 user 정보 얻기
-        LoginDto loginDto;
+        SignInDto signInDto;
         try {
-            loginDto = objectMapper.readValue(StreamUtils.copyToString(
-                    request.getInputStream(), StandardCharsets.UTF_8), LoginDto.class);
+            signInDto = objectMapper.readValue(StreamUtils.copyToString(
+                    request.getInputStream(), StandardCharsets.UTF_8), SignInDto.class);
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
 
         UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+                = new UsernamePasswordAuthenticationToken(signInDto.getUsername(), signInDto.getPassword());
         return this.getAuthenticationManager().authenticate(authenticationToken);
     }
 
@@ -72,9 +72,10 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
                                             FilterChain filter,
                                             Authentication authResult) {
 
-        SecurityContextHolder.getContext().setAuthentication(authResult);
-        jwtProvider.sendAccessToken(response, (UserDetails) authResult.getPrincipal());
+        String token = jwtProvider.createAccessToken((UserDetails) authResult.getPrincipal());
+        response.addHeader("Authorization", token);
 
+        SecurityContextHolder.getContext().setAuthentication(authResult);
         try {
             response.getWriter().write(
                     objectMapper.writeValueAsString(
