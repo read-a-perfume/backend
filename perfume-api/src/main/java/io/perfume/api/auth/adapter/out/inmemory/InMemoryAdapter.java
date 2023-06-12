@@ -24,7 +24,7 @@ class InMemoryAdapter implements RememberMeQueryRepository, RememberMeRepository
     }
 
     @Override
-    public void RemoveRememberMe(String accessToken) {
+    public void removeRememberMe(String accessToken) {
         inMemoryRepository.delete(accessToken);
     }
 }

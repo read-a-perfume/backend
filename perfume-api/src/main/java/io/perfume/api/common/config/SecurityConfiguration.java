@@ -3,6 +3,7 @@ package io.perfume.api.common.config;
 import io.perfume.api.common.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -63,7 +64,7 @@ public class SecurityConfiguration {
                                                 new AntPathRequestMatcher("/login/oauth2/code/**"),
                                                 new AntPathRequestMatcher("/v1/signup/**"),
                                                 new AntPathRequestMatcher("/error"),
-                                                new AntPathRequestMatcher("/api/access-token")
+                                                new AntPathRequestMatcher("/v1/access-token", HttpMethod.GET.toString())
                                         ).permitAll()
                                         .anyRequest().authenticated()
                 )

@@ -25,7 +25,7 @@ public class RedisAdapter implements RememberMeQueryRepository, RememberMeReposi
     }
 
     @Override
-    public void RemoveRememberMe(String accessToken) {
+    public void removeRememberMe(String accessToken) {
         redisRepository.deleteById(accessToken);
     }
 }

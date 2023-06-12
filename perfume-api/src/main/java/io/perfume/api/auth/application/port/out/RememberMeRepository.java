@@ -6,5 +6,5 @@ import java.sql.Ref;
 
 public interface RememberMeRepository {
     RefreshToken saveRefreshToken(RefreshToken refreshToken);
-    void RemoveRememberMe(String accessToken);
+    void removeRememberMe(String accessToken);
 }
