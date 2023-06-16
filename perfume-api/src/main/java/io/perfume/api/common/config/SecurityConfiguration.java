@@ -111,7 +111,7 @@ public class SecurityConfiguration {
                                 .accessDeniedHandler(
                                         (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(403)
                                 ))
-                .addFilter(new SignInAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild(), jwtFactory))
+                .addFilterBefore(new SignInAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild(), jwtFactory), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild()), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();

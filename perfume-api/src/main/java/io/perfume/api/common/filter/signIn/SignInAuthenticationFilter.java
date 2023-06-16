@@ -42,7 +42,6 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-        // request로부터 user 정보 얻기
         SignInDto signInDto;
         try {
             signInDto = objectMapper.readValue(StreamUtils.copyToString(

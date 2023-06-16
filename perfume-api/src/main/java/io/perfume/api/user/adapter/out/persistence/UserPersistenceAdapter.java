@@ -18,16 +18,6 @@ public class UserPersistenceAdapter implements UserRepository {
     private final UserMapper userMapper;
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        UserJpaEntity userJpaEntity = jpaQueryFactory.selectFrom(QUserJpaEntity.userJpaEntity)
-                .where(
-                        QUserJpaEntity.userJpaEntity.username.eq(username)
-                                .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
-                .fetchOne();
-        return Optional.ofNullable(userMapper.toUser(userJpaEntity));
-    }
-
-    @Override
     public Optional<User> save(User user) {
         UserJpaEntity userJpaEntity = userMapper.toUserJpaEntity(user);
         userJpaRepository.save(userJpaEntity);

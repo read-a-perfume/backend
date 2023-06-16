@@ -1,6 +1,6 @@
 package io.perfume.api.common.jwt;
 
-import io.perfume.api.user.application.port.out.UserRepository;
+import io.perfume.api.user.application.port.out.UserQueryRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserQueryRepository userQueryRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(UserQueryRepository userQueryRepository) {
+        this.userQueryRepository = userQueryRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
+        return userQueryRepository.findByUsername(username)
                 .map(UserPrincipal::new)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }
