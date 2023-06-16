@@ -18,10 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -53,13 +53,36 @@ class SignInAuthenticationFilterTest {
         this.mockMvc.perform(post("/v1/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signInDto))
-                        .param("username", email)
-                        .param("password", password))
+                )
                 .andExpect(status().isOk())
                 .andExpect(result -> {
                     String token = result.getResponse().getHeader("Authorization");
                     assertNotNull(token);
                     assertEquals(token.substring(0, 7), "Bearer ");
+                });
+    }
+
+    @Test
+    @DisplayName("로그인 실패 시 jwt 토큰을 생성하지 않는다.")
+    void failLoginGenerateToken() throws Exception {
+        // given
+        String email = "test@test.com";
+        String password = "test12341234";
+        String encodedPassword = passwordEncoder.encode(password);
+        given(userQueryRepository.findByUsername(email))
+                .willReturn(Optional.of(User.builder().username(email).name("test").role(Role.USER).password(encodedPassword).build()));
+        SignInDto signInDto = SignInDto.builder().username(email).password("invalid password!@#").build();
+
+        // when & then
+        this.mockMvc.perform(post("/v1/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signInDto))
+                )
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(result -> {
+                    String token = result.getResponse().getHeader("Authorization");
+                    assertNull(token);
                 });
     }
 }
