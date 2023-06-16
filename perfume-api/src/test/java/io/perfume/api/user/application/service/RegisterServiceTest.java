@@ -1,6 +1,5 @@
 package io.perfume.api.user.application.service;
 
-import encryptor.OneWayEncryptor;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.auth.application.type.CheckEmailStatus;
