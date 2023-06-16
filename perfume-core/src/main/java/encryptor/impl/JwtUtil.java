@@ -38,7 +38,7 @@ public class JwtUtil {
         return TOKEN_PREFIX + token;
     }
 
-    public Claims getClaims(String token){
+    public Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -46,7 +46,7 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public boolean expirationToken(String token)  {
+    public boolean expirationToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
