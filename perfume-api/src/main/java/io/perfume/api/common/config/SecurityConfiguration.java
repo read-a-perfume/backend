@@ -58,6 +58,7 @@ public class SecurityConfiguration {
                         authorizeHttpRequests ->
                                 authorizeHttpRequests
                                         .requestMatchers(
+                                                new AntPathRequestMatcher("/docs/**"),
                                                 new AntPathRequestMatcher("/v1/signup/**"),
                                                 new AntPathRequestMatcher("/oauth2/**"),
                                                 new AntPathRequestMatcher("/login/oauth2/code/**"),

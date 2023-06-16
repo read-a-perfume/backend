@@ -48,7 +48,7 @@ tasks.asciidoctor {
     doLast {
         copy {
             from("build/docs/asciidoc")
-            into("src/main/resources/static/docs")
+            into("build/resources/main/static")
         }
     }
 }
