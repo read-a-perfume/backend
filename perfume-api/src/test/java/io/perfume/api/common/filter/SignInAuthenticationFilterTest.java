@@ -1,22 +1,17 @@
 package io.perfume.api.common.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.common.config.SecurityConfiguration;
-import io.perfume.api.common.filter.signin.SignInDto;
+import io.perfume.api.common.filter.signIn.SignInDto;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
 import io.perfume.api.user.application.service.RegisterService;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -34,15 +29,12 @@ class SignInAuthenticationFilterTest {
 
     @Autowired
     RegisterService registerService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Autowired
     MockMvc mockMvc;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {

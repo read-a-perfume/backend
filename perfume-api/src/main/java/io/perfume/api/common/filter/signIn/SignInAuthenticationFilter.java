@@ -1,8 +1,7 @@
-package io.perfume.api.common.filter;
+package io.perfume.api.common.filter.signIn;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.common.jwt.JwtProvider;
-import io.perfume.api.common.filter.signin.SignInDto;
+import io.perfume.api.common.jwt.JwtFactory;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
@@ -21,16 +21,15 @@ import java.nio.charset.StandardCharsets;
 
 public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final JwtProvider jwtProvider;
+    private final JwtFactory jwtProvider;
     private final ObjectMapper objectMapper;
 
-    public SignInAuthenticationFilter(AuthenticationManager authenticationManager,
-                                      JwtProvider jwtProvider,
-                                      ObjectMapper objectMapper) {
-
+    public SignInAuthenticationFilter(AuthenticationManager authenticationManager, JwtFactory jwtProvider) {
+        this.objectMapper = new ObjectMapper();
         this.jwtProvider = jwtProvider;
-        this.objectMapper = objectMapper;
+
         super.setAuthenticationManager(authenticationManager);
+        super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/v1/login", "POST"));
     }
 
     /**
