@@ -10,9 +10,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-security:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.1.0")
-    implementation ("io.jsonwebtoken:jjwt-api:0.11.5")
-    implementation ("io.jsonwebtoken:jjwt-impl:0.11.5")
-    implementation ("io.jsonwebtoken:jjwt-jackson:0.11.5")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.1.0")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.0")
