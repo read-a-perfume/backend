@@ -10,10 +10,9 @@ spring:
 spring:
   config:
     import:
-      - application-default.yaml
+      - application-local.yaml
       - application-dev.yaml
       - application-prod.yaml
-
 ---
 
 spring:

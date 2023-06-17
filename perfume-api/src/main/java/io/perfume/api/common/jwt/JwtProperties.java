@@ -1,4 +1,4 @@
-package io.perfume.api.common.property;
+package io.perfume.api.common.jwt;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "jwt")
 @Validated
-public record JsonWebTokenProperties(
+public record JwtProperties(
         @NotEmpty
         String secretKey,
         @NotEmpty

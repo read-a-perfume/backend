@@ -1,8 +1,12 @@
 package io.perfume.api.common.config;
 
-import io.perfume.api.common.filter.JwtAuthenticationFilter;
+import io.perfume.api.common.filter.oauth.JwtAuthenticationFilter;
+import io.perfume.api.common.filter.signIn.SignInAuthenticationFilter;
+import io.perfume.api.common.jwt.JwtFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -36,12 +42,19 @@ public class SecurityConfiguration {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public SecurityConfiguration(
-            AuthenticationManagerBuilder authenticationManagerBuilder,
-            JwtAuthenticationProvider jwtAuthenticationProvider
+    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
+                                 @Qualifier("JwtAuthenticationProvider") AuthenticationProvider jwtAuthenticationProvider,
+                                 @Qualifier("daoAuthenticationProvider") AuthenticationProvider daoAuthenticationProvider
     ) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
+        this.authenticationManagerBuilder
+                .authenticationProvider(jwtAuthenticationProvider)
+                .authenticationProvider(daoAuthenticationProvider);
+    }
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -51,7 +64,8 @@ public class SecurityConfiguration {
             AuthenticationSuccessHandler authenticationSuccessHandler,
             AuthenticationFailureHandler authenticationFailureHandler,
             OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService,
-            WhiteListConfiguration whiteListConfig
+            WhiteListConfiguration whiteListConfig,
+            JwtFactory jwtFactory
     ) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(
@@ -67,10 +81,12 @@ public class SecurityConfiguration {
                                         ).permitAll()
                                         .anyRequest().authenticated()
                 )
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
+                .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfig.getCors())))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
-                .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfig.getCors())))
+                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(oAuth2LoginConfigurer ->
                         oAuth2LoginConfigurer
                                 .authorizationEndpoint(authorizationEndpointConfig ->
@@ -95,10 +111,8 @@ public class SecurityConfiguration {
                                 .accessDeniedHandler(
                                         (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(403)
                                 ))
-                .sessionManagement(sessionManagement ->
-                        sessionManagement
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtAuthenticationFilter(authenticationManagerBuilder.getOrBuild()), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new SignInAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild(), jwtFactory), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild()), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

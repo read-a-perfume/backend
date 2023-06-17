@@ -1,4 +1,4 @@
-package io.perfume.api.common.filter;
+package io.perfume.api.common.filter.oauth;
 
 import io.perfume.api.common.config.JwtAuthenticationToken;
 import jakarta.servlet.FilterChain;
@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -25,9 +26,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = getTokenFromHeader(request);
+
+        if (Objects.isNull(jwt)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         Authentication authentication = authenticationManager.authenticate(new JwtAuthenticationToken(jwt));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         filterChain.doFilter(request, response);
     }
 

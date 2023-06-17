@@ -1,5 +1,6 @@
 package io.perfume.api.user.adapter.out.persistence;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
@@ -10,9 +11,10 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @PersistenceAdapter
-class UserPersistenceAdapter implements UserRepository {
+public class UserPersistenceAdapter implements UserRepository {
 
     private final UserJpaRepository userJpaRepository;
+    private final JPAQueryFactory jpaQueryFactory;
     private final UserMapper userMapper;
 
     @Override
