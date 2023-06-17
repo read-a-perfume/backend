@@ -10,24 +10,23 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-security:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.1.0")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.1.0")
-
-    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.0")
-
-    compileOnly("org.projectlombok:lombok:1.18.28")
-    annotationProcessor("org.projectlombok:lombok:1.18.28")
-
     implementation("mysql:mysql-connector-java:8.0.33")
     implementation("com.zaxxer:HikariCP:5.0.1")
-
-    testImplementation("com.h2database:h2:2.1.214")
-    testImplementation("org.mockito:mockito-core:5.3.1")
-
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.0")
+    compileOnly("org.projectlombok:lombok:1.18.28")
+
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.1.0")
     annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api:2.1.1")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
 
+    testImplementation("com.h2database:h2:2.1.214")
+    testImplementation("org.mockito:mockito-core:5.3.1")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
 }
 
