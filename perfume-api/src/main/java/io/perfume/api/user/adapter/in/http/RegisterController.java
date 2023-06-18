@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/signup")
@@ -40,10 +39,11 @@ public class RegisterController {
     }
 
     @PostMapping("/check-username")
-    public ResponseEntity<Void> checkUsername(@RequestBody @Valid Map<String, String> map) {
-        if (registerService.validDuplicateUsername(map.get("username"))) {
+    public ResponseEntity<Void> checkUsername(@RequestBody @Valid CheckUsernameRequestDto dto) {
+        if (registerService.validDuplicateUsername(dto.username())) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 

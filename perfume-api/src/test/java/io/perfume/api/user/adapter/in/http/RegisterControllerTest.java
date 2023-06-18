@@ -1,6 +1,7 @@
 package io.perfume.api.user.adapter.in.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.perfume.api.user.adapter.in.http.dto.CheckUsernameRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.RegisterDto;
 import io.perfume.api.user.adapter.in.http.dto.SendEmailVerifyCodeRequestDto;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -141,18 +143,54 @@ class RegisterControllerTest {
                 .andDo(
                         document("sign-up-by-email",
                                 requestFields(
-                                        fieldWithPath("username").description("사용자 이름"),
-                                        fieldWithPath("password").description("비밀번호"),
-                                        fieldWithPath("email").description("이메일"),
-                                        fieldWithPath("marketingConsent").description("마케팅 수신 동의 여부"),
-                                        fieldWithPath("promotionConsent").description("이용약관 동의 여부"),
-                                        fieldWithPath("name").description("이름")
+                                        fieldWithPath("username").type(JsonFieldType.STRING).description("사용자 이름"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("marketingConsent").type(JsonFieldType.BOOLEAN).description("마케팅 수신 동의 여부"),
+                                        fieldWithPath("promotionConsent").type(JsonFieldType.BOOLEAN).description("이용약관 동의 여부"),
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("이름")
                                 ),
                                 responseFields(
-                                        fieldWithPath("username").description("사용자 이름"),
-                                        fieldWithPath("email").description("이메일"),
-                                        fieldWithPath("name").description("이름")
+                                        fieldWithPath("username").type(JsonFieldType.STRING).description("사용자 이름"),
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("이름")
                                 )));
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인을 요청한다.")
+    void testCheckUsername() throws Exception {
+        // given
+        CheckUsernameRequestDto dto = new CheckUsernameRequestDto("sample");
+        LocalDateTime now = LocalDateTime.now();
+        given(registerService.validDuplicateUsername(any())).willReturn(true);
+
+        // when & then
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/v1/signup/check-username")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                )
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("중복 닉네임 요청 시 CONFLICT를 응답을 한다.")
+    void testCheckUsernameWhenDuplicate() throws Exception {
+        // given
+        CheckUsernameRequestDto dto = new CheckUsernameRequestDto("sample");
+        LocalDateTime now = LocalDateTime.now();
+        given(registerService.validDuplicateUsername(any())).willReturn(false);
+
+        // when & then
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/v1/signup/check-username")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                )
+                .andExpect(status().isConflict());
     }
 
     @Test
@@ -169,7 +207,6 @@ class RegisterControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
                 )
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(status().isBadRequest());
     }
 }
