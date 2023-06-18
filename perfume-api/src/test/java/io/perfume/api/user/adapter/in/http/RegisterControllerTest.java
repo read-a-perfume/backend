@@ -16,8 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -29,7 +27,9 @@ import java.time.LocalDateTime;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,7 +53,7 @@ class RegisterControllerTest {
     }
 
     @Test
-    @DisplayName("이메일 검증을 한다.")
+    @DisplayName("본인 이메일을 인증한다.")
     void confirmEmail() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now();
@@ -70,13 +70,20 @@ class RegisterControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcRestDocumentation.document("confirm-email-verify",
-                        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint())));
+                .andDo(
+                        document("verify-email",
+                                requestFields(
+                                        fieldWithPath("code").description("본인 인증 코드"),
+                                        fieldWithPath("key").description("본인 인증 요청 시 발급받은 키")
+                                ),
+                                responseFields(
+                                        fieldWithPath("email").description("인증 완료된 이메일"),
+                                        fieldWithPath("verifiedAt").description("본인 인증 완료 시간")
+                                )));
     }
 
     @Test
-    @DisplayName("본인인증 이메일 요청 API")
+    @DisplayName("본인 이메일 인증을 위한 코드 발송을 요청한다.")
     void testEmailVerifyRequest() throws Exception {
         // given
         String email = "sample@mail.com";
@@ -92,7 +99,17 @@ class RegisterControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(
+                        document("send-verify-code",
+                                requestFields(
+                                        fieldWithPath("email").description("본인 인증을 위한 이메일")
+                                ),
+                                responseFields(
+                                        fieldWithPath("key").description("이메일 본인 인증 시 필요한 키"),
+                                        fieldWithPath("sentAt").description("본인 확인 이메일 발송 시간")
+                                )));
     }
 
     @Test
@@ -109,6 +126,7 @@ class RegisterControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }
