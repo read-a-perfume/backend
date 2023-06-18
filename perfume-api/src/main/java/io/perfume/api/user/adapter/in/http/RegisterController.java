@@ -21,7 +21,7 @@ public class RegisterController {
 
     @PostMapping("/email")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResult signUpByEmail(@RequestBody @Valid RegisterDto registerDto) {
+    public ResponseEntity<EmailSignUpResponseDto> signUpByEmail(@RequestBody @Valid RegisterDto registerDto) {
         SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
                 registerDto.username(),
                 registerDto.password(),
@@ -30,7 +30,13 @@ public class RegisterController {
                 registerDto.promotionConsent(),
                 registerDto.name()
         );
-        return registerService.signUpGeneralUserByEmail(command);
+        UserResult result = registerService.signUpGeneralUserByEmail(command);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new EmailSignUpResponseDto(
+                result.username(),
+                result.email(),
+                result.name()
+        ));
     }
 
     @PostMapping("/check-username")

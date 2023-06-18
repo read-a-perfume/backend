@@ -2,9 +2,11 @@ package io.perfume.api.user.adapter.in.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.RegisterDto;
 import io.perfume.api.user.adapter.in.http.dto.SendEmailVerifyCodeRequestDto;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
+import io.perfume.api.user.application.port.in.dto.UserResult;
 import io.perfume.api.user.application.service.RegisterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -109,6 +111,47 @@ class RegisterControllerTest {
                                 responseFields(
                                         fieldWithPath("key").description("이메일 본인 인증 시 필요한 키"),
                                         fieldWithPath("sentAt").description("본인 확인 이메일 발송 시간")
+                                )));
+    }
+
+    @Test
+    @DisplayName("이메일 회원가입을 요청한다.")
+    void testSignUpByEmail() throws Exception {
+        // given
+        RegisterDto dto = new RegisterDto(
+                "sample",
+                "password",
+                "test@mail.com",
+                false,
+                false,
+                "sample name"
+        );
+        LocalDateTime now = LocalDateTime.now();
+        given(registerService.signUpGeneralUserByEmail(any())).willReturn(new UserResult("username", "email@mail.com", "name", now));
+
+        // when & then
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/v1/signup/email")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(
+                        document("sign-up-by-email",
+                                requestFields(
+                                        fieldWithPath("username").description("사용자 이름"),
+                                        fieldWithPath("password").description("비밀번호"),
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("marketingConsent").description("마케팅 수신 동의 여부"),
+                                        fieldWithPath("promotionConsent").description("이용약관 동의 여부"),
+                                        fieldWithPath("name").description("이름")
+                                ),
+                                responseFields(
+                                        fieldWithPath("username").description("사용자 이름"),
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("name").description("이름")
                                 )));
     }
 
