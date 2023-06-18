@@ -34,7 +34,7 @@ tasks.jar {
     enabled = false
 }
 
-val snippetsDir by extra { file("./build/generated-snippets") }
+val snippetsDir by extra { file("build/generated-snippets") }
 
 tasks.test {
     outputs.dir(snippetsDir)
@@ -44,14 +44,12 @@ tasks.asciidoctor {
     inputs.dir(snippetsDir)
     configurations(asciidoctorExt.name)
     dependsOn(tasks.test)
-    doLast {
-        copy {
-            from("build/docs/asciidoc")
-            into("build/resources/main/static")
-        }
-    }
 }
 
 tasks.build {
     dependsOn(tasks.asciidoctor)
+    copy {
+        from("build/docs/asciidoc")
+        into("src/main/resources/static/docs")
+    }
 }
