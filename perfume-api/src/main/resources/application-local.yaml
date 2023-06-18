@@ -27,8 +27,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 'google-client-id'
-            client-secret: 'google-client-secret'
+            client-id: ''
+            client-secret: ''
             scope:
               - profile
               - email
@@ -45,8 +45,4 @@ jwt:
 
 encryption:
   aes:
-    secret-key: ''
-
-sentry:
-  dsn: ''
-  traces-sample-rate: 1.0
+    secret-key: 'readaperfumesecretkeyhelloletsmakegoodthings'
