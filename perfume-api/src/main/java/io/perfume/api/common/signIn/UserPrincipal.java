@@ -1,4 +1,4 @@
-package io.perfume.api.common.jwt;
+package io.perfume.api.common.signIn;
 
 import io.perfume.api.user.domain.User;
 import org.springframework.security.core.GrantedAuthority;

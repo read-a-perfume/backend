@@ -1,7 +1,7 @@
 package io.perfume.api.common.config;
 
-import io.perfume.api.common.filter.oauth.JwtAuthenticationFilter;
-import io.perfume.api.common.filter.signIn.SignInAuthenticationFilter;
+import io.perfume.api.common.jwt.JwtAuthenticationFilter;
+import io.perfume.api.common.signIn.SignInAuthenticationFilter;
 import io.perfume.api.common.jwt.JwtFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

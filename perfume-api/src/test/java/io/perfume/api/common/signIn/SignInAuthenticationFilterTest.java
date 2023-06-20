@@ -1,7 +1,7 @@
-package io.perfume.api.common.filter;
+package io.perfume.api.common.signIn;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.common.filter.signIn.SignInDto;
+import io.perfume.api.common.signIn.SignInDto;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.Role;
 import io.perfume.api.user.domain.User;

@@ -1,4 +1,4 @@
-package io.perfume.api.common.filter.signIn;
+package io.perfume.api.common.signIn;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.common.jwt.JwtFactory;

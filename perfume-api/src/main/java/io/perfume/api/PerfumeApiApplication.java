@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
-@ConfigurationPropertiesScan("io.perfume.api")
+@ConfigurationPropertiesScan()
 public class PerfumeApiApplication {
 
     public static void main(String[] args) {
