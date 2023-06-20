@@ -4,7 +4,9 @@ dependencies {
     implementation(project(":perfume-core"))
     implementation(project(":perfume-support"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web:3.1.1")
+    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
+
+    implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.1.1")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.1")
@@ -27,7 +29,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.4.0")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
-    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
+    testImplementation("io.rest-assured:rest-assured:5.3.1")
 }
 
 tasks.jar {
