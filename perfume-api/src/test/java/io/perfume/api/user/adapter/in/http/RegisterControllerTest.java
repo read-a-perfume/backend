@@ -77,12 +77,12 @@ class RegisterControllerTest {
                 .andDo(
                         document("verify-email",
                                 requestFields(
-                                        fieldWithPath("code").description("본인 인증 코드"),
-                                        fieldWithPath("key").description("본인 인증 요청 시 발급받은 키")
+                                        fieldWithPath("code").type(JsonFieldType.STRING).description("본인 인증 코드"),
+                                        fieldWithPath("key").type(JsonFieldType.STRING).description("본인 인증 요청 시 발급받은 키")
                                 ),
                                 responseFields(
-                                        fieldWithPath("email").description("인증 완료된 이메일"),
-                                        fieldWithPath("verifiedAt").description("본인 인증 완료 시간")
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("인증 완료된 이메일"),
+                                        fieldWithPath("verifiedAt").type(JsonFieldType.STRING).description("본인 인증 완료 시간")
                                 )));
     }
 
@@ -108,11 +108,11 @@ class RegisterControllerTest {
                 .andDo(
                         document("send-verify-code",
                                 requestFields(
-                                        fieldWithPath("email").description("본인 인증을 위한 이메일")
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("본인 인증을 위한 이메일")
                                 ),
                                 responseFields(
-                                        fieldWithPath("key").description("이메일 본인 인증 시 필요한 키"),
-                                        fieldWithPath("sentAt").description("본인 확인 이메일 발송 시간")
+                                        fieldWithPath("key").type(JsonFieldType.STRING).description("이메일 본인 인증 시 필요한 키"),
+                                        fieldWithPath("sentAt").type(JsonFieldType.STRING).description("본인 확인 이메일 발송 시간")
                                 )));
     }
 
