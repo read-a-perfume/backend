@@ -1,5 +1,5 @@
 dependencies {
-    implementation("io.sentry:sentry-spring-boot-starter-jakarta:6.23.0")
+    implementation("io.sentry:sentry-spring-boot-starter-jakarta:6.24.0")
     implementation("io.sentry:sentry-logback:6.23.0")
     implementation("org.springframework.boot:spring-boot-starter-aop:3.1.1")
 }
