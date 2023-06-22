@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.0"
+    id("org.springframework.boot") version "3.1.1"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.23"
@@ -40,10 +40,10 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
         // spring boot
-        implementation("org.springframework.boot:spring-boot-starter:3.1.0")
+        implementation("org.springframework.boot:spring-boot-starter:3.1.1")
 
         // test
-        testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
+        testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.1")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
         testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
