@@ -1,7 +1,6 @@
-package io.perfume.api.common.config;
+package io.perfume.api.common.jwt;
 
 import encryptor.impl.JwtUtil;
-import io.perfume.api.common.jwt.JwtProperties;
 import jwt.JsonWebTokenGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

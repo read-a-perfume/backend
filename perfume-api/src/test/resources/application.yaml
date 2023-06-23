@@ -14,11 +14,11 @@ spring:
               - email
 
 jwt:
-  secret-key: 'readaperfumesecretkeyhelloletsmakegoodthings'
+  secret-key: 'readaperfumesecretkeyhelloletsma'
   redirect-uri: '/'
   access-token-validity-in-seconds: 7200
   refresh-token-validity-in-seconds: 604800
 
 encryption:
   aes:
-    secret-key: 'readaperfumesecretkeyhelloletsmakegoodthings'
+    secret-key: 'readaperfumesecretkeyhelloletsma'

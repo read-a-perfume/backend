@@ -1,4 +1,4 @@
-package io.perfume.api.common.config;
+package io.perfume.api.common.jwt;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

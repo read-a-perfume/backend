@@ -1,4 +1,4 @@
-package io.perfume.api.common.config;
+package io.perfume.api.common.jwt;
 
 import jwt.JsonWebTokenGenerator;
 import org.jetbrains.annotations.NotNull;
