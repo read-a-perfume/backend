@@ -1,20 +1,16 @@
 package io.perfume.api.common.signIn;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.common.signIn.SignInDto;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.Role;
 import io.perfume.api.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,20 +19,20 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
-@WebAppConfiguration
-@SpringBootTest
-@AutoConfigureTestEntityManager
-@AutoConfigureMockMvc
 @Transactional
+@SpringBootTest
+@AutoConfigureMockMvc
 class SignInAuthenticationFilterTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private ObjectMapper objectMapper;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UserRepository userRepository;
 
