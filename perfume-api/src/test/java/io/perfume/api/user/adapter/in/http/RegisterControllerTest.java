@@ -8,7 +8,6 @@ import io.perfume.api.user.adapter.in.http.dto.CheckUsernameRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.RegisterDto;
 import io.perfume.api.user.adapter.in.http.dto.SendEmailVerifyCodeRequestDto;
-import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import mailer.MailSender;
@@ -143,8 +142,9 @@ class RegisterControllerTest {
         // given
         String email = "sample@mail.com";
         SendEmailVerifyCodeRequestDto dto = new SendEmailVerifyCodeRequestDto(email);
+        given(twoWayEncryptor.encrypt(any())).willReturn("");
         LocalDateTime now = LocalDateTime.now();
-        SendVerificationCodeResult result = new SendVerificationCodeResult("key", now);
+        given(mailSender.send(any(), any(), any())).willReturn(now);
 
         // when & then
         mockMvc
@@ -249,6 +249,7 @@ class RegisterControllerTest {
         given(mailSender.send(any(), any(), any())).willReturn(now);
         String email = "sample@test.com";
         SendEmailVerifyCodeRequestDto dto = new SendEmailVerifyCodeRequestDto(email);
+        given(twoWayEncryptor.encrypt(any())).willReturn("");
 
         // when & then
         mockMvc
