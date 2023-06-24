@@ -6,7 +6,7 @@ import io.perfume.api.auth.application.port.in.MakeNewAccessTokenUseCase;
 import io.perfume.api.auth.application.port.out.RememberMeQueryRepository;
 import io.perfume.api.auth.application.port.out.RememberMeRepository;
 import io.perfume.api.auth.domain.RefreshToken;
-import io.perfume.api.common.property.JsonWebTokenProperties;
+import io.perfume.api.common.jwt.JwtProperties;
 import jwt.JsonWebTokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cglib.core.Local;
@@ -25,7 +25,7 @@ public class TokenHandlingService implements MakeNewAccessTokenUseCase {
     private final RememberMeQueryRepository rememberMeQueryRepository;
     private final RememberMeRepository rememberMeRepository;
     private final JsonWebTokenGenerator tokenGenerator;
-    private final JsonWebTokenProperties jsonWebTokenProperties;
+    private final JwtProperties jwtProperties;
     /**
      * RefreshToken을 확인하고 새로운 AccessToken을 반환
      *
@@ -43,7 +43,7 @@ public class TokenHandlingService implements MakeNewAccessTokenUseCase {
             String newAccessToken = tokenGenerator.create(
                     tokenGenerator.getSubject(accessToken),
                     Map.of("roles", List.of("ROLE_USER")),
-                    jsonWebTokenProperties.accessTokenValidityInSeconds(),
+                    jwtProperties.accessTokenValidityInSeconds(),
                     LocalDateTime.now());
 
             refreshToken.updateAccessToken(newAccessToken);
