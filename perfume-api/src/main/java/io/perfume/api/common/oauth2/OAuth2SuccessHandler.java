@@ -1,7 +1,7 @@
 package io.perfume.api.common.oauth2;
 
 import generator.Generator;
-import io.perfume.api.common.property.JsonWebTokenProperties;
+import io.perfume.api.common.jwt.JwtProperties;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
@@ -32,7 +32,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
 
     private final JsonWebTokenGenerator jsonWebTokenGenerator;
 
-    private final JsonWebTokenProperties jsonWebTokenProperties;
+    private final JwtProperties jwtProperties;
 
     private final FindUserUseCase findUserUseCase;
 
@@ -63,7 +63,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
 
     @NotNull
     private String getRedirectUri() {
-        return UriComponentsBuilder.fromHttpUrl(jsonWebTokenProperties.redirectUri())
+        return UriComponentsBuilder.fromHttpUrl(jwtProperties.redirectUri())
                 .build()
                 .toUriString();
     }
@@ -73,7 +73,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         return jsonWebTokenGenerator.create(
                 email,
                 Map.of("roles", List.of("ROLE_USER")),
-                jsonWebTokenProperties.accessTokenValidityInSeconds(),
+                jwtProperties.accessTokenValidityInSeconds(),
                 LocalDateTime.now()
         );
     }
@@ -83,7 +83,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         return jsonWebTokenGenerator.create(
                 pairAccessToken,
                 Map.of(),
-                jsonWebTokenProperties.refreshTokenValidityInSeconds(),
+                jwtProperties.refreshTokenValidityInSeconds(),
                 LocalDateTime.now()
         );
     }

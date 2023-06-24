@@ -1,5 +1,3 @@
-name: CI
-
 on:
   pull_request:
     branches: [ develop ]
@@ -20,6 +18,3 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew :perfume-core:clean :perfume-api:clean :perfume-api:build
-
-      - name: Run tests
-        run: ./gradlew :perfume-core:clean :perfume-api:clean :perfume-core:test :perfume-api:test

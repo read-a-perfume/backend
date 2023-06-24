@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/signup")
@@ -21,7 +20,7 @@ public class RegisterController {
 
     @PostMapping("/email")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResult signUpByEmail(@RequestBody @Valid RegisterDto registerDto) {
+    public ResponseEntity<EmailSignUpResponseDto> signUpByEmail(@RequestBody @Valid RegisterDto registerDto) {
         SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
                 registerDto.username(),
                 registerDto.password(),
@@ -30,14 +29,21 @@ public class RegisterController {
                 registerDto.promotionConsent(),
                 registerDto.name()
         );
-        return registerService.signUpGeneralUserByEmail(command);
+        UserResult result = registerService.signUpGeneralUserByEmail(command);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new EmailSignUpResponseDto(
+                result.username(),
+                result.email(),
+                result.name()
+        ));
     }
 
     @PostMapping("/check-username")
-    public ResponseEntity<Void> checkUsername(@RequestBody @Valid Map<String, String> map) {
-        if (registerService.validDuplicateUsername(map.get("username"))) {
+    public ResponseEntity<Void> checkUsername(@RequestBody @Valid CheckUsernameRequestDto dto) {
+        if (registerService.validDuplicateUsername(dto.username())) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 

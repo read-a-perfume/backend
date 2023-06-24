@@ -1,7 +1,8 @@
-package io.perfume.api.common.config;
+package io.perfume.api.common.jwt;
 
 import jwt.JsonWebTokenGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Component
+@Qualifier("JwtAuthenticationProvider")
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     public static final Authentication ANONYMOUS =

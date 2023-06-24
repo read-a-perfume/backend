@@ -27,8 +27,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 'google-client-id'
-            client-secret: 'google-client-secret'
+            client-id: ${OAUTH2_GOOGLE_CLIENT_ID}
+            client-secret: ${OAUTH2_GOOGLE_CLIENT_SECRET}
             scope:
               - profile
               - email
@@ -50,3 +50,8 @@ encryption:
 sentry:
   dsn: ${SENTRY_DSN}
   traces-sample-rate: 1.0
+  enable-tracing: true
+  send-default-pii: true
+  logging:
+    minimum-event-level: warn
+    minimum-breadcrumb-level: info

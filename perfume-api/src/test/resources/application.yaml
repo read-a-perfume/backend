@@ -1,0 +1,24 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 'google-client-id'
+            client-secret: 'google-client-secret'
+            scope:
+              - profile
+              - email
+
+jwt:
+  secret-key: 'readaperfumesecretkeyhelloletsma'
+  redirect-uri: '/'
+  access-token-validity-in-seconds: 7200
+  refresh-token-validity-in-seconds: 604800
+
+encryption:
+  aes:
+    secret-key: 'readaperfumesecretkeyhelloletsma'
