@@ -6,6 +6,7 @@ import io.perfume.api.common.signIn.SignInAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -77,7 +78,8 @@ public class SecurityConfiguration {
                                                 new AntPathRequestMatcher("/oauth2/**"),
                                                 new AntPathRequestMatcher("/login/oauth2/code/**"),
                                                 new AntPathRequestMatcher("/v1/signup/**"),
-                                                new AntPathRequestMatcher("/error")
+                                                new AntPathRequestMatcher("/error"),
+                                                new AntPathRequestMatcher("/v1/access-token", HttpMethod.GET.toString())
                                         ).permitAll()
                                         .anyRequest().authenticated()
                 )
