@@ -14,9 +14,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security:3.1.1")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.1.1")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.1.0")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.1.1")
 
-    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.0")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.1")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
