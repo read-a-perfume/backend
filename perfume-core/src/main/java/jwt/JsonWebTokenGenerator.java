@@ -3,6 +3,7 @@ package jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -51,6 +52,15 @@ public class JsonWebTokenGenerator {
                 .getBody()
                 .getExpiration()
                 .before(toDate(now));
+    }
+
+    public String getTokenFromHeader(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header == null || !header.startsWith("Bearer ")) {
+            return null;
+        }
+
+        return header.substring(7).trim();
     }
 
     public String getSubject(String jwt) {

@@ -1,8 +1,10 @@
 package io.perfume.api.common.signIn;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.common.jwt.JwtFactory;
+import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -11,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.StreamUtils;
@@ -21,12 +22,12 @@ import java.nio.charset.StandardCharsets;
 
 public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final JwtFactory jwtProvider;
+    private final MakeNewTokenUseCase makeNewTokenUseCase;
     private final ObjectMapper objectMapper;
 
-    public SignInAuthenticationFilter(AuthenticationManager authenticationManager, JwtFactory jwtProvider) {
+    public SignInAuthenticationFilter(AuthenticationManager authenticationManager, MakeNewTokenUseCase makeNewTokenUseCase) {
         this.objectMapper = new ObjectMapper();
-        this.jwtProvider = jwtProvider;
+        this.makeNewTokenUseCase = makeNewTokenUseCase;
 
         super.setAuthenticationManager(authenticationManager);
         super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/v1/login", "POST"));
@@ -68,10 +69,16 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain filter,
-                                            Authentication authResult) {
+                                            Authentication authResult) throws JsonProcessingException {
+        UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
+        String accessToken = makeNewTokenUseCase.createAccessToken(principal);
+        response.addHeader("Authorization", accessToken);
 
-        String token = jwtProvider.createAccessToken((UserDetails) authResult.getPrincipal());
-        response.addHeader("Authorization", token);
+        String refreshToken = makeNewTokenUseCase.createRefreshToken(principal.getUser());
+        Cookie cookie = new Cookie("X-Refresh-Token", refreshToken);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
         try {

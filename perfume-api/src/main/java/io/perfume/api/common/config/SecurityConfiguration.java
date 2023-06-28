@@ -1,8 +1,9 @@
 package io.perfume.api.common.config;
 
+import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.common.jwt.JwtAuthenticationFilter;
-import io.perfume.api.common.jwt.JwtFactory;
 import io.perfume.api.common.signIn.SignInAuthenticationFilter;
+import jwt.JsonWebTokenGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-@EnableMethodSecurity()
+@EnableMethodSecurity
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration {
@@ -65,9 +66,9 @@ public class SecurityConfiguration {
             AuthenticationSuccessHandler authenticationSuccessHandler,
             AuthenticationFailureHandler authenticationFailureHandler,
             OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService,
-            WhiteListConfiguration whiteListConfig,
-            JwtFactory jwtFactory
-    ) throws Exception {
+            MakeNewTokenUseCase makeNewTokenUseCase,
+            JsonWebTokenGenerator jsonWebTokenGenerator,
+            WhiteListConfiguration whiteListConfig) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(
                         authorizeHttpRequests ->
@@ -113,8 +114,8 @@ public class SecurityConfiguration {
                                 .accessDeniedHandler(
                                         (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(403)
                                 ))
-                .addFilterBefore(new SignInAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild(), jwtFactory), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild()), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new SignInAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild(), makeNewTokenUseCase), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild(), jsonWebTokenGenerator), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

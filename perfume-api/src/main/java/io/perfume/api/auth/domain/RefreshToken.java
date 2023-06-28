@@ -1,31 +1,45 @@
 package io.perfume.api.auth.domain;
 
+import io.perfume.api.auth.adapter.out.redis.RedisRefreshToken;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
-@ToString
-@RedisHash
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken {
-    @Id
-    private String accessToken;
-    private LocalDateTime expiredTime;
+    private UUID tokenId;
+    private Long userId;
 
-    public void updateAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public RefreshToken(Long userId) {
+        this.tokenId = UUID.randomUUID();
+        this.userId = userId;
     }
-    public boolean canIssueAccessToken(LocalDateTime now) {
-        return now.isBefore(expiredTime);
+
+    @Builder
+    private RefreshToken(UUID tokenId, Long userId) {
+        this.tokenId = tokenId;
+        this.userId = userId;
     }
-    public static RefreshToken Login(String accessToken, LocalDateTime expiredTime) {
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.accessToken = accessToken;
-        refreshToken.expiredTime = expiredTime;
-        return refreshToken;
+
+    public static RefreshToken fromRedisRefreshToken(RedisRefreshToken refreshToken) {
+        return RefreshToken.builder()
+                .tokenId(refreshToken.getTokenId())
+                .userId(refreshToken.getUserId())
+                .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RefreshToken that = (RefreshToken) o;
+        return Objects.equals(tokenId, that.tokenId) && Objects.equals(userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tokenId, userId);
     }
 }
