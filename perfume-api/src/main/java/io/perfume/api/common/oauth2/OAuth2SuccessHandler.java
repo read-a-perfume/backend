@@ -1,11 +1,15 @@
 package io.perfume.api.common.oauth2;
 
 import generator.Generator;
+import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.common.jwt.JwtProperties;
+import io.perfume.api.common.signIn.UserPrincipal;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
+import io.perfume.api.user.application.port.out.UserQueryRepository;
+import io.perfume.api.user.domain.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,13 +30,15 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequestHandler implements AuthenticationSuccessHandler {
 
-    private final JsonWebTokenGenerator jsonWebTokenGenerator;
+    private final UserQueryRepository userQueryRepository;
 
     private final JwtProperties jwtProperties;
 
     private final FindUserUseCase findUserUseCase;
 
     private final CreateUserUseCase createUserUseCase;
+
+    private final MakeNewTokenUseCase makeNewTokenUseCase;
 
     private final Generator generator;
 
@@ -41,17 +47,18 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         UserResult userResult = newUserIfNotExists(oAuth2User);
 
-        setResponseToken(response, userResult);
+        setResponseToken(response, userResult, (UserPrincipal) authentication.getPrincipal());
 
         String targetUrl = getRedirectUri();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    private void setResponseToken(HttpServletResponse response, UserResult userResult) {
-        String accessToken = createAccessToken(userResult.email());
+    private void setResponseToken(HttpServletResponse response, UserResult userResult, UserPrincipal principal) {
+        User user = userQueryRepository.findByUsername(userResult.email()).orElseThrow();
+        String accessToken = makeNewTokenUseCase.createAccessToken(principal);
         response.setHeader("Authorization", "Bearer " + accessToken);
 
-        String refreshToken = createRefreshToken(accessToken);
+        String refreshToken = makeNewTokenUseCase.createRefreshToken(user);
         Cookie cookie = new Cookie("X-Refresh-Token", refreshToken);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
@@ -62,26 +69,6 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         return UriComponentsBuilder.fromHttpUrl(jwtProperties.redirectUri())
                 .build()
                 .toUriString();
-    }
-
-    @NotNull
-    private String createAccessToken(String email) {
-        return jsonWebTokenGenerator.create(
-                email,
-                Map.of("roles", List.of("ROLE_USER")),
-                jwtProperties.accessTokenValidityInSeconds(),
-                LocalDateTime.now()
-        );
-    }
-
-    @NotNull
-    private String createRefreshToken(String pairAccessToken) {
-        return jsonWebTokenGenerator.create(
-                pairAccessToken,
-                Map.of(),
-                jwtProperties.refreshTokenValidityInSeconds(),
-                LocalDateTime.now()
-        );
     }
 
     private UserResult newUserIfNotExists(@NotNull OAuth2User oAuth2User) {

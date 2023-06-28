@@ -4,12 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import encryptor.impl.JwtUtil;
 import io.perfume.api.auth.application.exception.FailedMakeNewAccessTokenException;
+import io.perfume.api.auth.application.exception.FailedMakeRefreshTokenException;
 import io.perfume.api.auth.application.exception.NotFoundRefreshTokenException;
-import io.perfume.api.auth.application.port.in.MakeNewAccessTokenUseCase;
+import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.auth.application.port.out.RememberMeQueryRepository;
 import io.perfume.api.auth.application.port.out.RememberMeRepository;
 import io.perfume.api.auth.domain.RefreshToken;
 import io.perfume.api.common.jwt.JwtProperties;
+import io.perfume.api.common.signIn.UserPrincipal;
+import io.perfume.api.user.domain.User;
 import jwt.JsonWebTokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +27,7 @@ import java.util.Map;
  */
 @Service
 @RequiredArgsConstructor
-public class TokenHandlingService implements MakeNewAccessTokenUseCase {
+public class TokenHandlingService implements MakeNewTokenUseCase {
     private final RememberMeQueryRepository rememberMeQueryRepository;
     private final RememberMeRepository rememberMeRepository;
     private final JsonWebTokenGenerator tokenGenerator;
@@ -86,3 +89,5 @@ public class TokenHandlingService implements MakeNewAccessTokenUseCase {
         }
     }
 }
+
+// oauthSuccessHandler

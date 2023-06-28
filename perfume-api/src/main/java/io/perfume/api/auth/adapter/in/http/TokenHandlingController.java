@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class TokenHandlingController {
-    private final MakeNewAccessTokenUseCase makeNewAccessToken;
+    private final MakeNewTokenUseCase makeNewTokenUseCase;
+    private final JsonWebTokenGenerator jsonWebTokenGenerator;
 
     @GetMapping("/v1/access-token")
     public String reissueAccessToken(@CookieValue(name = "X-Refresh-Token") String refreshToken, HttpServletRequest request) {
