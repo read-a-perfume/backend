@@ -16,6 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RedisAdapter implements RememberMeQueryRepository, RememberMeRepository {
     private final RedisRepository redisRepository;
+
     @Override
     public RefreshToken saveRefreshToken(RefreshToken refreshToken) {
         RedisRefreshToken save = redisRepository.save(RedisRefreshToken.fromRefreshToken(refreshToken));

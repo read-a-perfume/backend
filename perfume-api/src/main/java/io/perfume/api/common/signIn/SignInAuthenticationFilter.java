@@ -1,6 +1,5 @@
 package io.perfume.api.common.signIn;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import jakarta.servlet.FilterChain;
@@ -19,6 +18,7 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -69,12 +69,12 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain filter,
-                                            Authentication authResult) throws JsonProcessingException {
+                                            Authentication authResult) {
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
-        String accessToken = makeNewTokenUseCase.createAccessToken(principal);
+        String accessToken = makeNewTokenUseCase.createAccessToken(principal.getUser().getId(), LocalDateTime.now());
         response.addHeader("Authorization", accessToken);
 
-        String refreshToken = makeNewTokenUseCase.createRefreshToken(principal.getUser());
+        String refreshToken = makeNewTokenUseCase.createRefreshToken(principal.getUser().getId(), LocalDateTime.now());
         Cookie cookie = new Cookie("X-Refresh-Token", refreshToken);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);

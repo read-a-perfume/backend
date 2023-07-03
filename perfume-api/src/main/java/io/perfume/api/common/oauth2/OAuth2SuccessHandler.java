@@ -3,13 +3,11 @@ package io.perfume.api.common.oauth2;
 import generator.Generator;
 import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.common.jwt.JwtProperties;
-import io.perfume.api.common.signIn.UserPrincipal;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
-import io.perfume.api.user.domain.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Component
@@ -46,19 +45,19 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, @NotNull Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         UserResult userResult = newUserIfNotExists(oAuth2User);
+        LocalDateTime now = LocalDateTime.now();
 
-        setResponseToken(response, userResult, (UserPrincipal) authentication.getPrincipal());
+        setResponseToken(response, userResult, now);
 
         String targetUrl = getRedirectUri();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    private void setResponseToken(HttpServletResponse response, UserResult userResult, UserPrincipal principal) {
-        User user = userQueryRepository.findByUsername(userResult.email()).orElseThrow();
-        String accessToken = makeNewTokenUseCase.createAccessToken(principal);
+    private void setResponseToken(HttpServletResponse response, UserResult userResult, LocalDateTime now) {
+        String accessToken = makeNewTokenUseCase.createAccessToken(userResult.id(), now);
         response.setHeader("Authorization", "Bearer " + accessToken);
 
-        String refreshToken = makeNewTokenUseCase.createRefreshToken(user);
+        String refreshToken = makeNewTokenUseCase.createRefreshToken(userResult.id(), now);
         Cookie cookie = new Cookie("X-Refresh-Token", refreshToken);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);

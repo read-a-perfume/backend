@@ -6,5 +6,6 @@ import java.util.UUID;
 
 public interface RememberMeRepository {
     RefreshToken saveRefreshToken(RefreshToken refreshToken);
+
     void removeRefreshToken(UUID tokenId);
 }

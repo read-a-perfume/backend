@@ -19,10 +19,6 @@ public class RedisRefreshToken {
     private UUID tokenId;
     private Long userId;
 
-    public void updateRefreshToken(UUID tokenId) {
-        this.tokenId = tokenId;
-    }
-
     private RedisRefreshToken(UUID tokenId, Long userId) {
         this.tokenId = tokenId;
         this.userId = userId;

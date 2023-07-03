@@ -1,7 +1,10 @@
 package io.perfume.api.auth.domain;
 
 import io.perfume.api.auth.adapter.out.redis.RedisRefreshToken;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -28,6 +31,10 @@ public class RefreshToken {
                 .tokenId(refreshToken.getTokenId())
                 .userId(refreshToken.getUserId())
                 .build();
+    }
+
+    public static RefreshToken create(UUID tokenId, Long userId) {
+        return new RefreshToken(tokenId, userId);
     }
 
     @Override

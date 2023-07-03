@@ -1,10 +1,13 @@
 package io.perfume.api.auth.application.port.in;
 
-import io.perfume.api.common.signIn.UserPrincipal;
-import io.perfume.api.user.domain.User;
+import io.perfume.api.auth.application.port.in.dto.ReissuedTokenResult;
+
+import java.time.LocalDateTime;
 
 public interface MakeNewTokenUseCase {
-    String reissueAccessToken(String accessToken, String refreshToken);
-    String createAccessToken(UserPrincipal userPrincipal);
-    String createRefreshToken(User user);
+    ReissuedTokenResult reissueAccessToken(String accessToken, String refreshToken, LocalDateTime now);
+
+    String createAccessToken(Long userId, LocalDateTime now);
+
+    String createRefreshToken(Long userId, LocalDateTime now);
 }
