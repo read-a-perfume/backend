@@ -1,51 +1,40 @@
 package io.perfume.api.auth.adapter.in.http;
 
-import io.perfume.api.auth.application.exception.FailedMakeNewAccessTokenException;
-import io.perfume.api.auth.application.exception.NotFoundRefreshTokenException;
-import io.perfume.api.auth.application.port.out.RememberMeRepository;
-import io.perfume.api.auth.domain.RefreshToken;
-import io.perfume.api.common.advice.GlobalExceptionHandler;
-import jwt.JsonWebTokenGenerator;
+import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
+import io.perfume.api.auth.application.port.in.dto.ReissuedTokenResult;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.cookies.CookieDocumentation.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = TokenHandlingController.class)
 public class TokenHandlingControllerTest {
-
     MockMvc mockMvc;
-
-    @Autowired
-    private RememberMeRepository rememberMeRepository;
-
     @MockBean
-    private JsonWebTokenGenerator tokenGenerator;
+    private MakeNewTokenUseCase makeNewTokenUseCase;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -53,69 +42,42 @@ public class TokenHandlingControllerTest {
                 .apply(documentationConfiguration(restDocumentation))
                 .build();
     }
-    @Test
-    @DisplayName("새로운 액세스 토큰을 발급 성공 - memory에 존재하는 토큰")
-    public void testGetNewAccessTokenSuccess() throws Exception {
-        // given
-        String oldAccessToken = "PerfumeAccessToken";
-        RefreshToken refreshToken = RefreshToken.Login(oldAccessToken, LocalDateTime.now().plusDays(3));
-        rememberMeRepository.saveRefreshToken(refreshToken);
 
-        String stubbingCreateNewAccessToken = "stubbingTempToken";
-        given(tokenGenerator
-                .create(
-                        ArgumentMatchers.any(),
-                        ArgumentMatchers.any(),
-                        ArgumentMatchers.anyInt(),
-                        ArgumentMatchers.any()
-                )
-        ).willReturn(stubbingCreateNewAccessToken);
-
-        // when + then
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders.get("/v1/access-token?accessToken="+oldAccessToken)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string(stubbingCreateNewAccessToken));
-
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    @DisplayName("새로운 액세스 토큰을 발급 실패 - 유효기간이 지남")
-    public void testGetNewAccessTokenFailed_fast_expired_time() throws Exception {
-        // given
-        String oldAccessToken = "PerfumeAccessToken";
-        RefreshToken refreshToken = RefreshToken.Login(oldAccessToken, LocalDateTime.now().minusSeconds(10));
-        rememberMeRepository.saveRefreshToken(refreshToken);
+    public void testReissueAccessToken() throws Exception {
+        String refreshTokenString = "refreshToken";
+        String accessToken = "sampleAccessToken";
+        String newAccessToken = "newAccessToken";
 
-        // when
-        Throwable cause = assertThrows(
-                Exception.class,
-                () -> mockMvc.perform(MockMvcRequestBuilders.get("/v1/access-token?accessToken="+oldAccessToken))
-        ).getCause();
+        ReissuedTokenResult reissuedTokenResult = new ReissuedTokenResult(newAccessToken, refreshTokenString);
 
-        // then
-        assertTrue(cause instanceof FailedMakeNewAccessTokenException);
-    }
+        given(makeNewTokenUseCase.reissueAccessToken(anyString(), anyString(), any(LocalDateTime.class)))
+                .willReturn(reissuedTokenResult);
 
-    @Test
-    @DisplayName("새로운 액세스 토큰을 발급 실패 - memory에 등록되지 않은 토큰")
-    public void testGetNewAccessTokenFailed_not_found_access_token() throws Exception {
-        // given
-        String oldAccessToken = "PerfumeAccessToken";
-
-        // when
-        Exception resolvedException = mockMvc
-                .perform(
-                        MockMvcRequestBuilders.get("/v1/access-token?accessToken="+oldAccessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andReturn()
-                .getResolvedException();
-
-        // then
-        assertNotNull(resolvedException);
-        assertTrue(resolvedException instanceof NotFoundRefreshTokenException);
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/reissue")
+                        .header("Authorization", accessToken)
+                        .cookie(new Cookie("X-Refresh-Token", refreshTokenString)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.header().string("Authorization", newAccessToken))
+                .andExpect(MockMvcResultMatchers.cookie().value("X-Refresh-Token", reissuedTokenResult.refreshToken()))
+                .andDo(
+                        document("reissue-token",
+                                requestHeaders(
+                                        headerWithName("Authorization").description("재발급이 필요한 만료된 액세스 토큰")
+                                ),
+                                requestCookies(
+                                        cookieWithName("X-Refresh-Token").description("재발급을 위해 필요한 리프레시 토큰")
+                                ),
+                                responseHeaders(
+                                        headerWithName("Authorization").description("재발급된 액세스 토큰")
+                                ),
+                                responseCookies(
+                                        cookieWithName("X-Refresh-Token").description("재발급된 리프레시 토큰")
+                                )));
     }
 }

@@ -24,11 +24,11 @@ public class TokenHandlingController {
     public ResponseEntity<Void> reissueAccessToken(@CookieValue(name = "X-Refresh-Token") String refreshToken,
                                                    @RequestHeader(name = "Authorization") String accessToken) {
         ReissuedTokenResult reissuedTokenResult = makeNewTokenUseCase.reissueAccessToken(accessToken, refreshToken, LocalDateTime.now());
-        String string = ResponseCookie.from("X-Refresh-Token", reissuedTokenResult.refreshToken())
+        String cookie = ResponseCookie.from("X-Refresh-Token", reissuedTokenResult.refreshToken())
                 .httpOnly(true)
                 .secure(true).build().toString();
         return ResponseEntity.ok()
-                .header(accessToken)
-                .header(HttpHeaders.SET_COOKIE, string).build();
+                .header("Authorization", reissuedTokenResult.accessToken())
+                .header(HttpHeaders.SET_COOKIE, cookie).build();
     }
 }

@@ -69,38 +69,6 @@ class RegisterControllerTest {
     }
 
     @Test
-    @DisplayName("이메일 회원가입을 한다.")
-    void testEmailSignUp() throws Exception {
-        // given
-        RegisterDto dto = new RegisterDto("username", "password", "email@test.com", false, false, "name");
-
-        // when & then
-        mockMvc
-                .perform(MockMvcRequestBuilders.post("/v1/signup/email")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto))
-                )
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(
-                        document("signup-email",
-                                requestFields(
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
-                                        fieldWithPath("username").type(JsonFieldType.STRING).description("계정 이름"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("계정 비밀번호"),
-                                        fieldWithPath("email").type(JsonFieldType.STRING).description("계정 이메일"),
-                                        fieldWithPath("marketingConsent").type(JsonFieldType.BOOLEAN).description("마켓팅 메일 수신 동의 여부"),
-                                        fieldWithPath("promotionConsent").type(JsonFieldType.BOOLEAN).description("프로모션 메일 수신 동의 여부")
-                                ),
-                                responseFields(
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("가입된 사용자 이름"),
-                                        fieldWithPath("username").type(JsonFieldType.STRING).description("가입된 계정 이름"),
-                                        fieldWithPath("email").type(JsonFieldType.STRING).description("가입된 계정 이메일")
-                                )));
-    }
-
-    @Test
     @DisplayName("본인 이메일을 인증한다.")
     void confirmEmail() throws Exception {
         // given
@@ -178,7 +146,6 @@ class RegisterControllerTest {
                 false,
                 "sample name"
         );
-        LocalDateTime now = LocalDateTime.now();
 
         // when & then
         mockMvc
@@ -195,9 +162,9 @@ class RegisterControllerTest {
                                         fieldWithPath("username").type(JsonFieldType.STRING).description("사용자 이름"),
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("marketingConsent").type(JsonFieldType.BOOLEAN).description("마케팅 수신 동의 여부"),
-                                        fieldWithPath("promotionConsent").type(JsonFieldType.BOOLEAN).description("이용약관 동의 여부"),
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("이름")
+                                        fieldWithPath("promotionConsent").type(JsonFieldType.BOOLEAN).description("이용약관 동의 여부")
                                 ),
                                 responseFields(
                                         fieldWithPath("username").type(JsonFieldType.STRING).description("사용자 이름"),
@@ -239,36 +206,6 @@ class RegisterControllerTest {
                         .content(objectMapper.writeValueAsString(dto))
                 )
                 .andExpect(status().isConflict());
-    }
-
-    @Test
-    @DisplayName("이메일 확인 요청한다.")
-    void testCheckEmail() throws Exception {
-        // given
-        LocalDateTime now = LocalDateTime.now();
-        given(mailSender.send(any(), any(), any())).willReturn(now);
-        String email = "sample@test.com";
-        SendEmailVerifyCodeRequestDto dto = new SendEmailVerifyCodeRequestDto(email);
-        given(twoWayEncryptor.encrypt(any())).willReturn("");
-
-        // when & then
-        mockMvc
-                .perform(MockMvcRequestBuilders.post("/v1/signup/email-verify/request")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto))
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(
-                        document("request-email-verify-code",
-                                requestFields(
-                                        fieldWithPath("email").type(JsonFieldType.STRING).description("인증하기 위한 이메일")
-                                ),
-                                responseFields(
-                                        fieldWithPath("key").type(JsonFieldType.STRING).description("인증코드 확인 시 필요한 키"),
-                                        fieldWithPath("sentAt").type(JsonFieldType.STRING).description("인증 요청 일시")
-                                )));
     }
 
     @Test
