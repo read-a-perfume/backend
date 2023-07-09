@@ -1,21 +1,23 @@
 package io.perfume.api.common.config;
 
-import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.common.auth.SignInAuthenticationFilter;
 import io.perfume.api.common.jwt.JwtAuthenticationFilter;
-import java.util.List;
-import jwt.JsonWebTokenGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,32 +30,13 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@EnableMethodSecurity
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfiguration {
-
-  private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-  public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
-                               @Qualifier("JwtAuthenticationProvider")
-                               AuthenticationProvider jwtAuthenticationProvider,
-                               @Qualifier("daoAuthenticationProvider")
-                               AuthenticationProvider daoAuthenticationProvider
-  ) {
-    this.authenticationManagerBuilder = authenticationManagerBuilder;
-    this.authenticationManagerBuilder
-        .authenticationProvider(jwtAuthenticationProvider)
-        .authenticationProvider(daoAuthenticationProvider);
-  }
 
   @Bean
   public static PasswordEncoder passwordEncoder() {
@@ -63,81 +46,26 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(
       HttpSecurity httpSecurity,
-      AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository,
-      AuthenticationSuccessHandler authenticationSuccessHandler,
-      AuthenticationFailureHandler authenticationFailureHandler,
-      OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService,
-      MakeNewTokenUseCase makeNewTokenUseCase,
-      JsonWebTokenGenerator jsonWebTokenGenerator,
-      WhiteListConfiguration whiteListConfig) throws Exception {
+      Customizer<OAuth2LoginConfigurer<HttpSecurity>> oauth2LoginConfigurer,
+      Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> authorizeHttpRequestsConfigurerCustomizer,
+      Customizer<CorsConfigurer<HttpSecurity>> corsConfigurerCustomizer,
+      Customizer<ExceptionHandlingConfigurer<HttpSecurity>> exceptionHandlingConfigurerCustomizer,
+      SignInAuthenticationFilter signInAuthenticationFilter,
+      JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
     httpSecurity
-        .authorizeHttpRequests(
-            authorizeHttpRequests ->
-                authorizeHttpRequests
-                    .requestMatchers(
-                        new AntPathRequestMatcher("/docs/**"),
-                        new AntPathRequestMatcher("/v1/signup/**"),
-                        new AntPathRequestMatcher("/oauth2/**"),
-                        new AntPathRequestMatcher("/login/oauth2/code/**"),
-                        new AntPathRequestMatcher("/v1/signup/**"),
-                        new AntPathRequestMatcher("/error"),
-                        new AntPathRequestMatcher("/v1/access-token", HttpMethod.GET.toString())
-                    ).permitAll()
-                    .anyRequest().authenticated()
-        )
+        .authorizeHttpRequests(authorizeHttpRequestsConfigurerCustomizer)
         .httpBasic(AbstractHttpConfigurer::disable)
         .csrf(CsrfConfigurer::disable)
-        .cors(c -> c.configurationSource(corsConfigurationSource(whiteListConfig.getCors())))
+        .cors(corsConfigurerCustomizer)
         .formLogin(AbstractHttpConfigurer::disable)
         .logout(AbstractHttpConfigurer::disable)
         .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .oauth2Login(oauth2LoginConfigurer ->
-            oauth2LoginConfigurer
-                .authorizationEndpoint(authorizationEndpointConfig ->
-                    authorizationEndpointConfig
-                        .baseUri("/oauth2/authorize")
-                        .authorizationRequestRepository(authorizationRequestRepository))
-                .redirectionEndpoint(redirectionEndpointConfig ->
-                    redirectionEndpointConfig
-                        .baseUri("/login/oauth2/code/**"))
-                .userInfoEndpoint(userInfoEndpointConfig ->
-                    userInfoEndpointConfig
-                        .userService(oauth2UserService)
-                )
-                .successHandler(authenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler)
-        )
-        .exceptionHandling(exceptionHandling ->
-            exceptionHandling
-                .authenticationEntryPoint(
-                    (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(
-                        401)
-                )
-                .accessDeniedHandler(
-                    (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(
-                        403)
-                ))
-        .addFilterBefore(
-            new SignInAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild(),
-                makeNewTokenUseCase), UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(new JwtAuthenticationFilter(this.authenticationManagerBuilder.getOrBuild(),
-            jsonWebTokenGenerator), UsernamePasswordAuthenticationFilter.class);
+        .oauth2Login(oauth2LoginConfigurer)
+        .exceptionHandling(exceptionHandlingConfigurerCustomizer)
+        .addFilterBefore(signInAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return httpSecurity.build();
-  }
-
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource(List<String> whitelistCors) {
-    CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(whitelistCors);
-    config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    config.setAllowedHeaders(List.of("*"));
-    config.setAllowCredentials(true);
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
-
-    return source;
   }
 
   @Bean
@@ -153,5 +81,21 @@ public class SecurityConfiguration {
   @Bean
   public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
     return new DefaultOAuth2UserService();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(HttpSecurity http,
+                                                     @Qualifier("JwtAuthenticationProvider")
+                                                     AuthenticationProvider jwtAuthenticationProvider,
+                                                     @Qualifier("daoAuthenticationProvider")
+                                                     AuthenticationProvider daoAuthenticationProvider
+  ) throws Exception {
+    AuthenticationManagerBuilder authenticationManagerBuilder =
+        http.getSharedObject(AuthenticationManagerBuilder.class);
+
+    return authenticationManagerBuilder
+        .authenticationProvider(jwtAuthenticationProvider)
+        .authenticationProvider(daoAuthenticationProvider)
+        .getOrBuild();
   }
 }
