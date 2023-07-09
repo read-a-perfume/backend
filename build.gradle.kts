@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id("checkstyle")
     id("org.springframework.boot") version "3.1.1"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
@@ -32,6 +33,7 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "kotlin-spring")
     apply(plugin = "org.asciidoctor.jvm.convert")
+    apply(plugin = "checkstyle")
 
     dependencies {
         // kotlin
@@ -59,5 +61,12 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+    }
+
+    tasks.checkstyleMain {
+        configFile = rootProject.file("config/checkstyle/google-checkstyle.xml")
+        ignoreFailures = true
+        source = fileTree("src/main/java")
+        include("**/*.java")
     }
 }
