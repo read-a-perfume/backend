@@ -1,15 +1,14 @@
 package io.perfume.api.sample.adapter.out.persistence;
 
+import static io.perfume.api.sample.domain.QSample.sample;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.sample.application.port.out.SampleQueryRepository;
 import io.perfume.api.sample.domain.Sample;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
-
-import static io.perfume.api.sample.domain.QSample.sample;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor

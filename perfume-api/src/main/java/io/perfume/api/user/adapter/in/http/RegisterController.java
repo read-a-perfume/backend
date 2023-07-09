@@ -1,16 +1,29 @@
 package io.perfume.api.user.adapter.in.http;
 
 
-import io.perfume.api.user.adapter.in.http.dto.*;
-import io.perfume.api.user.application.port.in.dto.*;
+import io.perfume.api.user.adapter.in.http.dto.CheckUsernameRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.EmailSignUpResponseDto;
+import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmResponseDto;
+import io.perfume.api.user.adapter.in.http.dto.RegisterDto;
+import io.perfume.api.user.adapter.in.http.dto.SendEmailVerifyCodeRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.SendEmailVerifyCodeResponseDto;
+import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
+import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
+import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
+import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
+import io.perfume.api.user.application.port.in.dto.UserResult;
 import io.perfume.api.user.application.service.RegisterService;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/signup")

@@ -1,4 +1,4 @@
-package io.perfume.api.common.signIn;
+package io.perfume.api.common.auth;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

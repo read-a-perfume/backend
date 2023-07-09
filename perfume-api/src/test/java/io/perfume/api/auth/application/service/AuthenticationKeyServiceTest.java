@@ -1,5 +1,7 @@
 package io.perfume.api.auth.application.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeCommand;
@@ -10,13 +12,10 @@ import io.perfume.api.auth.stub.StubAuthenticationKeyQueryRepository;
 import io.perfume.api.auth.stub.StubAuthenticationKeyRepository;
 import io.perfume.api.auth.stub.StubGenerator;
 import io.perfume.api.auth.stub.StubTwoWayEncryptor;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AuthenticationKeyServiceTest {
 

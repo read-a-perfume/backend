@@ -1,4 +1,4 @@
-package io.perfume.api.common.signIn;
+package io.perfume.api.common.auth;
 
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import org.springframework.security.core.userdetails.UserDetails;

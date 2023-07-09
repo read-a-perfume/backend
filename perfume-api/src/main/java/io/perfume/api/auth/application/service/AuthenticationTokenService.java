@@ -2,15 +2,14 @@ package io.perfume.api.auth.application.service;
 
 import io.perfume.api.auth.domain.RefreshToken;
 import io.perfume.api.common.jwt.JwtProperties;
-import jwt.JsonWebTokenGenerator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import jwt.JsonWebTokenGenerator;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

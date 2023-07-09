@@ -1,5 +1,8 @@
 package io.perfume.api.user.application.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.auth.application.type.CheckEmailStatus;
@@ -8,16 +11,16 @@ import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
-import io.perfume.api.user.stub.*;
+import io.perfume.api.user.stub.StubCheckEmailCertificateUseCase;
+import io.perfume.api.user.stub.StubCreateVerificationCodeUseCase;
+import io.perfume.api.user.stub.StubEncryptor;
+import io.perfume.api.user.stub.StubMailSender;
+import io.perfume.api.user.stub.StubUserRepository;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RegisterServiceTest {
 

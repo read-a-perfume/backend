@@ -1,8 +1,9 @@
 package io.perfume.api.common.config;
 
 import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
+import io.perfume.api.common.auth.SignInAuthenticationFilter;
 import io.perfume.api.common.jwt.JwtAuthenticationFilter;
-import io.perfume.api.common.signIn.SignInAuthenticationFilter;
+import java.util.List;
 import jwt.JsonWebTokenGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -35,8 +36,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
-
 @EnableMethodSecurity
 @EnableWebSecurity
 @Configuration
@@ -64,10 +63,10 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(
       HttpSecurity httpSecurity,
-      AuthorizationRequestRepository<OAuth2AuthorizationRequest> requestAuthorizationRequestRepository,
+      AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository,
       AuthenticationSuccessHandler authenticationSuccessHandler,
       AuthenticationFailureHandler authenticationFailureHandler,
-      OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService,
+      OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService,
       MakeNewTokenUseCase makeNewTokenUseCase,
       JsonWebTokenGenerator jsonWebTokenGenerator,
       WhiteListConfiguration whiteListConfig) throws Exception {
@@ -92,18 +91,18 @@ public class SecurityConfiguration {
         .formLogin(AbstractHttpConfigurer::disable)
         .logout(AbstractHttpConfigurer::disable)
         .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .oauth2Login(oAuth2LoginConfigurer ->
-            oAuth2LoginConfigurer
+        .oauth2Login(oauth2LoginConfigurer ->
+            oauth2LoginConfigurer
                 .authorizationEndpoint(authorizationEndpointConfig ->
                     authorizationEndpointConfig
                         .baseUri("/oauth2/authorize")
-                        .authorizationRequestRepository(requestAuthorizationRequestRepository))
+                        .authorizationRequestRepository(authorizationRequestRepository))
                 .redirectionEndpoint(redirectionEndpointConfig ->
                     redirectionEndpointConfig
                         .baseUri("/login/oauth2/code/**"))
                 .userInfoEndpoint(userInfoEndpointConfig ->
                     userInfoEndpointConfig
-                        .userService(oAuth2UserService)
+                        .userService(oauth2UserService)
                 )
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
@@ -142,7 +141,7 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  public AuthorizationRequestRepository<OAuth2AuthorizationRequest> httpSessionOAuth2AuthorizationRequestRepository() {
+  public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
     return new HttpSessionOAuth2AuthorizationRequestRepository();
   }
 
@@ -152,7 +151,7 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+  public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
     return new DefaultOAuth2UserService();
   }
 }

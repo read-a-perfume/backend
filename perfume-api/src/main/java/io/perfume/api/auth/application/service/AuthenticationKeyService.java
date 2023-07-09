@@ -12,12 +12,11 @@ import io.perfume.api.auth.application.port.out.AuthenticationKeyQueryRepository
 import io.perfume.api.auth.application.port.out.AuthenticationKeyRepository;
 import io.perfume.api.auth.application.type.CheckEmailStatus;
 import io.perfume.api.auth.domain.AuthenticationKey;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ import java.util.Optional;
 public class AuthenticationKeyService
     implements CheckEmailCertificateUseCase, CreateVerificationCodeUseCase {
 
-  private final static String SEPERATE_STRING = "::";
+  private static final String SEPERATE_STRING = "::";
   private final AuthenticationKeyRepository authenticationKeyRepository;
   private final AuthenticationKeyQueryRepository authenticationKeyQueryRepository;
   private final TwoWayEncryptor twoWayEncryptor;

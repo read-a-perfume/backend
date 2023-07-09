@@ -1,4 +1,4 @@
-package io.perfume.api.common.signIn;
+package io.perfume.api.common.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;

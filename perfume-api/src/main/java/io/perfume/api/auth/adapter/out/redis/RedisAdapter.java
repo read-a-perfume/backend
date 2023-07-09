@@ -4,12 +4,11 @@ import io.perfume.api.auth.application.exception.NotFoundRefreshTokenException;
 import io.perfume.api.auth.application.port.out.RememberMeQueryRepository;
 import io.perfume.api.auth.application.port.out.RememberMeRepository;
 import io.perfume.api.auth.domain.RefreshToken;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Profile("prod")
 @Repository

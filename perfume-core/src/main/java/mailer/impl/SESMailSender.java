@@ -1,8 +1,7 @@
 package mailer.impl;
 
-import mailer.MailSender;
-
 import java.time.LocalDateTime;
+import mailer.MailSender;
 
 public class SESMailSender implements MailSender {
 

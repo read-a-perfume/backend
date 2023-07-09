@@ -3,7 +3,6 @@ package io.perfume.api.user.stub;
 import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
-
 import java.util.ArrayList;
 import java.util.List;
 

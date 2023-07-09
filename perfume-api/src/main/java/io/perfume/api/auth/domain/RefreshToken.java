@@ -1,13 +1,12 @@
 package io.perfume.api.auth.domain;
 
 import io.perfume.api.auth.adapter.out.redis.RedisRefreshToken;
+import java.util.Objects;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Objects;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

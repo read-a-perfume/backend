@@ -1,7 +1,6 @@
 package generator.impl;
 
 import generator.Generator;
-
 import java.util.Random;
 
 public class NumberGenerator implements Generator {

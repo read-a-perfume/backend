@@ -2,7 +2,6 @@ package io.perfume.api.auth.stub;
 
 import io.perfume.api.auth.application.port.out.AuthenticationKeyQueryRepository;
 import io.perfume.api.auth.domain.AuthenticationKey;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

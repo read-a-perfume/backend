@@ -2,9 +2,8 @@ package io.perfume.api.auth.domain;
 
 import io.perfume.api.base.BaseTimeDomain;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class AuthenticationKey extends BaseTimeDomain {
@@ -49,9 +48,10 @@ public class AuthenticationKey extends BaseTimeDomain {
   }
 
   public boolean matchKey(String code, String key, LocalDateTime now) {
-    boolean isValid = !this.isVerified() && !this.isExpired(now) && this.key.equals(key) &&
-        this.code.equals(code);
-    if (isValid) {
+    boolean isValid = !this.isVerified() && !this.isExpired(now);
+    boolean isMatched = this.code.equals(code) && this.key.equals(key);
+
+    if (isValid && isMatched) {
       this.verifiedAt = now;
       return true;
     }

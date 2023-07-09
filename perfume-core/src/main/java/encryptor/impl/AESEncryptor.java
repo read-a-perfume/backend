@@ -1,10 +1,9 @@
 package encryptor.impl;
 
 import encryptor.TwoWayEncryptor;
-
+import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 
 public class AESEncryptor implements TwoWayEncryptor {
 

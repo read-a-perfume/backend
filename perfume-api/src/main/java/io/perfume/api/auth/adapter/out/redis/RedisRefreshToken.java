@@ -1,14 +1,13 @@
 package io.perfume.api.auth.adapter.out.redis;
 
 import io.perfume.api.auth.domain.RefreshToken;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-
-import java.util.UUID;
 
 @Getter
 @ToString

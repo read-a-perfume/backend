@@ -3,10 +3,9 @@ package io.perfume.api.auth.adapter.out.persistence;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.auth.application.port.out.AuthenticationKeyQueryRepository;
 import io.perfume.api.auth.domain.AuthenticationKey;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

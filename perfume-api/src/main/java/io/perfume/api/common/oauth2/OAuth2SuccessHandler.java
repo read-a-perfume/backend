@@ -11,6 +11,10 @@ import io.perfume.api.user.application.port.out.UserQueryRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
@@ -19,11 +23,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationTar
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -45,8 +44,8 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                       @NotNull Authentication authentication) throws IOException {
-    OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-    UserResult userResult = newUserIfNotExists(oAuth2User);
+    OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+    UserResult userResult = newUserIfNotExists(oauth2User);
     LocalDateTime now = LocalDateTime.now();
 
     setResponseToken(response, userResult, now);
@@ -73,13 +72,13 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         .toUriString();
   }
 
-  private UserResult newUserIfNotExists(@NotNull OAuth2User oAuth2User) {
-    String email = oAuth2User.getAttributes().get("email").toString();
+  private UserResult newUserIfNotExists(@NotNull OAuth2User oauth2User) {
+    String email = oauth2User.getAttributes().get("email").toString();
     if (email == null) {
       throw new RuntimeException("Email not found from OAuth2 provider");
     }
 
-    String name = oAuth2User.getAttributes().get("name").toString();
+    String name = oauth2User.getAttributes().get("name").toString();
     if (name == null) {
       throw new RuntimeException("Name not found from OAuth2 provider");
     }

@@ -4,10 +4,9 @@ import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.UserResult;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.domain.User;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

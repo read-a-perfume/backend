@@ -7,15 +7,11 @@ import io.perfume.api.auth.application.port.in.dto.ReissuedTokenResult;
 import io.perfume.api.auth.application.port.out.RememberMeQueryRepository;
 import io.perfume.api.auth.application.port.out.RememberMeRepository;
 import io.perfume.api.auth.domain.RefreshToken;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
-/**
- * token 발급, 무효같은 기능을 제공
- */
 @Service
 @RequiredArgsConstructor
 public class TokenHandlingService implements MakeNewTokenUseCase {
@@ -23,18 +19,10 @@ public class TokenHandlingService implements MakeNewTokenUseCase {
   private final RememberMeRepository rememberMeRepository;
   private final AuthenticationTokenService authenticationTokenService;
 
-  /**
-   * RefreshToken을 확인하고 새로운 AccessToken을 반환
-   *
-   * @param accessToken  기존에 인증을 위해 사용한 token
-   * @param refreshToken 재발행을 위한 token
-   * @return 새로운 accessToken
-   */
   @Override
   public ReissuedTokenResult reissueAccessToken(String accessToken, String refreshToken,
                                                 LocalDateTime now) {
-    boolean isValidTokens = authenticationTokenService.isValid(refreshToken, now) &&
-        authenticationTokenService.isValid(accessToken, now);
+    boolean isValidTokens = authenticationTokenService.isValid(refreshToken, now);
     if (isValidTokens) {
       throw new IllegalArgumentException("Invalid tokens");
     }
@@ -72,10 +60,6 @@ public class TokenHandlingService implements MakeNewTokenUseCase {
     return authenticationTokenService.createAccessToken(userId, now);
   }
 
-  /**
-   * @param userId
-   * @return Initialized Refresh Token which is type of JWT
-   */
   @Override
   public String createRefreshToken(Long userId, LocalDateTime now) {
     RefreshToken refreshToken = rememberMeRepository.saveRefreshToken(new RefreshToken(userId));

@@ -3,7 +3,6 @@ package io.perfume.api.user.stub;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
-
 import java.util.Optional;
 
 public class StubUserRepository implements UserRepository, UserQueryRepository {

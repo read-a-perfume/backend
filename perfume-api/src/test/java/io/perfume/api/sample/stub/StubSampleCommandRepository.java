@@ -3,7 +3,6 @@ package io.perfume.api.sample.stub;
 import io.perfume.api.sample.application.port.out.SampleCommandRepository;
 import io.perfume.api.sample.application.port.out.SampleQueryRepository;
 import io.perfume.api.sample.domain.Sample;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;

@@ -1,8 +1,7 @@
 package io.perfume.api.user.stub;
 
-import mailer.MailSender;
-
 import java.time.LocalDateTime;
+import mailer.MailSender;
 
 public class StubMailSender implements MailSender {
 
