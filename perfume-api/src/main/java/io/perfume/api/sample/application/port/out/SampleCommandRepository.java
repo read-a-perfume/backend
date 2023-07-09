@@ -4,5 +4,5 @@ import io.perfume.api.sample.domain.Sample;
 
 public interface SampleCommandRepository {
 
-    Sample save(Sample entity);
+  Sample save(Sample entity);
 }

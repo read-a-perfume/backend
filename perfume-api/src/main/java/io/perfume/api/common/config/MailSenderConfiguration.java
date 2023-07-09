@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MailSenderConfiguration {
 
-    @Bean
-    public MailSender mailSender() {
-        return new SESMailSender();
-    }
+  @Bean
+  public MailSender mailSender() {
+    return new SESMailSender();
+  }
 }

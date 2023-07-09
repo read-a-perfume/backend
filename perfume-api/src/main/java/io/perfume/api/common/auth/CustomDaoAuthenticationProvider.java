@@ -1,4 +1,4 @@
-package io.perfume.api.common.signIn;
+package io.perfume.api.common.auth;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 @Qualifier("daoAuthenticationProvider")
 public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
 
-    public CustomDaoAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
-        super(passwordEncoder);
-        this.setUserDetailsService(userDetailsService);
-    }
+  public CustomDaoAuthenticationProvider(PasswordEncoder passwordEncoder,
+                                         UserDetailsService userDetailsService) {
+    super(passwordEncoder);
+    this.setUserDetailsService(userDetailsService);
+  }
 }

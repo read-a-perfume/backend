@@ -6,40 +6,40 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public User toUser(UserJpaEntity userJpaEntity) {
-        if (userJpaEntity == null) {
-            return null;
-        }
-        return User.withId(
-                userJpaEntity.getId(),
-                userJpaEntity.getUsername(),
-                userJpaEntity.getEmail(),
-                userJpaEntity.getPassword(),
-                userJpaEntity.getName(),
-                userJpaEntity.getRole(),
-                userJpaEntity.getBusinessId(),
-                userJpaEntity.getThumbnailId(),
-                userJpaEntity.getCreatedAt(),
-                userJpaEntity.getUpdatedAt(),
-                userJpaEntity.getDeletedAt());
+  public User toUser(UserJpaEntity userJpaEntity) {
+    if (userJpaEntity == null) {
+      return null;
     }
+    return User.withId(
+        userJpaEntity.getId(),
+        userJpaEntity.getUsername(),
+        userJpaEntity.getEmail(),
+        userJpaEntity.getPassword(),
+        userJpaEntity.getName(),
+        userJpaEntity.getRole(),
+        userJpaEntity.getBusinessId(),
+        userJpaEntity.getThumbnailId(),
+        userJpaEntity.getCreatedAt(),
+        userJpaEntity.getUpdatedAt(),
+        userJpaEntity.getDeletedAt());
+  }
 
-    public UserJpaEntity toUserJpaEntity(User user) {
-        if (user == null) {
-            return null;
-        }
-        return UserJpaEntity.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .name(user.getName())
-                .role(user.getRole())
-                .promotionConsent(user.isPromotionConsent())
-                .marketingConsent(user.isMarketingConsent())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .deletedAt(user.getDeletedAt())
-                .build();
+  public UserJpaEntity toUserJpaEntity(User user) {
+    if (user == null) {
+      return null;
     }
+    return UserJpaEntity.builder()
+        .id(user.getId())
+        .username(user.getUsername())
+        .email(user.getEmail())
+        .password(user.getPassword())
+        .name(user.getName())
+        .role(user.getRole())
+        .promotionConsent(user.isPromotionConsent())
+        .marketingConsent(user.isMarketingConsent())
+        .createdAt(user.getCreatedAt())
+        .updatedAt(user.getUpdatedAt())
+        .deletedAt(user.getDeletedAt())
+        .build();
+  }
 }

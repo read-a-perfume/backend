@@ -2,5 +2,5 @@ package generator;
 
 public interface Generator {
 
-    String generate(int length);
+  String generate(int length);
 }

@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EncryptorConfiguration {
 
-    @Bean
-    public TwoWayEncryptor twoWayEncryptor(@Value("${encryption.aes.secret-key}") String secretKey) {
-        return new AESEncryptor(secretKey);
-    }
+  @Bean
+  public TwoWayEncryptor twoWayEncryptor(@Value("${encryption.aes.secret-key}") String secretKey) {
+    return new AESEncryptor(secretKey);
+  }
 
-    @Bean
-    public OneWayEncryptor oneWayEncryptor() {
-        return new SHAEncryptor();
-    }
+  @Bean
+  public OneWayEncryptor oneWayEncryptor() {
+    return new SHAEncryptor();
+  }
 }
