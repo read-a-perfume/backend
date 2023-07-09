@@ -69,4 +69,11 @@ subprojects {
         source = fileTree("src/main/java")
         include("**/*.java")
     }
+
+    tasks.checkstyleTest {
+        configFile = rootProject.file("config/checkstyle/google-checkstyle.xml")
+        ignoreFailures = true
+        source = fileTree("src/test/java")
+        include("**/*.java")
+    }
 }
