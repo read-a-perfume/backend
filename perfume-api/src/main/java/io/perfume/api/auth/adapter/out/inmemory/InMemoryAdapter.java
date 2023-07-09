@@ -14,20 +14,20 @@ import java.util.UUID;
 @Repository
 @RequiredArgsConstructor
 class InMemoryAdapter implements RememberMeQueryRepository, RememberMeRepository {
-    private final InMemoryRepository inMemoryRepository;
+  private final InMemoryRepository inMemoryRepository;
 
-    @Override
-    public Optional<RefreshToken> getRefreshTokenById(UUID tokenId) {
-        return inMemoryRepository.findByAccessToken(tokenId);
-    }
+  @Override
+  public Optional<RefreshToken> getRefreshTokenById(UUID tokenId) {
+    return inMemoryRepository.findByAccessToken(tokenId);
+  }
 
-    @Override
-    public RefreshToken saveRefreshToken(RefreshToken refreshToken) {
-        return inMemoryRepository.save(refreshToken);
-    }
+  @Override
+  public RefreshToken saveRefreshToken(RefreshToken refreshToken) {
+    return inMemoryRepository.save(refreshToken);
+  }
 
-    @Override
-    public void removeRefreshToken(UUID tokenId) {
-        inMemoryRepository.delete(tokenId);
-    }
+  @Override
+  public void removeRefreshToken(UUID tokenId) {
+    inMemoryRepository.delete(tokenId);
+  }
 }

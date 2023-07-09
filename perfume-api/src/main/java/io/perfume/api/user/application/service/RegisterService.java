@@ -27,58 +27,63 @@ import java.time.LocalDateTime;
 @Transactional(readOnly = true)
 public class RegisterService implements CreateUserUseCase {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
-    private final UserRepository userRepository;
-    private final UserQueryRepository userQueryRepository;
-    private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
-    private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
-    private final MailSender mailSender;
-    private final PasswordEncoder passwordEncoder;
+  private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
+  private final UserRepository userRepository;
+  private final UserQueryRepository userQueryRepository;
+  private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
+  private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
+  private final MailSender mailSender;
+  private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command) {
-        User user = User.generalUserJoin(
-                command.username(),
-                command.email(),
-                passwordEncoder.encode(command.password()),
-                command.name(),
-                command.marketingConsent(),
-                command.promotionConsent());
+  @Transactional
+  public UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command) {
+    User user = User.generalUserJoin(
+        command.username(),
+        command.email(),
+        passwordEncoder.encode(command.password()),
+        command.name(),
+        command.marketingConsent(),
+        command.promotionConsent());
 
-        return toDto(userRepository.save(user).orElseThrow(FailedRegisterException::new));
+    return toDto(userRepository.save(user).orElseThrow(FailedRegisterException::new));
+  }
+
+  public boolean validDuplicateUsername(String username) {
+    try {
+      return userQueryRepository.findByUsername(username).isEmpty();
+    } catch (Exception e) {
+      return true;
     }
+  }
 
-    public boolean validDuplicateUsername(String username) {
-        try {
-            return userQueryRepository.findByUsername(username).isEmpty();
-        } catch (Exception e) {
-            return true;
-        }
-    }
+  @Transactional
+  public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
+    logger.info("confirmEmailVerify code = {}, key = {}, now = {}", code, key, now);
 
-    @Transactional
-    public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
-        logger.info("confirmEmailVerify code = {}, key = {}, now = {}", code, key, now);
+    CheckEmailCertificateCommand command = new CheckEmailCertificateCommand(code, key, now);
+    CheckEmailCertificateResult result =
+        checkEmailCertificateUseCase.checkEmailCertificate(command);
 
-        CheckEmailCertificateCommand command = new CheckEmailCertificateCommand(code, key, now);
-        CheckEmailCertificateResult result = checkEmailCertificateUseCase.checkEmailCertificate(command);
+    return new ConfirmEmailVerifyResult(result.email(), now);
+  }
 
-        return new ConfirmEmailVerifyResult(result.email(), now);
-    }
+  @Transactional
+  public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
+    CreateVerificationCodeCommand createVerificationCodeCommand =
+        new CreateVerificationCodeCommand(command.email(), command.now());
+    CreateVerificationCodeResult result =
+        createVerificationCodeUseCase.createVerificationCode(createVerificationCodeCommand);
 
-    @Transactional
-    public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
-        CreateVerificationCodeCommand createVerificationCodeCommand = new CreateVerificationCodeCommand(command.email(), command.now());
-        CreateVerificationCodeResult result = createVerificationCodeUseCase.createVerificationCode(createVerificationCodeCommand);
+    LocalDateTime sentAt = mailSender.send(command.email(), "이메일 인증을 완료해주세요.", result.code());
 
-        LocalDateTime sentAt = mailSender.send(command.email(), "이메일 인증을 완료해주세요.", result.code());
+    logger.info("sendEmailVerifyCode email = {}, code = {}, key = {}, now = {}", command.email(),
+        result.code(), result.signKey(), sentAt);
 
-        logger.info("sendEmailVerifyCode email = {}, code = {}, key = {}, now = {}", command.email(), result.code(), result.signKey(), sentAt);
+    return new SendVerificationCodeResult(result.signKey(), sentAt);
+  }
 
-        return new SendVerificationCodeResult(result.signKey(), sentAt);
-    }
-
-    private UserResult toDto(User user) {
-        return new UserResult(user.getId(), user.getUsername(), user.getEmail(), user.getName(), user.getCreatedAt());
-    }
+  private UserResult toDto(User user) {
+    return new UserResult(user.getId(), user.getUsername(), user.getEmail(), user.getName(),
+        user.getCreatedAt());
+  }
 }

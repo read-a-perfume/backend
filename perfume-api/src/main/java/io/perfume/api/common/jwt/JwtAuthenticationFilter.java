@@ -17,27 +17,30 @@ import java.util.Objects;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final AuthenticationManager authenticationManager;
-    private final JsonWebTokenGenerator jsonWebTokenGenerator;
+  private final AuthenticationManager authenticationManager;
+  private final JsonWebTokenGenerator jsonWebTokenGenerator;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JsonWebTokenGenerator jsonWebTokenGenerator) {
-        this.authenticationManager = authenticationManager;
-        this.jsonWebTokenGenerator = jsonWebTokenGenerator;
+  public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
+                                 JsonWebTokenGenerator jsonWebTokenGenerator) {
+    this.authenticationManager = authenticationManager;
+    this.jsonWebTokenGenerator = jsonWebTokenGenerator;
+  }
+
+  @Override
+  protected void doFilterInternal(@NotNull HttpServletRequest request,
+                                  @NotNull HttpServletResponse response,
+                                  @NotNull FilterChain filterChain)
+      throws ServletException, IOException {
+    String jwt = jsonWebTokenGenerator.getTokenFromHeader(request);
+
+    if (Objects.isNull(jwt)) {
+      filterChain.doFilter(request, response);
+      return;
     }
 
-    @Override
-    protected void doFilterInternal(@NotNull HttpServletRequest request,
-                                    @NotNull HttpServletResponse response,
-                                    @NotNull FilterChain filterChain) throws ServletException, IOException {
-        String jwt = jsonWebTokenGenerator.getTokenFromHeader(request);
-
-        if (Objects.isNull(jwt)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        Authentication authentication = authenticationManager.authenticate(new JwtAuthenticationToken(jwt));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
-    }
+    Authentication authentication =
+        authenticationManager.authenticate(new JwtAuthenticationToken(jwt));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    filterChain.doFilter(request, response);
+  }
 }

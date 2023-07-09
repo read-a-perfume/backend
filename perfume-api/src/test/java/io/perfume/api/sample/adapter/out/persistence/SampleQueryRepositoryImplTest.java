@@ -21,38 +21,38 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnableJpaAuditing
 class SampleQueryRepositoryImplTest {
 
-    @Autowired
-    private EntityManager entityManager;
+  @Autowired
+  private EntityManager entityManager;
 
-    @Autowired
-    private SampleQueryRepositoryImpl sampleQueryRepository;
+  @Autowired
+  private SampleQueryRepositoryImpl sampleQueryRepository;
 
-    @Test
-    void find() {
-        // given
-        entityManager.persist(Sample.builder().name("sample").build());
-        entityManager.persist(Sample.builder().name("sample").build());
-        entityManager.flush();
-        entityManager.clear();
+  @Test
+  void find() {
+    // given
+    entityManager.persist(Sample.builder().name("sample").build());
+    entityManager.persist(Sample.builder().name("sample").build());
+    entityManager.flush();
+    entityManager.clear();
 
-        // when
-        List<Sample> actual = sampleQueryRepository.find();
+    // when
+    List<Sample> actual = sampleQueryRepository.find();
 
-        // then
-        assertThat(actual).hasSize(2);
-    }
+    // then
+    assertThat(actual).hasSize(2);
+  }
 
-    @Test
-    void findById() {
-        // given
-        entityManager.persist(Sample.builder().name("sample").build());
-        entityManager.flush();
-        entityManager.clear();
+  @Test
+  void findById() {
+    // given
+    entityManager.persist(Sample.builder().name("sample").build());
+    entityManager.flush();
+    entityManager.clear();
 
-        // when
-        Optional<Sample> actual = sampleQueryRepository.findById(1L);
+    // when
+    Optional<Sample> actual = sampleQueryRepository.findById(1L);
 
-        // then
-        assertThat(actual.isPresent()).isTrue();
-    }
+    // then
+    assertThat(actual.isPresent()).isTrue();
+  }
 }

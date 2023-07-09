@@ -21,26 +21,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnableJpaAuditing
 class AuthenticationKeyQueryRepositoryImplTest {
 
-    @Autowired
-    private EntityManager entityManager;
+  @Autowired
+  private EntityManager entityManager;
 
-    @Autowired
-    private AuthenticationKeyQueryRepositoryImpl authenticationKeyQueryRepository;
+  @Autowired
+  private AuthenticationKeyQueryRepositoryImpl authenticationKeyQueryRepository;
 
-    @Test
-    void findByKey() {
-        // given
-        LocalDateTime now = LocalDateTime.now();
-        String code = "sample code";
-        String key = "sample key";
-        entityManager.persist(new AuthenticationKeyJpaEntity(null, code, key, null, now, now, null));
-        entityManager.flush();
-        entityManager.clear();
+  @Test
+  void findByKey() {
+    // given
+    LocalDateTime now = LocalDateTime.now();
+    String code = "sample code";
+    String key = "sample key";
+    entityManager.persist(new AuthenticationKeyJpaEntity(null, code, key, null, now, now, null));
+    entityManager.flush();
+    entityManager.clear();
 
-        // when
-        Optional<AuthenticationKey> actual = authenticationKeyQueryRepository.findByKey(key);
+    // when
+    Optional<AuthenticationKey> actual = authenticationKeyQueryRepository.findByKey(key);
 
-        // then
-        assertThat(actual.isPresent()).isTrue();
-    }
+    // then
+    assertThat(actual.isPresent()).isTrue();
+  }
 }

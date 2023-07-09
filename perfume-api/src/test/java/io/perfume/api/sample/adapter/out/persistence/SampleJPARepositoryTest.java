@@ -16,20 +16,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnableJpaAuditing
 class SampleJPARepositoryTest {
 
-    @Autowired
-    private SampleCommandRepository sampleRepository;
+  @Autowired
+  private SampleCommandRepository sampleRepository;
 
-    @Test
-    @DisplayName("Sample entity 를 영속화한다.")
-    public void save() {
-        // given
-        Sample sample = Sample.builder().name("sample").build();
+  @Test
+  @DisplayName("Sample entity 를 영속화한다.")
+  public void save() {
+    // given
+    Sample sample = Sample.builder().name("sample").build();
 
-        // when
-        Sample savedSample = sampleRepository.save(sample);
+    // when
+    Sample savedSample = sampleRepository.save(sample);
 
-        // then
-        assertThat(savedSample).isNotNull();
-        assertThat(savedSample.getId()).isNotNull();
-    }
+    // then
+    assertThat(savedSample).isNotNull();
+    assertThat(savedSample.getId()).isNotNull();
+  }
 }

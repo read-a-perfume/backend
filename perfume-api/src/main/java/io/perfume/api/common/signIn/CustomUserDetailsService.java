@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserQueryRepository userQueryRepository;
+  private final UserQueryRepository userQueryRepository;
 
-    public CustomUserDetailsService(UserQueryRepository userQueryRepository) {
-        this.userQueryRepository = userQueryRepository;
-    }
+  public CustomUserDetailsService(UserQueryRepository userQueryRepository) {
+    this.userQueryRepository = userQueryRepository;
+  }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userQueryRepository.findOneByEmail(email)
-                .map(UserPrincipal::new)
-                .orElseThrow(() -> new UsernameNotFoundException(email));
-    }
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    return userQueryRepository.findOneByEmail(email)
+        .map(UserPrincipal::new)
+        .orElseThrow(() -> new UsernameNotFoundException(email));
+  }
 }

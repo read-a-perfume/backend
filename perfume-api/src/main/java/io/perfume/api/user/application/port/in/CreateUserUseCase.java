@@ -5,5 +5,5 @@ import io.perfume.api.user.application.port.in.dto.UserResult;
 
 public interface CreateUserUseCase {
 
-    UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command);
+  UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command);
 }

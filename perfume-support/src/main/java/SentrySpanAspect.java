@@ -14,32 +14,33 @@ import java.util.Objects;
 @ConditionalOnProperty(value = "sentry.enabled", havingValue = "true")
 public class SentrySpanAspect {
 
-    @Pointcut("within(@org.springframework.stereotype.Repository *)")
-    public void repositoryBeanMethods() {
-    }
+  @Pointcut("within(@org.springframework.stereotype.Repository *)")
+  public void repositoryBeanMethods() {
+  }
 
-    @Pointcut("within(@org.springframework.stereotype.Service *)")
-    public void serviceBeanMethods() {
-    }
+  @Pointcut("within(@org.springframework.stereotype.Service *)")
+  public void serviceBeanMethods() {
+  }
 
-    @Before("repositoryBeanMethods() || serviceBeanMethods()")
-    public void beforeMethodExecution(JoinPoint joinPoint) {
-        ITransaction span = Sentry.startTransaction("RDPF", joinPoint.getSignature().toShortString(), true);
-        span.setTag("class", joinPoint.getTarget().getClass().getSimpleName());
-        span.setTag("method", joinPoint.getSignature().getName());
-    }
+  @Before("repositoryBeanMethods() || serviceBeanMethods()")
+  public void beforeMethodExecution(JoinPoint joinPoint) {
+    ITransaction span =
+        Sentry.startTransaction("RDPF", joinPoint.getSignature().toShortString(), true);
+    span.setTag("class", joinPoint.getTarget().getClass().getSimpleName());
+    span.setTag("method", joinPoint.getSignature().getName());
+  }
 
-    @After("repositoryBeanMethods() || serviceBeanMethods()")
-    public void afterMethodExecution(JoinPoint joinPoint) {
-        ISpan span = Sentry.getCurrentHub().getSpan();
-        if (Objects.isNull(span)) {
-            return;
-        }
-        span.finish();
+  @After("repositoryBeanMethods() || serviceBeanMethods()")
+  public void afterMethodExecution(JoinPoint joinPoint) {
+    ISpan span = Sentry.getCurrentHub().getSpan();
+    if (Objects.isNull(span)) {
+      return;
     }
+    span.finish();
+  }
 
-    @Around("repositoryBeanMethods() || serviceBeanMethods()")
-    public Object aroundMethodExecution(ProceedingJoinPoint joinPoint) throws Throwable {
-        return joinPoint.proceed();
-    }
+  @Around("repositoryBeanMethods() || serviceBeanMethods()")
+  public Object aroundMethodExecution(ProceedingJoinPoint joinPoint) throws Throwable {
+    return joinPoint.proceed();
+  }
 }

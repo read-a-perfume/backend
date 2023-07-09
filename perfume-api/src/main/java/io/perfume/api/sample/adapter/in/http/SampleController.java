@@ -21,40 +21,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SampleController {
 
-    private final SampleService sampleService;
+  private final SampleService sampleService;
 
-    @GetMapping
-    public ResponseEntity<List<SampleResponseDto>> samples() {
-        return ResponseEntity.ok(sampleService.getSamples().stream().map(this::toDto).toList());
-    }
+  @GetMapping
+  public ResponseEntity<List<SampleResponseDto>> samples() {
+    return ResponseEntity.ok(sampleService.getSamples().stream().map(this::toDto).toList());
+  }
 
-    @PostMapping
-    public ResponseEntity<SampleResponseDto> createSample(@RequestBody @Valid CreateSampleRequestDto dto) {
-        SampleResult result = sampleService.createSample(dto.name());
+  @PostMapping
+  public ResponseEntity<SampleResponseDto> createSample(
+      @RequestBody @Valid CreateSampleRequestDto dto) {
+    SampleResult result = sampleService.createSample(dto.name());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(result));
-    }
+    return ResponseEntity.status(HttpStatus.CREATED).body(toDto(result));
+  }
 
-    @GetMapping("/exception/teapot")
-    public ResponseEntity<Void> throwCustomHttpException() {
-        throw new CustomSampleException();
-    }
+  @GetMapping("/exception/teapot")
+  public ResponseEntity<Void> throwCustomHttpException() {
+    throw new CustomSampleException();
+  }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<SampleResponseDto> updateSample(@PathVariable("id") @Min(1) Long id, @RequestBody @Valid UpdateSampleRequestDto dto) {
-        SampleResult result = sampleService.updateSample(id, dto.name());
+  @PatchMapping("/{id}")
+  public ResponseEntity<SampleResponseDto> updateSample(@PathVariable("id") @Min(1) Long id,
+                                                        @RequestBody @Valid
+                                                        UpdateSampleRequestDto dto) {
+    SampleResult result = sampleService.updateSample(id, dto.name());
 
-        return ResponseEntity.ok(toDto(result));
-    }
+    return ResponseEntity.ok(toDto(result));
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SampleResponseDto> sample(@PathVariable("id") @Min(1) Long id) {
-        SampleResult result = sampleService.getSample(id);
+  @GetMapping("/{id}")
+  public ResponseEntity<SampleResponseDto> sample(@PathVariable("id") @Min(1) Long id) {
+    SampleResult result = sampleService.getSample(id);
 
-        return ResponseEntity.ok(toDto(result));
-    }
+    return ResponseEntity.ok(toDto(result));
+  }
 
-    private SampleResponseDto toDto(SampleResult sampleResult) {
-        return new SampleResponseDto(sampleResult.id(), sampleResult.name(), sampleResult.createdAt());
-    }
+  private SampleResponseDto toDto(SampleResult sampleResult) {
+    return new SampleResponseDto(sampleResult.id(), sampleResult.name(), sampleResult.createdAt());
+  }
 }

@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface FindUserUseCase {
 
-    Optional<UserResult> findOneByEmail(String email);
+  Optional<UserResult> findOneByEmail(String email);
 }

@@ -15,25 +15,27 @@ import java.time.LocalDateTime;
 @Getter
 public class AuthenticationKeyJpaEntity extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    @ToString.Include
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @EqualsAndHashCode.Include
+  @ToString.Include
+  private Long id;
 
-    @Column(updatable = false, nullable = false)
-    private String code;
+  @Column(updatable = false, nullable = false)
+  private String code;
 
-    @Column(updatable = false, nullable = false)
-    private String signKey;
+  @Column(updatable = false, nullable = false)
+  private String signKey;
 
-    private LocalDateTime verifiedAt;
+  private LocalDateTime verifiedAt;
 
-    public AuthenticationKeyJpaEntity(Long id, @NotNull String code, @NotNull String key, LocalDateTime verifiedAt, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        super(createdAt, updatedAt, deletedAt);
-        this.id = id;
-        this.code = code;
-        this.signKey = key;
-        this.verifiedAt = verifiedAt;
-    }
+  public AuthenticationKeyJpaEntity(Long id, @NotNull String code, @NotNull String key,
+                                    LocalDateTime verifiedAt, @NotNull LocalDateTime createdAt,
+                                    @NotNull LocalDateTime updatedAt, LocalDateTime deletedAt) {
+    super(createdAt, updatedAt, deletedAt);
+    this.id = id;
+    this.code = code;
+    this.signKey = key;
+    this.verifiedAt = verifiedAt;
+  }
 }

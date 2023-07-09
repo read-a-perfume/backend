@@ -17,56 +17,56 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    private static final String TOKEN_PREFIX = "Bearer ";
-    private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+  private static final String TOKEN_PREFIX = "Bearer ";
+  private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-    public String create(String subject, List<String> roles, LocalDateTime now) {
-        Map<String, Object> claims = new HashMap<>();
+  public String create(String subject, List<String> roles, LocalDateTime now) {
+    Map<String, Object> claims = new HashMap<>();
 
-        claims.put("username", subject);
-        claims.put("roles", roles);
+    claims.put("username", subject);
+    claims.put("roles", roles);
 
 
-        String token = Jwts
-                .builder()
-                .setSubject(subject)
-                .setIssuedAt(toDate(now))
-                .setClaims(claims)
-                .setExpiration(toDate(now.plusHours(2)))
-                .signWith(key)
-                .compact();
-        return TOKEN_PREFIX + token;
+    String token = Jwts
+        .builder()
+        .setSubject(subject)
+        .setIssuedAt(toDate(now))
+        .setClaims(claims)
+        .setExpiration(toDate(now.plusHours(2)))
+        .signWith(key)
+        .compact();
+    return TOKEN_PREFIX + token;
+  }
+
+  public Claims getClaims(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(key)
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
+  }
+
+  public boolean expirationToken(String token) {
+    try {
+      Jwts.parserBuilder()
+          .setSigningKey(key)
+          .build()
+          .parseClaimsJws(token)
+          .getBody().getExpiration();
+      return true;
+    } catch (ExpiredJwtException ex) {
+      return false;
     }
+  }
 
-    public Claims getClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
+  private Date toDate(LocalDateTime localDateTime) {
+    return Date.from(localDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant());
+  }
 
-    public boolean expirationToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody().getExpiration();
-            return true;
-        } catch (ExpiredJwtException ex) {
-            return false;
-        }
+  public String getToken(String header) {
+    if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+      return null;
     }
-
-    private Date toDate(LocalDateTime localDateTime) {
-        return Date.from(localDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant());
-    }
-
-    public String getToken(String header) {
-        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
-            return null;
-        }
-        return header.replace(TOKEN_PREFIX, "");
-    }
+    return header.replace(TOKEN_PREFIX, "");
+  }
 }

@@ -21,59 +21,65 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RegisterServiceTest {
 
-    private StubCheckEmailCertificateUseCase checkEmailCertificateUseCase = new StubCheckEmailCertificateUseCase();
+  private StubCheckEmailCertificateUseCase checkEmailCertificateUseCase =
+      new StubCheckEmailCertificateUseCase();
 
-    private UserRepository userRepository = new StubUserRepository();
+  private UserRepository userRepository = new StubUserRepository();
 
-    private UserQueryRepository userQueryRepository = new StubUserRepository();
+  private UserQueryRepository userQueryRepository = new StubUserRepository();
 
-    private StubMailSender stubMailSender = new StubMailSender();
+  private StubMailSender stubMailSender = new StubMailSender();
 
-    private PasswordEncoder passwordEncoder = new StubEncryptor();
+  private PasswordEncoder passwordEncoder = new StubEncryptor();
 
-    private StubCreateVerificationCodeUseCase createVerificationCodeUseCase = new StubCreateVerificationCodeUseCase();
+  private StubCreateVerificationCodeUseCase createVerificationCodeUseCase =
+      new StubCreateVerificationCodeUseCase();
 
-    private RegisterService registerService = new RegisterService(userRepository, userQueryRepository, checkEmailCertificateUseCase, createVerificationCodeUseCase, stubMailSender, passwordEncoder);
+  private RegisterService registerService =
+      new RegisterService(userRepository, userQueryRepository, checkEmailCertificateUseCase,
+          createVerificationCodeUseCase, stubMailSender, passwordEncoder);
 
-    @BeforeEach
-    void setUp() {
-        this.checkEmailCertificateUseCase.clear();
-        this.stubMailSender.clear();
-        this.createVerificationCodeUseCase.clear();
-    }
+  @BeforeEach
+  void setUp() {
+    this.checkEmailCertificateUseCase.clear();
+    this.stubMailSender.clear();
+    this.createVerificationCodeUseCase.clear();
+  }
 
-    @Test
-    @DisplayName("발급받은 본인인증 코드를 검증한다.")
-    void testConfirmEmailVerify() {
-        // given
-        String code = "code";
-        String key = "key";
-        LocalDateTime now = LocalDateTime.now();
-        this.checkEmailCertificateUseCase.add(new CheckEmailCertificateResult(CheckEmailStatus.MATCH, "sample@mail.com"));
+  @Test
+  @DisplayName("발급받은 본인인증 코드를 검증한다.")
+  void testConfirmEmailVerify() {
+    // given
+    String code = "code";
+    String key = "key";
+    LocalDateTime now = LocalDateTime.now();
+    this.checkEmailCertificateUseCase.add(
+        new CheckEmailCertificateResult(CheckEmailStatus.MATCH, "sample@mail.com"));
 
-        // when
-        ConfirmEmailVerifyResult result = registerService.confirmEmailVerify(code, key, now);
+    // when
+    ConfirmEmailVerifyResult result = registerService.confirmEmailVerify(code, key, now);
 
-        // then
-        assertEquals(result.email(), "sample@mail.com");
-    }
+    // then
+    assertEquals(result.email(), "sample@mail.com");
+  }
 
-    @Test
-    @DisplayName("본인인증 이메일을 발송한다.")
-    void testSendEmailVerifyCode() {
-        // given
-        LocalDateTime now = LocalDateTime.now();
-        SendVerificationCodeCommand command = new SendVerificationCodeCommand("email", now);
-        CreateVerificationCodeResult createVerificationCodeResult = new CreateVerificationCodeResult("sample code", "", "sample key", now);
-        createVerificationCodeUseCase.setCreateVerificationCodeResult(createVerificationCodeResult);
-        stubMailSender.setSentAt(now);
+  @Test
+  @DisplayName("본인인증 이메일을 발송한다.")
+  void testSendEmailVerifyCode() {
+    // given
+    LocalDateTime now = LocalDateTime.now();
+    SendVerificationCodeCommand command = new SendVerificationCodeCommand("email", now);
+    CreateVerificationCodeResult createVerificationCodeResult =
+        new CreateVerificationCodeResult("sample code", "", "sample key", now);
+    createVerificationCodeUseCase.setCreateVerificationCodeResult(createVerificationCodeResult);
+    stubMailSender.setSentAt(now);
 
-        // when
-        SendVerificationCodeResult result = registerService.sendEmailVerifyCode(command);
+    // when
+    SendVerificationCodeResult result = registerService.sendEmailVerifyCode(command);
 
-        // then
-        assertNotNull(result);
-        assertEquals(result.key(), "sample key");
-        assertEquals(result.sentAt(), now);
-    }
+    // then
+    assertNotNull(result);
+    assertEquals(result.key(), "sample key");
+    assertEquals(result.sentAt(), now);
+  }
 }

@@ -9,16 +9,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationKeyRepositoryImpl implements AuthenticationKeyRepository {
 
-    private final AuthenticationKeyMapper authenticationKeyMapper;
+  private final AuthenticationKeyMapper authenticationKeyMapper;
 
-    private final AuthenticationKeyJpaRepository authenticationKeyJpaRepository;
+  private final AuthenticationKeyJpaRepository authenticationKeyJpaRepository;
 
-    @Override
-    public AuthenticationKey save(AuthenticationKey authenticationKey) {
-        return authenticationKeyMapper.toDomain(
-                authenticationKeyJpaRepository.save(
-                        authenticationKeyMapper.toEntity(authenticationKey)
-                )
-        );
-    }
+  @Override
+  public AuthenticationKey save(AuthenticationKey authenticationKey) {
+    return authenticationKeyMapper.toDomain(
+        authenticationKeyJpaRepository.save(
+            authenticationKeyMapper.toEntity(authenticationKey)
+        )
+    );
+  }
 }

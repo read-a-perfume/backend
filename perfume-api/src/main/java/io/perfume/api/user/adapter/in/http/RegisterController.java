@@ -16,52 +16,57 @@ import java.time.LocalDateTime;
 @RequestMapping("/v1/signup")
 @RequiredArgsConstructor
 public class RegisterController {
-    private final RegisterService registerService;
+  private final RegisterService registerService;
 
-    @PostMapping("/email")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<EmailSignUpResponseDto> signUpByEmail(@RequestBody @Valid RegisterDto registerDto) {
-        SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
-                registerDto.username(),
-                registerDto.password(),
-                registerDto.email(),
-                registerDto.marketingConsent(),
-                registerDto.promotionConsent(),
-                registerDto.name()
-        );
-        UserResult result = registerService.signUpGeneralUserByEmail(command);
+  @PostMapping("/email")
+  @ResponseStatus(HttpStatus.CREATED)
+  public ResponseEntity<EmailSignUpResponseDto> signUpByEmail(
+      @RequestBody @Valid RegisterDto registerDto) {
+    SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
+        registerDto.username(),
+        registerDto.password(),
+        registerDto.email(),
+        registerDto.marketingConsent(),
+        registerDto.promotionConsent(),
+        registerDto.name()
+    );
+    UserResult result = registerService.signUpGeneralUserByEmail(command);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new EmailSignUpResponseDto(
-                result.username(),
-                result.email(),
-                result.name()
-        ));
+    return ResponseEntity.status(HttpStatus.CREATED).body(new EmailSignUpResponseDto(
+        result.username(),
+        result.email(),
+        result.name()
+    ));
+  }
+
+  @PostMapping("/check-username")
+  public ResponseEntity<Void> checkUsername(@RequestBody @Valid CheckUsernameRequestDto dto) {
+    if (registerService.validDuplicateUsername(dto.username())) {
+      return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping("/check-username")
-    public ResponseEntity<Void> checkUsername(@RequestBody @Valid CheckUsernameRequestDto dto) {
-        if (registerService.validDuplicateUsername(dto.username())) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
+    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+  }
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
-    }
+  @PostMapping("/email-verify/confirm")
+  public ResponseEntity<EmailVerifyConfirmResponseDto> confirmEmail(
+      @RequestBody @Valid EmailVerifyConfirmRequestDto dto) {
+    LocalDateTime now = LocalDateTime.now();
+    ConfirmEmailVerifyResult result =
+        registerService.confirmEmailVerify(dto.key(), dto.code(), now);
 
-    @PostMapping("/email-verify/confirm")
-    public ResponseEntity<EmailVerifyConfirmResponseDto> confirmEmail(@RequestBody @Valid EmailVerifyConfirmRequestDto dto) {
-        LocalDateTime now = LocalDateTime.now();
-        ConfirmEmailVerifyResult result = registerService.confirmEmailVerify(dto.key(), dto.code(), now);
+    return ResponseEntity.ok(
+        new EmailVerifyConfirmResponseDto(result.email(), result.verifiedAt()));
+  }
 
-        return ResponseEntity.ok(new EmailVerifyConfirmResponseDto(result.email(), result.verifiedAt()));
-    }
+  @PostMapping("/email-verify/request")
+  public ResponseEntity<SendEmailVerifyCodeResponseDto> requestEmailVerify(
+      @RequestBody @Valid SendEmailVerifyCodeRequestDto dto) {
+    LocalDateTime now = LocalDateTime.now();
+    SendVerificationCodeCommand command = new SendVerificationCodeCommand(dto.email(), now);
+    SendVerificationCodeResult result = registerService.sendEmailVerifyCode(command);
 
-    @PostMapping("/email-verify/request")
-    public ResponseEntity<SendEmailVerifyCodeResponseDto> requestEmailVerify(@RequestBody @Valid SendEmailVerifyCodeRequestDto dto) {
-        LocalDateTime now = LocalDateTime.now();
-        SendVerificationCodeCommand command = new SendVerificationCodeCommand(dto.email(), now);
-        SendVerificationCodeResult result = registerService.sendEmailVerifyCode(command);
-
-        return ResponseEntity
-                .ok(new SendEmailVerifyCodeResponseDto(result.key(), result.sentAt()));
-    }
+    return ResponseEntity
+        .ok(new SendEmailVerifyCodeResponseDto(result.key(), result.sentAt()));
+  }
 }

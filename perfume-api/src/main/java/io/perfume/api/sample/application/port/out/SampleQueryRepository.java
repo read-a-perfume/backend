@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface SampleQueryRepository {
 
-    List<Sample> find();
+  List<Sample> find();
 
-    Optional<Sample> findById(Long id);
+  Optional<Sample> findById(Long id);
 }

@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GeneratorConfiguration {
 
-    @Bean
-    public Generator generator() {
-        return new NumberGenerator();
-    }
+  @Bean
+  public Generator generator() {
+    return new NumberGenerator();
+  }
 }

@@ -14,26 +14,27 @@ import org.springframework.context.annotation.Bean;
 @TestConfiguration
 public class TestQueryDSLConfiguration {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+  @PersistenceContext
+  private EntityManager entityManager;
 
-    @Bean
-    public JPAQueryFactory jpaQueryFactory() {
-        return new JPAQueryFactory(entityManager);
-    }
+  @Bean
+  public JPAQueryFactory jpaQueryFactory() {
+    return new JPAQueryFactory(entityManager);
+  }
 
-    @Bean
-    public SampleQueryRepositoryImpl sampleQueryRepository(JPAQueryFactory jpaQueryFactory) {
-        return new SampleQueryRepositoryImpl(jpaQueryFactory);
-    }
+  @Bean
+  public SampleQueryRepositoryImpl sampleQueryRepository(JPAQueryFactory jpaQueryFactory) {
+    return new SampleQueryRepositoryImpl(jpaQueryFactory);
+  }
 
-    @Bean
-    public AuthenticationKeyQueryRepositoryImpl authenticationKeyQueryRepository(JPAQueryFactory jpaQueryFactory) {
-        return new AuthenticationKeyQueryRepositoryImpl(new AuthenticationKeyMapper(), jpaQueryFactory);
-    }
+  @Bean
+  public AuthenticationKeyQueryRepositoryImpl authenticationKeyQueryRepository(
+      JPAQueryFactory jpaQueryFactory) {
+    return new AuthenticationKeyQueryRepositoryImpl(new AuthenticationKeyMapper(), jpaQueryFactory);
+  }
 
-    @Bean
-    public UserQueryPersistenceAdapter userQueryPersistenceAdapter(JPAQueryFactory jpaQueryFactory) {
-        return new UserQueryPersistenceAdapter(jpaQueryFactory, new UserMapper());
-    }
+  @Bean
+  public UserQueryPersistenceAdapter userQueryPersistenceAdapter(JPAQueryFactory jpaQueryFactory) {
+    return new UserQueryPersistenceAdapter(jpaQueryFactory, new UserMapper());
+  }
 }

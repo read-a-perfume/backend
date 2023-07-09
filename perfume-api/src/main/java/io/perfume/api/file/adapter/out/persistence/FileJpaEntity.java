@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public class FileJpaEntity extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    @ToString.Include
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @EqualsAndHashCode.Include
+  @ToString.Include
+  private Long id;
 
-    @NotNull
-    private String url;
+  @NotNull
+  private String url;
 }

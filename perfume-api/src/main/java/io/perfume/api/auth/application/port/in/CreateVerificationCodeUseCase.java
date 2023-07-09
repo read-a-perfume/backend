@@ -5,5 +5,6 @@ import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 
 public interface CreateVerificationCodeUseCase {
 
-    CreateVerificationCodeResult createVerificationCode(CreateVerificationCodeCommand createVerificationCodeCommand);
+  CreateVerificationCodeResult createVerificationCode(
+      CreateVerificationCodeCommand createVerificationCodeCommand);
 }

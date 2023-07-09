@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 public class QueryDSLConfiguration {
 
-    @Bean
-    public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
-        return new JPAQueryFactory(entityManager);
-    }
+  @Bean
+  public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
+    return new JPAQueryFactory(entityManager);
+  }
 }

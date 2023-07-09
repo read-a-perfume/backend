@@ -21,50 +21,51 @@ import java.util.Set;
 @Qualifier("JwtAuthenticationProvider")
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    public static final Authentication ANONYMOUS =
-            new AnonymousAuthenticationToken(
-                    "anonymous",
-                    "anonymous",
-                    Set.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
+  public static final Authentication ANONYMOUS =
+      new AnonymousAuthenticationToken(
+          "anonymous",
+          "anonymous",
+          Set.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
 
-    private final JsonWebTokenGenerator jsonWebTokenGenerator;
+  private final JsonWebTokenGenerator jsonWebTokenGenerator;
 
-    public JwtAuthenticationProvider(JsonWebTokenGenerator jsonWebTokenGenerator) {
-        this.jsonWebTokenGenerator = jsonWebTokenGenerator;
+  public JwtAuthenticationProvider(JsonWebTokenGenerator jsonWebTokenGenerator) {
+    this.jsonWebTokenGenerator = jsonWebTokenGenerator;
+  }
+
+  @Override
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    Object credentials = authentication.getCredentials();
+    if (!(credentials instanceof String)) {
+      return ANONYMOUS;
     }
 
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        Object credentials = authentication.getCredentials();
-        if (!(credentials instanceof String)) {
-            return ANONYMOUS;
-        }
-
-        String jwt = Objects.toString(credentials);
-        LocalDateTime now = LocalDateTime.now();
-        if (!jsonWebTokenGenerator.verify(jwt, now)) {
-            return ANONYMOUS;
-        }
-
-        return getAuthentication(jwt);
+    String jwt = Objects.toString(credentials);
+    LocalDateTime now = LocalDateTime.now();
+    if (!jsonWebTokenGenerator.verify(jwt, now)) {
+      return ANONYMOUS;
     }
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return JwtAuthenticationToken.class.isAssignableFrom(authentication);
-    }
+    return getAuthentication(jwt);
+  }
 
-    @NotNull
-    private Authentication getAuthentication(String jwt) {
-        String email = jsonWebTokenGenerator.getSubject(jwt);
-        List<? extends GrantedAuthority> roles = getRoles(jwt);
-        return JwtAuthenticationToken.authorized(email, roles);
-    }
+  @Override
+  public boolean supports(Class<?> authentication) {
+    return JwtAuthenticationToken.class.isAssignableFrom(authentication);
+  }
 
-    @NotNull
-    private List<SimpleGrantedAuthority> getRoles(String authenticationToken) {
-        ArrayList<?> roles = jsonWebTokenGenerator.getClaim(authenticationToken, "roles", ArrayList.class);
+  @NotNull
+  private Authentication getAuthentication(String jwt) {
+    String email = jsonWebTokenGenerator.getSubject(jwt);
+    List<? extends GrantedAuthority> roles = getRoles(jwt);
+    return JwtAuthenticationToken.authorized(email, roles);
+  }
 
-        return roles.stream().map(String::valueOf).map(SimpleGrantedAuthority::new).toList();
-    }
+  @NotNull
+  private List<SimpleGrantedAuthority> getRoles(String authenticationToken) {
+    ArrayList<?> roles =
+        jsonWebTokenGenerator.getClaim(authenticationToken, "roles", ArrayList.class);
+
+    return roles.stream().map(String::valueOf).map(SimpleGrantedAuthority::new).toList();
+  }
 }

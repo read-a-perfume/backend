@@ -6,9 +6,9 @@ import java.util.Optional;
 
 public interface UserQueryRepository {
 
-    Optional<User> loadUser(long userId);
+  Optional<User> loadUser(long userId);
 
-    Optional<User> findByUsername(String username);
+  Optional<User> findByUsername(String username);
 
-    Optional<User> findOneByEmail(String email);
+  Optional<User> findOneByEmail(String email);
 }

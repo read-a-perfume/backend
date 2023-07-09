@@ -8,19 +8,19 @@ import java.util.List;
 
 public class StubAuthenticationKeyRepository implements AuthenticationKeyRepository {
 
-    private final List<AuthenticationKey> store = new ArrayList<>();
+  private final List<AuthenticationKey> store = new ArrayList<>();
 
-    @Override
-    public AuthenticationKey save(AuthenticationKey authenticationKey) {
-        store.add(authenticationKey);
-        return authenticationKey;
-    }
+  @Override
+  public AuthenticationKey save(AuthenticationKey authenticationKey) {
+    store.add(authenticationKey);
+    return authenticationKey;
+  }
 
-    public void clear() {
-        store.clear();
-    }
+  public void clear() {
+    store.clear();
+  }
 
-    public AuthenticationKey pop() {
-        return store.remove(0);
-    }
+  public AuthenticationKey pop() {
+    return store.remove(0);
+  }
 }

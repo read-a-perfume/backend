@@ -12,27 +12,27 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationKeyQueryRepositoryImpl implements AuthenticationKeyQueryRepository {
 
-    private final AuthenticationKeyMapper authenticationKeyMapper;
+  private final AuthenticationKeyMapper authenticationKeyMapper;
 
-    private final JPAQueryFactory jpaQueryFactory;
+  private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
-    public Optional<AuthenticationKey> findByKey(String key) {
-        AuthenticationKeyJpaEntity authenticationKeyJpaEntity =
-                jpaQueryFactory
-                        .selectFrom(QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity)
-                        .where(
-                                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.signKey.eq(key),
-                                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.deletedAt.isNull()
-                        )
-                        .fetchFirst();
+  @Override
+  public Optional<AuthenticationKey> findByKey(String key) {
+    AuthenticationKeyJpaEntity authenticationKeyJpaEntity =
+        jpaQueryFactory
+            .selectFrom(QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity)
+            .where(
+                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.signKey.eq(key),
+                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.deletedAt.isNull()
+            )
+            .fetchFirst();
 
-        if (authenticationKeyJpaEntity == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(
-                authenticationKeyMapper.toDomain(authenticationKeyJpaEntity)
-        );
+    if (authenticationKeyJpaEntity == null) {
+      return Optional.empty();
     }
+
+    return Optional.of(
+        authenticationKeyMapper.toDomain(authenticationKeyJpaEntity)
+    );
+  }
 }

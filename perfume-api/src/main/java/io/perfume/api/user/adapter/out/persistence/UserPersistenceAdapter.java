@@ -13,14 +13,14 @@ import java.util.Optional;
 @PersistenceAdapter
 public class UserPersistenceAdapter implements UserRepository {
 
-    private final UserJpaRepository userJpaRepository;
-    private final JPAQueryFactory jpaQueryFactory;
-    private final UserMapper userMapper;
+  private final UserJpaRepository userJpaRepository;
+  private final JPAQueryFactory jpaQueryFactory;
+  private final UserMapper userMapper;
 
-    @Override
-    public Optional<User> save(User user) {
-        UserJpaEntity userJpaEntity = userMapper.toUserJpaEntity(user);
-        userJpaRepository.save(userJpaEntity);
-        return Optional.ofNullable(userMapper.toUser(userJpaEntity));
-    }
+  @Override
+  public Optional<User> save(User user) {
+    UserJpaEntity userJpaEntity = userMapper.toUserJpaEntity(user);
+    userJpaRepository.save(userJpaEntity);
+    return Optional.ofNullable(userMapper.toUser(userJpaEntity));
+  }
 }

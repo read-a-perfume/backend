@@ -15,21 +15,21 @@ import static io.perfume.api.sample.domain.QSample.sample;
 @RequiredArgsConstructor
 public class SampleQueryRepositoryImpl implements SampleQueryRepository {
 
-    private final JPAQueryFactory jpaQueryFactory;
+  private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
-    public List<Sample> find() {
-        return jpaQueryFactory.selectFrom(sample).where(sample.deletedAt.isNull()).fetch();
-    }
+  @Override
+  public List<Sample> find() {
+    return jpaQueryFactory.selectFrom(sample).where(sample.deletedAt.isNull()).fetch();
+  }
 
-    @Override
-    public Optional<Sample> findById(Long id) {
-        Sample savedSample =
-                jpaQueryFactory
-                        .selectFrom(sample)
-                        .where(sample.id.eq(id).and(sample.deletedAt.isNull()))
-                        .fetchOne();
+  @Override
+  public Optional<Sample> findById(Long id) {
+    Sample savedSample =
+        jpaQueryFactory
+            .selectFrom(sample)
+            .where(sample.id.eq(id).and(sample.deletedAt.isNull()))
+            .fetchOne();
 
-        return Optional.ofNullable(savedSample);
-    }
+    return Optional.ofNullable(savedSample);
+  }
 }

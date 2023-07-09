@@ -5,5 +5,6 @@ import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 
 public interface CheckEmailCertificateUseCase {
 
-    CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand checkEmailCertificateCommand);
+  CheckEmailCertificateResult checkEmailCertificate(
+      CheckEmailCertificateCommand checkEmailCertificateCommand);
 }

@@ -4,5 +4,5 @@ import io.perfume.api.auth.domain.AuthenticationKey;
 
 public interface AuthenticationKeyRepository {
 
-    AuthenticationKey save(AuthenticationKey authenticationKey);
+  AuthenticationKey save(AuthenticationKey authenticationKey);
 }

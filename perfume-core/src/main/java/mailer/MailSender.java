@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 
 public interface MailSender {
 
-    LocalDateTime send(String email, String title, String content);
+  LocalDateTime send(String email, String title, String content);
 }

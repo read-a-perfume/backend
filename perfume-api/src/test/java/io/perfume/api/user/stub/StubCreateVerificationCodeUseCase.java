@@ -6,18 +6,20 @@ import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 
 public class StubCreateVerificationCodeUseCase implements CreateVerificationCodeUseCase {
 
-    private CreateVerificationCodeResult createVerificationCodeResult;
+  private CreateVerificationCodeResult createVerificationCodeResult;
 
-    @Override
-    public CreateVerificationCodeResult createVerificationCode(CreateVerificationCodeCommand createVerificationCodeCommand) {
-        return createVerificationCodeResult;
-    }
+  @Override
+  public CreateVerificationCodeResult createVerificationCode(
+      CreateVerificationCodeCommand createVerificationCodeCommand) {
+    return createVerificationCodeResult;
+  }
 
-    public void setCreateVerificationCodeResult(CreateVerificationCodeResult createVerificationCodeResult) {
-        this.createVerificationCodeResult = createVerificationCodeResult;
-    }
+  public void setCreateVerificationCodeResult(
+      CreateVerificationCodeResult createVerificationCodeResult) {
+    this.createVerificationCodeResult = createVerificationCodeResult;
+  }
 
-    public void clear() {
-        this.createVerificationCodeResult = null;
-    }
+  public void clear() {
+    this.createVerificationCodeResult = null;
+  }
 }

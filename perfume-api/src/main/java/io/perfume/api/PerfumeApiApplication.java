@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationPropertiesScan()
 public class PerfumeApiApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(PerfumeApiApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(PerfumeApiApplication.class, args);
+  }
 }

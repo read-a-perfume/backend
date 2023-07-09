@@ -9,18 +9,19 @@ import java.util.Optional;
 
 public class StubAuthenticationKeyQueryRepository implements AuthenticationKeyQueryRepository {
 
-    private final List<AuthenticationKey> store = new ArrayList<>();
+  private final List<AuthenticationKey> store = new ArrayList<>();
 
-    @Override
-    public Optional<AuthenticationKey> findByKey(String key) {
-        return store.stream().filter(authenticationKey -> authenticationKey.getKey().equals(key)).findFirst();
-    }
+  @Override
+  public Optional<AuthenticationKey> findByKey(String key) {
+    return store.stream().filter(authenticationKey -> authenticationKey.getKey().equals(key))
+        .findFirst();
+  }
 
-    public void add(AuthenticationKey authenticationKey) {
-        store.add(authenticationKey);
-    }
+  public void add(AuthenticationKey authenticationKey) {
+    store.add(authenticationKey);
+  }
 
-    public void clear() {
-        store.clear();
-    }
+  public void clear() {
+    store.clear();
+  }
 }
