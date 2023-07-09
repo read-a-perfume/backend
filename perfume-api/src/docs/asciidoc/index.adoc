@@ -6,19 +6,51 @@
 :toclevels: 2
 :sectlinks:
 
-== 이메일 인증
+== 이메일 인증 확인
 === 요청
-include::{snippets}/confirm-email-verify/http-request.adoc[]
-include::{snippets}/confirm-email-verify/request-body.adoc[]
+include::{snippets}/verify-email/http-request.adoc[]
+include::{snippets}/verify-email/request-fields.adoc[]
+
 === 응답
-include::{snippets}/confirm-email-verify/http-response.adoc[]
-include::{snippets}/confirm-email-verify/response-body.adoc[]
+include::{snippets}/verify-email/http-response.adoc[]
+include::{snippets}/verify-email/response-fields.adoc[]
+
+== 이메일 인증 코드 요청
+=== 요청
+include::{snippets}/send-verify-code/http-request.adoc[]
+include::{snippets}/send-verify-code/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/send-verify-code/http-response.adoc[]
+include::{snippets}/send-verify-code/response-fields.adoc[]
+
+== 회원가입
+=== 요청
+include::{snippets}/sign-up-by-email/http-request.adoc[]
+include::{snippets}/sign-up-by-email/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/sign-up-by-email/response-body.adoc[]
+include::{snippets}/sign-up-by-email/response-fields.adoc[]
+
+== 토큰 재발급
+=== 요청
+include::{snippets}/reissue-token/http-request.adoc[]
+헤더
+include::{snippets}/reissue-token/request-headers.adoc[]
+쿠키
+include::{snippets}/reissue-token/request-cookies.adoc[]
+
+=== 응답
+include::{snippets}/reissue-token/http-response.adoc[]
+헤더
+include::{snippets}/reissue-token/response-headers.adoc[]
+쿠키
+include::{snippets}/reissue-token/response-cookies.adoc[]
 
 == 샘플
 === 요청
 include::{snippets}/index/http-request.adoc[]
-include::{snippets}/index/request-body.adoc[]
 
 === 응답
 include::{snippets}/index/http-response.adoc[]
-include::{snippets}/index/response-body.adoc[]

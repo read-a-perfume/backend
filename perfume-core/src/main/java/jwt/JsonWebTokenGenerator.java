@@ -3,6 +3,7 @@ package jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -39,6 +40,22 @@ public class JsonWebTokenGenerator {
                 .compact();
     }
 
+    public String createWithPrefix(String subject, Map<String, Object> claims, int expirationSeconds, LocalDateTime now) {
+        assert subject != null;
+        assert !subject.isEmpty();
+        assert expirationSeconds > 60 * 60;
+        assert claims != null;
+
+        return Jwts
+                .builder()
+                .signWith(secret, SignatureAlgorithm.HS256)
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(toDate(now))
+                .setExpiration(toDate(now.plusSeconds(expirationSeconds)))
+                .compact();
+    }
+
     public boolean isExpired(String jwt, LocalDateTime now) {
         assert jwt != null;
         assert !jwt.isEmpty();
@@ -51,6 +68,19 @@ public class JsonWebTokenGenerator {
                 .getBody()
                 .getExpiration()
                 .before(toDate(now));
+    }
+
+    public String getTokenFromHeader(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        return validAccessToken(header);
+    }
+
+    public String validAccessToken(String header) {
+        if (header == null || !header.startsWith("Bearer ")) {
+            return null;
+        }
+
+        return header.substring(7).trim();
     }
 
     public String getSubject(String jwt) {
