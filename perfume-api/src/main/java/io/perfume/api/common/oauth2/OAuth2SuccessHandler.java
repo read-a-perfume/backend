@@ -57,12 +57,10 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
   private void setResponseToken(HttpServletResponse response, UserResult userResult,
                                 LocalDateTime now) {
     String accessToken = makeNewTokenUseCase.createAccessToken(userResult.id(), now);
-    response.setHeader("Authorization", "Bearer " + accessToken);
+    response.addCookie(createCookie("X-Access-Token", accessToken));
 
     String refreshToken = makeNewTokenUseCase.createRefreshToken(userResult.id(), now);
-    Cookie cookie = new Cookie("X-Refresh-Token", refreshToken);
-    cookie.setHttpOnly(true);
-    response.addCookie(cookie);
+    response.addCookie(createCookie("X-Refresh-Token", refreshToken));
   }
 
   @NotNull
@@ -108,5 +106,13 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
     }
 
     return email.split("@")[0] + unixTime;
+  }
+
+  private Cookie createCookie(String cookieName, String cookieValue) {
+    Cookie cookie = new Cookie(cookieName, cookieValue);
+    cookie.setSecure(true);
+    cookie.setHttpOnly(true);
+
+    return cookie;
   }
 }
