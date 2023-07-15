@@ -58,16 +58,14 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
                                           FilterChain filter,
                                           Authentication authResult) {
     UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
+
     String accessToken =
         makeNewTokenUseCase.createAccessToken(principal.getUser().getId(), LocalDateTime.now());
-    response.addHeader("Authorization", accessToken);
+    response.addCookie(createCookie("X-Access-Token", accessToken));
 
     String refreshToken =
         makeNewTokenUseCase.createRefreshToken(principal.getUser().getId(), LocalDateTime.now());
-    Cookie cookie = new Cookie("X-Refresh-Token", refreshToken);
-    cookie.setSecure(true);
-    cookie.setHttpOnly(true);
-    response.addCookie(cookie);
+    response.addCookie(createCookie("X-Refresh-Token", refreshToken));
 
     SecurityContextHolder.getContext().setAuthentication(authResult);
     try {
@@ -90,5 +88,13 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
     String errorMessage = "Authentication failed: " + failed.getMessage();
     response.getWriter().write(
         objectMapper.writeValueAsString(errorMessage));
+  }
+
+  private Cookie createCookie(String cookieName, String cookieValue) {
+    Cookie cookie = new Cookie(cookieName, cookieValue);
+    cookie.setSecure(true);
+    cookie.setHttpOnly(true);
+
+    return cookie;
   }
 }
