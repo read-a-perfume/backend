@@ -17,30 +17,40 @@ public class UserQueryPersistenceAdapter implements UserQueryRepository {
   @Override
   public Optional<User> findOneByEmail(String email) {
     UserJpaEntity userJpaEntity = jpaQueryFactory.selectFrom(QUserJpaEntity.userJpaEntity)
-        .where(
-            QUserJpaEntity.userJpaEntity.email.eq(email)
-                .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
-        .fetchOne();
+            .where(
+                    QUserJpaEntity.userJpaEntity.email.eq(email)
+                            .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
+            .fetchOne();
     return Optional.ofNullable(userMapper.toUser(userJpaEntity));
   }
 
   @Override
   public Optional<User> loadUser(long userId) {
     UserJpaEntity userJpaEntity = jpaQueryFactory.selectFrom(QUserJpaEntity.userJpaEntity)
-        .where(
-            QUserJpaEntity.userJpaEntity.id.eq(userId)
-                .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
-        .fetchOne();
+            .where(
+                    QUserJpaEntity.userJpaEntity.id.eq(userId)
+                            .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
+            .fetchOne();
     return Optional.ofNullable(userMapper.toUser(userJpaEntity));
   }
 
   @Override
   public Optional<User> findByUsername(String username) {
     UserJpaEntity userJpaEntity = jpaQueryFactory.selectFrom(QUserJpaEntity.userJpaEntity)
-        .where(
-            QUserJpaEntity.userJpaEntity.username.eq(username)
-                .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
-        .fetchOne();
+            .where(
+                    QUserJpaEntity.userJpaEntity.username.eq(username)
+                            .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
+            .fetchOne();
+    return Optional.ofNullable(userMapper.toUser(userJpaEntity));
+  }
+
+  @Override
+  public Optional<User> findOneByEmailAndUsername(String email, String username) {
+    UserJpaEntity userJpaEntity = jpaQueryFactory.selectFrom(QUserJpaEntity.userJpaEntity)
+            .where(
+                    QUserJpaEntity.userJpaEntity.username.eq(username)
+                            .and(QUserJpaEntity.userJpaEntity.email.eq(email)))
+            .fetchOne();
     return Optional.ofNullable(userMapper.toUser(userJpaEntity));
   }
 }
