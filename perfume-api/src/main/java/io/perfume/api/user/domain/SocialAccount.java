@@ -28,13 +28,13 @@ public class SocialAccount {
     this.deletedAt = deletedAt;
   }
 
-  public void link(User user) {
-    this.user = user;
-  }
-
   public static SocialAccount createGoogleSocialAccount(
       String identifier, String email, LocalDateTime now) {
 
     return new SocialAccount(null, identifier, email, SocialProvider.GOOGLE, null, now, now, null);
+  }
+
+  public void link(User user) {
+    this.user = user;
   }
 }

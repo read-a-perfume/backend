@@ -1,6 +1,5 @@
 package io.perfume.api.user.adapter.out.persistence.oauth;
 
-import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.user.application.port.out.OAuthRepository;
 import io.perfume.api.user.domain.SocialAccount;
 import java.util.Optional;
