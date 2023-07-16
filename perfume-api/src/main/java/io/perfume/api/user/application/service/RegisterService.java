@@ -106,14 +106,16 @@ public class RegisterService implements CreateUserUseCase {
   private User getUserByEmailOrCreateNew(SignUpSocialUserCommand command, LocalDateTime now) {
     return userQueryRepository
         .findOneByEmail(command.email())
-        .orElseGet(() ->
-            User.createSocialUser(
-                command.username(),
-                command.email(),
-                command.name(),
-                command.password(),
-                now)
-        );
+        .orElseGet(() -> {
+          User user = User.createSocialUser(
+              command.username(),
+              command.email(),
+              command.name(),
+              command.password(),
+              now);
+
+          return userRepository.save(user).orElseThrow();
+        });
   }
 
   private UserResult toDto(User user) {
