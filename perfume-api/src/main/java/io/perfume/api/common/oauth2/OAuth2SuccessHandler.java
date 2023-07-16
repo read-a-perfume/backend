@@ -92,7 +92,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
       throw new RuntimeException("Identifier not found from OAuth2 provider");
     }
 
-    return findUserUseCase.findOneBySocialId(email).orElseGet(() -> {
+    return findUserUseCase.findOneBySocialId(identifier).orElseGet(() -> {
       String randomPassword = generator.generate(30);
       SignUpSocialUserCommand command = new SignUpSocialUserCommand(
           identifier,
