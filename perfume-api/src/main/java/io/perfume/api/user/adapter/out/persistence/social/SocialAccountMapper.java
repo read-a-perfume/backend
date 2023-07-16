@@ -1,4 +1,4 @@
-package io.perfume.api.user.adapter.out.persistence.oauth;
+package io.perfume.api.user.adapter.out.persistence.social;
 
 import io.perfume.api.user.adapter.out.persistence.user.UserJpaEntity;
 import io.perfume.api.user.adapter.out.persistence.user.UserMapper;

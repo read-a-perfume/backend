@@ -1,9 +1,7 @@
-package io.perfume.api.user.adapter.out.persistence;
+package io.perfume.api.user.adapter.out.persistence.social;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.perfume.api.user.adapter.out.persistence.oauth.SocialAccountMapper;
-import io.perfume.api.user.adapter.out.persistence.oauth.SocialAccountPersistenceAdapter;
 import io.perfume.api.user.adapter.out.persistence.user.UserMapper;
 import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;

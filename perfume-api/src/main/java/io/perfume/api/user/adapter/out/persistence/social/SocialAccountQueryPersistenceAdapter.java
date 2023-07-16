@@ -1,7 +1,8 @@
-package io.perfume.api.user.adapter.out.persistence.oauth;
+package io.perfume.api.user.adapter.out.persistence.social;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
+import io.perfume.api.user.adapter.out.persistence.oauth.QOAuthJpaEntity;
 import io.perfume.api.user.application.port.out.SocialAccountQueryRepository;
 import io.perfume.api.user.domain.SocialAccount;
 import java.util.Objects;

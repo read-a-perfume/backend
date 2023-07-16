@@ -1,10 +1,8 @@
-package io.perfume.api.user.adapter.out.persistence;
+package io.perfume.api.user.adapter.out.persistence.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
-import io.perfume.api.user.adapter.out.persistence.user.UserJpaEntity;
-import io.perfume.api.user.adapter.out.persistence.user.UserQueryPersistenceAdapter;
 import io.perfume.api.user.domain.Role;
 import io.perfume.api.user.domain.User;
 import jakarta.persistence.EntityManager;
