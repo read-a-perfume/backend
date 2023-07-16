@@ -32,6 +32,7 @@ public class OAuthMapper {
 
   public OAuthJpaEntity toEntity(SocialAccount socialAccount) {
     UserJpaEntity userJpaEntity = userMapper.toUserJpaEntity(socialAccount.getUser());
+
     return new OAuthJpaEntity(
         socialAccount.getId(),
         socialAccount.getIdentifier(),

@@ -5,9 +5,9 @@ import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.common.jwt.JwtProperties;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
-import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
+import io.perfume.api.user.application.port.in.dto.SignUpSocialUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
-import io.perfume.api.user.application.port.out.UserQueryRepository;
+import io.perfume.api.user.domain.SocialProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -25,11 +24,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-@RequiredArgsConstructor
 public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequestHandler
     implements AuthenticationSuccessHandler {
-
-  private final UserQueryRepository userQueryRepository;
 
   private final JwtProperties jwtProperties;
 
@@ -41,12 +37,22 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
 
   private final Generator generator;
 
+  public OAuth2SuccessHandler(JwtProperties jwtProperties, FindUserUseCase findUserUseCase,
+                              CreateUserUseCase createUserUseCase,
+                              MakeNewTokenUseCase makeNewTokenUseCase, Generator generator) {
+    this.jwtProperties = jwtProperties;
+    this.findUserUseCase = findUserUseCase;
+    this.createUserUseCase = createUserUseCase;
+    this.makeNewTokenUseCase = makeNewTokenUseCase;
+    this.generator = generator;
+  }
+
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                       @NotNull Authentication authentication) throws IOException {
     OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-    UserResult userResult = newUserIfNotExists(oauth2User);
     LocalDateTime now = LocalDateTime.now();
+    UserResult userResult = newUserIfNotExists(oauth2User, now);
 
     setResponseToken(response, userResult, now);
 
@@ -70,37 +76,42 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
         .toUriString();
   }
 
-  private UserResult newUserIfNotExists(@NotNull OAuth2User oauth2User) {
+  private UserResult newUserIfNotExists(@NotNull OAuth2User oauth2User, LocalDateTime now) {
     String email = oauth2User.getAttributes().get("email").toString();
-    if (email == null) {
+    if (Objects.isNull(email)) {
       throw new RuntimeException("Email not found from OAuth2 provider");
     }
 
     String name = oauth2User.getAttributes().get("name").toString();
-    if (name == null) {
+    if (Objects.isNull(name)) {
       throw new RuntimeException("Name not found from OAuth2 provider");
     }
 
-    return findUserUseCase.findOneByEmail(email).orElseGet(() -> {
-      SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
-          createUsername(email, unixTime()),
-          generator.generate(30),
-          email,
-          false,
-          false,
-          name
+    String identifier = oauth2User.getAttributes().get("sub").toString();
+    if (Objects.isNull(identifier)) {
+      throw new RuntimeException("Identifier not found from OAuth2 provider");
+    }
+
+    return findUserUseCase.findOneBySocialId(email).orElseGet(() -> {
+      String randomPassword = generator.generate(30);
+      SignUpSocialUserCommand command = new SignUpSocialUserCommand(
+          identifier,
+          generateRandomUsername(email, getUnixTime()),
+          randomPassword,
+          name,
+          SocialProvider.GOOGLE
       );
-      return createUserUseCase.signUpGeneralUserByEmail(command);
+      return createUserUseCase.signUpSocialUser(command, now);
     });
   }
 
   @NotNull
-  private Long unixTime() {
+  private Long getUnixTime() {
     return Instant.now().getEpochSecond();
   }
 
   @NotNull
-  private String createUsername(String email, Long unixTime) {
+  private String generateRandomUsername(String email, Long unixTime) {
     if (Objects.isNull(email) || !email.contains("@")) {
       throw new IllegalArgumentException(email + " 올바른 이메일 형식이 아닙니다.");
     }

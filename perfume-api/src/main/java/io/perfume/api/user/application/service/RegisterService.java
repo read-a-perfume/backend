@@ -66,7 +66,8 @@ public class RegisterService implements CreateUserUseCase {
     User user = User.createSocialUser(
         command.username(),
         command.email(),
-        command.name());
+        command.name(),
+        now);
     socialAccount.link(user);
 
     return oauthRepository.save(socialAccount)
