@@ -1,7 +1,9 @@
-package io.perfume.api.user.adapter.out.persistence;
+package io.perfume.api.user.adapter.out.persistence.user;
 
 import io.perfume.api.base.BaseTimeEntity;
+import io.perfume.api.user.adapter.out.persistence.oauth.OAuthJpaEntity;
 import io.perfume.api.user.domain.Role;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
@@ -17,6 +20,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -39,7 +43,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
-class UserJpaEntity extends BaseTimeEntity {
+public class UserJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,10 +83,10 @@ class UserJpaEntity extends BaseTimeEntity {
 
   // Mapper Library 필요
   @Builder(access = AccessLevel.PACKAGE)
-  private UserJpaEntity(Long id, String username, String email, String password,
-                        String name, Role role, Boolean marketingConsent,
-                        Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt,
-                        LocalDateTime deletedAt) {
+  public UserJpaEntity(Long id, String username, String email, String password,
+                       String name, Role role, Boolean marketingConsent,
+                       Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt,
+                       LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;
