@@ -3,6 +3,7 @@ package io.perfume.api.user.domain;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
+@Getter
 public class SocialAccount {
 
   private final Long id;
@@ -35,13 +36,5 @@ public class SocialAccount {
       String identifier, String email, LocalDateTime now) {
 
     return new SocialAccount(null, identifier, email, SocialProvider.GOOGLE, null, now, now, null);
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public Long getUserId() {
-    return user.getId();
   }
 }

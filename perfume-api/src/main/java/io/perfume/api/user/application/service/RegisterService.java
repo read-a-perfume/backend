@@ -12,9 +12,12 @@ import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
+import io.perfume.api.user.application.port.in.dto.SignUpSocialUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
+import io.perfume.api.user.application.port.out.OAuthRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
+import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +34,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegisterService implements CreateUserUseCase {
 
   private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
+
   private final UserRepository userRepository;
   private final UserQueryRepository userQueryRepository;
+  private final OAuthRepository oauthRepository;
   private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
   private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
   private final MailSender mailSender;
   private final PasswordEncoder passwordEncoder;
 
   @Transactional
+  @Override
   public UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command) {
     User user = User.generalUserJoin(
         command.username(),
@@ -51,6 +57,23 @@ public class RegisterService implements CreateUserUseCase {
     return toDto(userRepository.save(user).orElseThrow(FailedRegisterException::new));
   }
 
+  @Transactional
+  @Override
+  public UserResult signUpSocialUser(SignUpSocialUserCommand command, LocalDateTime now) {
+    SocialAccount socialAccount =
+        SocialAccount.createGoogleSocialAccount(command.identifier(), command.email(), now);
+
+    User user = User.createSocialUser(
+        command.username(),
+        command.email(),
+        command.name());
+    socialAccount.link(user);
+
+    return oauthRepository.save(socialAccount)
+        .map(this::toSocialAccountDto)
+        .orElseThrow(FailedRegisterException::new);
+  }
+
   public boolean validDuplicateUsername(String username) {
     try {
       return userQueryRepository.findByUsername(username).isEmpty();
@@ -59,7 +82,6 @@ public class RegisterService implements CreateUserUseCase {
     }
   }
 
-  @Transactional
   public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
     logger.info("confirmEmailVerify code = {}, key = {}, now = {}", code, key, now);
 
@@ -70,7 +92,6 @@ public class RegisterService implements CreateUserUseCase {
     return new ConfirmEmailVerifyResult(result.email(), now);
   }
 
-  @Transactional
   public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
     CreateVerificationCodeCommand createVerificationCodeCommand =
         new CreateVerificationCodeCommand(command.email(), command.now());
@@ -88,5 +109,9 @@ public class RegisterService implements CreateUserUseCase {
   private UserResult toDto(User user) {
     return new UserResult(user.getId(), user.getUsername(), user.getEmail(), user.getName(),
         user.getCreatedAt());
+  }
+
+  private UserResult toSocialAccountDto(SocialAccount socialAccount) {
+    return toDto(socialAccount.getUser());
   }
 }
