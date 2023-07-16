@@ -2,8 +2,8 @@ package io.perfume.api.user.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.perfume.api.user.adapter.out.persistence.oauth.OAuthMapper;
-import io.perfume.api.user.adapter.out.persistence.oauth.OAuthPersistenceAdapter;
+import io.perfume.api.user.adapter.out.persistence.oauth.SocialAccountMapper;
+import io.perfume.api.user.adapter.out.persistence.oauth.SocialAccountPersistenceAdapter;
 import io.perfume.api.user.adapter.out.persistence.user.UserMapper;
 import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
@@ -17,13 +17,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({OAuthPersistenceAdapter.class, OAuthMapper.class, UserMapper.class})
+@Import({SocialAccountPersistenceAdapter.class, SocialAccountMapper.class, UserMapper.class})
 @DataJpaTest
 @EnableJpaAuditing
-class OAuthPersistenceAdapterTest {
+class SocialAccountPersistenceAdapterTest {
 
   @Autowired
-  private OAuthPersistenceAdapter oauthRepository;
+  private SocialAccountPersistenceAdapter oauthRepository;
 
   @Test
   @DisplayName("소셜 계정 정보를 저장한다.")

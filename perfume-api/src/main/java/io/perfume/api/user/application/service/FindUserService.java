@@ -2,7 +2,7 @@ package io.perfume.api.user.application.service;
 
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.UserResult;
-import io.perfume.api.user.application.port.out.OAuthQueryRepository;
+import io.perfume.api.user.application.port.out.SocialAccountQueryRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
@@ -14,10 +14,10 @@ public class FindUserService implements FindUserUseCase {
 
   private final UserQueryRepository userQueryRepository;
 
-  private final OAuthQueryRepository oauthQueryRepository;
+  private final SocialAccountQueryRepository oauthQueryRepository;
 
   public FindUserService(UserQueryRepository userQueryRepository,
-                         OAuthQueryRepository oauthQueryRepository) {
+                         SocialAccountQueryRepository oauthQueryRepository) {
     this.userQueryRepository = userQueryRepository;
     this.oauthQueryRepository = oauthQueryRepository;
   }
@@ -29,7 +29,7 @@ public class FindUserService implements FindUserUseCase {
 
   @Override
   public Optional<UserResult> findOneBySocialId(String socialId) {
-    return oauthQueryRepository.findByIdentifier(socialId).map(this::toDto);
+    return oauthQueryRepository.findOneBySocialId(socialId).map(this::toDto);
   }
 
   private UserResult toDto(User user) {

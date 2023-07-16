@@ -32,7 +32,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-public class OAuthJpaEntity extends BaseTimeEntity {
+public class SocialAccountJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,9 +58,11 @@ public class OAuthJpaEntity extends BaseTimeEntity {
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   UserJpaEntity user;
 
-  public OAuthJpaEntity(Long id, String identifier, String email, SocialProvider socialProvider,
-                        UserJpaEntity user, LocalDateTime createdAt, LocalDateTime updatedAt,
-                        LocalDateTime deletedAt) {
+  public SocialAccountJpaEntity(Long id, String identifier, String email,
+                                SocialProvider socialProvider,
+                                UserJpaEntity user, LocalDateTime createdAt,
+                                LocalDateTime updatedAt,
+                                LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.id = id;

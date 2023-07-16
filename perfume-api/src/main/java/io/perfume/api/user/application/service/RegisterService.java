@@ -14,7 +14,7 @@ import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
 import io.perfume.api.user.application.port.in.dto.SignUpSocialUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
-import io.perfume.api.user.application.port.out.OAuthRepository;
+import io.perfume.api.user.application.port.out.SocialAccountRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.SocialAccount;
@@ -37,7 +37,7 @@ public class RegisterService implements CreateUserUseCase {
 
   private final UserRepository userRepository;
   private final UserQueryRepository userQueryRepository;
-  private final OAuthRepository oauthRepository;
+  private final SocialAccountRepository oauthRepository;
   private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
   private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
   private final MailSender mailSender;

@@ -17,7 +17,7 @@ import io.perfume.api.user.stub.StubCheckEmailCertificateUseCase;
 import io.perfume.api.user.stub.StubCreateVerificationCodeUseCase;
 import io.perfume.api.user.stub.StubEncryptor;
 import io.perfume.api.user.stub.StubMailSender;
-import io.perfume.api.user.stub.StubOAuthRepository;
+import io.perfume.api.user.stub.StubSocialAccountRepository;
 import io.perfume.api.user.stub.StubUserRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,13 +41,13 @@ class RegisterServiceTest {
   private StubCreateVerificationCodeUseCase createVerificationCodeUseCase =
       new StubCreateVerificationCodeUseCase();
 
-  private StubOAuthRepository oauthRepository = new StubOAuthRepository();
+  private StubSocialAccountRepository socialAccountRepository = new StubSocialAccountRepository();
 
   private RegisterService registerService =
       new RegisterService(
           userRepository,
           userQueryRepository,
-          oauthRepository,
+          socialAccountRepository,
           checkEmailCertificateUseCase,
           createVerificationCodeUseCase,
           stubMailSender,

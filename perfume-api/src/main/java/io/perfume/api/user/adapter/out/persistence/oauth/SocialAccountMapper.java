@@ -7,15 +7,15 @@ import io.perfume.api.user.domain.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OAuthMapper {
+public class SocialAccountMapper {
 
   private final UserMapper userMapper;
 
-  public OAuthMapper(UserMapper userMapper) {
+  public SocialAccountMapper(UserMapper userMapper) {
     this.userMapper = userMapper;
   }
 
-  public SocialAccount toDomain(OAuthJpaEntity oauthJpaEntity) {
+  public SocialAccount toDomain(SocialAccountJpaEntity oauthJpaEntity) {
     User user = userMapper.toUser(oauthJpaEntity.user);
 
     return new SocialAccount(
@@ -30,10 +30,10 @@ public class OAuthMapper {
     );
   }
 
-  public OAuthJpaEntity toEntity(SocialAccount socialAccount) {
+  public SocialAccountJpaEntity toEntity(SocialAccount socialAccount) {
     UserJpaEntity userJpaEntity = userMapper.toUserJpaEntity(socialAccount.getUser());
 
-    return new OAuthJpaEntity(
+    return new SocialAccountJpaEntity(
         socialAccount.getId(),
         socialAccount.getIdentifier(),
         socialAccount.getEmail(),
