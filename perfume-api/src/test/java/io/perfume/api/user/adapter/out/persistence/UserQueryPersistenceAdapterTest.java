@@ -3,6 +3,8 @@ package io.perfume.api.user.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
+import io.perfume.api.user.adapter.out.persistence.user.UserJpaEntity;
+import io.perfume.api.user.adapter.out.persistence.user.UserQueryPersistenceAdapter;
 import io.perfume.api.user.domain.Role;
 import io.perfume.api.user.domain.User;
 import jakarta.persistence.EntityManager;
@@ -33,9 +35,10 @@ class UserQueryPersistenceAdapterTest {
     String email = "test@mail.com";
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
-        UserJpaEntity.builder().email(email).username("abcd").password("abcd").name("abcd")
-            .role(Role.USER).promotionConsent(false).marketingConsent(false).createdAt(now)
-            .updatedAt(now).deletedAt(null).build());
+        new UserJpaEntity(
+            null, "username", email, "abcd", "abcd", Role.USER, false, false, now, now, null
+        )
+    );
     entityManager.flush();
     entityManager.clear();
 
@@ -52,10 +55,9 @@ class UserQueryPersistenceAdapterTest {
     // given
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
-    UserJpaEntity entity =
-        UserJpaEntity.builder().email("test@mail.com").username(username).password("abcd")
-            .name("abcd").role(Role.USER).promotionConsent(false).marketingConsent(false)
-            .createdAt(now).updatedAt(now).deletedAt(null).build();
+    UserJpaEntity entity = new UserJpaEntity(
+        null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, null
+    );
     entityManager.persist(entity);
     entityManager.flush();
     entityManager.clear();
@@ -74,9 +76,9 @@ class UserQueryPersistenceAdapterTest {
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
-        UserJpaEntity.builder().email("test@mail.com").username(username).password("abcd")
-            .name("abcd").role(Role.USER).promotionConsent(false).marketingConsent(false)
-            .createdAt(now).updatedAt(now).deletedAt(null).build());
+        new UserJpaEntity(
+            null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, null
+        ));
     entityManager.flush();
     entityManager.clear();
 
