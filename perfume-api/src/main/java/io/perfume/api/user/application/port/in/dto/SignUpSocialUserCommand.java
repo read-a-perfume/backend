@@ -6,6 +6,7 @@ public record SignUpSocialUserCommand(
     String identifier,
     String email,
     String username,
+    String password,
     String name,
     SocialProvider socialProvider
 ) {

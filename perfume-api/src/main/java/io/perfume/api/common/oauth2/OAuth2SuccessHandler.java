@@ -96,6 +96,7 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
       String randomPassword = generator.generate(30);
       SignUpSocialUserCommand command = new SignUpSocialUserCommand(
           identifier,
+          email,
           generateRandomUsername(email, getUnixTime()),
           randomPassword,
           name,

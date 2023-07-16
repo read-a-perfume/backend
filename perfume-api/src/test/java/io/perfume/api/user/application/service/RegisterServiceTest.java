@@ -69,11 +69,13 @@ class RegisterServiceTest {
     String email = "name@mail.com";
     String username = "testusername";
     String name = "testname";
+    String password = "testpassword";
     SignUpSocialUserCommand command = new SignUpSocialUserCommand(
         "abcd12341234",
         email,
         username,
         name,
+        password,
         SocialProvider.GOOGLE
     );
 

@@ -63,11 +63,7 @@ public class RegisterService implements CreateUserUseCase {
     SocialAccount socialAccount =
         SocialAccount.createGoogleSocialAccount(command.identifier(), command.email(), now);
 
-    User user = User.createSocialUser(
-        command.username(),
-        command.email(),
-        command.name(),
-        now);
+    User user = getUserByEmailOrCreateNew(command, now);
     socialAccount.link(user);
 
     return oauthRepository.save(socialAccount)
@@ -105,6 +101,19 @@ public class RegisterService implements CreateUserUseCase {
         result.code(), result.signKey(), sentAt);
 
     return new SendVerificationCodeResult(result.signKey(), sentAt);
+  }
+
+  private User getUserByEmailOrCreateNew(SignUpSocialUserCommand command, LocalDateTime now) {
+    return userQueryRepository
+        .findOneByEmail(command.email())
+        .orElseGet(() ->
+            User.createSocialUser(
+                command.username(),
+                command.email(),
+                command.name(),
+                command.password(),
+                now)
+        );
   }
 
   private UserResult toDto(User user) {

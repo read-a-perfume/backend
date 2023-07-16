@@ -52,12 +52,12 @@ public class User extends BaseTimeDomain {
         .build();
   }
 
-  public static User createSocialUser(String username, String email, String name,
+  public static User createSocialUser(String username, String email, String name, String password,
                                       LocalDateTime now) {
     return User.builder()
         .username(username)
         .email(email)
-        .password(null)
+        .password(password)
         .name(name)
         .role(Role.USER)
         .marketingConsent(false)
