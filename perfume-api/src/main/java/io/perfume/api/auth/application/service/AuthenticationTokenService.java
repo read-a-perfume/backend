@@ -16,14 +16,15 @@ import org.springframework.stereotype.Service;
 public class AuthenticationTokenService {
 
   static final String ACCESS_TOKEN_NAME = "access_token";
+
   static final String REFRESH_TOKEN_NAME = "refresh_token";
-  private static final String TOKEN_PREFIX = "Bearer ";
 
   private final JsonWebTokenGenerator jsonWebTokenGenerator;
+
   private final JwtProperties jwtProperties;
 
   public String createAccessToken(Long userId, LocalDateTime now) {
-    return TOKEN_PREFIX + jsonWebTokenGenerator.create(
+    return jsonWebTokenGenerator.create(
         ACCESS_TOKEN_NAME,
         Map.of("userId", userId, "roles", List.of("ROLE_USER")),
         jwtProperties.accessTokenValidityInSeconds(),
