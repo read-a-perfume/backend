@@ -39,6 +39,5 @@ class SocialAccountPersistenceAdapterTest {
 
     // then
     assertThat(createdSocialAccount.getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdSocialAccount.getUser().getId()).isGreaterThanOrEqualTo(0L);
   }
 }

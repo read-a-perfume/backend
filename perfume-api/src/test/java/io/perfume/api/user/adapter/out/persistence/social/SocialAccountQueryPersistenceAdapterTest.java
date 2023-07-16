@@ -46,6 +46,7 @@ public class SocialAccountQueryPersistenceAdapterTest {
         "test", "test@mail.com", "test", "test", false, false);
     socialAccount.link(user);
     SocialAccountJpaEntity entity = oauthMapper.toEntity(socialAccount);
+    entityManager.persist(entity.user);
     entityManager.persist(entity);
 
     // when

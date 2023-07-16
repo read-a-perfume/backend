@@ -74,8 +74,8 @@ class RegisterServiceTest {
         "abcd12341234",
         email,
         username,
-        name,
         password,
+        name,
         SocialProvider.GOOGLE
     );
 
