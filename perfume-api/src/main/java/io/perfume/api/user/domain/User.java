@@ -1,7 +1,13 @@
 package io.perfume.api.user.domain;
 
+import com.mysql.cj.util.StringUtils;
+import encryptor.OneWayEncryptor;
 import io.perfume.api.base.BaseTimeDomain;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Objects;
+import java.util.UUID;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,6 +25,11 @@ public class User extends BaseTimeDomain {
   private Long businessId;
   private Long thumbnailId;
 
+  /**
+   * 현재 user의 username 필드 앞에서 "username.length / 2"만큼 "*" 치환하여 반환한다.
+   *
+   * @return 암호화된 username
+   */
   public String getEncryptedUsernameByEmail()
   {
     int length = username.length();
@@ -26,6 +37,23 @@ public class User extends BaseTimeDomain {
     int halfLength = length / 2;
 
     return username.substring(0, halfLength) + "*".repeat(length - halfLength);
+  }
+
+  /**
+   * 사용자가 암호를 잊어버리는 경우 사용된다.
+   * 현재 시간을 기준으로 해당 user의 password에 새로운 암호를 할당한다.
+   *
+   * @param now 랜덤값을 만들기 위한 씨앗
+   * @param oneWayEncryptor 암호화 유틸 클래스
+   */
+  public void resetPasswordFromForgotten(LocalDateTime now, OneWayEncryptor oneWayEncryptor) {
+
+    String milliseconds = String.valueOf(now.toInstant(ZoneOffset.UTC).toEpochMilli());
+    String uuid = String.valueOf(UUID.randomUUID().toString());
+    String hashedValue = String.valueOf(Objects.hash(milliseconds, uuid));
+
+    String plainNewPassword = milliseconds.substring(0, 3) + uuid.substring(0 , 5) + hashedValue.substring(0, 4);
+    this.password = oneWayEncryptor.hash(plainNewPassword);
   }
 
   @Builder

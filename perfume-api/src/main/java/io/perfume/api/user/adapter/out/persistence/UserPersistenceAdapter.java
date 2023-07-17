@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class UserPersistenceAdapter implements UserRepository {
 
   private final UserJpaRepository userJpaRepository;
+
   private final JPAQueryFactory jpaQueryFactory;
   private final UserMapper userMapper;
 

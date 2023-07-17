@@ -1,14 +1,12 @@
 package io.perfume.api.user.adapter.in.http;
 
 import io.perfume.api.user.application.port.in.FindUserUseCase;
+import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,14 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsersSupportController {
 
     private final FindUserUseCase findUserUseCase;
+    private final SendResetPasswordMailUseCase resetPasswordUserCase;
 
-    // TODO OAUTH 가입자의 경우 uesrname도 같이 넣는 흐름이 이상하다.
-    @GetMapping("/send-password-to-mail")
+    /**
+     * TODO OAUTH 가입자의 경우 uesrname도 같이 넣는 흐름이 이상하다.
+     */
+    @GetMapping("/email/reset-passowrd")
     public ResponseEntity<Object> sendPasswordToUsersEmail(
             @RequestParam @Email String email,
             @RequestParam @NotBlank String username) {
 
-        findUserUseCase.sendPasswordToEmail(email, username);
+        resetPasswordUserCase.sendNewPasswordToEmail(email, username);
+
         return ResponseEntity.ok().build();
     }
 
