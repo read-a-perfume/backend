@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-public class CommonController {
+public class UsersSupportController {
 
     private final FindUserUseCase findUserUseCase;
 

@@ -38,14 +38,8 @@ public class FindUserService implements FindUserUseCase {
   public String getEncryptedUsernameByEmail(String email) {
 
     User user = userQueryRepository.findOneByEmail(email).orElseThrow(NotFoundUserException::new);
-    String names = user.getUsername();
 
-    // encrypt 알고리즘
-    int length = names.length();
-
-    int halfLength = length / 2;
-
-    return names.substring(0, halfLength) + "*".repeat(length - halfLength);
-
+    return user.getEncryptedUsernameByEmail();
   }
+
 }

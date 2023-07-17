@@ -19,6 +19,14 @@ public class User extends BaseTimeDomain {
   private Long businessId;
   private Long thumbnailId;
 
+  public String getEncryptedUsernameByEmail()
+  {
+    int length = username.length();
+
+    int halfLength = length / 2;
+
+    return username.substring(0, halfLength) + "*".repeat(length - halfLength);
+  }
 
   @Builder
   private User(Long id, String username, String email, String password,
