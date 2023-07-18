@@ -51,15 +51,24 @@ tasks.test {
 }
 
 tasks.asciidoctor {
+    doFirst {
+        delete ("src/main/resources/static/docs")
+    }
     inputs.dir(snippetsDir)
     configurations(asciidoctorExt.name)
     dependsOn(tasks.test)
+    doLast {
+        copy {
+            from("build/docs/asciidoc")
+            into("src/main/resources/static/docs")
+        }
+        copy {
+            from("build/docs/asciidoc")
+            into("build/resources/main/static/docs")
+        }
+    }
 }
 
-tasks.build {
+tasks.bootJar {
     dependsOn(tasks.asciidoctor)
-    copy {
-        from("build/docs/asciidoc")
-        into("src/main/resources/static/docs")
-    }
 }
