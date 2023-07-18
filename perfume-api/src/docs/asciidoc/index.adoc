@@ -33,6 +33,15 @@ include::{snippets}/sign-up-by-email/request-fields.adoc[]
 include::{snippets}/sign-up-by-email/response-body.adoc[]
 include::{snippets}/sign-up-by-email/response-fields.adoc[]
 
+== 로그인
+=== 요청
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/login/http-response.adoc[]
+include::{snippets}/login/response-cookies.adoc[]
+
 == 토큰 재발급
 === 요청
 include::{snippets}/reissue-token/http-request.adoc[]
