@@ -1,4 +1,4 @@
-package io.perfume.api.user.adapter.out.persistence;
+package io.perfume.api.user.adapter.out.persistence.user;
 
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.user.domain.Role;
@@ -39,7 +39,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
-class UserJpaEntity extends BaseTimeEntity {
+public class UserJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,10 +79,10 @@ class UserJpaEntity extends BaseTimeEntity {
 
   // Mapper Library 필요
   @Builder(access = AccessLevel.PACKAGE)
-  private UserJpaEntity(Long id, String username, String email, String password,
-                        String name, Role role, Boolean marketingConsent,
-                        Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt,
-                        LocalDateTime deletedAt) {
+  public UserJpaEntity(Long id, String username, String email, String password,
+                       String name, Role role, Boolean marketingConsent,
+                       Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt,
+                       LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;

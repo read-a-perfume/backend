@@ -52,6 +52,22 @@ public class User extends BaseTimeDomain {
         .build();
   }
 
+  public static User createSocialUser(String username, String email, String name, String password,
+                                      LocalDateTime now) {
+    return User.builder()
+        .username(username)
+        .email(email)
+        .password(password)
+        .name(name)
+        .role(Role.USER)
+        .marketingConsent(false)
+        .promotionConsent(false)
+        .createdAt(now)
+        .updatedAt(now)
+        .deletedAt(null)
+        .build();
+  }
+
   // Only Adapter
   public static User withId(
       Long id, String username, String email,
