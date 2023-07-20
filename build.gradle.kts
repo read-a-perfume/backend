@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("checkstyle")
     id("org.springframework.boot") version "3.1.2"
-    id("io.spring.dependency-management") version "1.1.1"
+    id("io.spring.dependency-management") version "1.1.2"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.23"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
