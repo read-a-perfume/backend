@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/user")
+@RequestMapping("/v1")
 public class UsersSupportController {
 
     private final FindEncryptedUsernameUseCase findEncryptedUsernameUseCase;
@@ -39,7 +39,7 @@ public class UsersSupportController {
         return ResponseEntity.ok(encryptedUsername);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/user")
     public ResponseEntity leaveUser(@RequestHeader(name = "Authorization") String accessToken) {
         leaveUserUseCase.leave(accessToken);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
