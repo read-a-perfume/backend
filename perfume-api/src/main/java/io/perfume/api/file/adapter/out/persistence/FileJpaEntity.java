@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.hibernate.annotations.Where;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(name = "file")
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
+@Where(clause = "deleted_at is null") // TODO 'FileEntity'의 경우 'JpaRepository'의 조회기능 사용하므로 임시 조치, 사유 : QClass가 생성이 안된다.
 public class FileJpaEntity extends BaseTimeEntity {
 
   @Id
