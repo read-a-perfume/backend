@@ -26,4 +26,7 @@ public class StubUserRepository implements UserRepository, UserQueryRepository {
   public Optional<User> findOneByEmail(String email) {
     return Optional.empty();
   }
+
+  @Override
+  public Optional<User> findOneByEmailAndUsername(String email, String id) { return Optional.empty(); }
 }
