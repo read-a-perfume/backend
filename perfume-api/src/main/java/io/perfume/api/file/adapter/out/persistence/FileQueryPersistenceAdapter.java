@@ -12,7 +12,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class FileQueryQueryPersistenceAdapter implements FileQueryRepository {
+public class FileQueryPersistenceAdapter implements FileQueryRepository {
 
     // TODO QFileJpaEntity가 생성이 안되서 JpaRepository 임시 사용
     private final JPAQueryFactory jpaQueryFactory;
