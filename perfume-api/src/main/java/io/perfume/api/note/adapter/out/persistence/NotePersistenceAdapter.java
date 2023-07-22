@@ -1,7 +1,7 @@
 package io.perfume.api.note.adapter.out.persistence;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.note.application.port.NoteRepository;
+import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 
 @PersistenceAdapter

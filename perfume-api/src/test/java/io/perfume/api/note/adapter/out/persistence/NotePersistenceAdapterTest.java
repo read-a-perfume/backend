@@ -2,7 +2,7 @@ package io.perfume.api.note.adapter.out.persistence;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import io.perfume.api.note.application.port.NoteRepository;
+import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
 import org.junit.jupiter.api.DisplayName;
