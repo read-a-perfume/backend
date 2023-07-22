@@ -49,7 +49,8 @@ public class UserQueryPersistenceAdapter implements UserQueryRepository {
     UserJpaEntity userJpaEntity = jpaQueryFactory.selectFrom(QUserJpaEntity.userJpaEntity)
             .where(
                     QUserJpaEntity.userJpaEntity.username.eq(username)
-                            .and(QUserJpaEntity.userJpaEntity.email.eq(email)))
+                            .and(QUserJpaEntity.userJpaEntity.email.eq(email))
+                            .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
             .fetchOne();
     return Optional.ofNullable(userMapper.toUser(userJpaEntity));
   }
