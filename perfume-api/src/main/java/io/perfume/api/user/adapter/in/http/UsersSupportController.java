@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/users")
+@RequestMapping("/v1/user")
 public class UsersSupportController {
 
     private final FindEncryptedUsernameUseCase findEncryptedUsernameUseCase;
