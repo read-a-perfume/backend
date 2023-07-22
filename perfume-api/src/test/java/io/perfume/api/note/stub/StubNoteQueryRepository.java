@@ -21,6 +21,11 @@ public class StubNoteQueryRepository implements NoteQueryRepository {
     return notes.stream().filter(note -> note.getId() == id).findFirst();
   }
 
+  @Override
+  public List<Note> findUserNotesByUserId(long id) {
+    return null;
+  }
+
   public void add(Note note) {
     notes.add(note);
   }

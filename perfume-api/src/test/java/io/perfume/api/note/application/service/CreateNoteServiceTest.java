@@ -7,13 +7,14 @@ import io.perfume.api.note.application.port.in.CreateNoteUseCase;
 import io.perfume.api.note.application.port.in.dto.CreateNoteCommand;
 import io.perfume.api.note.application.port.in.dto.NoteResult;
 import io.perfume.api.note.domain.NoteCategory;
+import io.perfume.api.note.stub.StubFindUseCase;
 import io.perfume.api.note.stub.StubNoteRepository;
 import org.junit.jupiter.api.Test;
 
 class CreateNoteServiceTest {
 
   private final CreateNoteUseCase createNoteUseCase =
-      new CreateNoteService(new StubNoteRepository());
+      new CreateNoteService(new StubNoteRepository(), new StubFindUseCase());
 
   @Test
   void testCreateNote() {
