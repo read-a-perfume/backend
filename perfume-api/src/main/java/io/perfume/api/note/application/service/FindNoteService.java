@@ -28,7 +28,7 @@ public class FindNoteService implements FindNoteUseCase {
   }
 
   @Override
-  public NoteResult findNoteByUserId(Long id) {
-    return null;
+  public List<NoteResult> findUserNotesByUserId(Long id) {
+    return noteQueryRepository.findUserNotesByUserId(id).stream().map(NoteResult::from).toList();
   }
 }

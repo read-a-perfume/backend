@@ -8,4 +8,6 @@ public interface FindNoteUseCase {
   List<NoteResult> findNotes();
 
   NoteResult findNoteById(Long id);
+
+  List<NoteResult> findUserNotesByUserId(Long id);
 }

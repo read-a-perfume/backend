@@ -17,7 +17,7 @@ public class StubFindUseCase implements FindNoteUseCase {
   }
 
   @Override
-  public NoteResult findNoteByUserId(Long id) {
+  public List<NoteResult> findUserNotesByUserId(Long id) {
     return null;
   }
 }
