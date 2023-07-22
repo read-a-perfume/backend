@@ -1,8 +1,8 @@
 package io.perfume.api.user.application.service;
 
 import encryptor.OneWayEncryptor;
-import io.perfume.api.user.adapter.out.persistence.UserPersistenceAdapter;
 import io.perfume.api.user.application.exception.NotFoundUserException;
+import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class SupportUserService implements SendResetPasswordMailUseCase {
+public class SupportUserService implements SendResetPasswordMailUseCase, FindEncryptedUsernameUseCase {
 
     private final UserQueryRepository userQueryRepository;
 
@@ -49,4 +49,9 @@ public class SupportUserService implements SendResetPasswordMailUseCase {
         );
     }
 
+    @Override
+    public String findEncryptedUsername(String email) {
+        User user = userQueryRepository.findOneByEmail(email).orElseThrow(NotFoundUserException::new);
+        return user.getEncryptedUsername();
+    }
 }

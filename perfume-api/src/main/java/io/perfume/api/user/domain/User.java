@@ -30,7 +30,7 @@ public class User extends BaseTimeDomain {
    *
    * @return 암호화된 username
    */
-  public String getEncryptedUsernameByEmail()
+  public String getEncryptedUsername()
   {
     int length = username.length();
 

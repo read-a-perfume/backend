@@ -1,5 +1,6 @@
 package io.perfume.api.user.adapter.in.http;
 
+import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import jakarta.validation.constraints.Email;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1")
 public class UsersSupportController {
 
-    private final FindUserUseCase findUserUseCase;
+    private final FindEncryptedUsernameUseCase findEncryptedUsernameUseCase;
     private final SendResetPasswordMailUseCase resetPasswordUserCase;
 
     /**
@@ -32,7 +33,7 @@ public class UsersSupportController {
     @GetMapping("/find-username")
     public ResponseEntity<Object> sendUsernameToUsersEmail(@RequestParam @Email String email) {
 
-        String encryptedUsername = findUserUseCase.getEncryptedUsernameByEmail(email);
+        String encryptedUsername = findEncryptedUsernameUseCase.findEncryptedUsername(email);
         return ResponseEntity.ok(encryptedUsername);
     }
 
