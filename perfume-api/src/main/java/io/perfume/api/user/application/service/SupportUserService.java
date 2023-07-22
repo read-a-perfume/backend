@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class SupportUserService implements SendResetPasswordMailUseCase, FindEncryptedUsernameUseCase {
 
-    private final UserQueryRepository userQueryRepository;
+    private final UserQueryRepository userQueryRepository; 
 
     private final UserRepository userRepository;
     private final MailSender mailSender;
