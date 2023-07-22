@@ -1,4 +1,4 @@
-package io.perfume.api.user.adapter.out.persistence;
+package io.perfume.api.user.adapter.out.persistence.user;
 
 import io.perfume.api.user.domain.User;
 import org.springframework.stereotype.Component;

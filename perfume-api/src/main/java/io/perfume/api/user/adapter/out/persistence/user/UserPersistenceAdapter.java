@@ -1,4 +1,4 @@
-package io.perfume.api.user.adapter.out.persistence;
+package io.perfume.api.user.adapter.out.persistence.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;

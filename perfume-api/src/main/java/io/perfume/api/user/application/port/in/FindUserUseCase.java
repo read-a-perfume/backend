@@ -6,5 +6,6 @@ import java.util.Optional;
 public interface FindUserUseCase {
 
   Optional<UserResult> findOneByEmail(String email);
-  String getEncryptedUsernameByEmail(String email);
+  Optional<UserResult> findOneBySocialId(String socialId);
+
 }

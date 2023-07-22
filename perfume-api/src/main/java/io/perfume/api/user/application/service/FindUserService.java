@@ -5,24 +5,36 @@ import io.perfume.api.user.application.exception.NotFoundUserException;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import io.perfume.api.user.application.port.in.dto.UserResult;
+import io.perfume.api.user.application.port.out.SocialAccountQueryRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
+import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import mailer.MailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class FindUserService implements FindUserUseCase {
 
   private final UserQueryRepository userQueryRepository;
 
+  private final SocialAccountQueryRepository oauthQueryRepository;
+
+  public FindUserService(UserQueryRepository userQueryRepository,
+                         SocialAccountQueryRepository oauthQueryRepository) {
+    this.userQueryRepository = userQueryRepository;
+    this.oauthQueryRepository = oauthQueryRepository;
+  }
+
   @Override
   public Optional<UserResult> findOneByEmail(String email) {
     return userQueryRepository.findOneByEmail(email).map(this::toDto);
+  }
+
+  @Override
+  public Optional<UserResult> findOneBySocialId(String socialId) {
+    return oauthQueryRepository.findOneBySocialId(socialId).map(this::toDto);
   }
 
   private UserResult toDto(User user) {
@@ -30,10 +42,8 @@ public class FindUserService implements FindUserUseCase {
         user.getCreatedAt());
   }
 
-  @Override
-  public String getEncryptedUsernameByEmail(String email) {
-    User user = userQueryRepository.findOneByEmail(email).orElseThrow(NotFoundUserException::new);
-    return user.getEncryptedUsernameByEmail();
+  private UserResult toDto(SocialAccount socialAccount) {
+    return toDto(socialAccount.getUser());
   }
-
+  
 }
