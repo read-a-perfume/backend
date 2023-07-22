@@ -23,4 +23,8 @@ public class Note extends BaseTimeDomain {
     this.thumbnailId = thumbnailId;
     this.category = category;
   }
+
+  static public Note create(String name, Long thumbnailId, NoteCategory category) {
+    return new Note(null, name, thumbnailId, category, null, null, null);
+  }
 }

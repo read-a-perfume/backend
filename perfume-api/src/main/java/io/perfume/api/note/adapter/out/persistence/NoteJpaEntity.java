@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,4 +47,13 @@ public class NoteJpaEntity extends BaseTimeEntity {
 
   @Enumerated(EnumType.STRING)
   private NoteCategory category;
+
+  public NoteJpaEntity(Long id, String name, Long thumbnailId, NoteCategory category,
+                       LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+    super(createdAt, updatedAt, deletedAt);
+    this.id = id;
+    this.name = name;
+    this.thumbnailId = thumbnailId;
+    this.category = category;
+  }
 }
