@@ -9,4 +9,6 @@ public interface NoteQueryRepository {
   List<Note> find();
 
   Optional<Note> findById(long id);
+
+  List<Note> findUserNotesByUserId(long id);
 }

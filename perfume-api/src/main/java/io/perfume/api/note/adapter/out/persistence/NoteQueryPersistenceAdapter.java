@@ -38,4 +38,18 @@ public class NoteQueryPersistenceAdapter implements NoteQueryRepository {
 
     return Optional.of(noteMapper.toDomain(entity));
   }
+
+  @Override
+  public List<Note> findUserNotesByUserId(long id) {
+    List<Long> noteIds = jpaQueryFactory.selectFrom(QNoteUserJpaEntity.noteUserJpaEntity)
+        .innerJoin(QNoteJpaEntity.noteJpaEntity)
+        .on(QNoteUserJpaEntity.noteUserJpaEntity.noteId.eq(QNoteJpaEntity.noteJpaEntity.id))
+        .where(QNoteUserJpaEntity.noteUserJpaEntity.userId.eq(id))
+        .fetch().stream().map(NoteUserJpaEntity::getNoteId).toList();
+
+    return jpaQueryFactory.selectFrom(QNoteJpaEntity.noteJpaEntity)
+        .where(QNoteJpaEntity.noteJpaEntity.id.in(noteIds)
+            .and(QNoteJpaEntity.noteJpaEntity.deletedAt.isNull()))
+        .fetch().stream().map(noteMapper::toDomain).toList();
+  }
 }

@@ -6,7 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
+import io.perfume.api.note.domain.NoteUser;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +20,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({NoteQueryPersistenceAdapter.class, NoteMapper.class, TestQueryDSLConfiguration.class})
+@Import({NoteQueryPersistenceAdapter.class, NoteMapper.class, NoteUserMapper.class,
+    TestQueryDSLConfiguration.class})
 @DataJpaTest
 @EnableJpaAuditing
 class NoteQueryPersistenceAdapterTest {
@@ -31,6 +34,9 @@ class NoteQueryPersistenceAdapterTest {
 
   @Autowired
   private NoteMapper noteMapper;
+
+  @Autowired
+  private NoteUserMapper noteUserMapper;
 
   @Test
   @DisplayName("전체 Note 조회")
@@ -61,5 +67,24 @@ class NoteQueryPersistenceAdapterTest {
     // then
     assertThat(findNote).isPresent();
     assertThat(findNote.get().getName()).isEqualTo("name");
+  }
+
+  @Test
+  void testFindUserNotesByUserId() {
+    // given
+    NoteJpaEntity note = noteMapper.toEntity(Note.create("name", NoteCategory.BASE, 1L));
+    entityManager.persist(note);
+
+    LocalDateTime now = LocalDateTime.now();
+    NoteUserJpaEntity noteUser = noteUserMapper.toEntity(NoteUser.create(1L, note.getId(), now));
+    entityManager.persist(noteUser);
+    entityManager.clear();
+
+    // when
+    List<Note> notes = noteQueryRepository.findUserNotesByUserId(1L);
+
+    // then
+    assertThat(notes).hasSize(1);
+    assertThat(notes.get(0).getId()).isEqualTo(note.getId());
   }
 }

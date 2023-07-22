@@ -26,4 +26,9 @@ public class FindNoteService implements FindNoteUseCase {
     return noteQueryRepository.findById(id).map(NoteResult::from)
         .orElseThrow(() -> new NotFoundNoteException(id));
   }
+
+  @Override
+  public NoteResult findNoteByUserId(Long id) {
+    return null;
+  }
 }
