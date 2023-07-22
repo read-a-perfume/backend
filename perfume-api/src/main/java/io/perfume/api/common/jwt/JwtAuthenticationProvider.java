@@ -55,9 +55,10 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   @NotNull
   private Authentication getAuthentication(String jwt) {
-    String email = jsonWebTokenGenerator.getSubject(jwt);
+    String userId = jsonWebTokenGenerator.getClaim(jwt, "userId", String.class);
     List<? extends GrantedAuthority> roles = getRoles(jwt);
-    return JwtAuthenticationToken.authorized(email, roles);
+
+    return JwtAuthenticationToken.authorized(userId, roles);
   }
 
   @NotNull
