@@ -1,9 +1,9 @@
 package io.perfume.api.note.application.port.in;
 
 import io.perfume.api.note.application.port.in.dto.CreateNoteCommand;
-import io.perfume.api.note.application.port.in.dto.CreateNoteResult;
+import io.perfume.api.note.application.port.in.dto.NoteResult;
 
 public interface CreateNoteUseCase {
 
-    CreateNoteResult createNote(CreateNoteCommand command);
+    NoteResult createNote(CreateNoteCommand command);
 }
