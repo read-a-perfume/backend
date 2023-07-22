@@ -26,6 +26,15 @@ public class User extends BaseTimeDomain {
   private Long thumbnailId;
 
   /**
+   *  사용자의 회원탈퇴(soft delete)
+   *
+   *  @param now 삭제 시간에 할당되는 값
+   */
+  public void softDelete(LocalDateTime now) {
+    super.markDelete(now);
+  }
+
+  /**
    * 현재 user의 username 필드 앞에서 "username.length / 2"만큼 "*" 치환하여 반환한다.
    *
    * @return 암호화된 username

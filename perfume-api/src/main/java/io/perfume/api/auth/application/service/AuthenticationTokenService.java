@@ -26,6 +26,7 @@ public class AuthenticationTokenService {
   public String createAccessToken(Long userId, LocalDateTime now) {
     return jsonWebTokenGenerator.create(
         ACCESS_TOKEN_NAME,
+        // TODO 'userId'같은 상수값이 사용할 때 마다 정의해서 사용중, 상수값을 모아서 관리하고싶음
         Map.of("userId", userId, "roles", List.of("ROLE_USER")),
         jwtProperties.accessTokenValidityInSeconds(),
         now);
