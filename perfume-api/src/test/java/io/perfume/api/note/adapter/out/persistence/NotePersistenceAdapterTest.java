@@ -26,7 +26,7 @@ class NotePersistenceAdapterTest {
   @DisplayName("노트를 저장한다.")
   void testSave() {
     // given
-    Note note = Note.create("test", 1L, NoteCategory.BASE);
+    Note note = Note.create("test", NoteCategory.BASE, 1L);
 
     // when
     Note createdNote = noteRepository.save(note);
