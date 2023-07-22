@@ -16,6 +16,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -73,16 +75,24 @@ public class UserJpaEntity extends BaseTimeEntity {
   @NotNull
   private Boolean promotionConsent = false;
 
+  @NotNull
+  private Boolean isOauth = false;
+
+  private LocalDate birth;
+
+  private String bio;
+
   private Long businessId;
 
   private Long thumbnailId;
+
 
   // Mapper Library 필요
   @Builder(access = AccessLevel.PACKAGE)
   public UserJpaEntity(Long id, String username, String email, String password,
                        String name, Role role, Boolean marketingConsent,
                        Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt,
-                       LocalDateTime deletedAt) {
+                       LocalDate birth, LocalDateTime deletedAt, Boolean isOauth, String bio) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;
@@ -92,5 +102,8 @@ public class UserJpaEntity extends BaseTimeEntity {
     this.role = role;
     this.marketingConsent = marketingConsent;
     this.promotionConsent = promotionConsent;
+    this.birth = birth;
+    this.isOauth = isOauth;
+    this.bio = bio;
   }
 }

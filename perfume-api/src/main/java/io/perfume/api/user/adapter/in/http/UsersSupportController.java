@@ -36,5 +36,4 @@ public class UsersSupportController {
         String encryptedUsername = findEncryptedUsernameUseCase.findEncryptedUsername(email);
         return ResponseEntity.ok(encryptedUsername);
     }
-
 }

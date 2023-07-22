@@ -21,7 +21,9 @@ public class UserMapper {
         userJpaEntity.getThumbnailId(),
         userJpaEntity.getCreatedAt(),
         userJpaEntity.getUpdatedAt(),
-        userJpaEntity.getDeletedAt());
+        userJpaEntity.getDeletedAt(),
+        userJpaEntity.getBirth(),
+        userJpaEntity.getIsOauth());
   }
 
   public UserJpaEntity toUserJpaEntity(User user) {
@@ -40,6 +42,8 @@ public class UserMapper {
         .createdAt(user.getCreatedAt())
         .updatedAt(user.getUpdatedAt())
         .deletedAt(user.getDeletedAt())
+        .birth(user.getBirth())
+        .isOauth(user.getIsOauth())
         .build();
   }
 }

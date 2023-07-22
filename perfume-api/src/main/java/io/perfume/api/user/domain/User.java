@@ -3,6 +3,8 @@ package io.perfume.api.user.domain;
 import com.mysql.cj.util.StringUtils;
 import encryptor.OneWayEncryptor;
 import io.perfume.api.base.BaseTimeDomain;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -24,6 +26,10 @@ public class User extends BaseTimeDomain {
   private boolean promotionConsent;
   private Long businessId;
   private Long thumbnailId;
+  private LocalDate birth;
+
+  private String bio;
+  private Boolean isOauth;
 
   /**
    * 현재 user의 username 필드 앞에서 "username.length / 2"만큼 "*" 치환하여 반환한다.
@@ -60,7 +66,8 @@ public class User extends BaseTimeDomain {
   private User(Long id, String username, String email, String password,
                String name, Role role, Long businessId,
                Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
-               LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
+               LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent, LocalDate birth,
+               Boolean isOauth, String bio) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;
@@ -72,6 +79,9 @@ public class User extends BaseTimeDomain {
     this.thumbnailId = thumbnailId;
     this.marketingConsent = marketingConsent;
     this.promotionConsent = promotionConsent;
+    this.birth = birth;
+    this.isOauth = isOauth;
+    this.bio = bio;
   }
 
   // 기업 사용자가 아닌 경우 회원가입시에 사용됩니다.
@@ -85,6 +95,7 @@ public class User extends BaseTimeDomain {
         .role(Role.USER)
         .marketingConsent(marketingConsent)
         .promotionConsent(promotionConsent)
+        .isOauth(false)
         .build();
   }
 
@@ -101,6 +112,7 @@ public class User extends BaseTimeDomain {
         .createdAt(now)
         .updatedAt(now)
         .deletedAt(null)
+        .isOauth(true)
         .build();
   }
 
@@ -109,7 +121,7 @@ public class User extends BaseTimeDomain {
       Long id, String username, String email,
       String password, String name, Role role,
       Long businessId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
-      LocalDateTime deletedAt) {
+      LocalDateTime deletedAt, LocalDate birth, Boolean isOauth) {
     return User.builder()
         .id(id)
         .username(username)
@@ -122,6 +134,8 @@ public class User extends BaseTimeDomain {
         .createdAt(createdAt)
         .updatedAt(updatedAt)
         .deletedAt(deletedAt)
+        .birth(birth)
+        .isOauth(isOauth)
         .build();
   }
 }

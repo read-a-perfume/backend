@@ -34,7 +34,7 @@ class UserQueryPersistenceAdapterTest {
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
         new UserJpaEntity(
-            null, "username", email, "abcd", "abcd", Role.USER, false, false, now, now, null
+            null, "username", email, "abcd", "abcd", Role.USER, false, false, now, now, null, null, true, "not found bio"
         )
     );
     entityManager.flush();
@@ -54,7 +54,7 @@ class UserQueryPersistenceAdapterTest {
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
     UserJpaEntity entity = new UserJpaEntity(
-        null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, null
+        null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, null, null, false, "not found bio"
     );
     entityManager.persist(entity);
     entityManager.flush();
@@ -75,7 +75,7 @@ class UserQueryPersistenceAdapterTest {
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
         new UserJpaEntity(
-            null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, null
+            null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, null, null, false, "not found bio"
         ));
     entityManager.flush();
     entityManager.clear();
