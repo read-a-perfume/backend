@@ -1,4 +1,4 @@
-package com.알쓰.week5;
+package io.perfume.api.user.application.port.in;
 
 import io.perfume.api.user.domain.User;
 

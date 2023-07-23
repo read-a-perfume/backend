@@ -25,6 +25,10 @@ public class User extends BaseTimeDomain {
   private Long businessId;
   private Long thumbnailId;
 
+  public void rename(String name) {
+    this.name = name;
+  }
+
   /**
    *  사용자의 회원탈퇴(soft delete)
    *

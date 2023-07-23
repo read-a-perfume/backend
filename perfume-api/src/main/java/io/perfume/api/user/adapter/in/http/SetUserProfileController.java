@@ -1,5 +1,6 @@
-package com.알쓰.week5;
+package io.perfume.api.user.adapter.in.http;
 
+import io.perfume.api.user.application.port.in.SetUserProfileUseCase;
 import io.perfume.api.user.domain.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,7 +16,7 @@ public class SetUserProfileController {
         this.setUserProfileUseCase = setUserProfileUseCase;
     }
 
-    @PutMapping("/testPut")
+    @PutMapping("/test-put-endpoint")
     public ResponseEntity<Object> setPicture(
             @AuthenticationPrincipal User user,
             String name

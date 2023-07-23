@@ -1,4 +1,4 @@
-package com.알쓰.week5;
+package io.perfume.api.user.application.service;
 
 import io.perfume.api.user.application.exception.NotFoundUserException;
 import io.perfume.api.user.application.port.in.SetUserProfileUseCase;
