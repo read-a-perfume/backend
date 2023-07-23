@@ -1,6 +1,6 @@
 package io.perfume.api.sample.application.service;
 
-import io.perfume.api.sample.application.exception.UserNotFoundException;
+import io.perfume.api.sample.application.exception.SampleNotFoundException;
 import io.perfume.api.sample.application.port.in.CreateSampleUseCase;
 import io.perfume.api.sample.application.port.in.DeleteSampleUseCase;
 import io.perfume.api.sample.application.port.in.GetSampleUseCase;
@@ -32,7 +32,7 @@ public class SampleService implements CreateSampleUseCase, DeleteSampleUseCase,
   @Override
   @Transactional(readOnly = true)
   public SampleResult getSample(Long id) {
-    Sample sample = sampleQueryRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    Sample sample = sampleQueryRepository.findById(id).orElseThrow(SampleNotFoundException::new);
 
     return toDto(sample);
   }
@@ -48,7 +48,7 @@ public class SampleService implements CreateSampleUseCase, DeleteSampleUseCase,
   @Override
   @Transactional
   public SampleResult updateSample(Long id, String name) {
-    Sample sample = sampleQueryRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    Sample sample = sampleQueryRepository.findById(id).orElseThrow(SampleNotFoundException::new);
 
     sample.changeName(name);
 
