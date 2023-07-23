@@ -11,5 +11,7 @@ public interface UserQueryRepository {
 
   Optional<User> findOneByEmail(String email);
 
-  Optional<User> findOneByEmailAndUsername(String email, String id);
+  Optional<User> findOneByEmailAndUsername(String email, String username);
+
+  Optional<User> findOneByEmailOrUsername(String emailOrUsername);
 }
