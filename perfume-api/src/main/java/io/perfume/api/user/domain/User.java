@@ -25,6 +25,10 @@ public class User extends BaseTimeDomain {
   private Long businessId;
   private Long thumbnailId;
 
+  public void rename(String name) {
+    this.name = name;
+  }
+
   /**
    * 현재 user의 username 필드 앞에서 "username.length / 2"만큼 "*" 치환하여 반환한다.
    *
