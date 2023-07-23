@@ -4,12 +4,12 @@ import io.perfume.api.user.adapter.in.http.dto.CreateUserTasteRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.GetUserTasteResponseDto;
 import io.perfume.api.user.application.port.in.CreateUserTasteUseCase;
 import io.perfume.api.user.application.port.in.FindUserTasteUseCase;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,18 +31,28 @@ public class UserTasteController {
   }
 
   @GetMapping
-  public List<GetUserTasteResponseDto> getTastes(
-      @AuthenticationPrincipal User user) {
-    return findUserTasteUseCase.getUserTastes(Long.parseLong(user.getUsername())).stream()
-        .map(GetUserTasteResponseDto::from).toList();
+  @PreAuthorize("isAuthenticated()")
+  public List<GetUserTasteResponseDto> getTastes(Principal principal) {
+    Long userId = Long.parseLong(principal.getName());
+
+    return findUserTasteUseCase
+        .getUserTastes(userId)
+        .stream()
+        .map(GetUserTasteResponseDto::from)
+        .toList();
   }
 
   @PostMapping
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Object> createTaste(
-      @AuthenticationPrincipal User user,
+      Principal principal,
       @RequestBody CreateUserTasteRequestDto dto) {
-    createUserTasteUseCase.createUserTaste(Long.parseLong(user.getUsername()), dto.noteId());
+    Long userId = Long.parseLong(principal.getName());
+    createUserTasteUseCase.createUserTaste(userId, dto.noteId());
 
-    return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).build();
+    return ResponseEntity
+        .status(HttpStatus.CREATED)
+        .contentType(MediaType.APPLICATION_JSON)
+        .build();
   }
 }

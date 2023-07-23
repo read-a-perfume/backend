@@ -2,7 +2,6 @@ package io.perfume.api.note.adapter.in.http;
 
 import io.perfume.api.note.adapter.in.http.dto.NoteResponse;
 import io.perfume.api.note.application.port.in.FindNoteUseCase;
-import io.perfume.api.note.application.port.in.dto.NoteResult;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.util.List;
