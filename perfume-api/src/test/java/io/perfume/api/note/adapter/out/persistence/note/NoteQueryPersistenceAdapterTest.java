@@ -1,9 +1,11 @@
-package io.perfume.api.note.adapter.out.persistence;
+package io.perfume.api.note.adapter.out.persistence.note;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
+import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserJpaEntity;
+import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserMapper;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
 import io.perfume.api.note.domain.NoteUser;
@@ -76,7 +78,8 @@ class NoteQueryPersistenceAdapterTest {
     entityManager.persist(note);
 
     LocalDateTime now = LocalDateTime.now();
-    NoteUserJpaEntity noteUser = noteUserMapper.toEntity(NoteUser.create(1L, note.getId(), now));
+    NoteUserJpaEntity noteUser =
+        noteUserMapper.toEntity(NoteUser.create(1L, noteMapper.toDomain(note), now));
     entityManager.persist(noteUser);
     entityManager.clear();
 

@@ -60,7 +60,7 @@ class UserTasteControllerTest {
     Note createNote = noteRepository.save(Note.create("sample", NoteCategory.BASE, 1L));
 
     LocalDateTime now = LocalDateTime.now();
-    noteRepository.save(NoteUser.create(1L, createNote.getId(), now));
+    noteRepository.save(NoteUser.create(1L, createNote, now));
 
     // when & then
     mockMvc

@@ -1,4 +1,4 @@
-package io.perfume.api.note.adapter.out.persistence;
+package io.perfume.api.note.adapter.out.persistence.note;
 
 import org.springframework.data.repository.CrudRepository;
 

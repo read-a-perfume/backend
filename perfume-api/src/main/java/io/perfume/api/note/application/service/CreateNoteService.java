@@ -4,6 +4,7 @@ import io.perfume.api.note.application.port.in.CreateNoteUseCase;
 import io.perfume.api.note.application.port.in.FindNoteUseCase;
 import io.perfume.api.note.application.port.in.dto.CreateNoteCommand;
 import io.perfume.api.note.application.port.in.dto.NoteResult;
+import io.perfume.api.note.application.port.out.NoteQueryRepository;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteUser;
@@ -15,11 +16,11 @@ public class CreateNoteService implements CreateNoteUseCase {
 
   private final NoteRepository noteRepository;
 
-  private final FindNoteUseCase findNoteUseCase;
+  private final NoteQueryRepository noteQueryRepository;
 
-  public CreateNoteService(NoteRepository noteRepository, FindNoteUseCase findNoteUseCase) {
+  public CreateNoteService(NoteRepository noteRepository, NoteQueryRepository noteQueryRepository) {
     this.noteRepository = noteRepository;
-    this.findNoteUseCase = findNoteUseCase;
+    this.noteQueryRepository = noteQueryRepository;
   }
 
   @Override
@@ -32,9 +33,9 @@ public class CreateNoteService implements CreateNoteUseCase {
 
   @Override
   public NoteResult createUserTaste(Long userId, Long noteId, LocalDateTime now) {
-    NoteResult note = findNoteUseCase.findNoteById(noteId);
-    noteRepository.save(NoteUser.create(userId, note.id(), now));
+    Note note = noteQueryRepository.findById(noteId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 노트입니다."));
+    noteRepository.save(NoteUser.create(userId, note, now));
 
-    return note;
+    return NoteResult.from(note);
   }
 }

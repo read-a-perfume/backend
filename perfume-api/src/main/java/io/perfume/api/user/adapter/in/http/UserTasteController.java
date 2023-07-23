@@ -4,12 +4,13 @@ import io.perfume.api.user.adapter.in.http.dto.CreateUserTasteRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.GetUserTasteResponseDto;
 import io.perfume.api.user.application.port.in.CreateUserTasteUseCase;
 import io.perfume.api.user.application.port.in.FindUserTasteUseCase;
-import java.security.Principal;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,8 +33,8 @@ public class UserTasteController {
 
   @GetMapping
   @PreAuthorize("isAuthenticated()")
-  public List<GetUserTasteResponseDto> getTastes(Principal principal) {
-    Long userId = Long.parseLong(principal.getName());
+  public List<GetUserTasteResponseDto> getTastes(@AuthenticationPrincipal UserDetails principal) {
+    Long userId = Long.parseLong(principal.getUsername());
 
     return findUserTasteUseCase
         .getUserTastes(userId)
@@ -45,9 +46,9 @@ public class UserTasteController {
   @PostMapping
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Object> createTaste(
-      Principal principal,
+      @AuthenticationPrincipal UserDetails principal,
       @RequestBody CreateUserTasteRequestDto dto) {
-    Long userId = Long.parseLong(principal.getName());
+    Long userId = Long.parseLong(principal.getUsername());
     createUserTasteUseCase.createUserTaste(userId, dto.noteId());
 
     return ResponseEntity

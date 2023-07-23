@@ -1,7 +1,8 @@
-package io.perfume.api.note.adapter.out.persistence;
+package io.perfume.api.note.adapter.out.persistence.note;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
@@ -44,14 +45,15 @@ class NotePersistenceAdapterTest {
   void testNoteUserSave() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    NoteUser note = NoteUser.create(1L, 2L, now);
+    Note note = Note.create("test", NoteCategory.BASE, 1L);
+    NoteUser noteUser = NoteUser.create(1L, note, now);
 
     // when
-    NoteUser createdNote = noteRepository.save(note);
+    NoteUser createdNote = noteRepository.save(noteUser);
 
     // then
     assertThat(createdNote.getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdNote.getNoteId()).isGreaterThanOrEqualTo(1L);
+    assertThat(createdNote.getNote().getId()).isGreaterThanOrEqualTo(0L);
     assertThat(createdNote.getUserId()).isGreaterThanOrEqualTo(2L);
   }
 }

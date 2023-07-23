@@ -11,18 +11,18 @@ public class NoteUser extends BaseTimeDomain {
 
   private final Long userId;
 
-  private final Long noteId;
+  private final Note note;
 
-  public NoteUser(Long id, Long userId, Long noteId, LocalDateTime createdAt,
+  public NoteUser(Long id, Long userId, Note note, LocalDateTime createdAt,
                   LocalDateTime updatedAt,
                   LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.userId = userId;
-    this.noteId = noteId;
+    this.note = note;
   }
 
-  public static NoteUser create(Long userId, Long noteId, LocalDateTime now) {
-    return new NoteUser(null, userId, noteId, now, now, null);
+  public static NoteUser create(Long userId, Note note, LocalDateTime now) {
+    return new NoteUser(null, userId, note, now, now, null);
   }
 }

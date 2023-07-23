@@ -1,6 +1,9 @@
-package io.perfume.api.note.adapter.out.persistence;
+package io.perfume.api.note.adapter.out.persistence.note;
 
 import io.perfume.api.base.PersistenceAdapter;
+import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserJpaEntity;
+import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserJpaRepository;
+import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteUser;

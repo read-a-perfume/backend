@@ -1,6 +1,7 @@
-package io.perfume.api.note.adapter.out.persistence;
+package io.perfume.api.note.adapter.out.persistence.note;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.perfume.api.note.adapter.out.persistence.noteUser.QNoteUserJpaEntity;
 import io.perfume.api.note.application.port.out.NoteQueryRepository;
 import io.perfume.api.note.domain.Note;
 import java.util.List;
@@ -41,15 +42,15 @@ public class NoteQueryPersistenceAdapter implements NoteQueryRepository {
 
   @Override
   public List<Note> findUserNotesByUserId(long id) {
-    List<Long> noteIds = jpaQueryFactory.selectFrom(QNoteUserJpaEntity.noteUserJpaEntity)
-        .innerJoin(QNoteJpaEntity.noteJpaEntity)
-        .on(QNoteUserJpaEntity.noteUserJpaEntity.noteId.eq(QNoteJpaEntity.noteJpaEntity.id))
+    return jpaQueryFactory.select(QNoteJpaEntity.noteJpaEntity)
+        .from(QNoteUserJpaEntity.noteUserJpaEntity)
+        .join(QNoteJpaEntity.noteJpaEntity)
+        .on(QNoteJpaEntity.noteJpaEntity.id.eq(QNoteUserJpaEntity.noteUserJpaEntity.note.id)
+            .and(QNoteUserJpaEntity.noteUserJpaEntity.deletedAt.isNull()))
         .where(QNoteUserJpaEntity.noteUserJpaEntity.userId.eq(id))
-        .fetch().stream().map(NoteUserJpaEntity::getNoteId).toList();
-
-    return jpaQueryFactory.selectFrom(QNoteJpaEntity.noteJpaEntity)
-        .where(QNoteJpaEntity.noteJpaEntity.id.in(noteIds)
-            .and(QNoteJpaEntity.noteJpaEntity.deletedAt.isNull()))
-        .fetch().stream().map(noteMapper::toDomain).toList();
+        .fetch()
+        .stream()
+        .map(noteMapper::toDomain)
+        .toList();
   }
 }
