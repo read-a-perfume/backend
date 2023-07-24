@@ -9,8 +9,11 @@ import io.perfume.api.sample.application.port.in.UpdateSampleUseCase;
 import io.perfume.api.sample.application.port.in.dto.SampleResult;
 import io.perfume.api.sample.application.port.out.SampleCommandRepository;
 import io.perfume.api.sample.application.port.out.SampleQueryRepository;
+import io.perfume.api.sample.application.port.utils.mapper.SampleMapperInterface;
 import io.perfume.api.sample.domain.Sample;
 import java.util.List;
+
+import io.perfume.api.sample.adapter.utils.SampleMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,7 @@ public class SampleService implements CreateSampleUseCase, DeleteSampleUseCase,
   private final SampleCommandRepository sampleRepository;
   private final SampleQueryRepository sampleQueryRepository;
 
+  private final SampleMapperInterface sampleMapperInterface;
   @Override
   @Transactional(readOnly = true)
   public List<SampleResult> getSamples() {
@@ -61,6 +65,6 @@ public class SampleService implements CreateSampleUseCase, DeleteSampleUseCase,
   }
 
   private SampleResult toDto(Sample sample) {
-    return new SampleResult(sample.getId(), sample.getName(), sample.getCreatedAt());
+    return sampleMapperInterface.toSampleResult(sample);
   }
 }

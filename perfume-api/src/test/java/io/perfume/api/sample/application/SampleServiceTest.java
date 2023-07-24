@@ -9,6 +9,8 @@ import io.perfume.api.sample.application.service.SampleService;
 import io.perfume.api.sample.domain.Sample;
 import io.perfume.api.sample.stub.StubSampleCommandRepository;
 import java.util.List;
+
+import io.perfume.api.sample.stub.StubSampleMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +19,11 @@ class SampleServiceTest {
   private final StubSampleCommandRepository stubSampleRepository =
       new StubSampleCommandRepository();
 
+  private final StubSampleMapper stubSampleMapper =
+          new StubSampleMapper();
+
   private final SampleService sampleService =
-      new SampleService(stubSampleRepository, stubSampleRepository);
+      new SampleService(stubSampleRepository, stubSampleRepository, stubSampleMapper);
 
   @BeforeEach()
   void beforeEach() {

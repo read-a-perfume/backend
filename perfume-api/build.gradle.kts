@@ -14,6 +14,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security:3.1.2")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.1.2")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    implementation("org.mapstruct:mapstruct:1.5.3.Final")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.1.2")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.2")
