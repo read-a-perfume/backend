@@ -45,15 +45,15 @@ class NotePersistenceAdapterTest {
   void testNoteUserSave() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    Note note = Note.create("test", NoteCategory.BASE, 1L);
-    NoteUser noteUser = NoteUser.create(1L, note, now);
+    Note createdNote = noteRepository.save(Note.create("test", NoteCategory.BASE, 1L));
+    NoteUser noteUser = NoteUser.create(1L, createdNote, now);
 
     // when
-    NoteUser createdNote = noteRepository.save(noteUser);
+    NoteUser createdNoteUser = noteRepository.save(noteUser);
 
     // then
-    assertThat(createdNote.getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdNote.getNote().getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdNote.getUserId()).isGreaterThanOrEqualTo(2L);
+    assertThat(createdNoteUser.getId()).isGreaterThanOrEqualTo(0L);
+    assertThat(createdNoteUser.getNote().getId()).isGreaterThanOrEqualTo(0L);
+    assertThat(createdNoteUser.getUserId()).isGreaterThanOrEqualTo(1L);
   }
 }
