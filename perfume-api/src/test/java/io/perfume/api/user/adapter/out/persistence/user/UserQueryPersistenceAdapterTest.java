@@ -87,4 +87,23 @@ class UserQueryPersistenceAdapterTest {
     assertThat(actual.isPresent()).isTrue();
     assertThat(actual.get().getUsername()).isEqualTo(username);
   }
+
+  @Test
+  void testFindOneByEmailOrUsername() {
+    // given
+    String username = "username";
+    LocalDateTime now = LocalDateTime.now();
+    entityManager.persist(
+            new UserJpaEntity(
+                    null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, now
+            ));
+    entityManager.flush();
+    entityManager.clear();
+
+    // when
+    Optional<User> actual = userQueryPersistenceAdapter.findOneByEmailOrUsername(username);
+
+    // then
+    assertThat(actual.isPresent()).isFalse();
+  }
 }
