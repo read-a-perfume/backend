@@ -3,7 +3,7 @@ package io.perfume.api.sample.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.perfume.api.sample.application.exception.UserNotFoundException;
+import io.perfume.api.sample.application.exception.SampleNotFoundException;
 import io.perfume.api.sample.application.port.in.dto.SampleResult;
 import io.perfume.api.sample.application.service.SampleService;
 import io.perfume.api.sample.domain.Sample;
@@ -84,6 +84,6 @@ class SampleServiceTest {
   @Test
   void testUpdateSampleIfNotExists() {
     // when & then
-    assertThrows(UserNotFoundException.class, () -> sampleService.updateSample(1L, "sample 1"));
+    assertThrows(SampleNotFoundException.class, () -> sampleService.updateSample(1L, "sample 1"));
   }
 }

@@ -4,6 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.domain.User;
+
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
@@ -53,5 +55,21 @@ public class UserQueryPersistenceAdapter implements UserQueryRepository {
                             .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
             .fetchOne();
     return Optional.ofNullable(userMapper.toUser(userJpaEntity));
+  }
+
+  @Override
+  public Optional<User> findOneByEmailOrUsername(String emailOrUsername) {
+    UserJpaEntity userJpaEntity = jpaQueryFactory.selectFrom(QUserJpaEntity.userJpaEntity)
+            .where(
+                    QUserJpaEntity.userJpaEntity.username.eq(emailOrUsername)
+                            .or(QUserJpaEntity.userJpaEntity.email.eq(emailOrUsername))
+                            .and(QUserJpaEntity.userJpaEntity.deletedAt.isNull()))
+            .fetchOne();
+
+    if (Objects.isNull(userJpaEntity)) {
+      return Optional.empty();
+    }
+
+    return Optional.of(userMapper.toUser(userJpaEntity));
   }
 }
