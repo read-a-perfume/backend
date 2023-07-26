@@ -1,4 +1,4 @@
-package io.perfume.api.file.adapter.out.persistence;
+package io.perfume.api.file.adapter.out.persistence.file;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
