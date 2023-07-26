@@ -1,6 +1,8 @@
-package io.perfume.api.file.adapter.out.persistence;
+package io.perfume.api.file.adapter.out.persistence.file;
 
 import io.perfume.api.base.BaseTimeEntity;
+import io.perfume.api.user.adapter.out.persistence.user.UserJpaEntity;
+import io.perfume.api.user.domain.SocialProvider;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDateTime;
 
 @Entity(name = "file")
 @Table(name = "file")
@@ -29,4 +33,14 @@ public class FileJpaEntity extends BaseTimeEntity {
 
   @NotNull
   private String url;
+
+  public FileJpaEntity(Long id, String url,
+                                LocalDateTime createdAt,
+                                LocalDateTime updatedAt,
+                                LocalDateTime deletedAt) {
+    super(createdAt, updatedAt, deletedAt);
+
+    this.id = id;
+    this.url = url;
+  }
 }
