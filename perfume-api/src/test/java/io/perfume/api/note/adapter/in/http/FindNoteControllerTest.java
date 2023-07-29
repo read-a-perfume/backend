@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
-import io.perfume.api.note.domain.NoteCategory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +50,7 @@ class FindNoteControllerTest {
   @Test
   void testFindNotes() throws Exception {
     // given
-    Note createNote = noteRepository.save(Note.create("sample", NoteCategory.BASE, 1L));
+    Note createdNote = noteRepository.save(Note.create("sample", "", 1L));
 
     // when & then
     mockMvc
@@ -61,7 +60,7 @@ class FindNoteControllerTest {
         )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("[0].id").value(createNote.getId()))
+        .andExpect(jsonPath("[0].id").value(createdNote.getId()))
         .andExpect(jsonPath("[0].name").value("sample"))
         .andExpect(jsonPath("[0].category").value("BASE"))
         .andDo(
@@ -76,7 +75,7 @@ class FindNoteControllerTest {
   @Test
   void testFindNoteById() throws Exception {
     // given
-    Note createdNote = noteRepository.save(Note.create("sample", NoteCategory.BASE, 1L));
+    Note createdNote = noteRepository.save(Note.create("sample", "", 1L));
 
     // when & then
     mockMvc

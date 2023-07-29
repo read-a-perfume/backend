@@ -4,13 +4,9 @@ package io.perfume.api.note.adapter.out.persistence.note;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
-import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserMapper;
 import io.perfume.api.note.domain.Note;
-import io.perfume.api.note.domain.NoteCategory;
-import io.perfume.api.note.domain.CategoryUser;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +40,7 @@ class NoteQueryPersistenceAdapterTest {
   @DisplayName("전체 Note 조회")
   void testFind() {
     // given
-    Note note = Note.create("name", NoteCategory.BASE, 1L);
+    Note note = Note.create("name", "test description", 1L);
     entityManager.persist(noteMapper.toEntity(note));
     entityManager.clear();
 
@@ -59,7 +55,7 @@ class NoteQueryPersistenceAdapterTest {
   @DisplayName("특정 Id Note 조회")
   void testFindById() {
     // given
-    Note note = Note.create("name", NoteCategory.BASE, 1L);
+    Note note = Note.create("name", "test description", 1L);
     entityManager.persist(noteMapper.toEntity(note));
     entityManager.clear();
 
@@ -69,25 +65,5 @@ class NoteQueryPersistenceAdapterTest {
     // then
     assertThat(findNote).isPresent();
     assertThat(findNote.get().getName()).isEqualTo("name");
-  }
-
-  @Test
-  void testFindUserNotesByUserId() {
-    // given
-    NoteJpaEntity note = noteMapper.toEntity(Note.create("name", NoteCategory.BASE, 1L));
-    entityManager.persist(note);
-
-    LocalDateTime now = LocalDateTime.now();
-    CategoryUserJpaEntity noteUser =
-        categoryUserMapper.toEntity(CategoryUser.create(1L, noteMapper.toDomain(note), now));
-    entityManager.persist(noteUser);
-    entityManager.clear();
-
-    // when
-    List<Note> notes = noteQueryRepository.findUserNotesByUserId(1L);
-
-    // then
-    assertThat(notes).hasSize(1);
-    assertThat(notes.get(0).getId()).isEqualTo(note.getId());
   }
 }

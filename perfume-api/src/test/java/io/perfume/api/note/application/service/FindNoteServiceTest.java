@@ -14,7 +14,7 @@ class FindNoteServiceTest {
 
   private final StubNoteQueryRepository noteQueryRepository = new StubNoteQueryRepository();
 
-  private final FindNoteService service = new FindNoteService(noteQueryRepository);
+  private final FindCategoryService service = new FindCategoryService(noteQueryRepository);
 
   @BeforeEach
   void beforeEach() {
@@ -25,6 +25,6 @@ class FindNoteServiceTest {
   @DisplayName("존재하지 않는 노트를 조회하면 예외를 던진다.")
   void testFindNoteByIdWhenNoteExists() {
     // when & then
-    assertThrows(NotFoundNoteException.class, () -> service.findNoteById(1L));
+    assertThrows(NotFoundNoteException.class, () -> service.findCategoryById(1L));
   }
 }

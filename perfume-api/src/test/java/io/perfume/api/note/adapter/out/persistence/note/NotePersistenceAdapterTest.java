@@ -5,9 +5,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
-import io.perfume.api.note.domain.NoteCategory;
-import io.perfume.api.note.domain.CategoryUser;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,7 @@ class NotePersistenceAdapterTest {
   @DisplayName("노트를 저장한다.")
   void testSave() {
     // given
-    Note note = Note.create("test", NoteCategory.BASE, 1L);
+    Note note = Note.create("test", "test description", 1L);
 
     // when
     Note createdNote = noteRepository.save(note);
@@ -37,23 +34,7 @@ class NotePersistenceAdapterTest {
     // then
     assertThat(createdNote.getId()).isGreaterThanOrEqualTo(0L);
     assertThat(createdNote.getName()).isEqualTo("test");
-    assertThat(createdNote.getCategory()).isEqualTo(NoteCategory.BASE);
+    assertThat(createdNote.getDescription()).isEqualTo("test description");
     assertThat(createdNote.getThumbnailId()).isEqualTo(1L);
-  }
-
-  @Test
-  void testNoteUserSave() {
-    // given
-    LocalDateTime now = LocalDateTime.now();
-    Note createdNote = noteRepository.save(Note.create("test", NoteCategory.BASE, 1L));
-    CategoryUser categoryUser = CategoryUser.create(1L, createdNote, now);
-
-    // when
-    CategoryUser createdCategoryUser = noteRepository.save(categoryUser);
-
-    // then
-    assertThat(createdCategoryUser.getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdCategoryUser.getCategory().getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdCategoryUser.getUserId()).isGreaterThanOrEqualTo(1L);
   }
 }
