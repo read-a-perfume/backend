@@ -1,7 +1,7 @@
 package io.perfume.api.note.adapter.in.http;
 
 import io.perfume.api.note.adapter.in.http.dto.NoteResponse;
-import io.perfume.api.note.application.port.in.FindNoteUseCase;
+import io.perfume.api.note.application.port.in.FindCategoryUseCase;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.util.List;
@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class FindNoteController {
 
-  private final FindNoteUseCase findNoteUseCase;
+  private final FindCategoryUseCase findCategoryUseCase;
 
-  public FindNoteController(FindNoteUseCase findNoteUseCase) {
-    this.findNoteUseCase = findNoteUseCase;
+  public FindNoteController(FindCategoryUseCase findCategoryUseCase) {
+    this.findCategoryUseCase = findCategoryUseCase;
   }
 
   @GetMapping()
   public List<NoteResponse> findNotes() {
-    return findNoteUseCase.findNotes().stream().map(NoteResponse::from).toList();
+    return findCategoryUseCase.findCategories().stream().map(NoteResponse::from).toList();
   }
 
   @GetMapping("/{id}")
   public NoteResponse findNote(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
-    return NoteResponse.from(findNoteUseCase.findNoteById(id));
+    return NoteResponse.from(findCategoryUseCase.findCategoryById(id));
   }
 }
