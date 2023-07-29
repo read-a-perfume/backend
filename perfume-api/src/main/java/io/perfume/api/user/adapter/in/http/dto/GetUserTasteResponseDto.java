@@ -5,11 +5,12 @@ import io.perfume.api.user.application.port.in.dto.UserTasteResult;
 public record GetUserTasteResponseDto(
     Long id,
     String name,
-    String category,
+    String description,
     String thumbnail
 ) {
 
   public static GetUserTasteResponseDto from(UserTasteResult userTasteResult) {
-    return new GetUserTasteResponseDto(userTasteResult.id(), userTasteResult.name(), userTasteResult.category(), "");
+    return new GetUserTasteResponseDto(userTasteResult.id(), userTasteResult.name(),
+        userTasteResult.description(), userTasteResult.thumbnail());
   }
 }

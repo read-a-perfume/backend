@@ -22,7 +22,7 @@ import lombok.ToString;
 @Entity(name = "category_user")
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(name = "uni_user_id_note_id", columnNames = {"userId", "note_id"}),
+        @UniqueConstraint(name = "uni_user_id_note_id", columnNames = {"userId", "category_id"}),
     }
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
