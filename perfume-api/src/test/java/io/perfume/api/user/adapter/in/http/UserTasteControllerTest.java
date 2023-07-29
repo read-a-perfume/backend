@@ -74,7 +74,7 @@ class UserTasteControllerTest {
         .andExpect(jsonPath("[0].description").value("sample"))
         .andExpect(jsonPath("[0].thumbnail").value(""))
         .andDo(
-            document("get-user-notes",
+            document("get-user-tastes",
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
