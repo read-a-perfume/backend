@@ -5,7 +5,7 @@ public interface LeaveUserUseCase {
     /**
      * 본인의 계정을 탈퇴처리한다.
      *
-     * @param accessToken 삭제를 위한 User 데이터 조회에 필요한 값이 담겨있다.
+     * @param userId 회원 탈퇴를 희망하는 사용자 데이터 식별자
      */
-    void leave(String accessToken);
+    void leave(Long userId);
 }
