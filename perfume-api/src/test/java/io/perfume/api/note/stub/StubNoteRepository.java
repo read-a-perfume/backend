@@ -10,9 +10,4 @@ public class StubNoteRepository implements NoteRepository {
   public Note save(Note note) {
     return note;
   }
-
-  @Override
-  public CategoryUser save(CategoryUser categoryUser) {
-    return categoryUser;
-  }
 }

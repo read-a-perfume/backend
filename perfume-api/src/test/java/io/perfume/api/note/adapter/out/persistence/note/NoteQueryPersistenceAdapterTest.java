@@ -18,8 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({NoteQueryPersistenceAdapter.class, NoteMapper.class, CategoryUserMapper.class,
-    TestQueryDSLConfiguration.class})
+@Import({NoteQueryPersistenceAdapter.class, NoteMapper.class, TestQueryDSLConfiguration.class})
 @DataJpaTest
 @EnableJpaAuditing
 class NoteQueryPersistenceAdapterTest {
@@ -32,9 +31,6 @@ class NoteQueryPersistenceAdapterTest {
 
   @Autowired
   private NoteMapper noteMapper;
-
-  @Autowired
-  private CategoryUserMapper categoryUserMapper;
 
   @Test
   @DisplayName("전체 Note 조회")
@@ -56,11 +52,12 @@ class NoteQueryPersistenceAdapterTest {
   void testFindById() {
     // given
     Note note = Note.create("name", "test description", 1L);
-    entityManager.persist(noteMapper.toEntity(note));
+    NoteJpaEntity entity = noteMapper.toEntity(note);
+    entityManager.persist(entity);
     entityManager.clear();
 
     // when
-    Optional<Note> findNote = noteQueryRepository.findById(1L);
+    Optional<Note> findNote = noteQueryRepository.findById(entity.getId());
 
     // then
     assertThat(findNote).isPresent();

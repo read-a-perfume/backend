@@ -12,23 +12,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/notes")
+@RequestMapping("/v1/categories")
 @Validated
-public class FindNoteController {
+public class FindCategoryController {
 
   private final FindCategoryUseCase findCategoryUseCase;
 
-  public FindNoteController(FindCategoryUseCase findCategoryUseCase) {
+  public FindCategoryController(FindCategoryUseCase findCategoryUseCase) {
     this.findCategoryUseCase = findCategoryUseCase;
   }
 
   @GetMapping()
-  public List<NoteResponse> findNotes() {
+  public List<NoteResponse> findCategories() {
     return findCategoryUseCase.findCategories().stream().map(NoteResponse::from).toList();
   }
 
   @GetMapping("/{id}")
-  public NoteResponse findNote(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+  public NoteResponse findCategoryById(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
     return NoteResponse.from(findCategoryUseCase.findCategoryById(id));
   }
 }

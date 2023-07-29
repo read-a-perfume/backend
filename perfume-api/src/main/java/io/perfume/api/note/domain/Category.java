@@ -24,4 +24,8 @@ public class Category extends BaseTimeDomain {
     this.description = description;
     this.thumbnailId = thumbnailId;
   }
+
+  public static Category create(String name, String description, Long thumbnailId, LocalDateTime now) {
+    return new Category(null, name, description, thumbnailId, now, now, null);
+  }
 }

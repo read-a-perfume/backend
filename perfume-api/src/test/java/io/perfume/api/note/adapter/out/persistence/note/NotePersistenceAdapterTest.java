@@ -2,7 +2,6 @@ package io.perfume.api.note.adapter.out.persistence.note;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({NotePersistenceAdapter.class, NoteMapper.class, CategoryUserMapper.class})
+@Import({NotePersistenceAdapter.class, NoteMapper.class})
 @DataJpaTest
 @EnableJpaAuditing
 class NotePersistenceAdapterTest {

@@ -13,17 +13,11 @@ public class NotePersistenceAdapter implements NoteRepository {
 
   private final NoteMapper noteMapper;
 
-  private final CategoryUserMapper categoryUserMapper;
-
   private final NoteJpaRepository noteJpaRepository;
 
-  private final CategoryUserJpaRepository categoryUserJpaRepository;
-
-  public NotePersistenceAdapter(NoteMapper noteMapper, CategoryUserMapper categoryUserMapper, NoteJpaRepository noteJpaRepository, CategoryUserJpaRepository categoryUserJpaRepository) {
+  public NotePersistenceAdapter(NoteMapper noteMapper, NoteJpaRepository noteJpaRepository) {
     this.noteMapper = noteMapper;
-    this.categoryUserMapper = categoryUserMapper;
     this.noteJpaRepository = noteJpaRepository;
-    this.categoryUserJpaRepository = categoryUserJpaRepository;
   }
 
   @Override
@@ -32,13 +26,5 @@ public class NotePersistenceAdapter implements NoteRepository {
     NoteJpaEntity savedNoteEntity = noteJpaRepository.save(noteEntity);
 
     return noteMapper.toDomain(savedNoteEntity);
-  }
-
-  @Override
-  public CategoryUser save(CategoryUser categoryUser) {
-    CategoryUserJpaEntity noteUserEntity = categoryUserMapper.toEntity(categoryUser);
-    CategoryUserJpaEntity savedNoteUserEntity = categoryUserJpaRepository.save(noteUserEntity);
-
-    return categoryUserMapper.toDomain(savedNoteUserEntity);
   }
 }
