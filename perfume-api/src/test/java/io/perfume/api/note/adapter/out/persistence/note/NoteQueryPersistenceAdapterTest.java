@@ -4,8 +4,8 @@ package io.perfume.api.note.adapter.out.persistence.note;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
-import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserJpaEntity;
-import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserMapper;
+import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserJpaEntity;
+import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserMapper;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
 import io.perfume.api.note.domain.NoteUser;
@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({NoteQueryPersistenceAdapter.class, NoteMapper.class, NoteUserMapper.class,
+@Import({NoteQueryPersistenceAdapter.class, NoteMapper.class, CategoryUserMapper.class,
     TestQueryDSLConfiguration.class})
 @DataJpaTest
 @EnableJpaAuditing
@@ -38,7 +38,7 @@ class NoteQueryPersistenceAdapterTest {
   private NoteMapper noteMapper;
 
   @Autowired
-  private NoteUserMapper noteUserMapper;
+  private CategoryUserMapper categoryUserMapper;
 
   @Test
   @DisplayName("전체 Note 조회")
@@ -78,8 +78,8 @@ class NoteQueryPersistenceAdapterTest {
     entityManager.persist(note);
 
     LocalDateTime now = LocalDateTime.now();
-    NoteUserJpaEntity noteUser =
-        noteUserMapper.toEntity(NoteUser.create(1L, noteMapper.toDomain(note), now));
+    CategoryUserJpaEntity noteUser =
+        categoryUserMapper.toEntity(NoteUser.create(1L, noteMapper.toDomain(note), now));
     entityManager.persist(noteUser);
     entityManager.clear();
 

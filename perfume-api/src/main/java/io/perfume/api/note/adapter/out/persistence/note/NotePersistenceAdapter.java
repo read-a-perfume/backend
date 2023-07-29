@@ -1,9 +1,9 @@
 package io.perfume.api.note.adapter.out.persistence.note;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserJpaEntity;
-import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserJpaRepository;
-import io.perfume.api.note.adapter.out.persistence.noteUser.NoteUserMapper;
+import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserJpaEntity;
+import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserJpaRepository;
+import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteUser;
@@ -13,17 +13,17 @@ public class NotePersistenceAdapter implements NoteRepository {
 
   private final NoteMapper noteMapper;
 
-  private final NoteUserMapper noteUserMapper;
+  private final CategoryUserMapper categoryUserMapper;
 
   private final NoteJpaRepository noteJpaRepository;
 
-  private final NoteUserJpaRepository noteUserJpaRepository;
+  private final CategoryUserJpaRepository categoryUserJpaRepository;
 
-  public NotePersistenceAdapter(NoteMapper noteMapper, NoteUserMapper noteUserMapper, NoteJpaRepository noteJpaRepository, NoteUserJpaRepository noteUserJpaRepository) {
+  public NotePersistenceAdapter(NoteMapper noteMapper, CategoryUserMapper categoryUserMapper, NoteJpaRepository noteJpaRepository, CategoryUserJpaRepository categoryUserJpaRepository) {
     this.noteMapper = noteMapper;
-    this.noteUserMapper = noteUserMapper;
+    this.categoryUserMapper = categoryUserMapper;
     this.noteJpaRepository = noteJpaRepository;
-    this.noteUserJpaRepository = noteUserJpaRepository;
+    this.categoryUserJpaRepository = categoryUserJpaRepository;
   }
 
   @Override
@@ -36,9 +36,9 @@ public class NotePersistenceAdapter implements NoteRepository {
 
   @Override
   public NoteUser save(NoteUser noteUser) {
-    NoteUserJpaEntity noteUserEntity = noteUserMapper.toEntity(noteUser);
-    NoteUserJpaEntity savedNoteUserEntity = noteUserJpaRepository.save(noteUserEntity);
+    CategoryUserJpaEntity noteUserEntity = categoryUserMapper.toEntity(noteUser);
+    CategoryUserJpaEntity savedNoteUserEntity = categoryUserJpaRepository.save(noteUserEntity);
 
-    return noteUserMapper.toDomain(savedNoteUserEntity);
+    return categoryUserMapper.toDomain(savedNoteUserEntity);
   }
 }

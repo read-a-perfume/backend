@@ -5,15 +5,15 @@ import io.perfume.api.note.domain.NoteUser;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NoteUserMapper {
+public class CategoryUserMapper {
 
   private final NoteMapper noteMapper;
 
-  public NoteUserMapper(NoteMapper noteMapper) {
+  public CategoryUserMapper(NoteMapper noteMapper) {
     this.noteMapper = noteMapper;
   }
 
-  public NoteUser toDomain(NoteUserJpaEntity entity) {
+  public NoteUser toDomain(CategoryUserJpaEntity entity) {
     return new NoteUser(
         entity.getId(),
         entity.getUserId(),
@@ -24,8 +24,8 @@ public class NoteUserMapper {
     );
   }
 
-  public NoteUserJpaEntity toEntity(NoteUser domain) {
-    return new NoteUserJpaEntity(
+  public CategoryUserJpaEntity toEntity(NoteUser domain) {
+    return new CategoryUserJpaEntity(
         domain.getId(),
         noteMapper.toEntity(domain.getNote()),
         domain.getUserId(),

@@ -1,7 +1,7 @@
 package io.perfume.api.note.adapter.out.persistence.noteUser;
 
 import io.perfume.api.base.BaseTimeEntity;
-import io.perfume.api.note.adapter.out.persistence.note.NoteJpaEntity;
+import io.perfume.api.note.adapter.out.persistence.category.CategoryJpaEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "note_user")
+@Entity(name = "category_user")
 @Table(
     uniqueConstraints = {
         @UniqueConstraint(name = "uni_user_id_note_id", columnNames = {"userId", "note_id"}),
@@ -29,7 +29,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
-public class NoteUserJpaEntity extends BaseTimeEntity {
+public class CategoryUserJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,21 +38,22 @@ public class NoteUserJpaEntity extends BaseTimeEntity {
   private Long id;
 
   @ManyToOne()
-  @JoinColumn(name = "note_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "none"), nullable = false)
-  private NoteJpaEntity note;
+  @JoinColumn(name = "category_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "none"), nullable = false)
+  private CategoryJpaEntity category;
 
   @Column(nullable = false)
   private Long userId;
 
-  public NoteUserJpaEntity(Long id, NoteJpaEntity note, Long userId, LocalDateTime createdAt,
-                           LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public CategoryUserJpaEntity(Long id, CategoryJpaEntity category, Long userId,
+                               LocalDateTime createdAt,
+                               LocalDateTime updatedAt, LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
-    this.note = note;
+    this.category = category;
     this.userId = userId;
   }
 
-  static NoteUserJpaEntity create(NoteJpaEntity note, Long userId, LocalDateTime now) {
-    return new NoteUserJpaEntity(null, note, userId, now, now, null);
+  static CategoryUserJpaEntity create(CategoryJpaEntity category, Long userId, LocalDateTime now) {
+    return new CategoryUserJpaEntity(null, category, userId, now, now, null);
   }
 }
