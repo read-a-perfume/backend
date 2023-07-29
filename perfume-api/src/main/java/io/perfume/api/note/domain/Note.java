@@ -9,22 +9,22 @@ public class Note extends BaseTimeDomain {
 
   private final Long id;
 
-  private String name;
+  private final String name;
 
-  private Long thumbnailId;
+  private final String description;
 
-  private NoteCategory category;
+  private final Long thumbnailId;
 
-  public Note(Long id, String name, Long thumbnailId, NoteCategory category,
+  public Note(Long id, String name, String description, Long thumbnailId,
               LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
+    this.description = description;
     this.thumbnailId = thumbnailId;
-    this.category = category;
   }
 
-  static public Note create(String name, NoteCategory category, Long thumbnailId) {
-    return new Note(null, name, thumbnailId, category, null, null, null);
+  static public Note create(String name, String description, Long thumbnailId) {
+    return new Note(null, name, description, thumbnailId, null, null, null);
   }
 }

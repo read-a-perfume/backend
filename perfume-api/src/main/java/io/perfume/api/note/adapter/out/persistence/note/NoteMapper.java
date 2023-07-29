@@ -10,8 +10,8 @@ public class NoteMapper {
     return new Note(
         entity.getId(),
         entity.getName(),
+        entity.getDescription(),
         entity.getThumbnailId(),
-        entity.getCategory(),
         entity.getCreatedAt(),
         entity.getUpdatedAt(),
         entity.getDeletedAt()
@@ -22,8 +22,8 @@ public class NoteMapper {
     return new NoteJpaEntity(
         domain.getId(),
         domain.getName(),
+        domain.getDescription(),
         domain.getThumbnailId(),
-        domain.getCategory(),
         domain.getCreatedAt(),
         domain.getUpdatedAt(),
         domain.getDeletedAt()
