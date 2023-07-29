@@ -1,33 +1,33 @@
 package io.perfume.api.note.adapter.out.persistence.noteUser;
 
-import io.perfume.api.note.adapter.out.persistence.note.NoteMapper;
-import io.perfume.api.note.domain.NoteUser;
+import io.perfume.api.note.adapter.out.persistence.category.CategoryMapper;
+import io.perfume.api.note.domain.CategoryUser;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryUserMapper {
 
-  private final NoteMapper noteMapper;
+  private final CategoryMapper categoryMapper;
 
-  public CategoryUserMapper(NoteMapper noteMapper) {
-    this.noteMapper = noteMapper;
+  public CategoryUserMapper(CategoryMapper categoryMapper) {
+    this.categoryMapper = categoryMapper;
   }
 
-  public NoteUser toDomain(CategoryUserJpaEntity entity) {
-    return new NoteUser(
+  public CategoryUser toDomain(CategoryUserJpaEntity entity) {
+    return new CategoryUser(
         entity.getId(),
         entity.getUserId(),
-        noteMapper.toDomain(entity.getNote()),
+        categoryMapper.toDomain(entity.getCategory()),
         entity.getCreatedAt(),
         entity.getUpdatedAt(),
         entity.getDeletedAt()
     );
   }
 
-  public CategoryUserJpaEntity toEntity(NoteUser domain) {
+  public CategoryUserJpaEntity toEntity(CategoryUser domain) {
     return new CategoryUserJpaEntity(
         domain.getId(),
-        noteMapper.toEntity(domain.getNote()),
+        categoryMapper.toEntity(domain.getCategory()),
         domain.getUserId(),
         domain.getCreatedAt(),
         domain.getUpdatedAt(),

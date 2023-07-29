@@ -6,7 +6,7 @@ import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
-import io.perfume.api.note.domain.NoteUser;
+import io.perfume.api.note.domain.CategoryUser;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,14 +46,14 @@ class NotePersistenceAdapterTest {
     // given
     LocalDateTime now = LocalDateTime.now();
     Note createdNote = noteRepository.save(Note.create("test", NoteCategory.BASE, 1L));
-    NoteUser noteUser = NoteUser.create(1L, createdNote, now);
+    CategoryUser categoryUser = CategoryUser.create(1L, createdNote, now);
 
     // when
-    NoteUser createdNoteUser = noteRepository.save(noteUser);
+    CategoryUser createdCategoryUser = noteRepository.save(categoryUser);
 
     // then
-    assertThat(createdNoteUser.getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdNoteUser.getNote().getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdNoteUser.getUserId()).isGreaterThanOrEqualTo(1L);
+    assertThat(createdCategoryUser.getId()).isGreaterThanOrEqualTo(0L);
+    assertThat(createdCategoryUser.getCategory().getId()).isGreaterThanOrEqualTo(0L);
+    assertThat(createdCategoryUser.getUserId()).isGreaterThanOrEqualTo(1L);
   }
 }

@@ -8,7 +8,7 @@ import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserJpaEntit
 import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserMapper;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
-import io.perfume.api.note.domain.NoteUser;
+import io.perfume.api.note.domain.CategoryUser;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -79,7 +79,7 @@ class NoteQueryPersistenceAdapterTest {
 
     LocalDateTime now = LocalDateTime.now();
     CategoryUserJpaEntity noteUser =
-        categoryUserMapper.toEntity(NoteUser.create(1L, noteMapper.toDomain(note), now));
+        categoryUserMapper.toEntity(CategoryUser.create(1L, noteMapper.toDomain(note), now));
     entityManager.persist(noteUser);
     entityManager.clear();
 

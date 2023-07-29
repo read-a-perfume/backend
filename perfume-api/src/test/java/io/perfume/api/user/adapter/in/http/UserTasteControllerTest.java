@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
-import io.perfume.api.note.domain.NoteUser;
+import io.perfume.api.note.domain.CategoryUser;
 import io.perfume.api.user.adapter.in.http.dto.CreateUserTasteRequestDto;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +60,7 @@ class UserTasteControllerTest {
     Note createNote = noteRepository.save(Note.create("sample", NoteCategory.BASE, 1L));
 
     LocalDateTime now = LocalDateTime.now();
-    noteRepository.save(NoteUser.create(1L, createNote, now));
+    noteRepository.save(CategoryUser.create(1L, createNote, now));
 
     // when & then
     mockMvc

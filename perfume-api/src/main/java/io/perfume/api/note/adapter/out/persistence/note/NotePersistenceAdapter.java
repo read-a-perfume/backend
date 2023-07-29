@@ -6,7 +6,7 @@ import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserJpaRepos
 import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
-import io.perfume.api.note.domain.NoteUser;
+import io.perfume.api.note.domain.CategoryUser;
 
 @PersistenceAdapter
 public class NotePersistenceAdapter implements NoteRepository {
@@ -35,8 +35,8 @@ public class NotePersistenceAdapter implements NoteRepository {
   }
 
   @Override
-  public NoteUser save(NoteUser noteUser) {
-    CategoryUserJpaEntity noteUserEntity = categoryUserMapper.toEntity(noteUser);
+  public CategoryUser save(CategoryUser categoryUser) {
+    CategoryUserJpaEntity noteUserEntity = categoryUserMapper.toEntity(categoryUser);
     CategoryUserJpaEntity savedNoteUserEntity = categoryUserJpaRepository.save(noteUserEntity);
 
     return categoryUserMapper.toDomain(savedNoteUserEntity);

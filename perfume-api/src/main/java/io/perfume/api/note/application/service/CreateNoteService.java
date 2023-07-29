@@ -1,13 +1,12 @@
 package io.perfume.api.note.application.service;
 
 import io.perfume.api.note.application.port.in.CreateNoteUseCase;
-import io.perfume.api.note.application.port.in.FindNoteUseCase;
 import io.perfume.api.note.application.port.in.dto.CreateNoteCommand;
 import io.perfume.api.note.application.port.in.dto.NoteResult;
 import io.perfume.api.note.application.port.out.NoteQueryRepository;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
-import io.perfume.api.note.domain.NoteUser;
+import io.perfume.api.note.domain.CategoryUser;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class CreateNoteService implements CreateNoteUseCase {
   @Override
   public NoteResult createUserTaste(Long userId, Long noteId, LocalDateTime now) {
     Note note = noteQueryRepository.findById(noteId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 노트입니다."));
-    noteRepository.save(NoteUser.create(userId, note, now));
+    noteRepository.save(CategoryUser.create(userId, note, now));
 
     return NoteResult.from(note);
   }
