@@ -1,7 +1,7 @@
 package io.perfume.api.user.application.service;
 
 import encryptor.OneWayEncryptor;
-import io.perfume.api.user.application.exception.FailedLeaveException;
+import io.perfume.api.user.application.exception.FailedToLeaveException;
 import io.perfume.api.user.application.exception.NotFoundUserException;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
@@ -37,6 +37,7 @@ public class SupportUserService implements SendResetPasswordMailUseCase, FindEnc
      * 2. "새로운 패스워드 할당" 이메일 템플릿 정하기
      */
     @Override
+    @Transactional
     public void sendNewPasswordToEmail(String email, String username) {
         User user = userQueryRepository.findOneByEmailAndUsername(email, username).orElseThrow(NotFoundUserException::new);
 
@@ -60,13 +61,10 @@ public class SupportUserService implements SendResetPasswordMailUseCase, FindEnc
     }
 
     @Override
-    public void leave(String accessToken)
+    public void leave(Long userId)
     {
-        Long userId = null;
 
         try {
-            // TODO 'userId'같은 상수값이 사용할 때 마다 정의해서 사용중, 상수값을 모아서 관리하고싶음
-            userId = jsonWebTokenGenerator.getClaim(accessToken, "usdId", Long.class);
 
             User user = userQueryRepository.loadUser(userId).orElseThrow(NotFoundUserException::new);
 
@@ -78,7 +76,7 @@ public class SupportUserService implements SendResetPasswordMailUseCase, FindEnc
 
         } catch (NotFoundUserException e) {
 
-            FailedLeaveException failedLeaveException = new FailedLeaveException("회원탈퇴 실패", "user id : " + userId + ", 회원탈퇴 실패");
+            FailedToLeaveException failedLeaveException = new FailedToLeaveException("회원탈퇴 실패", "user id : " + userId + ", 회원탈퇴 실패");
 
             failedLeaveException.initCause(e);
 

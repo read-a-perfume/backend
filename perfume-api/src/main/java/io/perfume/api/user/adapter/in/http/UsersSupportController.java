@@ -1,5 +1,6 @@
 package io.perfume.api.user.adapter.in.http;
 
+import io.perfume.api.common.auth.UserPrincipal;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,8 +42,8 @@ public class UsersSupportController {
     }
 
     @DeleteMapping("/user")
-    public ResponseEntity leaveUser(@RequestHeader(name = "Authorization") String accessToken) {
-        leaveUserUseCase.leave(accessToken);
+    public ResponseEntity leaveUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        leaveUserUseCase.leave(userPrincipal.getUser().getId());
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
