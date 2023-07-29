@@ -1,9 +1,9 @@
 package io.perfume.api.note.adapter.out.persistence.note;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserJpaEntity;
-import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserJpaRepository;
-import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserMapper;
+import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserJpaEntity;
+import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserJpaRepository;
+import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.CategoryUser;

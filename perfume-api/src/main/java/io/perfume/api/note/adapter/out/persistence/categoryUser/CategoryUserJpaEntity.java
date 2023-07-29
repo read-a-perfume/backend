@@ -1,4 +1,4 @@
-package io.perfume.api.note.adapter.out.persistence.noteUser;
+package io.perfume.api.note.adapter.out.persistence.categoryUser;
 
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.note.adapter.out.persistence.category.CategoryJpaEntity;

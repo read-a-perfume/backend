@@ -2,7 +2,7 @@ package io.perfume.api.note.adapter.out.persistence.note;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserMapper;
+import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserMapper;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;

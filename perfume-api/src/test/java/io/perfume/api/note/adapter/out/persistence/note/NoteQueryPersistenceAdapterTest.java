@@ -4,8 +4,8 @@ package io.perfume.api.note.adapter.out.persistence.note;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
-import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserJpaEntity;
-import io.perfume.api.note.adapter.out.persistence.noteUser.CategoryUserMapper;
+import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserJpaEntity;
+import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserMapper;
 import io.perfume.api.note.domain.Note;
 import io.perfume.api.note.domain.NoteCategory;
 import io.perfume.api.note.domain.CategoryUser;

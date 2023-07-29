@@ -1,4 +1,4 @@
-package io.perfume.api.note.adapter.out.persistence.noteUser;
+package io.perfume.api.note.adapter.out.persistence.categoryUser;
 
 import io.perfume.api.note.adapter.out.persistence.category.CategoryMapper;
 import io.perfume.api.note.domain.CategoryUser;
