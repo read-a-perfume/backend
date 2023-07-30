@@ -25,7 +25,10 @@ public class SetUserProfileService implements SetUserProfileUseCase {
 
     }
 
-    // 닉네임 형식 지정?
+    /*
+     *  TODO
+     *  1. 닉네임 제약조건 설정(?)
+     */
     @Override
     public void setNickName(User user, String name) {
         if (user == null) {
