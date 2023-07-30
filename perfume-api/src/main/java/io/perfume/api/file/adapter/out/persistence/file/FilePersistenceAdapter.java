@@ -4,6 +4,8 @@ import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.file.application.port.out.FileRepository;
 import io.perfume.api.file.domain.File;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @PersistenceAdapter
@@ -25,5 +27,15 @@ public class FilePersistenceAdapter implements FileRepository {
                         fileMapper.toEntity(file)
                 )
         ));
+    }
+
+    @Override
+    public List<File> saveAll(List<File> files) {
+        List<File> result = new ArrayList<>();
+        for (File file : files) {
+            result.add(file);
+        }
+        fileJpaRepository.saveAll(fileMapper.toEntity(result));
+        return result;
     }
 }

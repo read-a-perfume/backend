@@ -20,4 +20,15 @@ public class File extends BaseTimeDomain {
     this.id = id;
     this.url = url;
   }
+
+  public static File createFile(String url, LocalDateTime now) {
+    return File.builder()
+            .url(url)
+            .createdAt(now)
+            .updatedAt(now)
+            .deletedAt(null)
+            .build();
+  }
+
+
 }

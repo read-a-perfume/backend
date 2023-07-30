@@ -3,6 +3,9 @@ package io.perfume.api.file.adapter.out.persistence.file;
 import io.perfume.api.file.domain.File;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class FileMapper {
 
@@ -25,5 +28,39 @@ public class FileMapper {
                 file.getCreatedAt(),
                 file.getUpdatedAt(),
                 file.getDeletedAt());
+    }
+
+    public List<File> toDomain(List<FileJpaEntity> fileJpaEntities) {
+        if (fileJpaEntities == null) return null;
+        List<File> files = new ArrayList<>();
+        for (FileJpaEntity fileJpaEntity : fileJpaEntities) {
+            files.add(
+                    File.builder()
+                            .id(fileJpaEntity.getId())
+                            .url(fileJpaEntity.getUrl())
+                            .createdAt(fileJpaEntity.getCreatedAt())
+                            .updatedAt(fileJpaEntity.getUpdatedAt())
+                            .deletedAt(fileJpaEntity.getDeletedAt())
+                            .build()
+            );
+        }
+
+        return files;
+    }
+
+    public List<FileJpaEntity> toEntity(List<File> files) {
+        if (files == null) return null;
+        List<FileJpaEntity> fileJpaEntities = new ArrayList<>();
+        for (File file : files) {
+            fileJpaEntities.add(
+                    new FileJpaEntity(
+                            file.getId(),
+                            file.getUrl(),
+                            file.getCreatedAt(),
+                            file.getUpdatedAt(),
+                            file.getDeletedAt())
+            );
+        }
+        return fileJpaEntities;
     }
 }
