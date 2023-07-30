@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FileUploadUseCase {
 
-    SaveFileResult singleFileUplaod(MultipartFile file, LocalDateTime now) throws FileNotFoundException;
+    SaveFileResult singleFileUpload(MultipartFile file, LocalDateTime now) throws FileNotFoundException;
 
     List<SaveFileResult> multiFileUpload(List<MultipartFile> files, LocalDateTime now);
 }
