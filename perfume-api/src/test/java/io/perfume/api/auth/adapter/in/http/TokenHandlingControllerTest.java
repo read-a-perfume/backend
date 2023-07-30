@@ -15,6 +15,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.auth.application.port.in.dto.ReissuedTokenResult;
 import jakarta.servlet.http.Cookie;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
+@Transactional
 @SpringBootTest
 public class TokenHandlingControllerTest {
 
