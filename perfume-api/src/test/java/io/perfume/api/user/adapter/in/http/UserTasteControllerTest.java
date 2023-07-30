@@ -58,8 +58,7 @@ class UserTasteControllerTest {
     // given
     LocalDateTime now = LocalDateTime.now();
     Category category = categoryRepository.save(Category.create("sample", "sample", 1L, now));
-    CategoryUser categoryUser = categoryRepository.save(
-        CategoryUser.create(1L, category, LocalDateTime.now()));
+    categoryRepository.save(CategoryUser.create(1L, category, LocalDateTime.now()));
 
     // when & then
     mockMvc
@@ -69,7 +68,7 @@ class UserTasteControllerTest {
         )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("[0].id").value(categoryUser.getId()))
+        .andExpect(jsonPath("[0].id").value(category.getId()))
         .andExpect(jsonPath("[0].name").value("sample"))
         .andExpect(jsonPath("[0].description").value("sample"))
         .andExpect(jsonPath("[0].thumbnail").value(""))
