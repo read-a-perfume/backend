@@ -10,9 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import io.perfume.api.note.application.port.out.CategoryRepository;
 import io.perfume.api.note.application.port.out.NoteRepository;
+import io.perfume.api.note.domain.Category;
 import io.perfume.api.note.domain.Note;
-import io.perfume.api.note.domain.NoteCategory;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,12 +35,12 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-class FindNoteControllerTest {
+class FindCategoryControllerTest {
 
   private MockMvc mockMvc;
 
   @Autowired
-  private NoteRepository noteRepository;
+  private CategoryRepository categoryRepository;
 
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
@@ -51,53 +53,59 @@ class FindNoteControllerTest {
   @Test
   void testFindNotes() throws Exception {
     // given
-    Note createNote = noteRepository.save(Note.create("sample", NoteCategory.BASE, 1L));
+    LocalDateTime now = LocalDateTime.now();
+    Category category = categoryRepository.save(Category.create("sample", "sample description", 1L, now));
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/v1/notes")
+        .perform(MockMvcRequestBuilders.get("/v1/categories")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("[0].id").value(createNote.getId()))
+        .andExpect(jsonPath("[0].id").value(category.getId()))
         .andExpect(jsonPath("[0].name").value("sample"))
-        .andExpect(jsonPath("[0].category").value("BASE"))
+        .andExpect(jsonPath("[0].description").value("sample description"))
+        .andExpect(jsonPath("[0].thumbnail").value(""))
         .andDo(
-            document("get-notes",
+            document("get-categories",
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("노트 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("노트 이름"),
-                    fieldWithPath("[].category").type(JsonFieldType.STRING).description("노트 종류")
+                    fieldWithPath("[].description").type(JsonFieldType.STRING).description("노트 설명"),
+                    fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("노트 이미지")
                 )));
   }
 
   @Test
   void testFindNoteById() throws Exception {
     // given
-    Note createdNote = noteRepository.save(Note.create("sample", NoteCategory.BASE, 1L));
+    LocalDateTime now = LocalDateTime.now();
+    Category category = categoryRepository.save(Category.create("sample", "sample description", 1L, now));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/notes/{id}", createdNote.getId())
+        .perform(RestDocumentationRequestBuilders.get("/v1/categories/{id}", category.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.id").value(createdNote.getId()))
+        .andExpect(jsonPath("$.id").value(category.getId()))
         .andExpect(jsonPath("$.name").value("sample"))
-        .andExpect(jsonPath("$.category").value("BASE"))
+        .andExpect(jsonPath("$.description").value("sample description"))
+        .andExpect(jsonPath("$.thumbnail").value(""))
         .andDo(
-            document("get-note-by-id",
+            document("get-category-by-id",
                 pathParameters(
                     parameterWithName("id").description("노트 ID")
                 ),
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("노트 ID"),
                     fieldWithPath("name").type(JsonFieldType.STRING).description("노트 이름"),
-                    fieldWithPath("category").type(JsonFieldType.STRING).description("노트 종류")
+                    fieldWithPath("description").type(JsonFieldType.STRING).description("노트 설명"),
+                    fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("노트 이미지")
                 )));
   }
 }

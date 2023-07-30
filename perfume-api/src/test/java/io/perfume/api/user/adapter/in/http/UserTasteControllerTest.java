@@ -9,10 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.note.application.port.out.NoteRepository;
-import io.perfume.api.note.domain.Note;
-import io.perfume.api.note.domain.NoteCategory;
-import io.perfume.api.note.domain.NoteUser;
+import io.perfume.api.note.application.port.out.CategoryRepository;
+import io.perfume.api.note.domain.Category;
+import io.perfume.api.note.domain.CategoryUser;
 import io.perfume.api.user.adapter.in.http.dto.CreateUserTasteRequestDto;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +39,7 @@ class UserTasteControllerTest {
   private MockMvc mockMvc;
 
   @Autowired
-  private NoteRepository noteRepository;
+  private CategoryRepository categoryRepository;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -57,10 +56,9 @@ class UserTasteControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testGetTastes() throws Exception {
     // given
-    Note createNote = noteRepository.save(Note.create("sample", NoteCategory.BASE, 1L));
-
     LocalDateTime now = LocalDateTime.now();
-    noteRepository.save(NoteUser.create(1L, createNote, now));
+    Category category = categoryRepository.save(Category.create("sample", "sample", 1L, now));
+    categoryRepository.save(CategoryUser.create(1L, category, LocalDateTime.now()));
 
     // when & then
     mockMvc
@@ -70,16 +68,17 @@ class UserTasteControllerTest {
         )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("[0].id").value(createNote.getId()))
+        .andExpect(jsonPath("[0].id").value(category.getId()))
         .andExpect(jsonPath("[0].name").value("sample"))
-        .andExpect(jsonPath("[0].category").value("BASE"))
+        .andExpect(jsonPath("[0].description").value("sample"))
+        .andExpect(jsonPath("[0].thumbnail").value(""))
         .andDo(
-            document("get-user-notes",
+            document("get-user-tastes",
                 responseFields(
-                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("노트 ID"),
-                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("노트 이름"),
-                    fieldWithPath("[].category").type(JsonFieldType.STRING).description("노트 종류"),
-                    fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("노트 이미지")
+                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
+                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
+                    fieldWithPath("[].description").type(JsonFieldType.STRING).description("카테고리 설명"),
+                    fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("카테고리 이미지")
                 )));
   }
 
@@ -87,8 +86,9 @@ class UserTasteControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testCreateUserTaste() throws Exception {
     // given
-    Note createNote = noteRepository.save(Note.create("sample", NoteCategory.BASE, 1L));
-    CreateUserTasteRequestDto dto = new CreateUserTasteRequestDto(createNote.getId());
+    LocalDateTime now = LocalDateTime.now();
+    Category category = categoryRepository.save(Category.create("sample", "sample", 1L, now));
+    CreateUserTasteRequestDto dto = new CreateUserTasteRequestDto(category.getId());
 
     // when & then
     mockMvc

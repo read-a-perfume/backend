@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
-public class Note extends BaseTimeDomain {
+public class Category extends BaseTimeDomain {
 
   private final Long id;
 
@@ -15,8 +15,9 @@ public class Note extends BaseTimeDomain {
 
   private final Long thumbnailId;
 
-  public Note(Long id, String name, String description, Long thumbnailId,
-              LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public Category(Long id, String name, String description,
+                  Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
+                  LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
@@ -24,7 +25,7 @@ public class Note extends BaseTimeDomain {
     this.thumbnailId = thumbnailId;
   }
 
-  static public Note create(String name, String description, Long thumbnailId) {
-    return new Note(null, name, description, thumbnailId, null, null, null);
+  public static Category create(String name, String description, Long thumbnailId, LocalDateTime now) {
+    return new Category(null, name, description, thumbnailId, now, now, null);
   }
 }

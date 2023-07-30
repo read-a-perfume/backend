@@ -1,7 +1,8 @@
 package io.perfume.api.user.application.service;
 
-import io.perfume.api.note.application.port.in.CreateNoteUseCase;
-import io.perfume.api.note.application.port.in.FindNoteUseCase;
+import io.perfume.api.note.application.port.in.CreateCategoryUseCase;
+import io.perfume.api.note.application.port.in.FindCategoryUseCase;
+import io.perfume.api.note.application.port.in.dto.AddUserTasteCommand;
 import io.perfume.api.user.application.port.in.CreateUserTasteUseCase;
 import io.perfume.api.user.application.port.in.FindUserTasteUseCase;
 import io.perfume.api.user.application.port.in.dto.UserTasteResult;
@@ -12,23 +13,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserTasteService implements CreateUserTasteUseCase, FindUserTasteUseCase {
 
-  private final FindNoteUseCase findNoteUseCase;
+  private final FindCategoryUseCase findCategoryUseCase;
 
-  private final CreateNoteUseCase createNoteUseCase;
+  private final CreateCategoryUseCase createCategoryUseCase;
 
-  public UserTasteService(FindNoteUseCase findNoteUseCase, CreateNoteUseCase createNoteUseCase) {
-    this.findNoteUseCase = findNoteUseCase;
-    this.createNoteUseCase = createNoteUseCase;
+
+  public UserTasteService(FindCategoryUseCase findCategoryUseCase, CreateCategoryUseCase createCategoryUseCase) {
+    this.findCategoryUseCase = findCategoryUseCase;
+    this.createCategoryUseCase = createCategoryUseCase;
   }
 
   @Override
-  public UserTasteResult createUserTaste(Long userId, Long noteId) {
+  public UserTasteResult createUserTaste(Long userId, Long categoryId) {
     LocalDateTime now = LocalDateTime.now();
-    return UserTasteResult.from(createNoteUseCase.createUserTaste(userId, noteId, now));
+    AddUserTasteCommand command = new AddUserTasteCommand(userId, categoryId);
+    return UserTasteResult.from(createCategoryUseCase.create(command, now));
   }
 
   @Override
   public List<UserTasteResult> getUserTastes(Long userId) {
-    return findNoteUseCase.findUserNotesByUserId(userId).stream().map(UserTasteResult::from).toList();
+    return findCategoryUseCase.findTasteByUserId(userId).stream().map(UserTasteResult::from).toList();
   }
 }

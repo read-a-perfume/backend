@@ -1,13 +1,13 @@
-package io.perfume.api.note.adapter.out.persistence.note;
+package io.perfume.api.note.adapter.out.persistence.category;
 
-import io.perfume.api.note.domain.Note;
+import io.perfume.api.note.domain.Category;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NoteMapper {
+public class CategoryMapper {
 
-  public Note toDomain(NoteJpaEntity entity) {
-    return new Note(
+  public Category toDomain(CategoryJpaEntity entity) {
+    return new Category(
         entity.getId(),
         entity.getName(),
         entity.getDescription(),
@@ -18,8 +18,8 @@ public class NoteMapper {
     );
   }
 
-  public NoteJpaEntity toEntity(Note domain) {
-    return new NoteJpaEntity(
+  public CategoryJpaEntity toEntity(Category domain) {
+    return new CategoryJpaEntity(
         domain.getId(),
         domain.getName(),
         domain.getDescription(),

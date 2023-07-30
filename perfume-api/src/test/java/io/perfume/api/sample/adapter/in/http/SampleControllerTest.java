@@ -12,6 +12,7 @@ import io.perfume.api.sample.adapter.in.http.dto.CreateSampleRequestDto;
 import io.perfume.api.sample.adapter.in.http.dto.UpdateSampleRequestDto;
 import io.perfume.api.sample.application.port.in.dto.SampleResult;
 import io.perfume.api.sample.application.service.SampleService;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
+@Transactional
 @SpringBootTest
 class SampleControllerTest {
 

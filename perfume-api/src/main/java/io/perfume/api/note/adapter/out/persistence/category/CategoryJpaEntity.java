@@ -1,4 +1,4 @@
-package io.perfume.api.note.adapter.out.persistence.note;
+package io.perfume.api.note.adapter.out.persistence.category;
 
 import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -15,17 +15,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "note")
+@Entity(name = "category")
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(name = "uni_note_name", columnNames = "name"),
+        @UniqueConstraint(name = "uni_category_name", columnNames = "name"),
     }
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
-public class NoteJpaEntity extends BaseTimeEntity {
+public class CategoryJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +40,9 @@ public class NoteJpaEntity extends BaseTimeEntity {
 
   private Long thumbnailId;
 
-  public NoteJpaEntity(Long id, String name, String description, Long thumbnailId,
-                       LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public CategoryJpaEntity(Long id, String name, String description, Long thumbnailId,
+                           LocalDateTime createdAt, LocalDateTime updatedAt,
+                           LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;

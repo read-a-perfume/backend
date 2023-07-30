@@ -1,23 +1,23 @@
 package io.perfume.api.note.stub;
 
-import io.perfume.api.note.application.port.in.FindNoteUseCase;
-import io.perfume.api.note.application.port.in.dto.NoteResult;
+import io.perfume.api.note.application.port.in.FindCategoryUseCase;
+import io.perfume.api.note.application.port.in.dto.CategoryResult;
 import java.util.List;
 
-public class StubFindUseCase implements FindNoteUseCase {
+public class StubFindUseCase implements FindCategoryUseCase {
 
   @Override
-  public List<NoteResult> findNotes() {
+  public List<CategoryResult> findCategories() {
     return null;
   }
 
   @Override
-  public NoteResult findNoteById(Long id) {
+  public CategoryResult findCategoryById(Long id) {
     return null;
   }
 
   @Override
-  public List<NoteResult> findUserNotesByUserId(Long id) {
+  public List<CategoryResult> findTasteByUserId(Long id) {
     return null;
   }
 }
