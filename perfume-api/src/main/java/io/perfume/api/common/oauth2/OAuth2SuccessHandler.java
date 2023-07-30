@@ -2,18 +2,18 @@ package io.perfume.api.common.oauth2;
 
 import generator.Generator;
 import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
+import io.perfume.api.common.auth.Constants;
 import io.perfume.api.common.jwt.JwtProperties;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.SignUpSocialUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
-import io.perfume.api.user.domain.SocialProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
@@ -63,10 +63,10 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
   private void setResponseToken(HttpServletResponse response, UserResult userResult,
                                 LocalDateTime now) {
     String accessToken = makeNewTokenUseCase.createAccessToken(userResult.id(), now);
-    response.addCookie(createCookie("X-Access-Token", accessToken));
+    response.addCookie(createCookie(Constants.ACCESS_TOKEN_KEY, accessToken));
 
     String refreshToken = makeNewTokenUseCase.createRefreshToken(userResult.id(), now);
-    response.addCookie(createCookie("X-Refresh-Token", refreshToken));
+    response.addCookie(createCookie(Constants.REFRESH_TOKEN_KEY, refreshToken));
   }
 
   @NotNull
@@ -77,54 +77,37 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
   }
 
   private UserResult newUserIfNotExists(@NotNull OAuth2User oauth2User, LocalDateTime now) {
-    String email = oauth2User.getAttributes().get("email").toString();
-    if (Objects.isNull(email)) {
-      throw new RuntimeException("Email not found from OAuth2 provider");
-    }
-
-    String name = oauth2User.getAttributes().get("name").toString();
-    if (Objects.isNull(name)) {
-      throw new RuntimeException("Name not found from OAuth2 provider");
-    }
-
-    String identifier = oauth2User.getAttributes().get("sub").toString();
-    if (Objects.isNull(identifier)) {
-      throw new RuntimeException("Identifier not found from OAuth2 provider");
-    }
+    var attributes = oauth2User.getAttributes();
+    String identifier = getAttribute(attributes, "sub").toString();
 
     return findUserUseCase.findOneBySocialId(identifier).orElseGet(() -> {
       String randomPassword = generator.generate(30);
-      SignUpSocialUserCommand command = new SignUpSocialUserCommand(
+      String email = getAttribute(attributes, "email").toString();
+      String name = getAttribute(attributes, "name").toString();
+      SignUpSocialUserCommand command = SignUpSocialUserCommand.byGoogle(
           identifier,
           email,
-          generateRandomUsername(email, getUnixTime()),
           randomPassword,
-          name,
-          SocialProvider.GOOGLE
+          name
       );
+
       return createUserUseCase.signUpSocialUser(command, now);
     });
   }
 
-  @NotNull
-  private Long getUnixTime() {
-    return Instant.now().getEpochSecond();
-  }
-
-  @NotNull
-  private String generateRandomUsername(String email, Long unixTime) {
-    if (Objects.isNull(email) || !email.contains("@")) {
-      throw new IllegalArgumentException(email + " 올바른 이메일 형식이 아닙니다.");
-    }
-
-    return email.split("@")[0] + unixTime;
-  }
-
   private Cookie createCookie(String cookieName, String cookieValue) {
     Cookie cookie = new Cookie(cookieName, cookieValue);
-//    cookie.setSecure(true);
     cookie.setHttpOnly(true);
 
     return cookie;
+  }
+
+  private Object getAttribute(Map<String, Object> attributes, String key) {
+    Object value = attributes.get(key);
+    if (Objects.isNull(value)) {
+      throw new RuntimeException(key + " not found from OAuth2 provider");
+    }
+
+    return value;
   }
 }
