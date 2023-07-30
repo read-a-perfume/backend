@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class RegisterService implements CreateUserUseCase {
 
   private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
@@ -43,7 +43,6 @@ public class RegisterService implements CreateUserUseCase {
   private final MailSender mailSender;
   private final PasswordEncoder passwordEncoder;
 
-  @Transactional
   @Override
   public UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command) {
     User user = User.generalUserJoin(
@@ -57,7 +56,6 @@ public class RegisterService implements CreateUserUseCase {
     return toDto(userRepository.save(user).orElseThrow(FailedRegisterException::new));
   }
 
-  @Transactional
   @Override
   public UserResult signUpSocialUser(SignUpSocialUserCommand command, LocalDateTime now) {
     SocialAccount socialAccount =
@@ -71,6 +69,8 @@ public class RegisterService implements CreateUserUseCase {
         .orElseThrow(FailedRegisterException::new);
   }
 
+  @Transactional(readOnly = true)
+  @Override
   public boolean validDuplicateUsername(String username) {
     try {
       return userQueryRepository.findByUsername(username).isEmpty();
@@ -79,6 +79,7 @@ public class RegisterService implements CreateUserUseCase {
     }
   }
 
+  @Override
   public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
     logger.info("confirmEmailVerify code = {}, key = {}, now = {}", code, key, now);
 
@@ -89,6 +90,7 @@ public class RegisterService implements CreateUserUseCase {
     return new ConfirmEmailVerifyResult(result.email(), now);
   }
 
+  @Override
   public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
     CreateVerificationCodeCommand createVerificationCodeCommand =
         new CreateVerificationCodeCommand(command.email(), command.now());
