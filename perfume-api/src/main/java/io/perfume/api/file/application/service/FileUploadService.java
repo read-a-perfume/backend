@@ -26,7 +26,7 @@ public class FileUploadService implements FileUploadUseCase {
     }
 
     @Override
-    public SaveFileResult singleFileUplaod(MultipartFile file, LocalDateTime now) {
+    public SaveFileResult singleFileUpload(MultipartFile file, LocalDateTime now) {
         String URL = cdnUrl + file.getOriginalFilename();
         File saveFile = fileRepository.save(File.createFile(URL, now))
                 .orElseThrow(FileNotFoundException::new);

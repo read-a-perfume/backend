@@ -21,12 +21,8 @@ public class FilePersistenceAdapter implements FileRepository {
     }
 
     @Override
-    public Optional<File> save(File file) {
-        return Optional.of(fileMapper.toDomain(
-                fileJpaRepository.save(
-                        fileMapper.toEntity(file)
-                )
-        ));
+    public File save(File file) {
+        return fileMapper.toDomain(fileJpaRepository.save(fileMapper.toEntity(file)));
     }
 
     @Override

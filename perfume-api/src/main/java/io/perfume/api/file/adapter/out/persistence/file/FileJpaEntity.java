@@ -3,11 +3,7 @@ package io.perfume.api.file.adapter.out.persistence.file;
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.user.adapter.out.persistence.user.UserJpaEntity;
 import io.perfume.api.user.domain.SocialProvider;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import java.time.LocalDateTime;
 
 @Entity(name = "file")
-@Table(name = "file")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)

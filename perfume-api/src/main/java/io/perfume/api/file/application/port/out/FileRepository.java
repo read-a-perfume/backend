@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface FileRepository {
 
-    Optional<File> save(File file);
+    File save(File file);
 
     List<File> saveAll(List<File> files);
 }
