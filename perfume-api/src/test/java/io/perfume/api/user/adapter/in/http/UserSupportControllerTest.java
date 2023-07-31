@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-public class UserSupportControllerTest {
+public class UserSupportControllerTest { 
     private MockMvc mockMvc;
 
     @Autowired
