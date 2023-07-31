@@ -4,6 +4,7 @@ import io.perfume.api.common.auth.UserPrincipal;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
+import io.perfume.api.user.domain.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +43,8 @@ public class UsersSupportController {
     }
 
     @DeleteMapping("/user")
-    public ResponseEntity leaveUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        leaveUserUseCase.leave(userPrincipal.getUser().getId());
+    public ResponseEntity leaveUser(@AuthenticationPrincipal User user) {
+        leaveUserUseCase.leave(Long.parseLong(user.getUsername()));
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
