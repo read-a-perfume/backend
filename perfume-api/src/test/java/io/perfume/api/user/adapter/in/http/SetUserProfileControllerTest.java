@@ -1,4 +1,4 @@
-package io.perfume.api.user.application.service;
+package io.perfume.api.user.adapter.in.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.common.auth.UserPrincipal;
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +34,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -71,37 +75,28 @@ class SetUserProfileControllerTest {
     @Test
     @Transactional
     @DisplayName("유저는 닉네임을 설정할 수 있다.")
-    @WithMockUser
-    public void testSetPicture() throws Exception {
+    @WithMockUser(username = "1", roles = "USER")
+    public void modifySetUserNickName() throws Exception {
         // given
         String name = "NewName";
         User user = userRepository.save(createUser(email, password)).get();
-        UserPrincipal userPrincipal = new UserPrincipal(user);
+
+        Mockito.doNothing().when(setUserProfileUseCase).setNickName(String.valueOf(user.getId()), name);
 
         // when
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.setAuthentication(authentication);
-
-        Mockito.doNothing().when(setUserProfileUseCase).setNickName(user, name);
-
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/user/test-put-endpoint")
-                        .principal(authentication)
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .param("name", name))
-//                        .content("{\"name\":\"" + name + "\"}"))
                 .andExpect(status().isOk());
 
         // then
-        Mockito.verify(setUserProfileUseCase, Mockito.times(1)).setNickName(user, name);
-
-        securityContext.setAuthentication(null);
+        Mockito.verify(setUserProfileUseCase, Mockito.times(1)).setNickName(String.valueOf(user.getId()), name);
     }
 
     private User createUser(String email, String password) {
         String encodedPassword = passwordEncoder.encode(password);
-        return User.builder().id(1L).username("test").email(email).name("test").role(Role.USER)
+        return User.builder().id(1L).username("testusername").email(email).name("nickname").role(Role.USER)
                 .password(encodedPassword).role(Role.USER).build();
     }
 }
