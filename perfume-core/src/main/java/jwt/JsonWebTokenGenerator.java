@@ -3,9 +3,11 @@ package jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -40,23 +42,6 @@ public class JsonWebTokenGenerator {
         .compact();
   }
 
-  public String createWithPrefix(String subject, Map<String, Object> claims, int expirationSeconds,
-                                 LocalDateTime now) {
-    assert subject != null;
-    assert !subject.isEmpty();
-    assert expirationSeconds > 60 * 60;
-    assert claims != null;
-
-    return Jwts
-        .builder()
-        .signWith(secret, SignatureAlgorithm.HS256)
-        .setClaims(claims)
-        .setSubject(subject)
-        .setIssuedAt(toDate(now))
-        .setExpiration(toDate(now.plusSeconds(expirationSeconds)))
-        .compact();
-  }
-
   public boolean isExpired(String jwt, LocalDateTime now) {
     assert jwt != null;
     assert !jwt.isEmpty();
@@ -71,17 +56,12 @@ public class JsonWebTokenGenerator {
         .before(toDate(now));
   }
 
-  public String getTokenFromHeader(HttpServletRequest request) {
-    String header = request.getHeader("Authorization");
-    return validAccessToken(header);
-  }
-
-  public String validAccessToken(String header) {
-    if (header == null || !header.startsWith("Bearer ")) {
-      return null;
+  public String getTokenFromCookie(HttpServletRequest request) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null && cookies.length > 0) {
+      return Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("X-Access-Token")).findFirst().get().getValue();
     }
-
-    return header.substring(7).trim();
+    return null;
   }
 
   public String getSubject(String jwt) {
