@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -51,16 +50,14 @@ public class UserJpaEntity extends BaseTimeEntity {
   @Column(updatable = false)
   private String username;
 
-  @NotNull
-  @Email      // 제약조건 설정?  --> @Email "" 는 통과
-  @Column(updatable = false)
+  @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
+  @Email
   private String email;
 
   @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
   private String password;
 
-  @NotEmpty
-  @Column(updatable = false)
+  @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
   private String name;
 
   @NotNull
