@@ -50,9 +50,7 @@ public class AuthenticationTokenService {
   }
 
   public Long getUserIdFromToken(String accessToken) {
-    String token = jsonWebTokenGenerator.validAccessToken(accessToken);
-
-    return jsonWebTokenGenerator.getClaim(token, "userId", Long.class);
+    return jsonWebTokenGenerator.getClaim(accessToken, "userId", Long.class);
   }
 
   public RefreshToken getRefreshTokenFromClient(String refreshToken) {

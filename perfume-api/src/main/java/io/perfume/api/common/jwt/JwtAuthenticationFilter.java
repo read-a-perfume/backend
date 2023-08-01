@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   @NotNull HttpServletResponse response,
                                   @NotNull FilterChain filterChain)
       throws ServletException, IOException {
-    String jwt = jsonWebTokenGenerator.getTokenFromHeader(request);
+    String jwt = jsonWebTokenGenerator.getTokenFromCookie(request);
 
     if (Objects.isNull(jwt)) {
       filterChain.doFilter(request, response);

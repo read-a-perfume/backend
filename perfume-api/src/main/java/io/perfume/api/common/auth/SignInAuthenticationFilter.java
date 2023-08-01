@@ -92,7 +92,7 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
   private Cookie createCookie(String cookieName, String cookieValue) {
     Cookie cookie = new Cookie(cookieName, cookieValue);
-    cookie.setSecure(true);
+//    cookie.setSecure(true);
     cookie.setHttpOnly(true);
 
     return cookie;
