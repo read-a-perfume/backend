@@ -6,5 +6,5 @@ import io.perfume.api.user.domain.User;
 public interface SetUserProfileUseCase {
 
     void setUserProfilePicture();
-    void setNickName(User user, String name);
+    void setNickName(String userId, String name);
 }

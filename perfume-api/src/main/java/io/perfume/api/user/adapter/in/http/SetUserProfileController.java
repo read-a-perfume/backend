@@ -1,10 +1,10 @@
 package io.perfume.api.user.adapter.in.http;
 
-import io.perfume.api.common.auth.UserPrincipal;
 import io.perfume.api.user.adapter.in.http.dto.SetNickNameRequestDto;
 import io.perfume.api.user.application.port.in.SetUserProfileUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,10 +21,10 @@ public class SetUserProfileController {
 
     @PutMapping("/test-put-endpoint")
     public ResponseEntity<Object> setNickName(
-            @AuthenticationPrincipal UserPrincipal user,
+            @AuthenticationPrincipal User user,
             SetNickNameRequestDto dto
             ) {
-        setUserProfileUseCase.setNickName(user.getUser(), dto.name());
+        setUserProfileUseCase.setNickName(user.getUsername(), dto.name());
         return ResponseEntity.ok().build();
     }
 }
