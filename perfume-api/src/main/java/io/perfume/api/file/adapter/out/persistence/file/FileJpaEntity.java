@@ -29,7 +29,10 @@ public class FileJpaEntity extends BaseTimeEntity {
   @NotNull
   private String url;
 
-  public FileJpaEntity(Long id, String url,
+  @NotNull
+  private Long userId;
+
+  public FileJpaEntity(Long id, String url, Long userId,
                                 LocalDateTime createdAt,
                                 LocalDateTime updatedAt,
                                 LocalDateTime deletedAt) {
@@ -37,5 +40,6 @@ public class FileJpaEntity extends BaseTimeEntity {
 
     this.id = id;
     this.url = url;
+    this.userId = userId;
   }
 }

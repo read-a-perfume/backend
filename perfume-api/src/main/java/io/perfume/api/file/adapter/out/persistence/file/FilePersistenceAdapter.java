@@ -6,7 +6,6 @@ import io.perfume.api.file.domain.File;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @PersistenceAdapter
 public class FilePersistenceAdapter implements FileRepository {

@@ -1,10 +1,12 @@
 package io.perfume.api.file.application.service;
 
-import io.perfume.api.file.application.exception.FileNotFoundException;
+import io.perfume.api.file.application.exception.SaveFileNotFoundException;
 import io.perfume.api.file.application.port.in.FileUploadUseCase;
+import io.perfume.api.file.application.port.in.dto.MultiFileResponseDto;
 import io.perfume.api.file.application.port.in.dto.SaveFileResult;
 import io.perfume.api.file.application.port.out.FileRepository;
 import io.perfume.api.file.domain.File;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,33 +28,38 @@ public class FileUploadService implements FileUploadUseCase {
     }
 
     @Override
-    public SaveFileResult singleFileUpload(MultipartFile file, LocalDateTime now) {
+    public SaveFileResult singleFileUpload(User user, MultipartFile file, LocalDateTime now) {
         String URL = cdnUrl + file.getOriginalFilename();
-        File saveFile = fileRepository.save(File.createFile(URL, now));
-        return new SaveFileResult(saveFile.getUrl(), now);
+        if (file != null && !file.isEmpty()) {
+            File saveFile = fileRepository.save(File.createFile(URL, Long.parseLong(user.getUsername()), now));
+            return new SaveFileResult(saveFile.getUrl(), Long.parseLong(user.getUsername()), now);
+        } else {
+            throw new SaveFileNotFoundException();
+        }
     }
 
     @Override
-    public List<SaveFileResult> multiFileUpload(List<MultipartFile> files, LocalDateTime now) {
+    public MultiFileResponseDto multiFileUpload(User user, List<MultipartFile> files, LocalDateTime now) {
         List<File> saveFiles = new ArrayList<>();
-        if (files != null) {
+        if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 String URL = cdnUrl + file.getOriginalFilename();
-                saveFiles.add(File.createFile(URL, now));
+                saveFiles.add(File.createFile(URL, Long.parseLong(user.getUsername()), now));
             }
             fileRepository.saveAll(saveFiles);
+            return toDto(saveFiles, now);
+        } else {
+            throw new SaveFileNotFoundException();
         }
-
-        return toDto(saveFiles, now);
     }
 
-    private List<SaveFileResult> toDto(List<File> saveFiles, LocalDateTime now) {
+    private MultiFileResponseDto toDto(List<File> saveFiles, LocalDateTime now) {
         List<SaveFileResult> results = new ArrayList<>();
         for (File file : saveFiles) {
             results.add(
-                    new SaveFileResult(file.getUrl(), now)
+                    new SaveFileResult(file.getUrl(), file.getUserId(), now)
             );
         }
-        return results;
+        return new MultiFileResponseDto(results);
     }
 }

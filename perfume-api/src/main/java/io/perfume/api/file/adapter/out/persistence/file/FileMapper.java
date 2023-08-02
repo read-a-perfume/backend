@@ -14,6 +14,7 @@ public class FileMapper {
         return File.builder()
                 .id(fileJpaEntity.getId())
                 .url(fileJpaEntity.getUrl())
+                .userId(fileJpaEntity.getUserId())
                 .createdAt(fileJpaEntity.getCreatedAt())
                 .updatedAt(fileJpaEntity.getUpdatedAt())
                 .deletedAt(fileJpaEntity.getDeletedAt())
@@ -25,6 +26,7 @@ public class FileMapper {
         return new FileJpaEntity(
                 file.getId(),
                 file.getUrl(),
+                file.getUserId(),
                 file.getCreatedAt(),
                 file.getUpdatedAt(),
                 file.getDeletedAt());
@@ -38,6 +40,7 @@ public class FileMapper {
                     File.builder()
                             .id(fileJpaEntity.getId())
                             .url(fileJpaEntity.getUrl())
+                            .userId(fileJpaEntity.getUserId())
                             .createdAt(fileJpaEntity.getCreatedAt())
                             .updatedAt(fileJpaEntity.getUpdatedAt())
                             .deletedAt(fileJpaEntity.getDeletedAt())
@@ -56,6 +59,7 @@ public class FileMapper {
                     new FileJpaEntity(
                             file.getId(),
                             file.getUrl(),
+                            file.getUserId(),
                             file.getCreatedAt(),
                             file.getUpdatedAt(),
                             file.getDeletedAt())

@@ -2,7 +2,6 @@ package io.perfume.api.file.adapter.out.persistence.file;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.file.adapter.out.persistence.QFileJpaEntity;
 import io.perfume.api.file.application.port.out.FileQueryRepository;
 import io.perfume.api.file.domain.File;
 

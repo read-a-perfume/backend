@@ -1,6 +1,8 @@
 package io.perfume.api.file.application.port.in.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
-public record SaveFileResult(String url, LocalDateTime now) {
+public record SaveFileResult(@NotNull String url, @NotNull Long userId, LocalDateTime now) {
 }
