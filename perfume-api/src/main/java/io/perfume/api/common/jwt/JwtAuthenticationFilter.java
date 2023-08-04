@@ -1,5 +1,6 @@
 package io.perfume.api.common.jwt;
 
+import io.perfume.api.common.auth.Constants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -29,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   @NotNull FilterChain filterChain)
       throws ServletException, IOException {
     Arrays.stream(request.getCookies())
-        .filter(cookie -> cookie.getName().equalsIgnoreCase("x-access-token"))
+        .filter(cookie -> cookie.getName().equalsIgnoreCase(Constants.ACCESS_TOKEN_KEY))
         .findFirst()
         .map(Cookie::getValue)
         .ifPresent(value -> {
