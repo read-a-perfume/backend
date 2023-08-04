@@ -1,35 +1,32 @@
-package io.perfume.api.post.adapter.out.persistence.review;
+package io.perfume.api.post.adapter.out.persistence.review.keyword;
 
 import io.perfume.api.base.BaseTimeEntity;
-import io.perfume.api.post.adapter.out.persistence.review.item.ReviewItemJpaEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import java.util.Objects;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-@Entity(name = "review")
+@Entity(name = "review_keyword")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-@ToString(onlyExplicitlyIncluded = true)
 @Getter
-public class ReviewJpaEntity extends BaseTimeEntity {
+public class KeywordJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @ToString.Include
   private Long id;
 
-  private Long userId;
+  private String keyword;
 
-  @OneToMany(mappedBy = "review")
-  private Set<ReviewItemJpaEntity> reviewItems;
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "(" +
+        "id = " + id + ")";
+  }
 
   @Override
   public final boolean equals(Object o) {
@@ -48,7 +45,7 @@ public class ReviewJpaEntity extends BaseTimeEntity {
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
-    ReviewJpaEntity that = (ReviewJpaEntity) o;
+    KeywordJpaEntity that = (KeywordJpaEntity) o;
     return getId() != null && Objects.equals(getId(), that.getId());
   }
 
