@@ -4,8 +4,10 @@ import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.auth.application.port.in.dto.ReissuedTokenResult;
 import io.perfume.api.common.auth.Constants;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -33,11 +35,23 @@ public class TokenHandlingController {
   }
 
   private HttpHeaders createAuthenticationCookie(ReissuedTokenResult reissuedTokenResult) {
-    var responseHeaders = new HttpHeaders();
+    var headers = new HttpHeaders();
 
-    responseHeaders.add(Constants.ACCESS_TOKEN_KEY, reissuedTokenResult.accessToken());
-    responseHeaders.add(Constants.REFRESH_TOKEN_KEY, reissuedTokenResult.refreshToken());
+    headers.addAll(
+        HttpHeaders.SET_COOKIE,
+        List.of(
+            ResponseCookie
+                .from(Constants.ACCESS_TOKEN_KEY, reissuedTokenResult.accessToken())
+                .httpOnly(true)
+                .build()
+                .toString(),
+            ResponseCookie
+                .from(Constants.REFRESH_TOKEN_KEY, reissuedTokenResult.refreshToken())
+                .httpOnly(true)
+                .build()
+                .toString())
+    );
 
-    return responseHeaders;
+    return headers;
   }
 }
