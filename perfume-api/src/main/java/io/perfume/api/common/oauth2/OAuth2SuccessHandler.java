@@ -78,12 +78,12 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
 
   private UserResult newUserIfNotExists(@NotNull OAuth2User oauth2User, LocalDateTime now) {
     var attributes = oauth2User.getAttributes();
-    String identifier = getAttribute(attributes, "sub").toString();
+    String identifier = String.valueOf(getAttribute(attributes, "sub"));
 
     return findUserUseCase.findOneBySocialId(identifier).orElseGet(() -> {
       String randomPassword = generator.generate(30);
-      String email = getAttribute(attributes, "email").toString();
-      String name = getAttribute(attributes, "name").toString();
+      String email = String.valueOf(getAttribute(attributes, "email"));
+      String name = String.valueOf(getAttribute(attributes, "name"));
       SignUpSocialUserCommand command = SignUpSocialUserCommand.byGoogle(
           identifier,
           email,
