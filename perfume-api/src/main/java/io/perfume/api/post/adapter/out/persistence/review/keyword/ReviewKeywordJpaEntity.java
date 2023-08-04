@@ -14,7 +14,7 @@ import org.hibernate.proxy.HibernateProxy;
 @Entity(name = "review_keyword")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @Getter
-public class KeywordJpaEntity extends BaseTimeEntity {
+public class ReviewKeywordJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class KeywordJpaEntity extends BaseTimeEntity {
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
-    KeywordJpaEntity that = (KeywordJpaEntity) o;
+    ReviewKeywordJpaEntity that = (ReviewKeywordJpaEntity) o;
     return getId() != null && Objects.equals(getId(), that.getId());
   }
 
