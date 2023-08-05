@@ -78,9 +78,6 @@ CREATE TABLE category_user
 ALTER TABLE category_user
     ADD CONSTRAINT uni_user_id_note_id UNIQUE (user_id, category_id);
 
-ALTER TABLE category_user
-    ADD CONSTRAINT NONE FOREIGN KEY (category_id) REFERENCES category (id);
-
 CREATE TABLE note
 (
     id            BIGINT AUTO_INCREMENT NOT NULL,
@@ -113,25 +110,6 @@ CREATE TABLE perfume
     CONSTRAINT pk_perfume PRIMARY KEY (id)
 );
 
-CREATE TABLE social_account
-(
-    id              BIGINT AUTO_INCREMENT NOT NULL,
-    created_at      datetime     NOT NULL,
-    updated_at      datetime     NOT NULL,
-    deleted_at      datetime NULL,
-    identifier      VARCHAR(255) NOT NULL,
-    email           VARCHAR(255) NOT NULL,
-    social_provider VARCHAR(255) NOT NULL,
-    user_id         BIGINT NULL,
-    CONSTRAINT pk_social_account PRIMARY KEY (id)
-);
-
-ALTER TABLE social_account
-    ADD CONSTRAINT uni_social_account_1 UNIQUE (identifier);
-
-ALTER TABLE social_account
-    ADD CONSTRAINT NONE FOREIGN KEY (user_id) REFERENCES member (id);
-
 CREATE TABLE member
 (
     id                BIGINT AUTO_INCREMENT NOT NULL,
@@ -159,3 +137,19 @@ ALTER TABLE member
 CREATE INDEX idx_business_id ON member (business_id);
 
 CREATE INDEX idx_thumbnail_id ON member (thumbnail_id);
+
+CREATE TABLE social_account
+(
+    id              BIGINT AUTO_INCREMENT NOT NULL,
+    created_at      datetime     NOT NULL,
+    updated_at      datetime     NOT NULL,
+    deleted_at      datetime NULL,
+    identifier      VARCHAR(255) NOT NULL,
+    email           VARCHAR(255) NOT NULL,
+    social_provider VARCHAR(255) NOT NULL,
+    user_id         BIGINT NULL,
+    CONSTRAINT pk_social_account PRIMARY KEY (id)
+);
+
+ALTER TABLE social_account
+    ADD CONSTRAINT uni_social_account_1 UNIQUE (identifier);

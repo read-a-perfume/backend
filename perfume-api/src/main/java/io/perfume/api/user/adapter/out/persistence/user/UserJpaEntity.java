@@ -24,7 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "users")
+@Entity(name = "member")
 @Table(
     indexes = {
         @Index(name = "idx_business_id", columnList = "businessId"),
