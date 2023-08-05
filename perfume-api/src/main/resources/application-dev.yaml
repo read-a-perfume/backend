@@ -55,3 +55,13 @@ sentry:
   logging:
     minimum-event-level: warn
     minimum-breadcrumb-level: info
+
+flyway:
+  enabled: true
+  url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+  user: ${DB_USERNAME}
+  password: ${DB_PASSWORD}
+  locations: 'classpath:db/migration'
+  validate-on-migrate: true
+  baseline-on-migrate: true
+  baseline-version: 1
