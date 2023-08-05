@@ -46,3 +46,7 @@ jwt:
 encryption:
   aes:
     secret-key: 'readaperfumesecretkeyhelloletsmakegoodthings'
+
+flyway:
+  enabled: false
+  validate-on-migrate: false
