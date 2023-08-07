@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface FileUploadUseCase {
 
-    SaveFileResult singleFileUpload(User user, MultipartFile file, LocalDateTime now) throws FileNotFoundException;
+    SaveFileResult singleFileUpload(Long userId, MultipartFile file, LocalDateTime now);
 
     MultiFileResponseDto multiFileUpload(User user, List<MultipartFile> files, LocalDateTime now);
 }

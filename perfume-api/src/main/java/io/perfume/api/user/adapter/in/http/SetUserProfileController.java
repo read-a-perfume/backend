@@ -7,7 +7,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/v1/user")
@@ -17,6 +21,16 @@ public class SetUserProfileController {
 
     public SetUserProfileController(SetUserProfileUseCase setUserProfileUseCase) {
         this.setUserProfileUseCase = setUserProfileUseCase;
+    }
+
+    @PutMapping("/test-setPicture-endpoint")
+    public ResponseEntity<Object> setProfilePicture(
+            @AuthenticationPrincipal User user,
+            @RequestPart MultipartFile image
+    ) {
+        LocalDateTime now = LocalDateTime.now();
+        setUserProfileUseCase.setUserProfilePicture(user.getUsername(), image, now);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/test-put-endpoint")

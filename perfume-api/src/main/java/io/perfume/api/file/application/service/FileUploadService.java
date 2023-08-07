@@ -28,11 +28,11 @@ public class FileUploadService implements FileUploadUseCase {
     }
 
     @Override
-    public SaveFileResult singleFileUpload(User user, MultipartFile file, LocalDateTime now) {
+    public SaveFileResult singleFileUpload(Long userId, MultipartFile file, LocalDateTime now) {
         String URL = cdnUrl + file.getOriginalFilename();
         if (file != null && !file.isEmpty()) {
-            File saveFile = fileRepository.save(File.createFile(URL, Long.parseLong(user.getUsername()), now));
-            return new SaveFileResult(saveFile.getUrl(), Long.parseLong(user.getUsername()), now);
+            File saveFile = fileRepository.save(File.createFile(URL, userId, now));
+            return new SaveFileResult(saveFile.getUrl(), userId, now);
         } else {
             throw new SaveFileNotFoundException();
         }
