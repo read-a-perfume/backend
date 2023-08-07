@@ -4,5 +4,5 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record SaveFileResult(@NotNull String url, @NotNull Long userId, LocalDateTime now) {
+public record SaveFileResult(@NotNull String url, @NotNull Long userId, @NotNull Long fileId, LocalDateTime now) {
 }

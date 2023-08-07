@@ -32,7 +32,7 @@ public class FileUploadService implements FileUploadUseCase {
         String URL = cdnUrl + file.getOriginalFilename();
         if (file != null && !file.isEmpty()) {
             File saveFile = fileRepository.save(File.createFile(URL, userId, now));
-            return new SaveFileResult(saveFile.getUrl(), userId, now);
+            return new SaveFileResult(saveFile.getUrl(), userId, saveFile.getId(), now);
         } else {
             throw new SaveFileNotFoundException();
         }
@@ -46,8 +46,7 @@ public class FileUploadService implements FileUploadUseCase {
                 String URL = cdnUrl + file.getOriginalFilename();
                 saveFiles.add(File.createFile(URL, Long.parseLong(user.getUsername()), now));
             }
-            fileRepository.saveAll(saveFiles);
-            return toDto(saveFiles, now);
+            return toDto(fileRepository.saveAll(saveFiles), now);
         } else {
             throw new SaveFileNotFoundException();
         }
@@ -57,7 +56,7 @@ public class FileUploadService implements FileUploadUseCase {
         List<SaveFileResult> results = new ArrayList<>();
         for (File file : saveFiles) {
             results.add(
-                    new SaveFileResult(file.getUrl(), file.getUserId(), now)
+                    new SaveFileResult(file.getUrl(), file.getUserId(), file.getId(), now)
             );
         }
         return new MultiFileResponseDto(results);

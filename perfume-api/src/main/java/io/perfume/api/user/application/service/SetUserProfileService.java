@@ -1,5 +1,6 @@
 package io.perfume.api.user.application.service;
 
+import io.perfume.api.file.application.port.in.dto.SaveFileResult;
 import io.perfume.api.file.application.service.FileUploadService;
 import io.perfume.api.user.application.exception.NotFoundUserException;
 import io.perfume.api.user.application.port.in.SetUserProfileUseCase;
@@ -31,9 +32,9 @@ public class SetUserProfileService implements SetUserProfileUseCase {
         if (userId == null) {
             new NotFoundUserException();
         } else {
-            fileUploadService.singleFileUpload(Long.parseLong(userId), image, now);
+            SaveFileResult saveFileResult = fileUploadService.singleFileUpload(Long.parseLong(userId), image, now);
             User user = userQueryRepository.loadUser(Long.parseLong(userId)).get();
-            user.updateThumbnailId();
+            user.updateThumbnailId(saveFileResult.fileId());
             userRepository.save(user);
         }
     }
