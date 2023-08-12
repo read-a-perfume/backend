@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,15 +30,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   @NotNull HttpServletResponse response,
                                   @NotNull FilterChain filterChain)
       throws ServletException, IOException {
-    Arrays.stream(request.getCookies())
-        .filter(cookie -> cookie.getName().equalsIgnoreCase(Constants.ACCESS_TOKEN_KEY))
-        .findFirst()
-        .map(Cookie::getValue)
-        .ifPresent(value -> {
-          var authentication =
-              authenticationManager.authenticate(new JwtAuthenticationToken(value));
-          SecurityContextHolder.getContext().setAuthentication(authentication);
-        });
+    var cookies = request.getCookies();
+    if (!Objects.isNull(cookies)) {
+      Arrays.stream(cookies)
+          .filter(cookie -> cookie.getName().equalsIgnoreCase(Constants.ACCESS_TOKEN_KEY))
+          .findFirst()
+          .map(Cookie::getValue)
+          .ifPresent(value -> {
+            var authentication =
+                authenticationManager.authenticate(new JwtAuthenticationToken(value));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+          });
+    }
 
     filterChain.doFilter(request, response);
   }
