@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Comment;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(name = "file")
@@ -25,8 +26,10 @@ public class FileJpaEntity extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   @ToString.Include
+  @Comment("PK")
   private Long id;
 
   @NotNull
+  @Comment("File 저장 위치")
   private String url;
 }

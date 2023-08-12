@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,12 +20,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseTimeEntity {
   @CreatedDate
   @Column(nullable = false, updatable = false)
+  @Comment("생성 날짜")
   private LocalDateTime createdAt;
 
   @LastModifiedDate
   @Column(nullable = false)
+  @Comment("마지막 업데이트 날짜")
   private LocalDateTime updatedAt;
 
+  @Comment("삭제 날짜")
   private LocalDateTime deletedAt;
 
   protected BaseTimeEntity(@NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt,

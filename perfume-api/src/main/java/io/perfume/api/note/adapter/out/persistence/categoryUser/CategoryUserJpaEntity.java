@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Comment;
 
 @Entity(name = "category_user")
 @Table(
@@ -35,13 +36,16 @@ public class CategoryUserJpaEntity extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   @ToString.Include
+  @Comment("PK")
   private Long id;
 
   @ManyToOne()
   @JoinColumn(name = "category_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "none"), nullable = false)
+  @Comment("Category Table FK")
   private CategoryJpaEntity category;
 
   @Column(nullable = false)
+  @Comment("User Table FK")
   private Long userId;
 
   public CategoryUserJpaEntity(Long id, CategoryJpaEntity category, Long userId,

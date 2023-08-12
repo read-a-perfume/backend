@@ -3,6 +3,7 @@ package io.perfume.api.base;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import org.hibernate.annotations.Comment;
 
 @Getter
 public class BaseTimeDomain {

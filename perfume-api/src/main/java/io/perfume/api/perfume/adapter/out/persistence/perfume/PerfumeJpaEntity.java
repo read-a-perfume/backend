@@ -4,6 +4,7 @@ import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
 
@@ -17,25 +18,34 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     @ToString.Include
+    @Comment("PK")
     private Long id;
 
     @NotNull
+    @Comment("향수 이름")
     private String name;
 
     @NotNull
+    @Comment("향수 이야기")
     private String story;
 
+    @Comment("농도 필드로 변경 예정")
     private String strength;
 
+    @Comment("농도 필드로 변경 예정")
     private String duration;
 
+    @Comment("향수 가격")
     private Long price;
 
+    @Comment("향수 용량")
     private Long capacity;
 
+    @Comment("Brand Table FK")
     @NotNull
     private Long brandId;
 
+    @Comment("Thumbnail Table FK")
     private Long thumbnailId;
 
     public PerfumeJpaEntity(

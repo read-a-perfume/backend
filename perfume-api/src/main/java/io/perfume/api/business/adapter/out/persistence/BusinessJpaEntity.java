@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Comment;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(name = "business")
@@ -32,15 +33,19 @@ public class BusinessJpaEntity extends BaseTimeEntity {
   @ToString.Include
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Comment("PK")
   private Long id;
 
   @NotNull
   @Column(nullable = false)
+  @Comment("회사 이름")
   private String companyName;
 
   @NotNull
   @Column(nullable = false)
+  @Comment("사업자 등록 번호")
   private String registrationNumber;
 
+  @Comment("File Table Entity")
   private Long companyLogoId;
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
 
@@ -22,14 +23,18 @@ public class BrandJpaEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     @ToString.Include
+    @Comment("PK")
     private Long id;
 
     @NotBlank
+    @Comment("브랜드 이름")
     private String name;
 
     @NotBlank
+    @Comment("브랜드 이야기")
     private String story;
 
+    @Comment("Thumbnail Table FK")
     private Long thumbnailId;
 
     public BrandJpaEntity(Long id, String name, String story, Long thumbnailId, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt, @NotNull LocalDateTime deletedAt) {

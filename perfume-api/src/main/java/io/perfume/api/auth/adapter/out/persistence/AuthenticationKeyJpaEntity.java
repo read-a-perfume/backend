@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
+/*
+  TODO
+    1. @Comment 작업하기
+ */
+
 @Entity(name = "authentication_key")
 @Table(name = "authentication_key")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)

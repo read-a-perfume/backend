@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Comment;
 
 @Entity(name = "category")
 @Table(
@@ -31,13 +32,17 @@ public class CategoryJpaEntity extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   @ToString.Include
+  @Comment("PK")
   private Long id;
 
   @Column(nullable = false)
+  @Comment("카테고리 이름")
   private String name;
 
+  @Comment("카테고리 설명")
   private String description;
 
+  @Comment("Thumbnail Table FK")
   private Long thumbnailId;
 
   public CategoryJpaEntity(Long id, String name, String description, Long thumbnailId,

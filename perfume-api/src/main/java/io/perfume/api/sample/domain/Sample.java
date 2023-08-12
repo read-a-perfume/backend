@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(name = "sample")
@@ -18,9 +19,11 @@ import org.jetbrains.annotations.NotNull;
 public class Sample extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Comment("PK")
   private Long id;
 
   @Column(nullable = false)
+  @Comment("이름")
   private String name;
 
   @Builder

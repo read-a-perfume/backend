@@ -23,6 +23,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Comment;
 
 @Entity(name = "member")
 @Table(
@@ -39,42 +40,52 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
-public class UserJpaEntity extends BaseTimeEntity {
+public class  UserJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   @ToString.Include
+  @Comment("PK")
   private Long id;
 
   @NotNull
   @Column(updatable = false)
+  @Comment("아이디, oauth가입이면 이메일 @ 앞부분 + unixTime 사용")
   private String username;
 
   @NotNull
   @Email      // 제약조건 설정?  --> @Email "" 는 통과
   @Column(updatable = false)
+  @Comment("가입에 사용된 이메일")
   private String email;
 
   @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
+  @Comment("비밀번호")
   private String password;
 
   @NotEmpty
   @Column(updatable = false)
+  @Comment("이름")
   private String name;
 
   @NotNull
   @Enumerated(EnumType.STRING)
+  @Comment("역할")
   private Role role;
 
   @NotNull
+  @Comment("마케팅 사용 동의 여부")
   private Boolean marketingConsent = false;
 
   @NotNull
+  @Comment("프로모션 사용 동의 여부") // TODO 뭐라고 쓰지?
   private Boolean promotionConsent = false;
 
+  @Comment("Business Table FK")
   private Long businessId;
 
+  @Comment("Thumbnail Table FK")
   private Long thumbnailId;
 
   // Mapper Library 필요

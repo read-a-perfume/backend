@@ -23,6 +23,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Comment;
 
 @Entity(name = "social_account")
 @Table(
@@ -40,20 +41,24 @@ public class SocialAccountJpaEntity extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   @ToString.Include
+  @Comment("PK")
   Long id;
 
   @NotNull
   @Column(updatable = false)
+  @Comment("IDP 측 사용자 식별 ID")
   String identifier;
 
   @NotNull
   @Email
   @Column(updatable = false)
+  @Comment("oauth 가입 이메일")
   String email;
 
   @NotNull
   @Column(updatable = false)
   @Enumerated(EnumType.STRING)
+  @Comment("사용된 서드파티 서비스")
   SocialProvider socialProvider;
 
   @ManyToOne
@@ -62,6 +67,7 @@ public class SocialAccountJpaEntity extends BaseTimeEntity {
       referencedColumnName = "id",
       foreignKey = @ForeignKey(name = "none")
   )
+  @Comment("User Table FK")
   UserJpaEntity user;
 
   public SocialAccountJpaEntity(Long id, String identifier, String email,
