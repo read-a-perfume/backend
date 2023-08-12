@@ -8,19 +8,17 @@ public class SocialAccount {
 
   private final Long id;
   private final String identifier;
-  private final String email;
   private final SocialProvider socialProvider;
   private final LocalDateTime createdAt;
   private final LocalDateTime updatedAt;
   private final LocalDateTime deletedAt;
   private User user;
 
-  public SocialAccount(Long id, String identifier, String email, SocialProvider socialProvider,
+  public SocialAccount(Long id, String identifier, SocialProvider socialProvider,
                        User user,
                        LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
     this.id = id;
     this.identifier = identifier;
-    this.email = email;
     this.socialProvider = socialProvider;
     this.user = user;
     this.createdAt = createdAt;
@@ -29,12 +27,12 @@ public class SocialAccount {
   }
 
   public static SocialAccount createGoogleSocialAccount(
-      String identifier, String email, LocalDateTime now) {
+      String identifier, LocalDateTime now) {
 
-    return new SocialAccount(null, identifier, email, SocialProvider.GOOGLE, null, now, now, null);
+    return new SocialAccount(null, identifier, SocialProvider.GOOGLE, null, now, now, null);
   }
 
-  public void link(User user) {
+  public void connect(User user) {
     this.user = user;
   }
 }

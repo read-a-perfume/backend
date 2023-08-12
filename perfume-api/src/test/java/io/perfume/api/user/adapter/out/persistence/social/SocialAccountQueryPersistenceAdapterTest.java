@@ -41,10 +41,10 @@ public class SocialAccountQueryPersistenceAdapterTest {
     String identifier = "testsocialidentifier";
     LocalDateTime now = LocalDateTime.now();
     SocialAccount socialAccount =
-        SocialAccount.createGoogleSocialAccount(identifier, "test@mail.com", now);
+        SocialAccount.createGoogleSocialAccount(identifier, now);
     User user = User.generalUserJoin(
         "test", "test@mail.com", "test", "test", false, false);
-    socialAccount.link(user);
+    socialAccount.connect(user);
     SocialAccountJpaEntity entity = oauthMapper.toEntity(socialAccount);
     entityManager.persist(entity.user);
     entityManager.persist(entity);
