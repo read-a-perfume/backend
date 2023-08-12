@@ -21,7 +21,6 @@ public class SocialAccountMapper {
     return new SocialAccount(
         oauthJpaEntity.id,
         oauthJpaEntity.identifier,
-        oauthJpaEntity.email,
         oauthJpaEntity.socialProvider,
         user,
         oauthJpaEntity.getCreatedAt(),
@@ -36,7 +35,6 @@ public class SocialAccountMapper {
     return new SocialAccountJpaEntity(
         socialAccount.getId(),
         socialAccount.getIdentifier(),
-        socialAccount.getEmail(),
         socialAccount.getSocialProvider(),
         userJpaEntity,
         socialAccount.getCreatedAt(),

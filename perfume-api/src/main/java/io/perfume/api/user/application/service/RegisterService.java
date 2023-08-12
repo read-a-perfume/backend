@@ -59,10 +59,10 @@ public class RegisterService implements CreateUserUseCase {
   @Override
   public UserResult signUpSocialUser(SignUpSocialUserCommand command, LocalDateTime now) {
     SocialAccount socialAccount =
-        SocialAccount.createGoogleSocialAccount(command.identifier(), command.email(), now);
+        SocialAccount.createGoogleSocialAccount(command.identifier(), now);
 
     User user = getUserByEmailOrCreateNew(command, now);
-    socialAccount.link(user);
+    socialAccount.connect(user);
 
     return oauthRepository.save(socialAccount)
         .map(this::toSocialAccountDto)
