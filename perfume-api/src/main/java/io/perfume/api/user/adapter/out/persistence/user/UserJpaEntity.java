@@ -40,7 +40,7 @@ import org.hibernate.annotations.Comment;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
-public class  UserJpaEntity extends BaseTimeEntity {
+public class UserJpaEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,7 +79,7 @@ public class  UserJpaEntity extends BaseTimeEntity {
   private Boolean marketingConsent = false;
 
   @NotNull
-  @Comment("프로모션 사용 동의 여부") // TODO 뭐라고 쓰지?
+  @Comment("프로모션 사용 동의 여부")
   private Boolean promotionConsent = false;
 
   @Comment("Business Table FK")
