@@ -4,6 +4,7 @@ import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.note.adapter.out.persistence.category.CategoryJpaEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,8 +38,8 @@ public class CategoryUserJpaEntity extends BaseTimeEntity {
   @ToString.Include
   private Long id;
 
-  @ManyToOne()
-  @JoinColumn(name = "category_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "none"), nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
   private CategoryJpaEntity category;
 
   @Column(nullable = false)
