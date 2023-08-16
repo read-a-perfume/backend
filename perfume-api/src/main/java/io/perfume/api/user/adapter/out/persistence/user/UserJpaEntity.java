@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -52,7 +51,7 @@ public class UserJpaEntity extends BaseTimeEntity {
   @Comment("사용자 아이디")
   private String username;
 
-  @NotNull
+  @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
   @Email
   @Comment("사용자 이메일")
   private String email;
@@ -61,7 +60,7 @@ public class UserJpaEntity extends BaseTimeEntity {
   @Comment("사용자 비밀번호")
   private String password;
 
-  @NotEmpty
+  @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
   @Comment("사용자 이름")
   private String name;
 

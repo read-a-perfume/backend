@@ -1,6 +1,5 @@
 package io.perfume.api.user.domain;
 
-import com.mysql.cj.util.StringUtils;
 import encryptor.OneWayEncryptor;
 import io.perfume.api.base.BaseTimeDomain;
 import java.time.LocalDateTime;
@@ -8,8 +7,10 @@ import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.UUID;
 
+import io.perfume.api.user.application.exception.UserPasswordNotMatchException;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 public class User extends BaseTimeDomain {
@@ -71,6 +72,17 @@ public class User extends BaseTimeDomain {
 
     String plainNewPassword = milliseconds.substring(0, 3) + uuid.substring(0 , 5) + hashedValue.substring(0, 4);
     this.password = oneWayEncryptor.hash(plainNewPassword);
+  }
+
+  public void updateEmail(String email) {
+    this.email = email;
+  }
+
+  public void updatePassword(PasswordEncoder passwordEncoder, String oldPassword, String newPassword) {
+    if(!passwordEncoder.matches(oldPassword, this.password)) {
+      throw new UserPasswordNotMatchException(this.id);
+    }
+    this.password = passwordEncoder.encode(newPassword);
   }
 
   @Builder

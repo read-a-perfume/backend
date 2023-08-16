@@ -6,6 +6,7 @@ import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class UserPersistenceAdapter implements UserRepository {
   private final UserMapper userMapper;
 
   @Override
+  @Transactional
   public Optional<User> save(User user) {
     UserJpaEntity userJpaEntity = userMapper.toUserJpaEntity(user);
     userJpaRepository.save(userJpaEntity);
