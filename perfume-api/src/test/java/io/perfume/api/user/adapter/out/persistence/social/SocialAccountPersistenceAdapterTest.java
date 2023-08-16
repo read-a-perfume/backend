@@ -29,10 +29,10 @@ class SocialAccountPersistenceAdapterTest {
     // given
     LocalDateTime now = LocalDateTime.now();
     SocialAccount socialAccount =
-        SocialAccount.createGoogleSocialAccount("test", "test@mail.com", now);
+        SocialAccount.createGoogleSocialAccount("test", now);
     User user = User.generalUserJoin(
         "test", "test@mail.com", "test", "test", false, false);
-    socialAccount.link(user);
+    socialAccount.connect(user);
 
     // when
     SocialAccount createdSocialAccount = oauthRepository.save(socialAccount).orElseThrow();

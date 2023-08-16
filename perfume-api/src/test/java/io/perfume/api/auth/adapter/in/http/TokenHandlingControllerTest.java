@@ -6,11 +6,9 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.auth.application.port.in.dto.ReissuedTokenResult;
@@ -69,25 +67,25 @@ public class TokenHandlingControllerTest {
         .willReturn(reissuedTokenResult);
 
     mockMvc.perform(MockMvcRequestBuilders.get("/v1/reissue")
-            .header("Authorization", accessToken)
+            .cookie(new Cookie("X-Access-Token", accessToken))
             .cookie(new Cookie("X-Refresh-Token", refreshTokenString)))
+        .andDo(print())
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.header().string("Authorization", newAccessToken))
+        .andExpect(MockMvcResultMatchers.cookie()
+            .value("X-Access-Token", reissuedTokenResult.accessToken()))
         .andExpect(MockMvcResultMatchers.cookie()
             .value("X-Refresh-Token", reissuedTokenResult.refreshToken()))
         .andDo(
-            document("reissue-token",
-                requestHeaders(
-                    headerWithName("Authorization").description("재발급이 필요한 만료된 액세스 토큰")
-                ),
+            document("reissue-access-token",
                 requestCookies(
-                    cookieWithName("X-Refresh-Token").description("재발급을 위해 필요한 리프레시 토큰")
-                ),
-                responseHeaders(
-                    headerWithName("Authorization").description("재발급된 액세스 토큰")
+                    cookieWithName("X-Access-Token").description("만료된 Access Token"),
+                    cookieWithName("X-Refresh-Token").description("재발급을 위한 Refresh Token")
                 ),
                 responseCookies(
-                    cookieWithName("X-Refresh-Token").description("재발급된 리프레시 토큰")
-                )));
+                    cookieWithName("X-Access-Token").description("재발급된 Access Token"),
+                    cookieWithName("X-Refresh-Token").description("재발급된 Refresh Token")
+                )
+            )
+        );
   }
 }
