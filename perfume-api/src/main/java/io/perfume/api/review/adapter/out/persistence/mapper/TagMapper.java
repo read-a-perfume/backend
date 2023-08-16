@@ -1,5 +1,6 @@
-package io.perfume.api.review.adapter.out.persistence;
+package io.perfume.api.review.adapter.out.persistence.mapper;
 
+import io.perfume.api.review.adapter.out.persistence.entity.TagEntity;
 import io.perfume.api.review.domain.Tag;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence;
+package io.perfume.api.review.adapter.out.persistence.entity;
 
 import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.EmbeddedId;

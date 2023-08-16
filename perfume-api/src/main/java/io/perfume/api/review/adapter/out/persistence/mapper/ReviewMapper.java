@@ -1,5 +1,7 @@
-package io.perfume.api.review.adapter.out.persistence;
+package io.perfume.api.review.adapter.out.persistence.mapper;
 
+import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
+import io.perfume.api.review.adapter.out.persistence.entity.ReviewTagEntity;
 import io.perfume.api.review.domain.Review;
 import org.springframework.stereotype.Component;
 
