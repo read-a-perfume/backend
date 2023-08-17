@@ -4,6 +4,7 @@ import io.perfume.api.base.BaseTimeDomain;
 import io.perfume.api.review.domain.type.SEASON;
 import io.perfume.api.review.domain.type.STRENGTH;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
@@ -44,9 +45,12 @@ public class Review extends BaseTimeDomain {
   }
 
   public static Review create(String feeling, String situation, STRENGTH strength, Long duration,
-                              SEASON season, Long perfumeId, Long userId, List<Tag> tags,
-                              LocalDateTime now) {
-    return new Review(null, feeling, situation, strength, duration, season, perfumeId, userId, tags,
+                              SEASON season, Long perfumeId, Long userId, LocalDateTime now) {
+    return new Review(null, feeling, situation, strength, duration, season, perfumeId, userId, new ArrayList<>(),
         now, now, null);
+  }
+
+  public void addTags(Tag ...tags) {
+    this.tags.addAll(List.of(tags));
   }
 }

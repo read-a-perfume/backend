@@ -30,7 +30,7 @@ class ReviewPersistenceAdapterTest {
   void testSave() {
     // given
     var now = LocalDateTime.now();
-    var tags = List.of(Tag.create("test", now));
+    var tag = Tag.create("test", now);
     var review = Review.create(
         "test",
         "test description",
@@ -39,9 +39,9 @@ class ReviewPersistenceAdapterTest {
         SEASON.DAILY,
         1L,
         1L,
-        tags,
         now
     );
+    review.addTags(tag);
 
     // when
     var createdNote = repository.save(review);
