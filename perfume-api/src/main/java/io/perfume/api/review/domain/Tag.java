@@ -17,4 +17,8 @@ public class Tag extends BaseTimeDomain {
     this.id = id;
     this.name = name;
   }
+
+  public static Tag create(String name, LocalDateTime now) {
+    return new Tag(null, name, now, now, null);
+  }
 }

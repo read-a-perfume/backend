@@ -42,4 +42,11 @@ public class Review extends BaseTimeDomain {
     this.userId = userId;
     this.tags = tags;
   }
+
+  public static Review create(String feeling, String situation, STRENGTH strength, Long duration,
+                              SEASON season, Long perfumeId, Long userId, List<Tag> tags,
+                              LocalDateTime now) {
+    return new Review(null, feeling, situation, strength, duration, season, perfumeId, userId, tags,
+        now, now, null);
+  }
 }
