@@ -12,9 +12,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import lombok.Getter;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -38,18 +38,18 @@ public class ReviewEntity extends BaseTimeEntity {
 
   private SEASON season;
 
-  @OneToMany(
-      mappedBy = "review",
-      cascade = CascadeType.ALL,
-      orphanRemoval = true
-  )
-  private List<ReviewTagEntity> tags = new ArrayList<>();
-
   @Column(nullable = false)
   private Long perfumeId;
 
   @Column(nullable = false)
   private Long userId;
+
+  @OneToMany(
+      mappedBy = "review",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true
+  )
+  private Set<ReviewTagEntity> tags = new LinkedHashSet<>();
 
   protected ReviewEntity() {
   }

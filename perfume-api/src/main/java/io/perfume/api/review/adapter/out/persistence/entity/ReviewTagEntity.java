@@ -7,8 +7,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Getter;
+import org.hibernate.grammars.hql.HqlParser;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
@@ -61,5 +63,12 @@ public class ReviewTagEntity extends BaseTimeEntity {
   @Override
   public final int hashCode() {
     return Objects.hash(id);
+  }
+
+  public static ReviewTagEntity create(ReviewEntity review, TagEntity tag) {
+    ReviewTagEntity reviewTag = new ReviewTagEntity(review, tag);
+    review.getTags().add(reviewTag);
+
+    return reviewTag;
   }
 }
