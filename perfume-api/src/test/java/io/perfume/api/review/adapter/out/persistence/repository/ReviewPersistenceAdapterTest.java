@@ -30,7 +30,7 @@ class ReviewPersistenceAdapterTest {
   void testSave() {
     // given
     var now = LocalDateTime.now();
-    var tag = Tag.create("test", now);
+    var tag = List.of(Tag.create("test", now));
     var review = Review.create(
         "test",
         "test description",
