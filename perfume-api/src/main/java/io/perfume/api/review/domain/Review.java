@@ -50,7 +50,7 @@ public class Review extends BaseTimeDomain {
         now, now, null);
   }
 
-  public void addTags(Tag ...tags) {
-    this.tags.addAll(List.of(tags));
+  public void addTags(List<Tag> tags) {
+    this.tags.addAll(tags);
   }
 }
