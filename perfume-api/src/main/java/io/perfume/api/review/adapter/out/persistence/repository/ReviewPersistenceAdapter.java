@@ -2,16 +2,17 @@ package io.perfume.api.review.adapter.out.persistence.repository;
 
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
+import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 
 @PersistenceAdapter
-public class ReviewPersistenceAdapter {
+public class ReviewPersistenceAdapter implements ReviewRepository {
 
-  private final ReviewRepository reviewRepository;
+  private final ReviewJpaRepository reviewRepository;
 
   private final ReviewMapper reviewMapper;
 
-  public ReviewPersistenceAdapter(ReviewRepository reviewRepository, ReviewMapper reviewMapper) {
+  public ReviewPersistenceAdapter(ReviewJpaRepository reviewRepository, ReviewMapper reviewMapper) {
     this.reviewRepository = reviewRepository;
     this.reviewMapper = reviewMapper;
   }
