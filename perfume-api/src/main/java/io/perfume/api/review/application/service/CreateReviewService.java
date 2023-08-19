@@ -1,10 +1,10 @@
 package io.perfume.api.review.application.service;
 
+import io.perfume.api.review.application.in.AddReviewTagUseCase;
 import io.perfume.api.review.application.in.CreateReviewUseCase;
 import io.perfume.api.review.application.in.dto.CreateReviewCommand;
 import io.perfume.api.review.application.in.dto.ReviewResult;
 import io.perfume.api.review.application.out.ReviewRepository;
-import io.perfume.api.review.application.out.TagQueryRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.Tag;
 import java.time.LocalDateTime;
@@ -18,39 +18,36 @@ public class CreateReviewService implements CreateReviewUseCase {
 
   private final ReviewRepository reviewRepository;
 
-  private final TagQueryRepository tagRepository;
+  private final AddReviewTagUseCase addReviewTagUseCase;
 
-  public CreateReviewService(ReviewRepository reviewRepository, TagQueryRepository tagRepository) {
+  public CreateReviewService(ReviewRepository reviewRepository,
+                             AddReviewTagUseCase addReviewTagUseCase) {
     this.reviewRepository = reviewRepository;
-    this.tagRepository = tagRepository;
+    this.addReviewTagUseCase = addReviewTagUseCase;
   }
 
   @Override
   @Transactional
   public ReviewResult create(Long authorId, CreateReviewCommand command) {
     LocalDateTime now = LocalDateTime.now();
-    List<Tag> tags = tagRepository.findByIds(command.tags());
-
-    Review createdReview = reviewRepository.save(createReview(authorId, command, now, tags));
+    Review createdReview = reviewRepository.save(createReview(authorId, command, now));
+    addReviewTagUseCase.addTags(createdReview.getId(), command.tags());
 
     return new ReviewResult(createdReview.getId());
   }
 
   @NotNull
-  private static Review createReview(Long authorId, CreateReviewCommand command, LocalDateTime now,
-                                     List<Tag> tags) {
-    Review createReview =
-        Review.create(
-            command.feeling(),
-            command.situation(),
-            command.strength(),
-            command.duration(),
-            command.season(),
-            command.perfumeId(),
-            authorId,
-            now);
-    createReview.addTags(tags);
-
-    return createReview;
+  private static Review createReview(Long authorId, CreateReviewCommand command,
+                                     LocalDateTime now) {
+    return Review.create(
+        command.feeling(),
+        command.situation(),
+        command.strength(),
+        command.duration(),
+        command.season(),
+        command.perfumeId(),
+        authorId,
+        now
+    );
   }
 }
