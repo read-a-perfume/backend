@@ -1,20 +1,14 @@
 package io.perfume.api.review.adapter.out.persistence.mapper;
 
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
-import io.perfume.api.review.adapter.out.persistence.entity.ReviewTagEntity;
 import io.perfume.api.review.domain.Review;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReviewMapper {
 
-  private final TagMapper tagMapper;
-
-  public ReviewMapper(TagMapper tagMapper) {
-    this.tagMapper = tagMapper;
-  }
-
-  public Review toDomain(ReviewEntity reviewEntity) {
+  public Review toDomain(@NotNull ReviewEntity reviewEntity) {
     return new Review(
         reviewEntity.getId(),
         reviewEntity.getFeeling(),
@@ -24,16 +18,14 @@ public class ReviewMapper {
         reviewEntity.getSeason(),
         reviewEntity.getPerfumeId(),
         reviewEntity.getUserId(),
-        reviewEntity.getTags().stream().map(ReviewTagEntity::getTag).map(tagMapper::toDomain)
-            .toList(),
         reviewEntity.getCreatedAt(),
         reviewEntity.getUpdatedAt(),
         reviewEntity.getDeletedAt()
     );
   }
 
-  public ReviewEntity toEntity(Review review) {
-    var entity = new ReviewEntity(
+  public ReviewEntity toEntity(@NotNull Review review) {
+    return new ReviewEntity(
         review.getId(),
         review.getFeeling(),
         review.getSituation(),
@@ -46,8 +38,5 @@ public class ReviewMapper {
         review.getUpdatedAt(),
         review.getDeletedAt()
     );
-    review.getTags().stream().map(tagMapper::toEntity).forEach(entity::addTag);
-
-    return entity;
   }
 }

@@ -44,13 +44,6 @@ public class ReviewEntity extends BaseTimeEntity {
   @Column(nullable = false)
   private Long userId;
 
-  @OneToMany(
-      mappedBy = "review",
-      cascade = CascadeType.ALL,
-      orphanRemoval = true
-  )
-  private Set<ReviewTagEntity> tags = new LinkedHashSet<>();
-
   protected ReviewEntity() {
   }
 
@@ -66,11 +59,6 @@ public class ReviewEntity extends BaseTimeEntity {
     this.season = season;
     this.perfumeId = perfumeId;
     this.userId = userId;
-  }
-
-  public void addTag(TagEntity tag) {
-    ReviewTagEntity reviewTag = new ReviewTagEntity(this, tag);
-    tags.add(reviewTag);
   }
 
   @Override
