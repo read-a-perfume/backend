@@ -26,7 +26,7 @@ class ReviewPersistenceAdapterTest {
   private ReviewPersistenceAdapter repository;
 
   @Test
-  @DisplayName("노트를 저장한다.")
+  @DisplayName("리뷰를 저장한다.")
   void testSave() {
     // given
     var now = LocalDateTime.now();
