@@ -30,7 +30,6 @@ class ReviewPersistenceAdapterTest {
   void testSave() {
     // given
     var now = LocalDateTime.now();
-    var tag = List.of(Tag.create("test", now));
     var review = Review.create(
         "test",
         "test description",
@@ -41,7 +40,6 @@ class ReviewPersistenceAdapterTest {
         1L,
         now
     );
-    review.addTags(tag);
 
     // when
     var createdNote = repository.save(review);
@@ -58,10 +56,5 @@ class ReviewPersistenceAdapterTest {
     assertThat(createdNote.getCreatedAt()).isEqualTo(now);
     assertThat(createdNote.getUpdatedAt()).isEqualTo(now);
     assertThat(createdNote.getDeletedAt()).isNull();
-    assertThat(createdNote.getTags().get(0).getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdNote.getTags().get(0).getName()).isEqualTo("test");
-    assertThat(createdNote.getTags().get(0).getCreatedAt()).isEqualTo(now);
-    assertThat(createdNote.getTags().get(0).getUpdatedAt()).isEqualTo(now);
-    assertThat(createdNote.getTags().get(0).getDeletedAt()).isNull();
   }
 }

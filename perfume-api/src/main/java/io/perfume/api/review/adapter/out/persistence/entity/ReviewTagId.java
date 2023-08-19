@@ -5,9 +5,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.Getter;
 import org.hibernate.proxy.HibernateProxy;
 
 @Embeddable
+@Getter
 public class ReviewTagId implements Serializable {
 
   @Column(name = "review_id")

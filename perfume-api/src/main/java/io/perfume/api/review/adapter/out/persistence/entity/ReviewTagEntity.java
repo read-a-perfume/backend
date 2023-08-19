@@ -3,14 +3,10 @@ package io.perfume.api.review.adapter.out.persistence.entity;
 import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Getter;
-import org.hibernate.grammars.hql.HqlParser;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
@@ -21,21 +17,15 @@ public class ReviewTagEntity extends BaseTimeEntity {
   @EmbeddedId
   private ReviewTagId id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @MapsId("reviewId")
-  private ReviewEntity review;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @MapsId("tagId")
-  private TagEntity tag;
-
   protected ReviewTagEntity() {
   }
 
-  public ReviewTagEntity(ReviewEntity review, TagEntity tag) {
-    this.review = review;
-    this.tag = tag;
-    this.id = new ReviewTagId(review.getId(), tag.getId());
+  public ReviewTagEntity(Long reviewId, Long tagId, LocalDateTime createdAt,
+                         LocalDateTime updatedAt,
+                         LocalDateTime deletedAt) {
+    super(createdAt, updatedAt, deletedAt);
+
+    this.id = new ReviewTagId(reviewId, tagId);
   }
 
   @Override
@@ -56,19 +46,11 @@ public class ReviewTagEntity extends BaseTimeEntity {
       return false;
     }
     ReviewTagEntity that = (ReviewTagEntity) o;
-    return review != null && Objects.equals(review, that.review) && tag != null
-        && Objects.equals(tag, that.tag);
+    return getId() != null && Objects.equals(getId(), that.getId());
   }
 
   @Override
   public final int hashCode() {
     return Objects.hash(id);
-  }
-
-  public static ReviewTagEntity create(ReviewEntity review, TagEntity tag) {
-    ReviewTagEntity reviewTag = new ReviewTagEntity(review, tag);
-    review.getTags().add(reviewTag);
-
-    return reviewTag;
   }
 }
