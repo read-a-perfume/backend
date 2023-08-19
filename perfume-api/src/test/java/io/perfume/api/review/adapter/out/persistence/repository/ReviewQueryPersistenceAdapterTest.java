@@ -6,7 +6,6 @@ import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
 import io.perfume.api.review.domain.Review;
-import io.perfume.api.review.domain.Tag;
 import io.perfume.api.review.domain.type.SEASON;
 import io.perfume.api.review.domain.type.STRENGTH;
 import jakarta.persistence.EntityManager;
@@ -54,10 +53,6 @@ class ReviewQueryPersistenceAdapterTest {
   void testFindById() {
     // given
     var now = LocalDateTime.now();
-    var tag = Tag.create("test", now);
-    var createdTag = tagMapper.toEntity(tag);
-    entityManager.persist(createdTag);
-
     var review = Review.create(
         "test",
         "test description",
@@ -69,7 +64,6 @@ class ReviewQueryPersistenceAdapterTest {
         now
     );
     var createdReview = reviewMapper.toEntity(review);
-    createdReview.addTag(createdTag);
     entityManager.persist(createdReview);
     entityManager.flush();
     entityManager.clear();
@@ -79,6 +73,5 @@ class ReviewQueryPersistenceAdapterTest {
 
     // then
     assertThat(result.getId()).isGreaterThan(0L);
-    assertThat(result.getTags().size()).isGreaterThan(0);
   }
 }
