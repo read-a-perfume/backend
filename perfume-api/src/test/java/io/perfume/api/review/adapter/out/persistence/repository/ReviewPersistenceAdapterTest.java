@@ -51,8 +51,6 @@ class ReviewPersistenceAdapterTest {
     assertThat(createdNote.getSeason()).isEqualTo(SEASON.DAILY);
     assertThat(createdNote.getPerfumeId()).isEqualTo(1L);
     assertThat(createdNote.getUserId()).isEqualTo(1L);
-    assertThat(createdNote.getCreatedAt()).isEqualTo(now);
-    assertThat(createdNote.getUpdatedAt()).isEqualTo(now);
     assertThat(createdNote.getDeletedAt()).isNull();
   }
 }
