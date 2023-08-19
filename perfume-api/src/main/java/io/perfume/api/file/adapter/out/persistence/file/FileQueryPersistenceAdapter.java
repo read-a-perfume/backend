@@ -28,7 +28,7 @@ public class FileQueryPersistenceAdapter implements FileQueryRepository {
                         file.id.eq(fileId)
                                 .and(file.deletedAt.isNull()))
                 .fetchOne();
-        return Optional.of(fileMapper.toDomain(fileJpaEntity));
+        return Optional.ofNullable(fileMapper.toDomain(fileJpaEntity));
     }
 
     @Override
@@ -40,6 +40,6 @@ public class FileQueryPersistenceAdapter implements FileQueryRepository {
                                 file.url.eq(fileURL)
                                         .and(file.deletedAt.isNull()))
                         .fetchOne();
-        return Optional.of(fileMapper.toDomain(fileJpaEntity));
+        return Optional.ofNullable(fileMapper.toDomain(fileJpaEntity));
     }
 }
