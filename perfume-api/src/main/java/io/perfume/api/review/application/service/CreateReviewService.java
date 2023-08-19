@@ -38,10 +38,17 @@ public class CreateReviewService implements CreateReviewUseCase {
 
   @NotNull
   private static Review createReview(Long authorId, CreateReviewCommand command, LocalDateTime now,
-                                  List<Tag> tags) {
-    Review createReview = Review.create(command.feeling(),
-        command.situation(), command.strength(), command.duration(), command.season(),
-        command.perfumeId(), authorId, now);
+                                     List<Tag> tags) {
+    Review createReview =
+        Review.create(
+            command.feeling(),
+            command.situation(),
+            command.strength(),
+            command.duration(),
+            command.season(),
+            command.perfumeId(),
+            authorId,
+            now);
     createReview.addTags(tags);
 
     return createReview;
