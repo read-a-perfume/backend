@@ -9,16 +9,12 @@ import io.perfume.api.review.domain.ReviewTag;
 @PersistenceAdapter
 public class TagPersistenceAdapter implements TagRepository {
 
-  private final TagRepository tagJpaRepository;
-
   private final ReviewTagRepository reviewTagRepository;
 
   private final ReviewTagMapper reviewTagMapper;
 
-  public TagPersistenceAdapter(TagRepository tagJpaRepository,
-                               ReviewTagRepository reviewTagRepository,
+  public TagPersistenceAdapter(ReviewTagRepository reviewTagRepository,
                                ReviewTagMapper reviewTagMapper) {
-    this.tagJpaRepository = tagJpaRepository;
     this.reviewTagRepository = reviewTagRepository;
     this.reviewTagMapper = reviewTagMapper;
   }
