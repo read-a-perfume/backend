@@ -54,7 +54,7 @@ tasks.test {
 
 tasks.asciidoctor {
     doFirst {
-        delete ("src/main/resources/static/docs")
+        delete("src/main/resources/static/docs")
     }
     inputs.dir(snippetsDir)
     configurations(asciidoctorExt.name)

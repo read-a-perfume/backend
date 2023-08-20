@@ -29,6 +29,7 @@ public class FindCategoryService implements FindCategoryUseCase {
 
   @Override
   public List<CategoryResult> findTasteByUserId(Long id) {
-    return categoryQueryRepository.findCategoryUserByUserId(id).stream().map(CategoryResult::from).toList();
+    return categoryQueryRepository.findCategoryUserByUserId(id).stream().map(CategoryResult::from)
+        .toList();
   }
 }

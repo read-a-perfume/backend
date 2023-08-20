@@ -94,9 +94,9 @@ class UserQueryPersistenceAdapterTest {
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
-            new UserJpaEntity(
-                    null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, now
-            ));
+        new UserJpaEntity(
+            null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, now
+        ));
     entityManager.flush();
     entityManager.clear();
 

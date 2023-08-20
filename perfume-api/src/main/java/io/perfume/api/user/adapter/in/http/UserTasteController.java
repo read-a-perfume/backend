@@ -4,13 +4,11 @@ import io.perfume.api.user.adapter.in.http.dto.CreateUserTasteRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.GetUserTasteResponseDto;
 import io.perfume.api.user.application.port.in.CreateUserTasteUseCase;
 import io.perfume.api.user.application.port.in.FindUserTasteUseCase;
-import java.security.Principal;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +34,8 @@ public class UserTasteController {
   @GetMapping
   @PreAuthorize("isAuthenticated()")
   public List<GetUserTasteResponseDto> getTastes() {
-    UserDetails authentication = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    UserDetails authentication =
+        (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     return findUserTasteUseCase
         .getUserTastes(Long.parseLong(authentication.getUsername()))
@@ -48,9 +47,11 @@ public class UserTasteController {
   @PostMapping
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Object> createTaste(@RequestBody CreateUserTasteRequestDto dto) {
-    UserDetails authentication = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    UserDetails authentication =
+        (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    createUserTasteUseCase.createUserTaste(Long.parseLong(authentication.getUsername()), dto.noteId());
+    createUserTasteUseCase.createUserTaste(Long.parseLong(authentication.getUsername()),
+        dto.noteId());
 
     return ResponseEntity
         .status(HttpStatus.CREATED)

@@ -15,7 +15,7 @@ public record SignUpSocialUserCommand(
 ) {
 
   public static SignUpSocialUserCommand byGoogle(String identifier, String email,
-                                          String password, String name) {
+                                                 String password, String name) {
     return new SignUpSocialUserCommand(identifier, email, generateRandomUsername(email), password,
         name, SocialProvider.GOOGLE);
   }
