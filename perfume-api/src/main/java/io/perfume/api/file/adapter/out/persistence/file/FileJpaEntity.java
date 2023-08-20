@@ -7,13 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Entity(name = "file")
 @Table(name = "file")
@@ -36,9 +35,9 @@ public class FileJpaEntity extends BaseTimeEntity {
   private Long userId;
 
   public FileJpaEntity(Long id, String url, Long userId,
-                                LocalDateTime createdAt,
-                                LocalDateTime updatedAt,
-                                LocalDateTime deletedAt) {
+                       LocalDateTime createdAt,
+                       LocalDateTime updatedAt,
+                       LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.id = id;

@@ -2,7 +2,6 @@ package io.perfume.api.file.domain;
 
 import io.perfume.api.base.BaseTimeDomain;
 import java.time.LocalDateTime;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,12 +26,12 @@ public class File extends BaseTimeDomain {
 
   public static File createFile(String url, Long userId, LocalDateTime now) {
     return File.builder()
-            .url(url)
-            .userId(userId)
-            .createdAt(now)
-            .updatedAt(now)
-            .deletedAt(null)
-            .build();
+        .url(url)
+        .userId(userId)
+        .createdAt(now)
+        .updatedAt(now)
+        .deletedAt(null)
+        .build();
   }
 
 

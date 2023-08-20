@@ -3,18 +3,14 @@ package io.perfume.api.review.adapter.out.persistence.entity;
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.review.domain.type.SEASON;
 import io.perfume.api.review.domain.type.STRENGTH;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 import lombok.Getter;
 import org.hibernate.proxy.HibernateProxy;
 

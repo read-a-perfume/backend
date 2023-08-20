@@ -77,7 +77,8 @@ class UserTasteControllerTest {
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
-                    fieldWithPath("[].description").type(JsonFieldType.STRING).description("카테고리 설명"),
+                    fieldWithPath("[].description").type(JsonFieldType.STRING)
+                        .description("카테고리 설명"),
                     fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("카테고리 이미지")
                 )));
   }

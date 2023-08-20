@@ -1,10 +1,7 @@
 package io.perfume.api.note.stub;
 
 import io.perfume.api.note.application.port.out.CategoryQueryRepository;
-import io.perfume.api.note.application.port.out.NoteQueryRepository;
 import io.perfume.api.note.domain.Category;
-import io.perfume.api.note.domain.Note;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

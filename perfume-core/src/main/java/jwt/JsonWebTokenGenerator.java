@@ -59,7 +59,8 @@ public class JsonWebTokenGenerator {
   public String getTokenFromCookie(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     if (cookies != null && cookies.length > 0) {
-      return Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("X-Access-Token")).findFirst().get().getValue();
+      return Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("X-Access-Token"))
+          .findFirst().get().getValue();
     }
     return null;
   }
