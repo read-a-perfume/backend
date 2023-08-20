@@ -4,7 +4,6 @@ package io.perfume.api.note.adapter.out.persistence.note;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
-import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserMapper;
 import io.perfume.api.note.domain.Note;
 import jakarta.persistence.EntityManager;
 import java.util.List;

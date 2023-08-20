@@ -2,12 +2,11 @@ package io.perfume.api.user.domain;
 
 import encryptor.OneWayEncryptor;
 import io.perfume.api.base.BaseTimeDomain;
+import io.perfume.api.user.application.exception.UserPasswordNotMatchException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.UUID;
-
-import io.perfume.api.user.application.exception.UserPasswordNotMatchException;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,65 +24,6 @@ public class User extends BaseTimeDomain {
   private boolean promotionConsent;
   private Long businessId;
   private Long thumbnailId;
-
-  public void rename(String name) {
-    this.name = name;
-  }
-
-  public void updateThumbnailId(Long thumbnailId) {
-    this.thumbnailId = thumbnailId;
-  }
-
-  /**
-   *  사용자의 회원탈퇴(soft delete)
-   *
-   *  @param now 삭제 시간에 할당되는 값
-   */
-  public void softDelete(LocalDateTime now) {
-    super.markDelete(now);
-  }
-
-  /**
-   * 현재 user의 username 필드 앞에서 "username.length / 2"만큼 "*" 치환하여 반환한다.
-   *
-   * @return 암호화된 username
-   */
-  public String getEncryptedUsername()
-  {
-    int length = username.length();
-
-    int halfLength = length / 2;
-
-    return username.substring(0, halfLength) + "*".repeat(length - halfLength);
-  }
-
-  /**
-   * 사용자가 암호를 잊어버리는 경우 사용된다.
-   * 현재 시간을 기준으로 해당 user의 password에 새로운 암호를 할당한다.
-   *
-   * @param now 랜덤값을 만들기 위한 씨앗
-   * @param oneWayEncryptor 암호화 유틸 클래스
-   */
-  public void resetPasswordFromForgotten(LocalDateTime now, OneWayEncryptor oneWayEncryptor) {
-
-    String milliseconds = String.valueOf(now.toInstant(ZoneOffset.UTC).toEpochMilli());
-    String uuid = String.valueOf(UUID.randomUUID().toString());
-    String hashedValue = String.valueOf(Objects.hash(milliseconds, uuid));
-
-    String plainNewPassword = milliseconds.substring(0, 3) + uuid.substring(0 , 5) + hashedValue.substring(0, 4);
-    this.password = oneWayEncryptor.hash(plainNewPassword);
-  }
-
-  public void updateEmail(String email) {
-    this.email = email;
-  }
-
-  public void updatePassword(PasswordEncoder passwordEncoder, String oldPassword, String newPassword) {
-    if(!passwordEncoder.matches(oldPassword, this.password)) {
-      throw new UserPasswordNotMatchException(this.id);
-    }
-    this.password = passwordEncoder.encode(newPassword);
-  }
 
   @Builder
   private User(Long id, String username, String email, String password,
@@ -152,5 +92,65 @@ public class User extends BaseTimeDomain {
         .updatedAt(updatedAt)
         .deletedAt(deletedAt)
         .build();
+  }
+
+  public void rename(String name) {
+    this.name = name;
+  }
+
+  public void updateThumbnailId(Long thumbnailId) {
+    this.thumbnailId = thumbnailId;
+  }
+
+  /**
+   * 사용자의 회원탈퇴(soft delete)
+   *
+   * @param now 삭제 시간에 할당되는 값
+   */
+  public void softDelete(LocalDateTime now) {
+    super.markDelete(now);
+  }
+
+  /**
+   * 현재 user의 username 필드 앞에서 "username.length / 2"만큼 "*" 치환하여 반환한다.
+   *
+   * @return 암호화된 username
+   */
+  public String getEncryptedUsername() {
+    int length = username.length();
+
+    int halfLength = length / 2;
+
+    return username.substring(0, halfLength) + "*".repeat(length - halfLength);
+  }
+
+  /**
+   * 사용자가 암호를 잊어버리는 경우 사용된다.
+   * 현재 시간을 기준으로 해당 user의 password에 새로운 암호를 할당한다.
+   *
+   * @param now             랜덤값을 만들기 위한 씨앗
+   * @param oneWayEncryptor 암호화 유틸 클래스
+   */
+  public void resetPasswordFromForgotten(LocalDateTime now, OneWayEncryptor oneWayEncryptor) {
+
+    String milliseconds = String.valueOf(now.toInstant(ZoneOffset.UTC).toEpochMilli());
+    String uuid = String.valueOf(UUID.randomUUID().toString());
+    String hashedValue = String.valueOf(Objects.hash(milliseconds, uuid));
+
+    String plainNewPassword =
+        milliseconds.substring(0, 3) + uuid.substring(0, 5) + hashedValue.substring(0, 4);
+    this.password = oneWayEncryptor.hash(plainNewPassword);
+  }
+
+  public void updateEmail(String email) {
+    this.email = email;
+  }
+
+  public void updatePassword(PasswordEncoder passwordEncoder, String oldPassword,
+                             String newPassword) {
+    if (!passwordEncoder.matches(oldPassword, this.password)) {
+      throw new UserPasswordNotMatchException(this.id);
+    }
+    this.password = passwordEncoder.encode(newPassword);
   }
 }

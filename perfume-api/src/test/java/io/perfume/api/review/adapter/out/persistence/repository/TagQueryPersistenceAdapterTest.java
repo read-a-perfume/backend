@@ -3,7 +3,6 @@ package io.perfume.api.review.adapter.out.persistence.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
-import io.perfume.api.review.adapter.out.persistence.entity.TagEntity;
 import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
 import io.perfume.api.review.domain.Tag;
 import jakarta.persistence.EntityManager;
