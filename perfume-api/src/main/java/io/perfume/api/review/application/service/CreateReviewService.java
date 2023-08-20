@@ -6,9 +6,7 @@ import io.perfume.api.review.application.in.dto.CreateReviewCommand;
 import io.perfume.api.review.application.in.dto.ReviewResult;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
-import io.perfume.api.review.domain.Tag;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,16 +24,6 @@ public class CreateReviewService implements CreateReviewUseCase {
     this.addReviewTagUseCase = addReviewTagUseCase;
   }
 
-  @Override
-  @Transactional
-  public ReviewResult create(Long authorId, CreateReviewCommand command) {
-    LocalDateTime now = LocalDateTime.now();
-    Review createdReview = reviewRepository.save(createReview(authorId, command, now));
-    addReviewTagUseCase.addTags(createdReview.getId(), command.tags());
-
-    return new ReviewResult(createdReview.getId());
-  }
-
   @NotNull
   private static Review createReview(Long authorId, CreateReviewCommand command,
                                      LocalDateTime now) {
@@ -49,5 +37,15 @@ public class CreateReviewService implements CreateReviewUseCase {
         authorId,
         now
     );
+  }
+
+  @Override
+  @Transactional
+  public ReviewResult create(Long authorId, CreateReviewCommand command) {
+    LocalDateTime now = LocalDateTime.now();
+    Review createdReview = reviewRepository.save(createReview(authorId, command, now));
+    addReviewTagUseCase.addTags(createdReview.getId(), command.tags());
+
+    return new ReviewResult(createdReview.getId());
   }
 }

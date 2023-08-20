@@ -11,9 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.perfume.api.note.application.port.out.CategoryRepository;
-import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Category;
-import io.perfume.api.note.domain.Note;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +52,8 @@ class FindCategoryControllerTest {
   void testFindNotes() throws Exception {
     // given
     LocalDateTime now = LocalDateTime.now();
-    Category category = categoryRepository.save(Category.create("sample", "sample description", 1L, now));
+    Category category =
+        categoryRepository.save(Category.create("sample", "sample description", 1L, now));
 
     // when & then
     mockMvc
@@ -82,7 +81,8 @@ class FindCategoryControllerTest {
   void testFindNoteById() throws Exception {
     // given
     LocalDateTime now = LocalDateTime.now();
-    Category category = categoryRepository.save(Category.create("sample", "sample description", 1L, now));
+    Category category =
+        categoryRepository.save(Category.create("sample", "sample description", 1L, now));
 
     // when & then
     mockMvc

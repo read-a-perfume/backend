@@ -15,24 +15,25 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UpdateAccountService implements UpdateAccountUseCase {
-    private final UserRepository userRepository;
-    private final UserQueryRepository userQueryRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final UserQueryRepository userQueryRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    public void updateUserEmail(UpdateEmailCommand updateEmailCommand) {
-        if (updateEmailCommand.verified().equals(Boolean.FALSE)) {
-            throw new FailedToUpdateEmailException(updateEmailCommand.userId());
-        }
-        User user = userQueryRepository.loadUser(updateEmailCommand.userId())
-                .orElseThrow(() -> new UserNotFoundException(updateEmailCommand.userId()));
-        user.updateEmail(updateEmailCommand.email());
-        userRepository.save(user);
+  public void updateUserEmail(UpdateEmailCommand updateEmailCommand) {
+    if (updateEmailCommand.verified().equals(Boolean.FALSE)) {
+      throw new FailedToUpdateEmailException(updateEmailCommand.userId());
     }
+    User user = userQueryRepository.loadUser(updateEmailCommand.userId())
+        .orElseThrow(() -> new UserNotFoundException(updateEmailCommand.userId()));
+    user.updateEmail(updateEmailCommand.email());
+    userRepository.save(user);
+  }
 
-    public void updateUserPassword(UpdatePasswordCommand updatePasswordCommand) {
-        User user = userQueryRepository.loadUser(updatePasswordCommand.userId())
-                .orElseThrow(() -> new UserNotFoundException(updatePasswordCommand.userId()));
-        user.updatePassword(passwordEncoder, updatePasswordCommand.oldPassword(), updatePasswordCommand.newPassword());
-        userRepository.save(user);
-    }
+  public void updateUserPassword(UpdatePasswordCommand updatePasswordCommand) {
+    User user = userQueryRepository.loadUser(updatePasswordCommand.userId())
+        .orElseThrow(() -> new UserNotFoundException(updatePasswordCommand.userId()));
+    user.updatePassword(passwordEncoder, updatePasswordCommand.oldPassword(),
+        updatePasswordCommand.newPassword());
+    userRepository.save(user);
+  }
 }
