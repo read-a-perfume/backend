@@ -20,8 +20,6 @@ public class CustomAuthorizeHttpRequestConfigurer implements
             new AntPathRequestMatcher("/v1/signup/**"),
             new AntPathRequestMatcher("/oauth2/**"),
             new AntPathRequestMatcher("/login/oauth2/code/**"),
-            new AntPathRequestMatcher("/v1/signup/**"),
-            new AntPathRequestMatcher("/error"),
             new AntPathRequestMatcher("/v1/access-token", HttpMethod.GET.toString())
         ).permitAll()
         .anyRequest().authenticated();
