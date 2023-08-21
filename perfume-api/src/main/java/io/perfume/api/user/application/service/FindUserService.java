@@ -8,6 +8,7 @@ import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FindUserService implements FindUserUseCase {
@@ -23,11 +24,13 @@ public class FindUserService implements FindUserUseCase {
   }
 
   @Override
+  @Transactional
   public Optional<UserResult> findOneByEmail(String email) {
     return userQueryRepository.findOneByEmail(email).map(this::toDto);
   }
 
   @Override
+  @Transactional
   public Optional<UserResult> findOneBySocialId(String socialId) {
     return oauthQueryRepository.findOneBySocialId(socialId).map(this::toDto);
   }
