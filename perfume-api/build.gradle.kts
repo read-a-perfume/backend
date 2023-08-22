@@ -23,7 +23,7 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.33")
     implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
-    implementation("org.flywaydb:flyway-mysql:9.21.1")
+    implementation("org.flywaydb:flyway-mysql:9.21.2")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.2")
     compileOnly("org.projectlombok:lombok:1.18.28")
