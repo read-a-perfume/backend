@@ -6,20 +6,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+
+import lombok.*;
 
 @Entity(name = "brand")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
-public class BrandJpaEntity extends BaseTimeEntity {
+public class BrandEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +32,10 @@ public class BrandJpaEntity extends BaseTimeEntity {
 
   private Long thumbnailId;
 
-  public BrandJpaEntity(Long id, String name, String story, Long thumbnailId,
-                        @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt,
-                        @NotNull LocalDateTime deletedAt) {
+  @Builder
+  public BrandEntity(Long id, String name, String story, Long thumbnailId,
+                     LocalDateTime createdAt, LocalDateTime updatedAt,
+                     LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
