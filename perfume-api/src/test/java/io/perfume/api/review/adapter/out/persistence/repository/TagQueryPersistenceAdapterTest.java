@@ -3,8 +3,14 @@ package io.perfume.api.review.adapter.out.persistence.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
+import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
+import io.perfume.api.review.adapter.out.persistence.entity.ReviewTagEntity;
+import io.perfume.api.review.adapter.out.persistence.entity.TagEntity;
+import io.perfume.api.review.adapter.out.persistence.mapper.ReviewTagMapper;
 import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
 import io.perfume.api.review.domain.Tag;
+import io.perfume.api.review.domain.type.SEASON;
+import io.perfume.api.review.domain.type.STRENGTH;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,7 +24,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({TagQueryPersistenceAdapter.class, TagMapper.class, TestQueryDSLConfiguration.class})
+@Import({TagQueryPersistenceAdapter.class, TagMapper.class, ReviewTagMapper.class,
+    TestQueryDSLConfiguration.class})
 @DataJpaTest
 @EnableJpaAuditing
 class TagQueryPersistenceAdapterTest {
@@ -60,5 +67,25 @@ class TagQueryPersistenceAdapterTest {
 
     // then
     assertThat(result.size()).isEqualTo(0);
+  }
+
+  @Test
+  @DisplayName("리뷰 태그를 조회한다.")
+  void testFindReviewTags() {
+    // given
+    var now = LocalDateTime.now();
+    var tag = new TagEntity(null, "test", now, now, null);
+    entityManager.persist(tag);
+    var review =
+        new ReviewEntity(null, "", "", STRENGTH.LIGHT, 0L, SEASON.DAILY, 1L, 1L, now, now, null);
+    entityManager.persist(
+        review);
+    entityManager.persist(new ReviewTagEntity(review.getId(), tag.getId(), now, now, null));
+
+    // when
+    var result = queryRepository.findReviewTags(1L);
+
+    // then
+    assertThat(result.size()).isEqualTo(1L);
   }
 }

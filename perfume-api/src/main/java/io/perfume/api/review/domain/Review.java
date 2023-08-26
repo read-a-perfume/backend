@@ -4,6 +4,7 @@ import io.perfume.api.base.BaseTimeDomain;
 import io.perfume.api.review.domain.type.SEASON;
 import io.perfume.api.review.domain.type.STRENGTH;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.Getter;
 
 @Getter
@@ -43,5 +44,9 @@ public class Review extends BaseTimeDomain {
                               SEASON season, Long perfumeId, Long userId, LocalDateTime now) {
     return new Review(null, feeling, situation, strength, duration, season, perfumeId, userId,
         now, now, null);
+  }
+
+  public boolean isOwner(Long userId) {
+    return !Objects.isNull(this.userId) && this.userId.equals(userId);
   }
 }
