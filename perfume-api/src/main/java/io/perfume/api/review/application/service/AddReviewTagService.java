@@ -26,9 +26,10 @@ public class AddReviewTagService implements AddReviewTagUseCase {
   @Transactional
   public List<Tag> addTags(Long reviewId, List<Long> tagIds) {
     var now = LocalDateTime.now();
-    List<Tag> tags = tagQueryRepository.findByIds(tagIds);
-    tags.stream().map(tag -> ReviewTag.create(reviewId, tag.getId(), now))
-        .forEach(tagRepository::save);
+    var tags = tagQueryRepository.findByIds(tagIds);
+    var entities = tags.stream().map(tag -> ReviewTag.create(reviewId, tag.getId(), now)).toList();
+
+    tagRepository.saveAll(entities);
 
     return tags;
   }

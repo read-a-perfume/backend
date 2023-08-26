@@ -52,7 +52,7 @@ public class SocialAccountJpaEntity extends BaseTimeEntity {
   @Comment("소셜 정보 제공자")
   SocialProvider socialProvider;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
   UserJpaEntity user;
 
