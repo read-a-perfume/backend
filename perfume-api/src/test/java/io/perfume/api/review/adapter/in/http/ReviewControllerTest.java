@@ -34,7 +34,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-class CreateReviewControllerTest {
+class ReviewControllerTest {
 
   private MockMvc mockMvc;
 

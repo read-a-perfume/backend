@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/reviews")
-public class CreateReviewController {
+public class ReviewController {
 
   private final CreateReviewUseCase createReviewUseCase;
 
-  public CreateReviewController(CreateReviewUseCase createReviewUseCase) {
+  public ReviewController(CreateReviewUseCase createReviewUseCase) {
     this.createReviewUseCase = createReviewUseCase;
   }
 
