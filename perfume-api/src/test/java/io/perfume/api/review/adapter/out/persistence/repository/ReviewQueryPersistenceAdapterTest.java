@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
+import io.perfume.api.review.application.out.ReviewQueryRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.SEASON;
 import io.perfume.api.review.domain.type.STRENGTH;
@@ -26,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 class ReviewQueryPersistenceAdapterTest {
 
   @Autowired
-  private ReviewQueryPersistenceAdapter queryRepository;
+  private ReviewQueryRepository queryRepository;
 
   @Autowired
   private ReviewMapper reviewMapper;
