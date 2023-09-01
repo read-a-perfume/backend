@@ -39,7 +39,7 @@ import org.hibernate.proxy.HibernateProxy;
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
-public class UserJpaEntity extends BaseTimeEntity {
+public class UserEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,10 +59,6 @@ public class UserJpaEntity extends BaseTimeEntity {
   @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
   @Comment("사용자 비밀번호")
   private String password;
-
-  @NotBlank(message = "공백(스페이스 바)을 허용하지 않습니다.")
-  @Comment("사용자 이름")
-  private String name;
 
   @NotNull
   @Enumerated(EnumType.STRING)
@@ -85,16 +81,15 @@ public class UserJpaEntity extends BaseTimeEntity {
   private Long thumbnailId;
 
   @Builder(access = AccessLevel.PACKAGE)
-  public UserJpaEntity(Long id, String username, String email, String password,
-                       String name, Role role, Boolean marketingConsent,
-                       Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt,
-                       LocalDateTime deletedAt) {
+  public UserEntity(Long id, String username, String email, String password,
+                    Role role, Boolean marketingConsent,
+                    Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt,
+                    LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
-    this.name = name;
     this.role = role;
     this.marketingConsent = marketingConsent;
     this.promotionConsent = promotionConsent;
@@ -117,7 +112,7 @@ public class UserJpaEntity extends BaseTimeEntity {
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
-    UserJpaEntity that = (UserJpaEntity) o;
+    UserEntity that = (UserEntity) o;
     return getId() != null && Objects.equals(getId(), that.getId());
   }
 

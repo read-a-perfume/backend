@@ -135,7 +135,7 @@ class SignInAuthenticationFilterTest {
 
   private User createUser(String email, String password) {
     String encodedPassword = passwordEncoder.encode(password);
-    return User.builder().id(1L).username("test").email(email).name("test").role(Role.USER)
+    return User.builder().id(1L).username("test").email(email).role(Role.USER)
         .password(encodedPassword).role(Role.USER).build();
   }
 }

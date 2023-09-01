@@ -39,19 +39,4 @@ public class SetUserProfileService implements SetUserProfileUseCase {
       userRepository.save(user);
     }
   }
-
-  /*
-   *  TODO
-   *  1. 닉네임 제약조건 설정(?)
-   */
-  @Override
-  public void setNickName(String userId, String name) {
-    if (userId == null) {
-      new NotFoundUserException();
-    } else {
-      User user = userQueryRepository.loadUser(Long.parseLong(userId)).get();
-      user.rename(name);
-      userRepository.save(user);
-    }
-  }
 }

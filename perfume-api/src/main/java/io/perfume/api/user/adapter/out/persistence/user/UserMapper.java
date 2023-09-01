@@ -6,34 +6,33 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-  public User toUser(UserJpaEntity userJpaEntity) {
-    if (userJpaEntity == null) {
+  public User toUser(UserEntity userEntity) {
+    if (userEntity == null) {
       return null;
     }
     return User.withId(
-        userJpaEntity.getId(),
-        userJpaEntity.getUsername(),
-        userJpaEntity.getEmail(),
-        userJpaEntity.getPassword(),
-        userJpaEntity.getName(),
-        userJpaEntity.getRole(),
-        userJpaEntity.getBusinessId(),
-        userJpaEntity.getThumbnailId(),
-        userJpaEntity.getCreatedAt(),
-        userJpaEntity.getUpdatedAt(),
-        userJpaEntity.getDeletedAt());
+        userEntity.getId(),
+        userEntity.getUsername(),
+        userEntity.getEmail(),
+        userEntity.getPassword(),
+        null,
+        userEntity.getRole(),
+        userEntity.getBusinessId(),
+        userEntity.getThumbnailId(),
+        userEntity.getCreatedAt(),
+        userEntity.getUpdatedAt(),
+        userEntity.getDeletedAt());
   }
 
-  public UserJpaEntity toUserJpaEntity(User user) {
+  public UserEntity toUserJpaEntity(User user) {
     if (user == null) {
       return null;
     }
-    return UserJpaEntity.builder()
+    return UserEntity.builder()
         .id(user.getId())
         .username(user.getUsername())
         .email(user.getEmail())
         .password(user.getPassword())
-        .name(user.getName())
         .role(user.getRole())
         .promotionConsent(user.isPromotionConsent())
         .marketingConsent(user.isMarketingConsent())

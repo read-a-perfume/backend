@@ -1,6 +1,6 @@
 package io.perfume.api.user.adapter.out.persistence.social;
 
-import io.perfume.api.user.adapter.out.persistence.user.UserJpaEntity;
+import io.perfume.api.user.adapter.out.persistence.user.UserEntity;
 import io.perfume.api.user.adapter.out.persistence.user.UserMapper;
 import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
@@ -30,13 +30,13 @@ public class SocialAccountMapper {
   }
 
   public SocialAccountJpaEntity toEntity(SocialAccount socialAccount) {
-    UserJpaEntity userJpaEntity = userMapper.toUserJpaEntity(socialAccount.getUser());
+    UserEntity userEntity = userMapper.toUserJpaEntity(socialAccount.getUser());
 
     return new SocialAccountJpaEntity(
         socialAccount.getId(),
         socialAccount.getIdentifier(),
         socialAccount.getSocialProvider(),
-        userJpaEntity,
+        userEntity,
         socialAccount.getCreatedAt(),
         socialAccount.getUpdatedAt(),
         socialAccount.getDeletedAt()

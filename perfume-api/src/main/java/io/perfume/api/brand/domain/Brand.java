@@ -2,10 +2,9 @@ package io.perfume.api.brand.domain;
 
 import io.perfume.api.base.BaseTimeDomain;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class Brand extends BaseTimeDomain {

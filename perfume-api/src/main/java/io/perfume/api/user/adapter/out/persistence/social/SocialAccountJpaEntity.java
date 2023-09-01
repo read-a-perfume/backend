@@ -1,7 +1,7 @@
 package io.perfume.api.user.adapter.out.persistence.social;
 
 import io.perfume.api.base.BaseTimeEntity;
-import io.perfume.api.user.adapter.out.persistence.user.UserJpaEntity;
+import io.perfume.api.user.adapter.out.persistence.user.UserEntity;
 import io.perfume.api.user.domain.SocialProvider;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,11 +54,11 @@ public class SocialAccountJpaEntity extends BaseTimeEntity {
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-  UserJpaEntity user;
+  UserEntity user;
 
   public SocialAccountJpaEntity(Long id, String identifier,
                                 SocialProvider socialProvider,
-                                UserJpaEntity user, LocalDateTime createdAt,
+                                UserEntity user, LocalDateTime createdAt,
                                 LocalDateTime updatedAt,
                                 LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);

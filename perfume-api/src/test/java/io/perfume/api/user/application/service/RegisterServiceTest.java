@@ -86,7 +86,6 @@ class RegisterServiceTest {
     assertThat(result).isNotNull();
     assertThat(result.email()).isEqualTo(email);
     assertThat(result.username()).isEqualTo(username);
-    assertThat(result.name()).isEqualTo(name);
   }
 
   @Test
