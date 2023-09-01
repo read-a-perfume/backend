@@ -7,6 +7,4 @@ import org.springframework.web.multipart.MultipartFile;
 public interface SetUserProfileUseCase {
 
   void setUserProfilePicture(String userId, MultipartFile image, LocalDateTime now);
-
-  void setNickName(String userId, String name);
 }

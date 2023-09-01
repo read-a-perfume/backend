@@ -31,13 +31,4 @@ public class SetUserProfileController {
     setUserProfileUseCase.setUserProfilePicture(user.getUsername(), image, now);
     return ResponseEntity.ok().build();
   }
-
-  @PutMapping("/test-put-endpoint")
-  public ResponseEntity<Object> setNickName(
-      @AuthenticationPrincipal User user,
-      SetNickNameRequestDto dto
-  ) {
-    setUserProfileUseCase.setNickName(user.getUsername(), dto.name());
-    return ResponseEntity.ok().build();
-  }
 }
