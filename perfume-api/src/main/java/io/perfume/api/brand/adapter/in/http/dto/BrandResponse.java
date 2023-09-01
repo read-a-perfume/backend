@@ -6,11 +6,11 @@ import lombok.Builder;
 @Builder
 public record BrandResponse(String name, String story, String thumbnailUrl) {
 
-    public static BrandResponse of(BrandResult brandResult) {
-        return BrandResponse.builder()
-                .name(brandResult.name())
-                .story(brandResult.story())
-                .thumbnailUrl(brandResult.thumbnailUrl())
-                .build();
-    }
+  public static BrandResponse of(BrandResult brandResult) {
+    return BrandResponse.builder()
+        .name(brandResult.name())
+        .story(brandResult.story())
+        .thumbnailUrl(brandResult.thumbnailUrl())
+        .build();
+  }
 }

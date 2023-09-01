@@ -1,6 +1,5 @@
 package io.perfume.api.user.adapter.in.http;
 
-import io.perfume.api.user.adapter.in.http.dto.SetNickNameRequestDto;
 import io.perfume.api.user.application.port.in.SetUserProfileUseCase;
 import java.time.LocalDateTime;
 import org.springframework.http.ResponseEntity;
