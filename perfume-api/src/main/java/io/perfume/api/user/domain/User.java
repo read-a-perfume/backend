@@ -18,7 +18,6 @@ public class User extends BaseTimeDomain {
   private String username;
   private String email;
   private String password;
-  private String name;
   private Role role;
   private boolean marketingConsent;
   private boolean promotionConsent;
@@ -27,7 +26,7 @@ public class User extends BaseTimeDomain {
 
   @Builder
   private User(Long id, String username, String email, String password,
-               String name, Role role, Long businessId,
+               Role role, Long businessId,
                Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
                LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
     super(createdAt, updatedAt, deletedAt);
@@ -35,7 +34,6 @@ public class User extends BaseTimeDomain {
     this.username = username;
     this.email = email;
     this.password = password;
-    this.name = name;
     this.role = role;
     this.businessId = businessId;
     this.thumbnailId = thumbnailId;
@@ -50,7 +48,6 @@ public class User extends BaseTimeDomain {
         .username(username)
         .email(email)
         .password(password)
-        .name(name)
         .role(Role.USER)
         .marketingConsent(marketingConsent)
         .promotionConsent(promotionConsent)
@@ -63,7 +60,6 @@ public class User extends BaseTimeDomain {
         .username(username)
         .email(email)
         .password(password)
-        .name(name)
         .role(Role.USER)
         .marketingConsent(false)
         .promotionConsent(false)
@@ -84,7 +80,6 @@ public class User extends BaseTimeDomain {
         .username(username)
         .email(email)
         .password(password)
-        .name(name)
         .role(role)
         .businessId(businessId)
         .thumbnailId(thumbnailId)
@@ -92,10 +87,6 @@ public class User extends BaseTimeDomain {
         .updatedAt(updatedAt)
         .deletedAt(deletedAt)
         .build();
-  }
-
-  public void rename(String name) {
-    this.name = name;
   }
 
   public void updateThumbnailId(Long thumbnailId) {
