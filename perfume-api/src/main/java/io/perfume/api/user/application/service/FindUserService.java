@@ -36,12 +36,10 @@ public class FindUserService implements FindUserUseCase {
   }
 
   private UserResult toDto(User user) {
-    return new UserResult(user.getId(), user.getUsername(), user.getEmail(), user.getName(),
-        user.getCreatedAt());
+    return new UserResult(user.getId(), user.getUsername(), user.getEmail(), user.getCreatedAt());
   }
 
   private UserResult toDto(SocialAccount socialAccount) {
     return toDto(socialAccount.getUser());
   }
-
 }

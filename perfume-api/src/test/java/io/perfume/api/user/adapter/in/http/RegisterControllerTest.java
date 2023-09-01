@@ -175,8 +175,7 @@ class RegisterControllerTest {
                 ),
                 responseFields(
                     fieldWithPath("username").type(JsonFieldType.STRING).description("사용자 이름"),
-                    fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                    fieldWithPath("name").type(JsonFieldType.STRING).description("이름")
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
                 )));
   }
 

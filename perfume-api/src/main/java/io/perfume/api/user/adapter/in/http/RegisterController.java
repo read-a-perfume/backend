@@ -47,8 +47,7 @@ public class RegisterController {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(new EmailSignUpResponseDto(
         result.username(),
-        result.email(),
-        result.name()
+        result.email()
     ));
   }
 
