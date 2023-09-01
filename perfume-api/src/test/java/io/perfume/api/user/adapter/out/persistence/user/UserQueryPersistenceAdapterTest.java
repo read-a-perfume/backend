@@ -33,8 +33,8 @@ class UserQueryPersistenceAdapterTest {
     String email = "test@mail.com";
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
-        new UserJpaEntity(
-            null, "username", email, "abcd", "abcd", Role.USER, false, false, now, now, null
+        new UserEntity(
+            null, "username", email, "abcd", Role.USER, false, false, now, now, null
         )
     );
     entityManager.flush();
@@ -53,8 +53,8 @@ class UserQueryPersistenceAdapterTest {
     // given
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
-    UserJpaEntity entity = new UserJpaEntity(
-        null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, null
+    UserEntity entity = new UserEntity(
+        null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, null
     );
     entityManager.persist(entity);
     entityManager.flush();
@@ -74,8 +74,8 @@ class UserQueryPersistenceAdapterTest {
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
-        new UserJpaEntity(
-            null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, null
+        new UserEntity(
+            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, null
         ));
     entityManager.flush();
     entityManager.clear();
@@ -94,8 +94,8 @@ class UserQueryPersistenceAdapterTest {
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
-        new UserJpaEntity(
-            null, username, "test@mail.com", "abcd", "abcd", Role.USER, false, false, now, now, now
+        new UserEntity(
+            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, now
         ));
     entityManager.flush();
     entityManager.clear();

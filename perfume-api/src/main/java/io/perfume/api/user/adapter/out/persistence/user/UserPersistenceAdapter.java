@@ -21,8 +21,8 @@ public class UserPersistenceAdapter implements UserRepository {
   @Override
   @Transactional
   public Optional<User> save(User user) {
-    UserJpaEntity userJpaEntity = userMapper.toUserJpaEntity(user);
-    userJpaRepository.save(userJpaEntity);
-    return Optional.ofNullable(userMapper.toUser(userJpaEntity));
+    UserEntity userEntity = userMapper.toUserJpaEntity(user);
+    userJpaRepository.save(userEntity);
+    return Optional.ofNullable(userMapper.toUser(userEntity));
   }
 }
