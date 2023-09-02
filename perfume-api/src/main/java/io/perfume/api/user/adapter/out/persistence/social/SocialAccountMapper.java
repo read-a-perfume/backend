@@ -15,24 +15,24 @@ public class SocialAccountMapper {
     this.userMapper = userMapper;
   }
 
-  public SocialAccount toDomain(SocialAccountJpaEntity oauthJpaEntity) {
-    User user = userMapper.toUser(oauthJpaEntity.user);
+  public SocialAccount toDomain(SocialAccountEntity socialAccount) {
+    User user = userMapper.toUser(socialAccount.user);
 
     return new SocialAccount(
-        oauthJpaEntity.id,
-        oauthJpaEntity.identifier,
-        oauthJpaEntity.socialProvider,
+        socialAccount.id,
+        socialAccount.identifier,
+        socialAccount.socialProvider,
         user,
-        oauthJpaEntity.getCreatedAt(),
-        oauthJpaEntity.getUpdatedAt(),
-        oauthJpaEntity.getDeletedAt()
+        socialAccount.getCreatedAt(),
+        socialAccount.getUpdatedAt(),
+        socialAccount.getDeletedAt()
     );
   }
 
-  public SocialAccountJpaEntity toEntity(SocialAccount socialAccount) {
+  public SocialAccountEntity toEntity(SocialAccount socialAccount) {
     UserEntity userEntity = userMapper.toUserJpaEntity(socialAccount.getUser());
 
-    return new SocialAccountJpaEntity(
+    return new SocialAccountEntity(
         socialAccount.getId(),
         socialAccount.getIdentifier(),
         socialAccount.getSocialProvider(),
