@@ -1,4 +1,4 @@
-package io.perfume.api.user.adapter.out.persistence.exception;
+package io.perfume.api.user.application.exception;
 
 import io.perfume.api.base.CustomHttpException;
 import io.perfume.api.base.LogLevel;

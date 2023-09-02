@@ -1,6 +1,6 @@
 package io.perfume.api.user.application.service;
 
-import io.perfume.api.user.adapter.out.persistence.exception.UserNotFoundException;
+import io.perfume.api.user.application.exception.UserNotFoundException;
 import io.perfume.api.user.application.exception.FailedToUpdateEmailException;
 import io.perfume.api.user.application.port.in.UpdateAccountUseCase;
 import io.perfume.api.user.application.port.in.dto.UpdateEmailCommand;
