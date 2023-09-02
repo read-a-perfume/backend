@@ -34,7 +34,7 @@ import org.hibernate.proxy.HibernateProxy;
 )
 @ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-public class SocialAccountJpaEntity extends BaseTimeEntity {
+public class SocialAccountEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,11 +56,11 @@ public class SocialAccountJpaEntity extends BaseTimeEntity {
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
   UserEntity user;
 
-  public SocialAccountJpaEntity(Long id, String identifier,
-                                SocialProvider socialProvider,
-                                UserEntity user, LocalDateTime createdAt,
-                                LocalDateTime updatedAt,
-                                LocalDateTime deletedAt) {
+  public SocialAccountEntity(Long id, String identifier,
+                             SocialProvider socialProvider,
+                             UserEntity user, LocalDateTime createdAt,
+                             LocalDateTime updatedAt,
+                             LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.id = id;
@@ -86,7 +86,7 @@ public class SocialAccountJpaEntity extends BaseTimeEntity {
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
-    SocialAccountJpaEntity that = (SocialAccountJpaEntity) o;
+    SocialAccountEntity that = (SocialAccountEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

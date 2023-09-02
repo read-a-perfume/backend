@@ -16,10 +16,10 @@ public class SocialAccountPersistenceAdapter implements SocialAccountRepository 
 
   @Override
   public Optional<SocialAccount> save(SocialAccount socialAccount) {
-    SocialAccountJpaEntity oauthJpaEntity = oauthMapper.toEntity(socialAccount);
+    SocialAccountEntity entity = oauthMapper.toEntity(socialAccount);
 
-    oauthJpaRepository.save(oauthJpaEntity);
+    oauthJpaRepository.save(entity);
 
-    return Optional.of(oauthMapper.toDomain(oauthJpaEntity));
+    return Optional.of(oauthMapper.toDomain(entity));
   }
 }

@@ -24,7 +24,7 @@ public class SocialAccountQueryPersistenceAdapter implements SocialAccountQueryR
 
   @Override
   public Optional<SocialAccount> findOneBySocialId(String socialId) {
-    SocialAccountJpaEntity entity =
+    SocialAccountEntity entity =
         jpaQueryFactory.selectFrom(socialAccountJpaEntity)
             .where(
                 socialAccountJpaEntity.identifier.eq(socialId)
