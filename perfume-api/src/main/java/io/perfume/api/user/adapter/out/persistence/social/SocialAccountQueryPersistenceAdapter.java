@@ -1,6 +1,6 @@
 package io.perfume.api.user.adapter.out.persistence.social;
 
-import static io.perfume.api.user.adapter.out.persistence.social.QSocialAccountJpaEntity.socialAccountJpaEntity;
+import static io.perfume.api.user.adapter.out.persistence.social.QSocialAccountEntity.socialAccountEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
@@ -25,10 +25,10 @@ public class SocialAccountQueryPersistenceAdapter implements SocialAccountQueryR
   @Override
   public Optional<SocialAccount> findOneBySocialId(String socialId) {
     SocialAccountEntity entity =
-        jpaQueryFactory.selectFrom(socialAccountJpaEntity)
+        jpaQueryFactory.selectFrom(socialAccountEntity)
             .where(
-                socialAccountJpaEntity.identifier.eq(socialId)
-                    .and(socialAccountJpaEntity.deletedAt.isNull()))
+                socialAccountEntity.identifier.eq(socialId)
+                    .and(socialAccountEntity.deletedAt.isNull()))
             .fetchOne();
 
     if (Objects.isNull(entity)) {
