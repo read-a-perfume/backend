@@ -9,4 +9,6 @@ public interface TagQueryRepository {
   List<Tag> findByIds(List<Long> ids);
 
   List<ReviewTag> findReviewTags(Long reviewId);
+
+  List<ReviewTag> findReviewsTags(List<Long> reviewIds);
 }

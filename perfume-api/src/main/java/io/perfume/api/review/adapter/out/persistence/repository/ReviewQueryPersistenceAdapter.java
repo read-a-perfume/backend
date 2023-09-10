@@ -7,6 +7,7 @@ import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.application.out.ReviewQueryRepository;
 import io.perfume.api.review.domain.Review;
+import java.util.List;
 import java.util.Optional;
 
 @PersistenceAdapter
@@ -21,6 +22,7 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
     this.reviewMapper = reviewMapper;
   }
 
+  @Override
   public Optional<Review> findById(Long id) {
     var entity = jpaQueryFactory
         .selectFrom(reviewEntity)
@@ -34,5 +36,19 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
     }
 
     return Optional.of(reviewMapper.toDomain(entity));
+  }
+
+  @Override
+  public List<Review> findByPage(int page, int size) {
+    return jpaQueryFactory
+        .selectFrom(reviewEntity)
+        .where(reviewEntity.deletedAt.isNull())
+        .orderBy(reviewEntity.id.desc())
+        .offset((long) page * size)
+        .limit(size)
+        .fetch()
+        .stream()
+        .map(reviewMapper::toDomain)
+        .toList();
   }
 }
