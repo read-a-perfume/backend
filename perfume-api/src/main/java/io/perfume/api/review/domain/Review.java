@@ -24,6 +24,7 @@ public class Review extends BaseTimeDomain {
 
   private final Long perfumeId;
 
+
   private final Long userId;
 
   public Review(Long id, String feeling, String situation, STRENGTH strength, Long duration,
