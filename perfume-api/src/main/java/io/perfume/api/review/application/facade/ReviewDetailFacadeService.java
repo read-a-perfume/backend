@@ -8,8 +8,11 @@ import io.perfume.api.review.application.in.dto.ReviewResult;
 import io.perfume.api.review.application.in.dto.ReviewTagResult;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.UserResult;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -70,8 +73,13 @@ public class ReviewDetailFacadeService {
       Map<Long, UserResult> usersMap,
       Map<Long, List<ReviewTagResult>> tagsMap) {
     return review -> {
-      final var author = usersMap.get(review.authorId());
-      final var tags = tagsMap.get(review.id()).stream().map(ReviewTagResult::name).toList();
+      final var author = usersMap.getOrDefault(review.authorId(), UserResult.EMPTY);
+      final var tags =
+          tagsMap
+              .getOrDefault(review.id(), Collections.emptyList())
+              .stream()
+              .map(ReviewTagResult::name)
+              .toList();
 
       return ReviewDetailResult.from(review, author, tags);
     };

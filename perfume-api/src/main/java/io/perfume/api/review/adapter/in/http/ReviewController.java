@@ -44,10 +44,9 @@ public class ReviewController {
 
   @GetMapping
   public List<GetReviewsResponseDto> getReviews(
-      @RequestParam
-      GetReviewsRequestDto requestDto
+      GetReviewsRequestDto dto
   ) {
-    final var results = reviewDetailFacadeService.getPaginatedReviews(requestDto.page(), requestDto.size());
+    final var results = reviewDetailFacadeService.getPaginatedReviews(dto.offset(), dto.limit());
 
     return GetReviewsResponseDto.from(results);
   }

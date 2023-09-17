@@ -3,6 +3,7 @@ package io.perfume.api.user.stub;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
+import java.util.List;
 import java.util.Optional;
 
 public class StubUserRepository implements UserRepository, UserQueryRepository {
@@ -35,5 +36,10 @@ public class StubUserRepository implements UserRepository, UserQueryRepository {
   @Override
   public Optional<User> findOneByEmailOrUsername(String emailOrUsername) {
     return Optional.empty();
+  }
+
+  @Override
+  public List<User> findUsersByIds(List<Long> userIds) {
+    return null;
   }
 }
