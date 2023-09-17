@@ -45,11 +45,10 @@ include::{snippets}/login/response-cookies.adoc[]
 == 리뷰 삭제
 === 요청
 include::{snippets}/delete-review/http-request.adoc[]
-include::{snippets}/delete-review/request-fields.adoc[]
 
 === 응답
 include::{snippets}/delete-review/http-response.adoc[]
-include::{snippets}/delete-review/response-cookies.adoc[]
+include::{snippets}/delete-review/response-fields.adoc[]
 
 == 토큰 재발급
 === 요청
@@ -69,6 +68,14 @@ include::{snippets}/get-brand/http-request.adoc[]
 === 응답
 include::{snippets}/get-brand/http-response.adoc[]
 include::{snippets}/get-brand/response-fields.adoc[]
+
+== 노트 조회
+=== 요청
+include::{snippets}/get-note-by-id/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-note-by-id/http-response.adoc[]
+include::{snippets}/get-note-by-id/response-fields.adoc[]
 
 == 카테고리 목록 조회
 === 요청
