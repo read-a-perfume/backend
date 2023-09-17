@@ -1,7 +1,7 @@
 package io.perfume.api.perfume.adapter.in.http;
 
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
-import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponse;
+import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.GetPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
@@ -23,8 +23,8 @@ public class PerfumeController {
   private final CreatePerfumeUseCase createPerfumeUseCase;
 
   @GetMapping("/{id}")
-  public PerfumeResponse findPerfumeById(@PathVariable Long id) {
-    return PerfumeResponse.of(getPerfumeUseCase.getPerfume(id));
+  public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
+    return PerfumeResponseDto.of(getPerfumeUseCase.getPerfume(id));
   }
 
   @PostMapping
