@@ -39,12 +39,12 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
   }
 
   @Override
-  public List<Review> findByPage(int page, int size) {
+  public List<Review> findByPage(long page, long size) {
     return jpaQueryFactory
         .selectFrom(reviewEntity)
         .where(reviewEntity.deletedAt.isNull())
         .orderBy(reviewEntity.id.desc())
-        .offset((long) page * size)
+        .offset(page * size)
         .limit(size)
         .fetch()
         .stream()

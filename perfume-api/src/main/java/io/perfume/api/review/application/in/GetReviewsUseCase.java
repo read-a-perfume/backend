@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface GetReviewsUseCase {
 
-  List<ReviewResult> getPaginatedReviews(int page, int size);
+  List<ReviewResult> getPaginatedReviews(long page, long size);
 }

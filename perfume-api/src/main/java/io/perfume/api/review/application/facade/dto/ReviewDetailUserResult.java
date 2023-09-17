@@ -8,6 +8,6 @@ public record ReviewDetailUserResult(
 ) {
 
   static public ReviewDetailUserResult from(UserResult user) {
-    return new ReviewDetailUserResult(user.id(), user.name());
+    return new ReviewDetailUserResult(user.id(), user.username());
   }
 }

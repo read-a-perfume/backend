@@ -3,6 +3,7 @@ package io.perfume.api.review.adapter.in.http;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.DeleteReviewResponseDto;
+import io.perfume.api.review.adapter.in.http.dto.GetReviewsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
 import io.perfume.api.review.application.facade.ReviewDetailFacadeService;
 import io.perfume.api.review.application.in.CreateReviewUseCase;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,8 +43,11 @@ public class ReviewController {
   }
 
   @GetMapping
-  public List<GetReviewsResponseDto> getReviews() {
-    final var results = reviewDetailFacadeService.getPaginatedReviews(0, 10);
+  public List<GetReviewsResponseDto> getReviews(
+      @RequestParam
+      GetReviewsRequestDto requestDto
+  ) {
+    final var results = reviewDetailFacadeService.getPaginatedReviews(requestDto.page(), requestDto.size());
 
     return GetReviewsResponseDto.from(results);
   }

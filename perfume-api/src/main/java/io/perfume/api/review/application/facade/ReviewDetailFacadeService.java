@@ -37,7 +37,7 @@ public class ReviewDetailFacadeService {
     this.getReviewTagUseCase = getReviewTagUseCase;
   }
 
-  public List<ReviewDetailResult> getPaginatedReviews(int page, int size) {
+  public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
     final var reviews =
         getReviewsUseCase
             .getPaginatedReviews(page, size)

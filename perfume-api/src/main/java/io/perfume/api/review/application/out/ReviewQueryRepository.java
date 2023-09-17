@@ -8,5 +8,5 @@ public interface ReviewQueryRepository {
 
   Optional<Review> findById(Long id);
 
-  List<Review> findByPage(int page, int size);
+  List<Review> findByPage(long page, long size);
 }
