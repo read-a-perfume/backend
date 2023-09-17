@@ -1,13 +1,14 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfume.mapper;
 
-import io.perfume.api.note.domain.Note;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
-import io.perfume.api.perfume.domain.NotePyramid;
+import io.perfume.api.perfume.domain.NotePyramidIds;
 import io.perfume.api.perfume.domain.Perfume;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -40,29 +41,30 @@ public class PerfumeMapper {
         .build();
   }
 
-  public List<PerfumeNoteEntity> toPerfumeNoteEntities(Long perfumeId, NotePyramid notePyramid) {
-    List<PerfumeNoteEntity> perfumeNoteEntities = new ArrayList<>();
-    for (Note note : notePyramid.getTopNotes()) {
-      perfumeNoteEntities.add(PerfumeNoteEntity.builder()
-          .perfumeId(perfumeId)
-          .noteId(note.getId())
-          .noteLevel(NoteLevel.TOP)
-          .build());
-    }
-    for (Note note : notePyramid.getMiddleNotes()) {
-      perfumeNoteEntities.add(PerfumeNoteEntity.builder()
-          .perfumeId(perfumeId)
-          .noteId(note.getId())
-          .noteLevel(NoteLevel.MIDDLE)
-          .build());
-    }
-    for (Note note : notePyramid.getBaseNotes()) {
-      perfumeNoteEntities.add(PerfumeNoteEntity.builder()
-          .perfumeId(perfumeId)
-          .noteId(note.getId())
-          .noteLevel(NoteLevel.BASE)
-          .build());
-    }
-    return perfumeNoteEntities;
+  public List<PerfumeNoteEntity> toPerfumeNoteEntities(Long perfumeId,
+                                                       NotePyramidIds notePyramidIds) {
+    return Stream.of(
+            toPerfumeNoteEntities(notePyramidIds.getTopNoteIds(), perfumeId, NoteLevel.TOP),
+            toPerfumeNoteEntities(notePyramidIds.getMiddleNoteIds(), perfumeId, NoteLevel.MIDDLE),
+            toPerfumeNoteEntities(notePyramidIds.getBaseNoteIds(), perfumeId, NoteLevel.BASE)
+        )
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
+  }
+
+  private List<PerfumeNoteEntity> toPerfumeNoteEntities(List<Long> noteIds, Long perfumeId,
+                                                        NoteLevel noteLevel) {
+    return noteIds.stream()
+        .map(toPerfumeNoteEntity(perfumeId, noteLevel))
+        .collect(Collectors.toList());
+  }
+
+  private Function<Long, PerfumeNoteEntity> toPerfumeNoteEntity(Long perfumeId,
+                                                                NoteLevel noteLevel) {
+    return noteId -> PerfumeNoteEntity.builder()
+        .perfumeId(perfumeId)
+        .noteId(noteId)
+        .noteLevel(noteLevel)
+        .build();
   }
 }
