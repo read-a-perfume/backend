@@ -5,6 +5,7 @@ import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
 import io.perfume.api.perfume.domain.NotePyramidIds;
 import io.perfume.api.perfume.domain.Perfume;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -21,10 +22,54 @@ public class PerfumeMapper {
         .price(perfumeJpaEntity.getPrice())
         .concentration(perfumeJpaEntity.getConcentration())
         .capacity(perfumeJpaEntity.getCapacity())
+        .perfumeShopUrl(perfumeJpaEntity.getPerfumeShopUrl())
         .brandId(perfumeJpaEntity.getBrandId())
+        .categoryId(perfumeJpaEntity.getCategoryId())
+        .thumbnailId(perfumeJpaEntity.getThumbnailId())
         .deletedAt(perfumeJpaEntity.getDeletedAt())
         .updatedAt(perfumeJpaEntity.getUpdatedAt())
         .createdAt(perfumeJpaEntity.getCreatedAt())
+        .build();
+  }
+
+  public Perfume toPerfume(PerfumeJpaEntity perfumeJpaEntity, List<PerfumeNoteEntity> perfumeNoteEntities) {
+    return Perfume.builder()
+        .id(perfumeJpaEntity.getId())
+        .name(perfumeJpaEntity.getName())
+        .story(perfumeJpaEntity.getStory())
+        .price(perfumeJpaEntity.getPrice())
+        .concentration(perfumeJpaEntity.getConcentration())
+        .capacity(perfumeJpaEntity.getCapacity())
+        .perfumeShopUrl(perfumeJpaEntity.getPerfumeShopUrl())
+        .brandId(perfumeJpaEntity.getBrandId())
+        .categoryId(perfumeJpaEntity.getCategoryId())
+        .thumbnailId(perfumeJpaEntity.getThumbnailId())
+        .notePyramidIds(toNotePyramidIds(perfumeNoteEntities))
+        .deletedAt(perfumeJpaEntity.getDeletedAt())
+        .updatedAt(perfumeJpaEntity.getUpdatedAt())
+        .createdAt(perfumeJpaEntity.getCreatedAt())
+        .build();
+  }
+
+  private NotePyramidIds toNotePyramidIds(List<PerfumeNoteEntity> perfumeNoteEntities) {
+    List<Long> topNoteIds = new ArrayList<>();
+    List<Long> middleNoteIds = new ArrayList<>();
+    List<Long> baseNoteIds = new ArrayList<>();
+
+    perfumeNoteEntities.forEach(
+        e -> {
+          switch (e.getNoteLevel()) {
+            case TOP: topNoteIds.add(e.getNoteId()); break;
+            case MIDDLE: middleNoteIds.add(e.getNoteId());  break;
+            case BASE: baseNoteIds.add(e.getNoteId());
+          }
+        }
+    );
+
+    return NotePyramidIds.builder()
+        .topNoteIds(topNoteIds)
+        .middleNoteIds(middleNoteIds)
+        .baseNoteIds(baseNoteIds)
         .build();
   }
 
@@ -36,7 +81,9 @@ public class PerfumeMapper {
         .concentration(perfume.getConcentration())
         .price(perfume.getPrice())
         .capacity(perfume.getCapacity())
+        .perfumeShopUrl(perfume.getPerfumeShopUrl())
         .brandId(perfume.getBrandId())
+        .categoryId(perfume.getCategoryId())
         .thumbnailId(perfume.getThumbnailId())
         .build();
   }

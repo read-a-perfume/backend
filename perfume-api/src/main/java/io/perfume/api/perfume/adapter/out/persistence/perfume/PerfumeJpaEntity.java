@@ -38,16 +38,18 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
   private Long price;
 
   private Long capacity;
-
+  private String perfumeShopUrl;
   @NotNull
   private Long brandId;
+  @NotNull
+  private Long categoryId;
 
   private Long thumbnailId;
 
   @Builder
   public PerfumeJpaEntity(
-      Long id, String name, String story, Concentration concentration, Long price, Long capacity,
-      Long brandId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
+      Long id, String name, String story, Concentration concentration, Long price, Long capacity, String perfumeShopUrl,
+      Long brandId, Long categoryId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
       LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
@@ -56,7 +58,9 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
     this.concentration = concentration;
     this.price = price;
     this.capacity = capacity;
+    this.perfumeShopUrl = perfumeShopUrl;
     this.brandId = brandId;
+    this.categoryId = categoryId;
     this.thumbnailId = thumbnailId;
   }
 }

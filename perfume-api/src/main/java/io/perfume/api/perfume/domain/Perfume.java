@@ -13,7 +13,7 @@ public class Perfume extends BaseTimeDomain {
   private String story;
   private Concentration concentration;
   private Long price;
-  private Long capacity;
+  private Long capacity; // ML
   private String perfumeShopUrl;
   private Long brandId;
   private Long categoryId;
