@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.perfume.api.note.application.port.in.dto.NoteResult;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
-import io.perfume.api.perfume.application.port.in.GetPerfumeUseCase;
+import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
 import io.perfume.api.perfume.domain.Concentration;
 import java.util.List;
@@ -43,7 +43,7 @@ public class PerfumeControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private GetPerfumeUseCase getPerfumeUseCase;
+  private FindPerfumeUseCase findPerfumeUseCase;
 
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
@@ -73,7 +73,7 @@ public class PerfumeControllerTest {
         .baseNotes(List.of(new NoteResult(3L, "머스크", "testUrl.com/3", "머스크 향")))
         .build();
 
-    given(getPerfumeUseCase.getPerfume(anyLong())).willReturn(perfumeResult);
+    given(findPerfumeUseCase.findPerfumeById(anyLong())).willReturn(perfumeResult);
 
     // when
     // then
@@ -132,7 +132,7 @@ public class PerfumeControllerTest {
   @DisplayName("존재하지 않는 향수를 조회해서 NOT FOUND PERFUME EXCEPTION 을 던진다.")
   void getWithException() throws Exception {
     //given
-    given(getPerfumeUseCase.getPerfume(anyLong())).willThrow(new PerfumeNotFoundException(1L));
+    given(findPerfumeUseCase.findPerfumeById(anyLong())).willThrow(new PerfumeNotFoundException(1L));
 
     // when & then
     mockMvc

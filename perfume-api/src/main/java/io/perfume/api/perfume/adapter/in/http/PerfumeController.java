@@ -3,7 +3,7 @@ package io.perfume.api.perfume.adapter.in.http;
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
-import io.perfume.api.perfume.application.port.in.GetPerfumeUseCase;
+import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PerfumeController {
 
-  private final GetPerfumeUseCase getPerfumeUseCase;
+  private final FindPerfumeUseCase findPerfumeUseCase;
 
   private final CreatePerfumeUseCase createPerfumeUseCase;
 
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
-    return PerfumeResponseDto.of(getPerfumeUseCase.getPerfume(id));
+    return PerfumeResponseDto.of(findPerfumeUseCase.findPerfumeById(id));
   }
 
   @PostMapping

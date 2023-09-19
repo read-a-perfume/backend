@@ -1,9 +1,8 @@
 package io.perfume.api.perfume.application.port.in;
 
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
-import java.io.FileNotFoundException;
 
-public interface GetPerfumeUseCase {
+public interface FindPerfumeUseCase {
 
-  PerfumeResult getPerfume(Long id);
+  PerfumeResult findPerfumeById(Long id);
 }

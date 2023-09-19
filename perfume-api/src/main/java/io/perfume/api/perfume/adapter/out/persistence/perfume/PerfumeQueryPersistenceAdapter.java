@@ -15,7 +15,7 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
     private final PerfumeMapper perfumeMapper;
 
     @Override
-    public Perfume getPerfumeById(Long id) {
+    public Perfume findPerfumeById(Long id) {
         PerfumeJpaEntity perfumeJpaEntity = perfumeJpaRepository.findById(id).orElseThrow(() -> new PerfumeNotFoundException(id));
         return perfumeMapper.toPerfume(perfumeJpaEntity);
     }

@@ -4,5 +4,5 @@ import io.perfume.api.perfume.domain.Perfume;
 
 public interface PerfumeQueryRepository {
 
-    Perfume getPerfumeById(Long id);
+    Perfume findPerfumeById(Long id);
 }
