@@ -19,6 +19,10 @@ alter table note
 
 alter table perfume
     add concentration VARCHAR(255) not null;
+alter table perfume
+    add perfume_shop_url VARCHAR(255) null;
+alter table perfume
+    add category_id bigint not null;
 
 alter table perfume drop column strength;
 
