@@ -42,14 +42,6 @@ include::{snippets}/login/request-fields.adoc[]
 include::{snippets}/login/http-response.adoc[]
 include::{snippets}/login/response-cookies.adoc[]
 
-== 리뷰 삭제
-=== 요청
-include::{snippets}/delete-review/http-request.adoc[]
-
-=== 응답
-include::{snippets}/delete-review/http-response.adoc[]
-include::{snippets}/delete-review/response-fields.adoc[]
-
 == 토큰 재발급
 === 요청
 include::{snippets}/reissue-access-token/http-request.adoc[]
@@ -101,6 +93,15 @@ include::{snippets}/get-user-tastes/http-request.adoc[]
 include::{snippets}/get-user-tastes/http-response.adoc[]
 include::{snippets}/get-user-tastes/response-fields.adoc[]
 
+== 향수 조회
+=== 요청
+include::{snippets}/get-perfume/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume/http-response.adoc[]
+include::{snippets}/get-perfume/response-fields.adoc[]
+
+
 == 리뷰 생성
 === 요청
 include::{snippets}/create-review/http-request.adoc[]
@@ -108,6 +109,14 @@ include::{snippets}/create-review/http-request.adoc[]
 === 응답
 include::{snippets}/create-review/http-response.adoc[]
 include::{snippets}/create-review/response-fields.adoc[]
+
+== 리뷰 삭제
+=== 요청
+include::{snippets}/delete-review/http-request.adoc[]
+
+=== 응답
+include::{snippets}/delete-review/http-response.adoc[]
+include::{snippets}/delete-review/response-fields.adoc[]
 
 == 샘플
 === 요청
