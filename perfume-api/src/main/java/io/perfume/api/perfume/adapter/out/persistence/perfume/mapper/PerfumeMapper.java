@@ -1,10 +1,16 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfume.mapper;
 
+import static io.perfume.api.note.adapter.out.persistence.note.QNoteJpaEntity.noteJpaEntity;
+import static io.perfume.api.perfume.adapter.out.persistence.perfumeNote.QPerfumeNoteEntity.perfumeNoteEntity;
+
+import com.querydsl.core.Tuple;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
+import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.NotePyramidIds;
 import io.perfume.api.perfume.domain.Perfume;
+import io.perfume.api.perfume.domain.PerfumeNote;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -59,9 +65,14 @@ public class PerfumeMapper {
     perfumeNoteEntities.forEach(
         e -> {
           switch (e.getNoteLevel()) {
-            case TOP: topNoteIds.add(e.getNoteId()); break;
-            case MIDDLE: middleNoteIds.add(e.getNoteId());  break;
-            case BASE: baseNoteIds.add(e.getNoteId());
+            case TOP:
+              topNoteIds.add(e.getNoteId());
+              break;
+            case MIDDLE:
+              middleNoteIds.add(e.getNoteId());
+              break;
+            case BASE:
+              baseNoteIds.add(e.getNoteId());
           }
         }
     );
@@ -71,6 +82,34 @@ public class PerfumeMapper {
         .middleNoteIds(middleNoteIds)
         .baseNoteIds(baseNoteIds)
         .build();
+  }
+
+  public NotePyramid toNotePyramid(List<Tuple> fetchedTuples) {
+    List<PerfumeNote> topPerfumeNotes = new ArrayList<>();
+    List<PerfumeNote> middlePerfumeNotes = new ArrayList<>();
+    List<PerfumeNote> basePerfumeNotes = new ArrayList<>();
+
+    fetchedTuples.forEach(
+        tuple -> {
+          switch (tuple.get(perfumeNoteEntity.noteLevel)) {
+            case TOP:
+              topPerfumeNotes.add(toPerfumeNote(tuple));
+              break;
+            case MIDDLE:
+              middlePerfumeNotes.add(toPerfumeNote(tuple));
+              break;
+            case BASE:
+              basePerfumeNotes.add(toPerfumeNote(tuple));
+              break;
+          }
+        }
+    );
+    return new NotePyramid(topPerfumeNotes, middlePerfumeNotes, basePerfumeNotes);
+  }
+
+  private PerfumeNote toPerfumeNote(Tuple tuple) {
+    return new PerfumeNote(tuple.get(perfumeNoteEntity.noteId), tuple.get(noteJpaEntity.name),
+        tuple.get(noteJpaEntity.thumbnailId), tuple.get(perfumeNoteEntity.noteLevel));
   }
 
   public PerfumeJpaEntity toPerfumeJpaEntity(Perfume perfume) {

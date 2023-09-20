@@ -8,7 +8,8 @@ import lombok.Builder;
 @Builder
 public record PerfumeResponseDto(String name, String story, Concentration concentration, Long price, Long capacity,
                                  String perfumeShopUrl, String brandName, String categoryName, String categoryDescription,
-                                 String thumbnailUrl, List<NoteResponseDto> topNotes, List<NoteResponseDto> middleNotes, List<NoteResponseDto> baseNotes) {
+                                 String thumbnailUrl, List<NoteResponseDto> topNotes, List<NoteResponseDto> middleNotes,
+                                 List<NoteResponseDto> baseNotes) {
 
   public static PerfumeResponseDto of(PerfumeResult perfumeResult) {
     return PerfumeResponseDto.builder()
@@ -22,9 +23,9 @@ public record PerfumeResponseDto(String name, String story, Concentration concen
         .categoryDescription(perfumeResult.categoryDescription())
         .brandName(perfumeResult.brandName())
         .thumbnailUrl(perfumeResult.thumbnailUrl())
-        .topNotes(NoteResponseDto.of(perfumeResult.topNotes()))
-        .middleNotes(NoteResponseDto.of(perfumeResult.middleNotes()))
-        .baseNotes(NoteResponseDto.of(perfumeResult.baseNotes()))
+        .topNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().topNotes()))
+        .middleNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().middleNotes()))
+        .baseNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().baseNotes()))
         .build();
   }
 }

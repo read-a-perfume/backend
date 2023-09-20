@@ -12,9 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.perfume.api.note.application.port.in.dto.NoteResult;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
+import io.perfume.api.perfume.application.port.in.dto.NotePyramidResult;
+import io.perfume.api.perfume.application.port.in.dto.PerfumeNoteResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
 import io.perfume.api.perfume.domain.Concentration;
 import java.util.List;
@@ -57,6 +58,11 @@ public class PerfumeControllerTest {
   @DisplayName("향수를 카테고리, 브랜드 정보, 노트 정보와 함께 조회할 수 있다.")
   void get() throws Exception {
     // given
+    NotePyramidResult notePyramidResult = new NotePyramidResult(
+        List.of(new PerfumeNoteResult(1L, "핑크 페퍼", "testUrl.com/1")),
+        List.of(new PerfumeNoteResult(2L, "자스민", "testUrl.com/2")),
+        List.of(new PerfumeNoteResult(3L, "머스크", "testUrl.com/3")));
+
     PerfumeResult perfumeResult = PerfumeResult.builder()
         .name("샹스 오 드 빠르펭")
         .story("예측할 수 없는 놀라움을 줍니다.")
@@ -68,9 +74,7 @@ public class PerfumeControllerTest {
         .categoryName("플로럴")
         .categoryDescription("#달달한 #우아한 #꽃")
         .thumbnailUrl("testUrl.com")
-        .topNotes(List.of(new NoteResult(1L, "핑크 페퍼", "testUrl.com/1", "핑크페퍼 향")))
-        .middleNotes(List.of(new NoteResult(2L, "자스민", "testUrl.com/2", "자스민 향")))
-        .baseNotes(List.of(new NoteResult(3L, "머스크", "testUrl.com/3", "머스크 향")))
+        .notePyramidResult(notePyramidResult)
         .build();
 
     given(findPerfumeUseCase.findPerfumeById(anyLong())).willReturn(perfumeResult);
@@ -94,9 +98,9 @@ public class PerfumeControllerTest {
         .andExpect(jsonPath("$.categoryName").value(perfumeResult.categoryName()))
         .andExpect(jsonPath("$.categoryDescription").value(perfumeResult.categoryDescription()))
         .andExpect(jsonPath("$.thumbnailUrl").value(perfumeResult.thumbnailUrl()))
-        .andExpect(jsonPath("$.topNotes[0].name").value(perfumeResult.topNotes().get(0).name()))
-        .andExpect(jsonPath("$.middleNotes[0].name").value(perfumeResult.middleNotes().get(0).name()))
-        .andExpect(jsonPath("$.baseNotes[0].name").value(perfumeResult.baseNotes().get(0).name()))
+        .andExpect(jsonPath("$.topNotes[0].name").value(perfumeResult.notePyramidResult().topNotes().get(0).name()))
+        .andExpect(jsonPath("$.middleNotes[0].name").value(perfumeResult.notePyramidResult().middleNotes().get(0).name()))
+        .andExpect(jsonPath("$.baseNotes[0].name").value(perfumeResult.notePyramidResult().baseNotes().get(0).name()))
         .andDo(
             document("get-perfume",
                 pathParameters(

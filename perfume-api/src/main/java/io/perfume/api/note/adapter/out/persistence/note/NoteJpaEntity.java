@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ public class NoteJpaEntity extends BaseTimeEntity {
 
   private Long thumbnailId;
 
+  @Builder
   public NoteJpaEntity(Long id, String name, String description, Long thumbnailId,
                        LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
