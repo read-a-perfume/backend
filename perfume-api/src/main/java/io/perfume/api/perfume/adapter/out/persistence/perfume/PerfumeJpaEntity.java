@@ -1,6 +1,7 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfume;
 
 import io.perfume.api.base.BaseTimeEntity;
+import io.perfume.api.perfume.domain.Concentration;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,35 +33,34 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
   @NotNull
   private String story;
 
-  private String strength;
-
-  private String duration;
+  private Concentration concentration;
 
   private Long price;
 
   private Long capacity;
-
+  private String perfumeShopUrl;
   @NotNull
   private Long brandId;
+  @NotNull
+  private Long categoryId;
 
   private Long thumbnailId;
 
+  @Builder
   public PerfumeJpaEntity(
-      Long id, String name, String story, String strength, String duration, Long price,
-      Long capacity,
-      Long brandId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
+      Long id, String name, String story, Concentration concentration, Long price, Long capacity, String perfumeShopUrl,
+      Long brandId, Long categoryId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
       LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
     this.story = story;
-    this.strength = strength;
+    this.concentration = concentration;
     this.price = price;
     this.capacity = capacity;
-    this.duration = duration;
-    this.price = price;
-    this.capacity = capacity;
+    this.perfumeShopUrl = perfumeShopUrl;
     this.brandId = brandId;
+    this.categoryId = categoryId;
     this.thumbnailId = thumbnailId;
   }
 }

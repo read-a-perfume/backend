@@ -11,24 +11,30 @@ public class Perfume extends BaseTimeDomain {
   private Long id;
   private String name;
   private String story;
-  private String strength;
-  private String duration;
+  private Concentration concentration;
   private Long price;
-  private Long capacity;
+  private Long capacity; // ML
+  private String perfumeShopUrl;
   private Long brandId;
+  private Long categoryId;
+  private Long thumbnailId;
+  private NotePyramidIds notePyramidIds;
 
   @Builder
-  private Perfume(Long id, String name, String story, String strength, String duration, Long price,
-                  Long capacity, Long brandId,
-                  LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public Perfume(Long id, String name, String story, Concentration concentration, Long price, Long capacity, String perfumeShopUrl, Long brandId,
+                 Long thumbnailId, NotePyramidIds notePyramidIds, Long categoryId, LocalDateTime createdAt, LocalDateTime updatedAt,
+                 LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
     this.story = story;
-    this.strength = strength;
-    this.duration = duration;
+    this.concentration = concentration;
     this.price = price;
     this.capacity = capacity;
+    this.perfumeShopUrl = perfumeShopUrl;
     this.brandId = brandId;
+    this.categoryId = categoryId;
+    this.thumbnailId = thumbnailId;
+    this.notePyramidIds = notePyramidIds;
   }
 }
