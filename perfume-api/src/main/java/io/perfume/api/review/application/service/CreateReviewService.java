@@ -46,6 +46,6 @@ public class CreateReviewService implements CreateReviewUseCase {
     Review createdReview = reviewRepository.save(createReview(authorId, command, now));
     addReviewTagUseCase.addTags(createdReview.getId(), command.tags());
 
-    return new ReviewResult(createdReview.getId());
+    return ReviewResult.from(createdReview);
   }
 }

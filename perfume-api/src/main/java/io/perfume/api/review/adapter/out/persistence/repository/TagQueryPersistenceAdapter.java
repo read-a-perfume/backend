@@ -47,4 +47,14 @@ public class TagQueryPersistenceAdapter implements TagQueryRepository {
         .map(reviewTagMapper::toDomain)
         .toList();
   }
+
+  @Override
+  public List<ReviewTag> findReviewsTags(List<Long> reviewIds) {
+    return jpaQueryFactory.selectFrom(reviewTagEntity)
+        .where(reviewTagEntity.id.reviewId.in(reviewIds))
+        .fetch()
+        .stream()
+        .map(reviewTagMapper::toDomain)
+        .toList();
+  }
 }

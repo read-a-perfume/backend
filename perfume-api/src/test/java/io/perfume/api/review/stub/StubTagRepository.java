@@ -35,6 +35,11 @@ public class StubTagRepository implements TagRepository, TagQueryRepository {
     return tags;
   }
 
+  @Override
+  public List<ReviewTag> findReviewsTags(List<Long> reviewIds) {
+    return null;
+  }
+
   public void clear() {
     tags.clear();
   }

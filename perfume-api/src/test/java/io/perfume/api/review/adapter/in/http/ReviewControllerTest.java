@@ -7,6 +7,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,6 +17,8 @@ import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.SEASON;
 import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.user.application.port.out.UserRepository;
+import io.perfume.api.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +38,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
@@ -49,6 +54,9 @@ class ReviewControllerTest {
 
   @Autowired
   private ReviewRepository reviewRepository;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
@@ -177,5 +185,58 @@ class ReviewControllerTest {
         )
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+  }
+
+  @Test
+  @DisplayName("리뷰를 조회한다.")
+  @WithMockUser(username = "1", roles = "USER")
+  void testGetReviews() throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var user = userRepository.save(User.generalUserJoin(
+        "test",
+        "test@mail.com",
+        "test",
+        "test",
+        false,
+        false
+    )).orElseThrow();
+    var review = reviewRepository.save(Review.create(
+        "test",
+        "test description",
+        STRENGTH.LIGHT,
+        1000L,
+        SEASON.DAILY,
+        1L,
+        user.getId(),
+        now
+    ));
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("page", "1");
+    params.add("size", "10");
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/reviews")
+            .params(params)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("get-reviews",
+                responseFields(
+                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
+                    fieldWithPath("[].feeling").type(JsonFieldType.STRING).description("향수 느낌"),
+                    fieldWithPath("[].user.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
+                    fieldWithPath("[].user.username").type(JsonFieldType.STRING)
+                        .description("리뷰 작성자 이름"),
+                    fieldWithPath("[].user.thumbnailUrl").type(JsonFieldType.STRING)
+                        .description("리뷰 작성자 프로필 이미지"),
+                    fieldWithPath("[].tags").type(JsonFieldType.ARRAY).description("리뷰 태그")
+                )
+            ));
   }
 }

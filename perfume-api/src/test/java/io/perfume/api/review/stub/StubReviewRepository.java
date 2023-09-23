@@ -24,6 +24,11 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
     return review;
   }
 
+  @Override
+  public List<Review> findByPage(long page, long size) {
+    return null;
+  }
+
   public Review addReview(Review review) {
     reviews.add(review);
     return review;

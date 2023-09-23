@@ -6,6 +6,7 @@ import io.perfume.api.user.application.port.out.SocialAccountQueryRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,15 +25,23 @@ public class FindUserService implements FindUserUseCase {
   }
 
   @Override
-  @Transactional
+  @Transactional(readOnly = true)
   public Optional<UserResult> findOneByEmail(String email) {
     return userQueryRepository.findOneByEmail(email).map(this::toDto);
   }
 
   @Override
-  @Transactional
+  @Transactional(readOnly = true)
   public Optional<UserResult> findOneBySocialId(String socialId) {
     return oauthQueryRepository.findOneBySocialId(socialId).map(this::toDto);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<UserResult> findUsersByIds(List<Long> userIds) {
+    return userQueryRepository.findUsersByIds(userIds).stream()
+        .map(this::toDto)
+        .toList();
   }
 
   private UserResult toDto(User user) {
