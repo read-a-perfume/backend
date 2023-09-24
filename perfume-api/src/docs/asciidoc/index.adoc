@@ -69,6 +69,13 @@ include::{snippets}/get-note-by-id/http-request.adoc[]
 include::{snippets}/get-note-by-id/http-response.adoc[]
 include::{snippets}/get-note-by-id/response-fields.adoc[]
 
+== 노트 생성
+=== 요청
+include::{snippets}/create-note/http-request.adoc[]
+include::{snippets}/create-note/request-fields.adoc[]
+=== 응답
+include::{snippets}/create-note/http-response.adoc[]
+
 == 카테고리 목록 조회
 === 요청
 include::{snippets}/get-categories/http-request.adoc[]
@@ -101,6 +108,13 @@ include::{snippets}/get-perfume/http-request.adoc[]
 include::{snippets}/get-perfume/http-response.adoc[]
 include::{snippets}/get-perfume/response-fields.adoc[]
 
+== 향수 생성
+=== 요청
+include::{snippets}/create-perfume/http-request.adoc[]
+include::{snippets}/create-perfume/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/create-perfume/http-response.adoc[]
 
 == 리뷰 생성
 === 요청
