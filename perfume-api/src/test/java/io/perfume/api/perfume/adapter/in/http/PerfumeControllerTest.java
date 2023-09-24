@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -12,7 +13,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
+import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.NotePyramidResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNoteResult;
@@ -23,6 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -42,9 +47,12 @@ import org.springframework.web.context.WebApplicationContext;
 public class PerfumeControllerTest {
 
   private MockMvc mockMvc;
-
   @MockBean
   private FindPerfumeUseCase findPerfumeUseCase;
+  @MockBean
+  private CreatePerfumeUseCase createPerfumeUseCase;
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
@@ -142,5 +150,39 @@ public class PerfumeControllerTest {
     mockMvc
         .perform(RestDocumentationRequestBuilders.get("/v1/perfumes/1"))
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void createPerfume() throws Exception {
+    // given
+    CreatePerfumeRequestDto requestDto = new CreatePerfumeRequestDto("샹스 오 드 빠르펭", "예측할 수 없는 놀라움을 줍니다.", Concentration.EAU_DE_PERFUME, 100L, 255000L,
+        1L, 1L, 1L, "https://www.chanel.com/kr/fragrance/p/126520/chance-eau-de-parfum-spray/",
+        List.of(1L, 2L, 3L), List.of(4L, 5L, 6L), List.of(7L, 8L, 9L));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.post("/v1/perfumes")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsBytes(requestDto))
+        )
+        .andExpect(status().isCreated())
+        .andDo(
+            document("create-perfume",
+                requestFields(
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("향수 이름"),
+                    fieldWithPath("story").type(JsonFieldType.STRING).description("향수 스토리"),
+                    fieldWithPath("concentration").type(JsonFieldType.STRING).description("향수 농도 ex) EAU_DE_PERFUME, EAU_DE_TOILETTE"),
+                    fieldWithPath("price").type(JsonFieldType.NUMBER).description("향수 가격"),
+                    fieldWithPath("capacity").type(JsonFieldType.NUMBER).description("향수 용량"),
+                    fieldWithPath("brandId").type(JsonFieldType.NUMBER).description("향수 브랜드 ID(PK)"),
+                    fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("향수 카테고리 ID(PK)"),
+                    fieldWithPath("thumbnailId").type(JsonFieldType.NUMBER).description("향수 썸네일 ID(PK)"),
+                    fieldWithPath("perfumeShopUrl").type(JsonFieldType.STRING).description("향수 쇼핑몰 URL"),
+                    fieldWithPath("topNoteIds").type(JsonFieldType.ARRAY).description("향수 탑 노트 ID 목록"),
+                    fieldWithPath("middleNoteIds").type(JsonFieldType.ARRAY).description("향수 미들 노트 ID 목록"),
+                    fieldWithPath("baseNoteIds").type(JsonFieldType.ARRAY).description("향수 베이스 노트 ID 목록")
+                )
+            ));
   }
 }
