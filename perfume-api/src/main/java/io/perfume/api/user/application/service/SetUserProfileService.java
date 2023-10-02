@@ -1,7 +1,7 @@
 package io.perfume.api.user.application.service;
 
 import io.perfume.api.file.application.port.in.dto.SaveFileResult;
-import io.perfume.api.file.application.service.FileUploadService;
+import io.perfume.api.file.application.service.SaveFileService;
 import io.perfume.api.user.application.exception.NotFoundUserException;
 import io.perfume.api.user.application.port.in.SetUserProfileUseCase;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
@@ -18,10 +18,10 @@ public class SetUserProfileService implements SetUserProfileUseCase {
 
   private final UserQueryRepository userQueryRepository;
   private final UserRepository userRepository;
-  private final FileUploadService fileUploadService;
+  private final SaveFileService fileUploadService;
 
   public SetUserProfileService(UserQueryRepository userQueryRepository,
-                               UserRepository userRepository, FileUploadService fileUploadService) {
+                               UserRepository userRepository, SaveFileService fileUploadService) {
     this.userQueryRepository = userQueryRepository;
     this.userRepository = userRepository;
     this.fileUploadService = fileUploadService;
