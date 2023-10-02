@@ -16,13 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
-public class FileUploadService implements FileUploadUseCase {
+public class SaveFileService implements FileUploadUseCase {
 
   private final FileRepository fileRepository;
 
   private final String cdnUrl = "";
 
-  public FileUploadService(FileRepository fileRepository) {
+  public SaveFileService(FileRepository fileRepository) {
     this.fileRepository = fileRepository;
   }
 
