@@ -1,6 +1,8 @@
 package io.perfume.api.brand.adapter.in.http.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public record CreateBrandResponseDto (
-        Long id
+        @NotEmpty String name
 ){
 }
