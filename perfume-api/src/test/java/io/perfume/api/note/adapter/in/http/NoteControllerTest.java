@@ -3,6 +3,7 @@ package io.perfume.api.note.adapter.in.http;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -10,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.perfume.api.note.adapter.in.http.dto.CreateNoteRequestDto;
 import io.perfume.api.note.application.port.out.NoteRepository;
 import io.perfume.api.note.domain.Note;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +37,8 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 class NoteControllerTest {
   private MockMvc mockMvc;
+  @Autowired
+  private ObjectMapper objectMapper;
   @Autowired
   private NoteRepository noteRepository;
 
@@ -74,5 +79,28 @@ class NoteControllerTest {
                     fieldWithPath("description").type(JsonFieldType.STRING).description("노트 설명"),
                     fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("노트 이미지")
                 )));
+  }
+
+  @Test
+  void createNote() throws Exception {
+    CreateNoteRequestDto dto =
+        new CreateNoteRequestDto("white musk", "A light, white floral note with a fresh green scent and aquatic undertones.", 1L);
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.post("/v1/notes")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsBytes(dto))
+        )
+        .andExpect(status().isCreated())
+        .andDo(
+            document("create-note",
+                requestFields(
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("노트 이름"),
+                    fieldWithPath("description").type(JsonFieldType.STRING).description("노트 설명"),
+                    fieldWithPath("thumbnailId").type(JsonFieldType.NUMBER).description("노트 썸네일 ID(PK)")
+                )
+            ));
   }
 }
