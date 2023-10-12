@@ -1,7 +1,6 @@
 package jwt;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import javax.crypto.SecretKey;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,11 +34,11 @@ public class JsonWebTokenGenerator {
 
     return Jwts
         .builder()
-        .signWith(secret, SignatureAlgorithm.HS256)
-        .setClaims(claims)
-        .setSubject(subject)
-        .setIssuedAt(toDate(now))
-        .setExpiration(toDate(now.plusSeconds(expirationSeconds)))
+        .signWith(secret)
+        .claims(claims)
+        .subject(subject)
+        .issuedAt(toDate(now))
+        .expiration(toDate(now.plusSeconds(expirationSeconds)))
         .compact();
   }
 
@@ -47,11 +47,11 @@ public class JsonWebTokenGenerator {
     assert !jwt.isEmpty();
 
     return Jwts
-        .parserBuilder()
-        .setSigningKey(secret)
+        .parser()
+        .verifyWith((SecretKey) secret)
         .build()
-        .parseClaimsJws(jwt)
-        .getBody()
+        .parseSignedClaims(jwt)
+        .getPayload()
         .getExpiration()
         .before(toDate(now));
   }
@@ -70,11 +70,11 @@ public class JsonWebTokenGenerator {
     assert !jwt.isEmpty();
 
     return Jwts
-        .parserBuilder()
-        .setSigningKey(secret)
+        .parser()
+        .verifyWith((SecretKey) secret)
         .build()
-        .parseClaimsJws(jwt)
-        .getBody()
+        .parseSignedClaims(jwt)
+        .getPayload()
         .getSubject();
   }
 
@@ -85,11 +85,11 @@ public class JsonWebTokenGenerator {
     assert !key.isEmpty();
 
     return Jwts
-        .parserBuilder()
-        .setSigningKey(secret)
+        .parser()
+        .verifyWith((SecretKey) secret)
         .build()
-        .parseClaimsJws(jwt)
-        .getBody()
+        .parseSignedClaims(jwt)
+        .getPayload()
         .get(key, requiredType);
   }
 
@@ -99,10 +99,10 @@ public class JsonWebTokenGenerator {
 
     try {
       Jwts
-          .parserBuilder()
-          .setSigningKey(secret)
+          .parser()
+          .verifyWith((SecretKey) secret)
           .build()
-          .parseClaimsJws(jwt);
+          .parseSignedClaims(jwt);
       return !this.isExpired(jwt, now);
     } catch (Exception e) {
       return false;
