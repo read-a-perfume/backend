@@ -1,25 +1,31 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfume;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import io.perfume.api.brand.adapter.out.persistence.BrandEntity;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaRepository;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.domain.Concentration;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -106,5 +112,74 @@ class PerfumeQueryPersistenceAdapterTest {
     NotePyramid notePyramidIdsByPerfume = perfumeQueryPersistenceAdapter.getNotePyramidByPerfume(1L);
     // then
     assertNotNull(notePyramidIdsByPerfume);
+  }
+
+  @Test
+  @DisplayName("Brand를 기준으로 향수 조회 시, 마지막 향수의 id가 없으면 첫 페이지를 조회한다.")
+  void findPerfumesByBrand() {
+    // given
+    BrandEntity brandEntity = BrandEntity.builder().name("Aesop").story("기업 소개").build();
+    entityManager.persist(brandEntity);
+
+    for (int i = 0; i < 5; i++) {
+      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
+          .story("story" + i)
+          .concentration(Concentration.EAU_DE_PERFUME)
+          .price(150000L)
+          .capacity(50L)
+          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+          .brandId(brandEntity.getId())
+          .categoryId(1L)
+          .thumbnailId(1L)
+          .build();
+
+      entityManager.persist(perfumeJpaEntity);
+    }
+
+    // when
+    int pageSize = 3;
+    Slice<SimplePerfumeResult> perfumesByBrand = perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
+    // then
+    assertEquals(pageSize, perfumesByBrand.getSize());
+    assertEquals(pageSize, perfumesByBrand.getContent().size());
+    assertEquals(true, perfumesByBrand.hasNext());
+  }
+
+  @Test
+  @DisplayName("Brand를 기준으로 향수 조회 시, 마지막 향수의 id를 넘기면 그 이후의 향수를 조회한다.")
+  void findPerfumesByBrandWithLastPerfumeId() {
+    // given
+    BrandEntity brandEntity = BrandEntity.builder().name("Aesop").story("기업 소개").build();
+    entityManager.persist(brandEntity);
+
+    List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
+          .story("story" + i)
+          .concentration(Concentration.EAU_DE_PERFUME)
+          .price(150000L)
+          .capacity(50L)
+          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+          .brandId(brandEntity.getId())
+          .categoryId(1L)
+          .thumbnailId(1L)
+          .build();
+
+      entityManager.persist(perfumeJpaEntity);
+      perfumeJpaEntities.add(perfumeJpaEntity);
+    }
+
+    // when
+    int pageSize = 3;
+    // 첫 3개 조회
+    Slice<SimplePerfumeResult> perfumesByBrandFirst = perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
+    // 위에서 구한 마지막 향수 아이디를 넣어 나머지 2개 조회
+    Slice<SimplePerfumeResult> perfumesByBrandLast =
+        perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), perfumesByBrandFirst.getContent().get(pageSize - 1).id(), pageSize);
+
+    // then
+    assertEquals(pageSize, perfumesByBrandLast.getSize());
+    assertEquals(perfumeJpaEntities.size() - pageSize, perfumesByBrandLast.getContent().size());
+    assertFalse(perfumesByBrandLast.hasNext());
   }
 }
