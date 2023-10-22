@@ -1,12 +1,16 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfume.mapper;
 
+import static io.perfume.api.brand.adapter.out.persistence.QBrandEntity.brandEntity;
+import static io.perfume.api.file.adapter.out.persistence.file.QFileJpaEntity.fileJpaEntity;
 import static io.perfume.api.note.adapter.out.persistence.note.QNoteJpaEntity.noteJpaEntity;
+import static io.perfume.api.perfume.adapter.out.persistence.perfume.QPerfumeJpaEntity.perfumeJpaEntity;
 import static io.perfume.api.perfume.adapter.out.persistence.perfumeNote.QPerfumeNoteEntity.perfumeNoteEntity;
 
 import com.querydsl.core.Tuple;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.NotePyramidIds;
 import io.perfume.api.perfume.domain.Perfume;
@@ -151,6 +155,22 @@ public class PerfumeMapper {
         .perfumeId(perfumeId)
         .noteId(noteId)
         .noteLevel(noteLevel)
+        .build();
+  }
+
+  public List<SimplePerfumeResult> toSimplePerfumeResults(List<Tuple> fetchedTuples) {
+    return fetchedTuples.stream()
+        .map(this::toSimplePerfumeResult)
+        .toList();
+  }
+
+  private SimplePerfumeResult toSimplePerfumeResult(Tuple tuple) {
+    return SimplePerfumeResult.builder()
+        .id(tuple.get(perfumeJpaEntity.id))
+        .name(tuple.get(perfumeJpaEntity.name))
+        .concentration(tuple.get(perfumeJpaEntity.concentration))
+        .brandName(tuple.get(brandEntity.name))
+        .thumbnailUrl(tuple.get(fileJpaEntity.url))
         .build();
   }
 }

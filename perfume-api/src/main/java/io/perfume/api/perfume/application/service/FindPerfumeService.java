@@ -7,10 +7,12 @@ import io.perfume.api.note.application.port.in.dto.CategoryResult;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,5 +32,10 @@ public class FindPerfumeService implements FindPerfumeUseCase {
     // TODO: file의 thumbnail을 얻어와야 한다.
 
     return PerfumeResult.from(perfume, categoryResult, brandResult, notePyramid);
+  }
+
+  @Override
+  public Slice<SimplePerfumeResult> findPerfumeByCategory(Long categoryId, Long lastPerfumeId, int limit) {
+    return perfumeQueryRepository.findPerfumeByCategory(categoryId, lastPerfumeId, limit);
   }
 }
