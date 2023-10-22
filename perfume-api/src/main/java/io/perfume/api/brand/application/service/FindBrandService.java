@@ -27,6 +27,7 @@ public class FindBrandService implements FindBrandUseCase {
 
   @Override
   public BrandForPerfumeResult findBrandForPerfume(Long id) {
-    return null;
+    Brand brand = brandQueryRepository.findBrandById(id).orElseThrow(() -> new BrandNotFoundException(id));
+    return BrandForPerfumeResult.of(brand);
   }
 }
