@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("checkstyle")
-    id("org.springframework.boot") version "3.1.4"
+    id("org.springframework.boot") version "3.1.5"
     id("io.spring.dependency-management") version "1.1.3"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.27"
@@ -42,10 +42,10 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3")
 
         // spring boot
-        implementation("org.springframework.boot:spring-boot-starter:3.1.4")
+        implementation("org.springframework.boot:spring-boot-starter:3.1.5")
 
         // test
-        testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.4")
+        testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.5")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
         testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
