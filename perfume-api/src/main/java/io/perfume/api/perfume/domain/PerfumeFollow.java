@@ -18,4 +18,9 @@ public class PerfumeFollow extends BaseTimeDomain {
     this.userId = userId;
     this.perfumeId = perfumeId;
   }
+  
+  public static PerfumeFollow create(Long userId, Long perfumeId, LocalDateTime now) {
+    return new PerfumeFollow(null, userId, perfumeId,
+        now, now, null);
+  }
 }
