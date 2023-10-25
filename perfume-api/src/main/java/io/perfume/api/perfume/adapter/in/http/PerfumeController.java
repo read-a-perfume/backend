@@ -5,7 +5,12 @@ import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.SimplePerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
+<<<<<<< HEAD
 import io.perfume.api.perfume.application.port.in.UserFavoritePerfumeUseCase;
+=======
+import io.perfume.api.perfume.application.port.in.UserFollowPerfumeUseCase;
+import io.perfume.api.perfume.application.port.in.UserUnFollowPerfumeUseCase;
+>>>>>>> 261faff ([RDPF-193] feat: Follow Service 추가)
 import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import jakarta.annotation.Nullable;
@@ -35,7 +40,13 @@ public class PerfumeController {
 
   private final CreatePerfumeUseCase createPerfumeUseCase;
 
+<<<<<<< HEAD
   private final UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
+=======
+  private final UserFollowPerfumeUseCase userFollowPerfumeUseCase;
+
+  private final UserUnFollowPerfumeUseCase userUnFollowPerfumeUseCase;
+>>>>>>> 261faff ([RDPF-193] feat: Follow Service 추가)
 
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
@@ -50,12 +61,15 @@ public class PerfumeController {
     createPerfumeUseCase.createPerfume(createPerfumeCommand);
   }
 
+<<<<<<< HEAD
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/favorite/{id}")
   public void favoritePerfume(@AuthenticationPrincipal User user, @PathVariable Long id) {
     var userId = Long.parseLong(user.getUsername());
     userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, id);
   }
+=======
+>>>>>>> 261faff ([RDPF-193] feat: Follow Service 추가)
 
   @GetMapping
   public Slice<SimplePerfumeResponseDto> getPerfumesByBrand (@RequestParam Long
