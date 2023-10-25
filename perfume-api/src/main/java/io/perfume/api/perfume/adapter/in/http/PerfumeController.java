@@ -55,12 +55,16 @@ public class PerfumeController {
   public void favoritePerfume(@AuthenticationPrincipal User user, @PathVariable Long id) {
     var userId = Long.parseLong(user.getUsername());
     userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, id);
+  }
 
   @GetMapping
-  public Slice<SimplePerfumeResponseDto> getPerfumesByBrand(@RequestParam Long brandId, @RequestParam @Nullable Long lastPerfumeId,
-                                                            @RequestParam int pageSize) {
-    Slice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
-    List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
+  public Slice<SimplePerfumeResponseDto> getPerfumesByBrand (@RequestParam Long
+      brandId, @RequestParam @Nullable Long lastPerfumeId,
+      @RequestParam int pageSize){
+    Slice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId,
+        lastPerfumeId, pageSize);
+    List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream()
+        .map(SimplePerfumeResponseDto::of).toList();
     return new SliceImpl<>(list, perfumesByBrand.getPageable(), perfumesByBrand.hasNext());
   }
 }
