@@ -27,6 +27,7 @@ public class PerfumeFollowQueryPersistenceAdapter implements PerfumeFollowQueryR
   @Override
   public Optional<PerfumeFollow> findByUserAndPerfume(Long userId, Long perfumeId) {
     PerfumeFollowJpaEntity entity = jpaQueryFactory.select(perfumeFollowJpaEntity)
+        .from(perfumeFollowJpaEntity)
         .where(perfumeFollowJpaEntity.userId.eq(userId)
             .and(perfumeFollowJpaEntity.perfumeId.eq(perfumeId)))
         .fetchOne();
