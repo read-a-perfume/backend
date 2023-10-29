@@ -12,9 +12,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.perfume.api.review.adapter.in.http.dto.CreateReviewCommentRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewRequestDto;
+import io.perfume.api.review.application.out.ReviewCommentRepository;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
+import io.perfume.api.review.domain.ReviewComment;
 import io.perfume.api.review.domain.type.SEASON;
 import io.perfume.api.review.domain.type.STRENGTH;
 import io.perfume.api.user.application.port.out.UserRepository;
@@ -57,6 +60,9 @@ class ReviewControllerTest {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private ReviewCommentRepository reviewCommentRepository;
 
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
@@ -236,6 +242,174 @@ class ReviewControllerTest {
                     fieldWithPath("[].user.thumbnailUrl").type(JsonFieldType.STRING)
                         .description("리뷰 작성자 프로필 이미지"),
                     fieldWithPath("[].tags").type(JsonFieldType.ARRAY).description("리뷰 태그")
+                )
+            ));
+  }
+
+  @Test
+  @DisplayName("리뷰 댓글을 작성한다.")
+  @WithMockUser(username = "1", roles = "USER")
+  void testCreateReviewComment() throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var user = userRepository.save(User.generalUserJoin(
+        "test",
+        "test@mail.com",
+        "test",
+        "test",
+        false,
+        false
+    )).orElseThrow();
+    var review = reviewRepository.save(Review.create(
+        "test",
+        "test description",
+        STRENGTH.LIGHT,
+        1000L,
+        SEASON.DAILY,
+        1L,
+        user.getId(),
+        now
+    ));
+    var dto = new CreateReviewCommentRequestDto("test");
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.post("/v1/reviews/{id}/comments", review.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(dto))
+        )
+        .andDo(print())
+        .andExpect(status().isCreated())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("create-review-comment",
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID")
+                )
+            ));
+  }
+
+  @Test
+  @DisplayName("존재하지 않는 리뷰 댓글 작성 요청 시 NOT_FOUND 응답을 반환한다.")
+  @WithMockUser(username = "1", roles = "USER")
+  void testCreateReviewCommentIfNotExists() throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var user = userRepository.save(User.generalUserJoin(
+        "test",
+        "test@mail.com",
+        "test",
+        "test",
+        false,
+        false
+    )).orElseThrow();
+    var dto = new CreateReviewCommentRequestDto("test");
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.post("/v1/reviews/{id}/comments", 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(dto))
+        )
+        .andDo(print())
+        .andExpect(status().isNotFound())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("create-review-comment",
+                responseFields(
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("error").type(JsonFieldType.STRING).description("에러 메시지")
+                )
+            ));
+  }
+
+  @Test
+  @DisplayName("리뷰 댓글을 삭제한다.")
+  @WithMockUser(username = "1", roles = "USER")
+  void testDeleteReviewComment() throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var user = userRepository.save(User.generalUserJoin(
+        "test",
+        "test@mail.com",
+        "test",
+        "test",
+        false,
+        false
+    )).orElseThrow();
+    var review = reviewRepository.save(Review.create(
+        "test",
+        "test description",
+        STRENGTH.LIGHT,
+        1000L,
+        SEASON.DAILY,
+        1L,
+        user.getId(),
+        now
+    ));
+    var comment = reviewCommentRepository
+        .save(ReviewComment.create(review.getId(), user.getId(), "test", now));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.delete("/v1/reviews/{id}/comments/{commentId}",
+                review.getId(), comment.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("delete-review-comment",
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 댓글 ID")
+                )
+            ));
+  }
+
+  @Test
+  @DisplayName("존재하지 않는 리뷰 댓글을 삭제하는 경우 NOT_FOUND 응답을 반환한다.")
+  @WithMockUser(username = "1", roles = "USER")
+  void testDeleteReviewCommentIfNotExists() throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var user = userRepository.save(User.generalUserJoin(
+        "test",
+        "test@mail.com",
+        "test",
+        "test",
+        false,
+        false
+    )).orElseThrow();
+    var review = reviewRepository.save(Review.create(
+        "test",
+        "test description",
+        STRENGTH.LIGHT,
+        1000L,
+        SEASON.DAILY,
+        1L,
+        user.getId(),
+        now
+    ));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.delete("/v1/reviews/{id}/comments/{commentId}",
+                review.getId(), 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isNotFound())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("delete-review-comment",
+                responseFields(
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("error").type(JsonFieldType.STRING).description("에러 메시지")
                 )
             ));
   }
