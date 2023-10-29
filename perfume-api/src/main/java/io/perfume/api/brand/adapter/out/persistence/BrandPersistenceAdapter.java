@@ -16,8 +16,8 @@ public class BrandPersistenceAdapter implements BrandRepository {
   private final BrandJpaRepository brandJpaRepository;
 
   @Override
-  public Optional<Brand> save(Brand brand) {
+  public Brand save(Brand brand) {
     BrandEntity brandEntity = brandJpaRepository.save(brandMapper.toEntity(brand));
-    return Optional.ofNullable(brandMapper.toDomain(brandEntity));
+    return brandMapper.toDomain(brandEntity);
   }
 }

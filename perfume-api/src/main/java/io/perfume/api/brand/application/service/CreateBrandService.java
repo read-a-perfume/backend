@@ -30,7 +30,8 @@ public class CreateBrandService implements CreateBrandUseCase {
         LocalDateTime now = LocalDateTime.now();
 
         // TODO : 추후 optional 수정
-        Brand createdBrand = brandRepository.save(createBrand(command, now)).get();
+        Brand createdBrand = brandRepository.save(createBrand(command, now));
+
         return BrandResult.of(createdBrand,
                 fileQueryRepository.findOneByFileId(createdBrand.getThumbnailId())
                         .orElseThrow(() -> new FileNotFoundException(createdBrand.getThumbnailId())));
