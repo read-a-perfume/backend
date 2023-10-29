@@ -9,6 +9,10 @@ public record GetReviewCommentsRequestDto(
 ) {
 
   public ReviewCommentDetailCommand toCommand(long reviewId) {
-    return new ReviewCommentDetailCommand(reviewId, size, after, before);
+    return new ReviewCommentDetailCommand(reviewId, getSizeOrDefault(), after, before);
+  }
+
+  private Long getSizeOrDefault() {
+    return size == null ? 10 : size;
   }
 }
