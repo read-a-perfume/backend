@@ -15,7 +15,7 @@ public class ReviewComment extends BaseTimeDomain {
 
   private final Long userId;
 
-  private final String content;
+  private String content;
 
   @Builder
   public ReviewComment(LocalDateTime createdAt, LocalDateTime updatedAt,
@@ -28,7 +28,8 @@ public class ReviewComment extends BaseTimeDomain {
     this.content = content;
   }
 
-  public static ReviewComment create(final Long reviewId, final Long userId, final String content, final LocalDateTime now) {
+  public static ReviewComment create(final Long reviewId, final Long userId, final String content,
+                                     final LocalDateTime now) {
     Assert.notNull(reviewId, "reviewId must not be null");
     Assert.notNull(userId, "userId must not be null");
     Assert.hasText(content, "content must not be empty");
@@ -49,5 +50,15 @@ public class ReviewComment extends BaseTimeDomain {
     }
 
     this.markDelete(now);
+  }
+
+  public boolean isOwned(final long userId) {
+    return this.userId == userId;
+  }
+
+  public void updateComment(final String newComment) {
+    Assert.hasText(newComment, "newComment must not be empty");
+
+    this.content = newComment;
   }
 }

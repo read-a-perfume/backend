@@ -16,6 +16,7 @@ import io.perfume.api.review.application.in.CreateReviewCommentUseCase;
 import io.perfume.api.review.application.in.CreateReviewUseCase;
 import io.perfume.api.review.application.in.DeleteReviewCommentUseCase;
 import io.perfume.api.review.application.in.DeleteReviewUseCase;
+import io.perfume.api.review.application.in.UpdateReviewCommentUseCase;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -45,17 +46,21 @@ public class ReviewController {
 
   private final DeleteReviewCommentUseCase deleteReviewCommentUseCase;
 
+  private final UpdateReviewCommentUseCase updateReviewCommentUseCase;
+
   public ReviewController(CreateReviewUseCase createReviewUseCase,
                           DeleteReviewUseCase deleteReviewUseCase,
                           ReviewDetailFacadeService reviewDetailFacadeService,
                           CreateReviewCommentUseCase createReviewCommentUseCase,
-                          DeleteReviewCommentUseCase deleteReviewCommentUseCase
+                          DeleteReviewCommentUseCase deleteReviewCommentUseCase,
+                          UpdateReviewCommentUseCase updateReviewCommentUseCase
   ) {
     this.createReviewUseCase = createReviewUseCase;
     this.deleteReviewUseCase = deleteReviewUseCase;
     this.reviewDetailFacadeService = reviewDetailFacadeService;
     this.createReviewCommentUseCase = createReviewCommentUseCase;
     this.deleteReviewCommentUseCase = deleteReviewCommentUseCase;
+    this.updateReviewCommentUseCase = updateReviewCommentUseCase;
   }
 
   @GetMapping
@@ -139,5 +144,19 @@ public class ReviewController {
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(new DeleteReviewCommentResponseDto(commentId));
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @DeleteMapping("/{id}/comments/{commentId}")
+  public ResponseEntity<Void> updateReviewComment(
+      @AuthenticationPrincipal User user,
+      @PathVariable Long id,
+      @PathVariable Long commentId,
+      @RequestBody String comment
+  ) {
+    final var userId = Long.parseLong(user.getUsername());
+    updateReviewCommentUseCase.updateReviewComment(userId, commentId, comment);
+
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

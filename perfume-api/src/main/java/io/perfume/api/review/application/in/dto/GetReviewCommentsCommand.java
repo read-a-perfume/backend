@@ -9,7 +9,7 @@ public record GetReviewCommentsCommand(
     Long reviewId
 ) {
 
-  public long getCursor() {
+  public Long getCursor() {
     if (before != null) {
       return before;
     }
