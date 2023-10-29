@@ -4,8 +4,8 @@ import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
-import io.perfume.api.perfume.application.port.in.UserFollowPerfumeUseCase;
-import io.perfume.api.perfume.application.port.in.UserUnFollowPerfumeUseCase;
+import io.perfume.api.perfume.application.port.in.UserFavoritePerfumeUseCase;
+import io.perfume.api.perfume.application.port.in.UserUnFavoritePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,9 +29,9 @@ public class PerfumeController {
 
   private final CreatePerfumeUseCase createPerfumeUseCase;
 
-  private final UserFollowPerfumeUseCase userFollowPerfumeUseCase;
+  private final UserFavoritePerfumeUseCase userFollowPerfumeUseCase;
 
-  private final UserUnFollowPerfumeUseCase userUnFollowPerfumeUseCase;
+  private final UserUnFavoritePerfumeUseCase userUnFollowPerfumeUseCase;
 
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
@@ -47,16 +47,16 @@ public class PerfumeController {
   }
 
   @PreAuthorize("isAuthenticated()")
-  @PostMapping
+  // @PostMapping
   public void followPerfume(@AuthenticationPrincipal User user, @PathVariable Long perfumeId) {
     var userId = Long.parseLong(user.getUsername());
-    userFollowPerfumeUseCase.followPerfume(userId, perfumeId);
+    userFollowPerfumeUseCase.favoritePerfume(userId, perfumeId);
   }
 
   @PreAuthorize("isAuthenticated()")
-  @PostMapping
+  // @PostMapping
   public void unFollowPerfume(@AuthenticationPrincipal User user, @PathVariable Long perfumeId) {
     var userId = Long.parseLong(user.getUsername());
-    userUnFollowPerfumeUseCase.unFollowPerfume(userId, perfumeId);
+    userUnFollowPerfumeUseCase.unFavoritePerfume(userId, perfumeId);
   }
 }
