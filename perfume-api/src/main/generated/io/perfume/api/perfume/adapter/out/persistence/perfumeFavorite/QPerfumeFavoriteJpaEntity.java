@@ -15,7 +15,11 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QPerfumeFavoriteJpaEntity extends EntityPathBase<PerfumeFavoriteJpaEntity> {
 
+<<<<<<< HEAD
     private static final long serialVersionUID = -1388910710L;
+=======
+    private static final long serialVersionUID = -1699187307L;
+>>>>>>> a03dde0 ([RDPF-193] refactor: PerfumeFollow -> PerfumeFavorite 변경)
 
     public static final QPerfumeFavoriteJpaEntity perfumeFavoriteJpaEntity = new QPerfumeFavoriteJpaEntity("perfumeFavoriteJpaEntity");
 

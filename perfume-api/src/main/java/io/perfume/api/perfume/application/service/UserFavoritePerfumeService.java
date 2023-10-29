@@ -1,6 +1,9 @@
 package io.perfume.api.perfume.application.service;
 
+<<<<<<< HEAD
 import io.perfume.api.perfume.application.exception.PerfumeFavoriteNotFoundException;
+=======
+>>>>>>> a03dde0 ([RDPF-193] refactor: PerfumeFollow -> PerfumeFavorite 변경)
 import io.perfume.api.perfume.application.port.in.UserFavoritePerfumeUseCase;
 import io.perfume.api.perfume.application.port.out.PerfumeFavoriteQueryRepository;
 import io.perfume.api.perfume.application.port.out.PerfumeFavoriteRepository;
@@ -22,6 +25,7 @@ public class UserFavoritePerfumeService implements UserFavoritePerfumeUseCase {
     this.perfumeFavoriteQueryRepository = perfumeFavoriteQueryRepository;
   }
 
+<<<<<<< HEAD
 
   @Override
   public void addAndDeleteFavoritePerfume(Long authorId, Long perfumeId) {
@@ -46,4 +50,24 @@ public class UserFavoritePerfumeService implements UserFavoritePerfumeUseCase {
     foundPerfumeFavorite.markDelete(now);
     perfumeFavoriteRepository.save(foundPerfumeFavorite);
   }
+=======
+  @Override
+  @Transactional
+  public void favoritePerfume(Long authorId, Long perfumeId) {
+    Optional<PerfumeFavorite> foundPerfumeFollow =
+        perfumeFavoriteQueryRepository.findByUserAndPerfume(authorId, perfumeId);
+
+    userFollowPerfume(authorId, perfumeId, foundPerfumeFollow);
+  }
+
+  private void userFollowPerfume(Long authorId, Long perfumeId,
+      Optional<PerfumeFavorite> foundPerfumeFollow) {
+    if (foundPerfumeFollow.isPresent()) {
+      LocalDateTime now = LocalDateTime.now();
+      PerfumeFavorite perfumeFavorite = PerfumeFavorite.create(authorId, perfumeId, now);
+      perfumeFavoriteRepository.save(perfumeFavorite);
+    }
+  }
+
+>>>>>>> a03dde0 ([RDPF-193] refactor: PerfumeFollow -> PerfumeFavorite 변경)
 }
