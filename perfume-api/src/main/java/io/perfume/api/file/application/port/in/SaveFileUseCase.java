@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface FileUploadUseCase {
+public interface SaveFileUseCase {
 
   SaveFileResult singleFileUpload(Long userId, MultipartFile file, LocalDateTime now);
 
