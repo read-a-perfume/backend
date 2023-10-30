@@ -132,6 +132,22 @@ include::{snippets}/delete-review/http-request.adoc[]
 include::{snippets}/delete-review/http-response.adoc[]
 include::{snippets}/delete-review/response-fields.adoc[]
 
+== 리뷰 댓글 추가
+=== 요청
+include::{snippets}/create-review-comment/http-request.adoc[]
+
+=== 응답
+include::{snippets}/create-review-comment/http-response.adoc[]
+include::{snippets}/create-review-comment/response-fields.adoc[]
+
+== 리뷰 댓글 삭제
+=== 요청
+include::{snippets}/delete-review-comment/http-request.adoc[]
+
+=== 응답
+include::{snippets}/delete-review-comment/http-response.adoc[]
+include::{snippets}/delete-review-comment/response-fields.adoc[]
+
 == 샘플
 === 요청
 include::{snippets}/index/http-request.adoc[]
