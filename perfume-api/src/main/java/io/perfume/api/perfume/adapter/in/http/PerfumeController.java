@@ -5,7 +5,6 @@ import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.UserFavoritePerfumeUseCase;
-import io.perfume.api.perfume.application.port.in.UserUnFavoritePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,9 +28,7 @@ public class PerfumeController {
 
   private final CreatePerfumeUseCase createPerfumeUseCase;
 
-  private final UserFavoritePerfumeUseCase userFollowPerfumeUseCase;
-
-  private final UserUnFavoritePerfumeUseCase userUnFollowPerfumeUseCase;
+  private final UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
 
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
@@ -47,16 +44,9 @@ public class PerfumeController {
   }
 
   @PreAuthorize("isAuthenticated()")
-  // @PostMapping
-  public void followPerfume(@AuthenticationPrincipal User user, @PathVariable Long perfumeId) {
+  @PostMapping("/favorite/{id}")
+  public void favoritePerfume(@AuthenticationPrincipal User user, @PathVariable Long id) {
     var userId = Long.parseLong(user.getUsername());
-    userFollowPerfumeUseCase.favoritePerfume(userId, perfumeId);
-  }
-
-  @PreAuthorize("isAuthenticated()")
-  // @PostMapping
-  public void unFollowPerfume(@AuthenticationPrincipal User user, @PathVariable Long perfumeId) {
-    var userId = Long.parseLong(user.getUsername());
-    userUnFollowPerfumeUseCase.unFavoritePerfume(userId, perfumeId);
+    userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, id);
   }
 }
