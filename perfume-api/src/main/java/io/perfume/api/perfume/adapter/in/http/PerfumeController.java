@@ -37,7 +37,6 @@ public class PerfumeController {
 
   private final UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
 
-
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
     return PerfumeResponseDto.of(findPerfumeUseCase.findPerfumeById(id));
@@ -52,6 +51,14 @@ public class PerfumeController {
   }
 
 
+  @PreAuthorize("isAuthenticated()")
+  @PostMapping("/favorite/{id}")
+  public void favoritePerfume(@AuthenticationPrincipal User user, @PathVariable Long id) {
+    var userId = Long.parseLong(user.getUsername());
+    userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, id);
+  }
+
+
   @GetMapping
   public Slice<SimplePerfumeResponseDto> getPerfumesByBrand (@RequestParam Long
       brandId, @RequestParam @Nullable Long lastPerfumeId,
@@ -61,12 +68,5 @@ public class PerfumeController {
     List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream()
         .map(SimplePerfumeResponseDto::of).toList();
     return new SliceImpl<>(list, perfumesByBrand.getPageable(), perfumesByBrand.hasNext());
-  }
-
-  @PreAuthorize("isAuthenticated()")
-  @PostMapping("/favorite/{id}")
-  public void favoritePerfume(@AuthenticationPrincipal User user, @PathVariable Long id) {
-    var userId = Long.parseLong(user.getUsername());
-    userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, id);
   }
 }

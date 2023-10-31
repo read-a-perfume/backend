@@ -1,6 +1,5 @@
 package io.perfume.api.perfume.application.service;
 
-
 import io.perfume.api.perfume.application.port.in.UserFavoritePerfumeUseCase;
 import io.perfume.api.perfume.application.port.out.PerfumeFavoriteQueryRepository;
 import io.perfume.api.perfume.application.port.out.PerfumeFavoriteRepository;
@@ -22,9 +21,8 @@ public class UserFavoritePerfumeService implements UserFavoritePerfumeUseCase {
     this.perfumeFavoriteQueryRepository = perfumeFavoriteQueryRepository;
   }
 
-
-
   @Override
+  @Transactional
   public void addAndDeleteFavoritePerfume(Long authorId, Long perfumeId) {
     Optional<PerfumeFavorite> foundPerfumeFollow =
         perfumeFavoriteQueryRepository.findByUserAndPerfume(authorId, perfumeId);
@@ -47,6 +45,4 @@ public class UserFavoritePerfumeService implements UserFavoritePerfumeUseCase {
     foundPerfumeFavorite.markDelete(now);
     perfumeFavoriteRepository.save(foundPerfumeFavorite);
   }
-
-
 }
