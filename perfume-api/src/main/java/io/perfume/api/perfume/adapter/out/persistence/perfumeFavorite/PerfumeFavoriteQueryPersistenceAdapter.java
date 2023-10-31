@@ -40,7 +40,7 @@ public class PerfumeFavoriteQueryPersistenceAdapter implements PerfumeFavoriteQu
   }
 
   @Override
-  public List<PerfumeFavorite> findFavoritewedPerfumesByUser(Long userId) {
+  public List<PerfumeFavorite> findFavoritePerfumesByUser(Long userId) {
     return jpaQueryFactory
         .selectFrom(perfumeFavoriteJpaEntity)
         .where(perfumeFavoriteJpaEntity.userId.eq(userId))

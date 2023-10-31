@@ -76,7 +76,7 @@ class PerfumeFavoriteQueryPersistenceAdapterTest {
     entityManager.clear();
 
     // when
-    List<PerfumeFavorite> followedPerfumes = queryRepository.findFavoritewedPerfumesByUser(userId);
+    List<PerfumeFavorite> followedPerfumes = queryRepository.findFavoritePerfumesByUser(userId);
 
     // then
     assertThat(followedPerfumes.size()).isEqualTo(end - start);
