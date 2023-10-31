@@ -30,6 +30,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -113,14 +116,6 @@ public class PerfumeController {
   @PostMapping("/favorite/{id}")
   public void favoritePerfume(@AuthenticationPrincipal User user, @PathVariable Long id) {
     var userId = Long.parseLong(user.getUsername());
-    userFollowPerfumeUseCase.favoritePerfume(userId, perfumeId);
-  }
-
-  @PreAuthorize("isAuthenticated()")
-  // @PostMapping
-  public void unFollowPerfume(@AuthenticationPrincipal User user, @PathVariable Long perfumeId) {
-    var userId = Long.parseLong(user.getUsername());
-    userUnFollowPerfumeUseCase.unFavoritePerfume(userId, perfumeId);
     userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, id);
   }
 }
