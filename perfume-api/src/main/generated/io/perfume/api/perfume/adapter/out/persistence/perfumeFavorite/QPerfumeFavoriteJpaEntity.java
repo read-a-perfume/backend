@@ -16,10 +16,14 @@ import com.querydsl.core.types.Path;
 public class QPerfumeFavoriteJpaEntity extends EntityPathBase<PerfumeFavoriteJpaEntity> {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     private static final long serialVersionUID = -1388910710L;
 =======
     private static final long serialVersionUID = -1699187307L;
 >>>>>>> a03dde0 ([RDPF-193] refactor: PerfumeFollow -> PerfumeFavorite 변경)
+=======
+    private static final long serialVersionUID = -1388910710L;
+>>>>>>> ff96a83 ([RDPF-193] feat: 서비스 로직 변경, api 추가)
 
     public static final QPerfumeFavoriteJpaEntity perfumeFavoriteJpaEntity = new QPerfumeFavoriteJpaEntity("perfumeFavoriteJpaEntity");
 

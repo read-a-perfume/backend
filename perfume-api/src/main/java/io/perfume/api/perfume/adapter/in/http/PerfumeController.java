@@ -14,8 +14,11 @@ import io.perfume.api.perfume.application.port.in.UserUnFollowPerfumeUseCase;
 >>>>>>> 261faff ([RDPF-193] feat: Follow Service 추가)
 =======
 import io.perfume.api.perfume.application.port.in.UserFavoritePerfumeUseCase;
+<<<<<<< HEAD
 import io.perfume.api.perfume.application.port.in.UserUnFavoritePerfumeUseCase;
 >>>>>>> a03dde0 ([RDPF-193] refactor: PerfumeFollow -> PerfumeFavorite 변경)
+=======
+>>>>>>> ff96a83 ([RDPF-193] feat: 서비스 로직 변경, api 추가)
 import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import jakarta.annotation.Nullable;
@@ -47,6 +50,7 @@ public class PerfumeController {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   private final UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
 =======
   private final UserFollowPerfumeUseCase userFollowPerfumeUseCase;
@@ -58,6 +62,9 @@ public class PerfumeController {
 
   private final UserUnFavoritePerfumeUseCase userUnFollowPerfumeUseCase;
 >>>>>>> a03dde0 ([RDPF-193] refactor: PerfumeFollow -> PerfumeFavorite 변경)
+=======
+  private final UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
+>>>>>>> ff96a83 ([RDPF-193] feat: 서비스 로직 변경, api 추가)
 
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
@@ -72,6 +79,7 @@ public class PerfumeController {
     createPerfumeUseCase.createPerfume(createPerfumeCommand);
   }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   @PreAuthorize("isAuthenticated()")
@@ -89,15 +97,21 @@ public class PerfumeController {
   public Slice<SimplePerfumeResponseDto> getPerfumesByBrand (@RequestParam Long
       brandId, @RequestParam @Nullable Long lastPerfumeId,
       @RequestParam int pageSize){
+=======
+  @GetMapping
+  public Slice<SimplePerfumeResponseDto> getPerfumesByBrand(@RequestParam Long brandId, @RequestParam @Nullable Long lastPerfumeId,
+                                                            @RequestParam int pageSize) {
+>>>>>>> ff96a83 ([RDPF-193] feat: 서비스 로직 변경, api 추가)
     Slice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId,
         lastPerfumeId, pageSize);
     List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream()
         .map(SimplePerfumeResponseDto::of).toList();
     return new SliceImpl<>(list, perfumesByBrand.getPageable(), perfumesByBrand.hasNext());
-=======
+  }
+
   @PreAuthorize("isAuthenticated()")
-  // @PostMapping
-  public void followPerfume(@AuthenticationPrincipal User user, @PathVariable Long perfumeId) {
+  @PostMapping("/favorite/{id}")
+  public void favoritePerfume(@AuthenticationPrincipal User user, @PathVariable Long id) {
     var userId = Long.parseLong(user.getUsername());
     userFollowPerfumeUseCase.favoritePerfume(userId, perfumeId);
   }
@@ -107,6 +121,6 @@ public class PerfumeController {
   public void unFollowPerfume(@AuthenticationPrincipal User user, @PathVariable Long perfumeId) {
     var userId = Long.parseLong(user.getUsername());
     userUnFollowPerfumeUseCase.unFavoritePerfume(userId, perfumeId);
->>>>>>> 95d7b29 ([RDPF-193] refactor: PerfumeFollow -> PerfumeFavorite 변경)
+    userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, id);
   }
 }
