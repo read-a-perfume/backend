@@ -21,7 +21,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
@@ -89,5 +92,33 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
     }
 
     return perfumeJpaEntity.id.lt(perfumeId);
+  }
+
+  @Override
+  public Page<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
+
+    List<SimplePerfumeResult> results = jpaQueryFactory.select(
+            Projections.constructor(SimplePerfumeResult.class, perfumeJpaEntity.id, perfumeJpaEntity.name, perfumeJpaEntity.concentration,
+                brandEntity.name, fileJpaEntity.url))
+        .from(perfumeJpaEntity)
+        .where(
+            perfumeJpaEntity.categoryId.eq(categoryId),
+            perfumeJpaEntity.deletedAt.isNull())
+        .leftJoin(brandEntity).on(perfumeJpaEntity.brandId.eq(brandEntity.id)).fetchJoin()
+        .leftJoin(fileJpaEntity).on(perfumeJpaEntity.thumbnailId.eq(fileJpaEntity.id)).fetchJoin()
+        .orderBy(perfumeJpaEntity.id.desc())
+        .limit(pageable.getPageSize())
+        .offset(pageable.getOffset())
+        .fetch();
+
+    Long total = jpaQueryFactory.select(perfumeJpaEntity.count())
+        .from(perfumeJpaEntity)
+        .where(
+            perfumeJpaEntity.categoryId.eq(categoryId),
+            perfumeJpaEntity.deletedAt.isNull()
+        )
+        .fetchOne();
+
+    return new PageImpl<>(results, pageable, total == null ? 0 : total);
   }
 }

@@ -12,6 +12,8 @@ import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +39,10 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   @Override
   public Slice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
     return perfumeQueryRepository.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
+  }
+
+  @Override
+  public Page<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
+    return perfumeQueryRepository.findPerfumesByCategory(categoryId, pageable);
   }
 }
