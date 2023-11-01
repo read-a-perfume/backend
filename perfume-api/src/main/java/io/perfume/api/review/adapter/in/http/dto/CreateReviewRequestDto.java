@@ -6,6 +6,7 @@ import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import org.hibernate.validator.constraints.Length;
@@ -26,7 +27,7 @@ public record CreateReviewRequestDto(
     List<Long> tags
 ) {
 
-  public CreateReviewCommand toCommand() {
+  public CreateReviewCommand toCommand(LocalDateTime now) {
     return new CreateReviewCommand(
         perfumeId,
         dayType,
@@ -35,7 +36,8 @@ public record CreateReviewRequestDto(
         duration,
         feeling,
         shortReview,
-        Collections.unmodifiableList(tags)
+        Collections.unmodifiableList(tags),
+        now
     );
   }
 }

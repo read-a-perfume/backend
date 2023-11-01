@@ -3,6 +3,7 @@ package io.perfume.api.review.application.in.dto;
 import io.perfume.api.review.domain.type.DayType;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record CreateReviewCommand(
@@ -13,6 +14,7 @@ public record CreateReviewCommand(
     Long duration,
     String feeling,
     String situation,
-    List<Long> tags
+    List<Long> tags,
+    LocalDateTime now
 ) {
 }
