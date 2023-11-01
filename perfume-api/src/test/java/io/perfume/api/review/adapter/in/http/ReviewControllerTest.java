@@ -19,6 +19,7 @@ import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
@@ -81,6 +82,7 @@ class ReviewControllerTest {
         1L,
         DayType.DAILY,
         Strength.LIGHT,
+        Season.SPRING,
         100L,
         "",
         "",
@@ -100,7 +102,8 @@ class ReviewControllerTest {
             document("create-review",
                 requestFields(
                     fieldWithPath("perfumeId").type(JsonFieldType.NUMBER).description("향수 ID"),
-                    fieldWithPath("season").type(JsonFieldType.STRING).description("추천 날씨"),
+                    fieldWithPath("season").type(JsonFieldType.STRING).description("추천 계절"),
+                    fieldWithPath("dayType").type(JsonFieldType.STRING).description("추천 시간대"),
                     fieldWithPath("strength").type(JsonFieldType.STRING).description("향 확산력"),
                     fieldWithPath("duration").type(JsonFieldType.NUMBER).description("향 지속력"),
                     fieldWithPath("feeling").type(JsonFieldType.STRING).description("향수 느낌"),
@@ -126,6 +129,7 @@ class ReviewControllerTest {
         DayType.DAILY,
         1L,
         1L,
+        Season.SPRING,
         now
     ));
 
@@ -162,6 +166,7 @@ class ReviewControllerTest {
         DayType.DAILY,
         1L,
         userId,
+        Season.SPRING,
         now
     ));
 
@@ -215,6 +220,7 @@ class ReviewControllerTest {
         DayType.DAILY,
         1L,
         user.getId(),
+        Season.SPRING,
         now
     ));
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -268,6 +274,7 @@ class ReviewControllerTest {
         DayType.DAILY,
         1L,
         user.getId(),
+        Season.SPRING,
         now
     ));
     var dto = new CreateReviewCommentRequestDto("test");
@@ -348,6 +355,7 @@ class ReviewControllerTest {
         DayType.DAILY,
         1L,
         user.getId(),
+        Season.SPRING,
         now
     ));
     var comment = reviewCommentRepository
@@ -392,6 +400,7 @@ class ReviewControllerTest {
         DayType.DAILY,
         1L,
         user.getId(),
+        Season.SPRING,
         now
     ));
 

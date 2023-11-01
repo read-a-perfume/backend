@@ -11,6 +11,7 @@ import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -55,6 +56,7 @@ class ReviewCommentQueryPersistenceAdapterTest {
         DayType.DAILY,
         1L,
         1L,
+        Season.SPRING,
         now
     ));
     entityManager.persist(review);
@@ -94,6 +96,7 @@ class ReviewCommentQueryPersistenceAdapterTest {
         DayType.DAILY,
         1L,
         1L,
+        Season.SPRING,
         now
     ));
     entityManager.persist(review);

@@ -10,6 +10,7 @@ import io.perfume.api.review.adapter.out.persistence.mapper.ReviewTagMapper;
 import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
 import io.perfume.api.review.domain.Tag;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -77,7 +78,7 @@ class TagQueryPersistenceAdapterTest {
     var tag = new TagEntity(null, "test", now, now, null);
     entityManager.persist(tag);
     var review =
-        new ReviewEntity(null, "", "", Strength.LIGHT, 0L, DayType.DAILY, 1L, 1L, now, now, null);
+        new ReviewEntity(null, "", "", Strength.LIGHT, 0L, DayType.DAILY, 1L, 1L, Season.SPRING, now, now, null);
     entityManager.persist(
         review);
     entityManager.persist(new ReviewTagEntity(review.getId(), tag.getId(), now, now, null));

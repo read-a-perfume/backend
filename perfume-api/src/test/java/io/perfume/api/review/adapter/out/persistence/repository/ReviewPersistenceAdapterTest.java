@@ -6,6 +6,7 @@ import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,7 @@ class ReviewPersistenceAdapterTest {
         DayType.DAILY,
         1L,
         1L,
+        Season.SPRING,
         now
     );
 
@@ -45,7 +47,7 @@ class ReviewPersistenceAdapterTest {
     // then
     assertThat(createdNote.getId()).isGreaterThanOrEqualTo(0L);
     assertThat(createdNote.getFeeling()).isEqualTo("test");
-    assertThat(createdNote.getSituation()).isEqualTo("test description");
+    assertThat(createdNote.getShortReview()).isEqualTo("test description");
     assertThat(createdNote.getStrength()).isEqualTo(Strength.LIGHT);
     assertThat(createdNote.getDuration()).isEqualTo(1000L);
     assertThat(createdNote.getDayType()).isEqualTo(DayType.DAILY);

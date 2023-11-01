@@ -2,6 +2,7 @@ package io.perfume.api.review.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ class ReviewTest {
         null,
         null,
         userId,
+        Season.SPRING,
         null
     );
 
@@ -44,6 +46,7 @@ class ReviewTest {
         null,
         null,
         userId,
+        Season.SPRING,
         null
     );
 
