@@ -11,4 +11,6 @@ public interface FindPerfumeUseCase {
   PerfumeResult findPerfumeById(Long id);
 
   Slice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize);
+
+  Page<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable);
 }
