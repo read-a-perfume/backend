@@ -2,7 +2,7 @@ package io.perfume.api.review.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.Strength;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +15,8 @@ class ReviewTest {
     var userId = 1L;
     var review = Review.create(
         "feeling",
-        "situation",
-        STRENGTH.LIGHT,
+        "shortReview",
+        Strength.LIGHT,
         null,
         null,
         null,
@@ -38,8 +38,8 @@ class ReviewTest {
     var userId = 1L;
     var review = Review.create(
         "feeling",
-        "situation",
-        STRENGTH.LIGHT,
+        "shortReview",
+        Strength.LIGHT,
         null,
         null,
         null,

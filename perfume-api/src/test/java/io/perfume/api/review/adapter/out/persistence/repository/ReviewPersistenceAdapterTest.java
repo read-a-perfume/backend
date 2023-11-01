@@ -5,8 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
 import io.perfume.api.review.domain.Review;
-import io.perfume.api.review.domain.type.SEASON;
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Strength;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,9 +31,9 @@ class ReviewPersistenceAdapterTest {
     var review = Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         1L,
         now
@@ -46,9 +46,9 @@ class ReviewPersistenceAdapterTest {
     assertThat(createdNote.getId()).isGreaterThanOrEqualTo(0L);
     assertThat(createdNote.getFeeling()).isEqualTo("test");
     assertThat(createdNote.getSituation()).isEqualTo("test description");
-    assertThat(createdNote.getStrength()).isEqualTo(STRENGTH.LIGHT);
+    assertThat(createdNote.getStrength()).isEqualTo(Strength.LIGHT);
     assertThat(createdNote.getDuration()).isEqualTo(1000L);
-    assertThat(createdNote.getSeason()).isEqualTo(SEASON.DAILY);
+    assertThat(createdNote.getDayType()).isEqualTo(DayType.DAILY);
     assertThat(createdNote.getPerfumeId()).isEqualTo(1L);
     assertThat(createdNote.getUserId()).isEqualTo(1L);
     assertThat(createdNote.getDeletedAt()).isNull();

@@ -1,6 +1,6 @@
 package io.perfume.api.review.domain.type;
 
-public enum SEASON {
+public enum DayType {
   DAILY,
   WEEKLY,
   SPECIAL,

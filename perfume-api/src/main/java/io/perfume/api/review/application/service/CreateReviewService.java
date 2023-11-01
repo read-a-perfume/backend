@@ -32,7 +32,7 @@ public class CreateReviewService implements CreateReviewUseCase {
         command.situation(),
         command.strength(),
         command.duration(),
-        command.season(),
+        command.dayType(),
         command.perfumeId(),
         authorId,
         now

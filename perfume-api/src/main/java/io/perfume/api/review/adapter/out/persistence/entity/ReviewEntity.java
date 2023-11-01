@@ -1,8 +1,8 @@
 package io.perfume.api.review.adapter.out.persistence.entity;
 
 import io.perfume.api.base.BaseTimeEntity;
-import io.perfume.api.review.domain.type.SEASON;
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,11 +28,11 @@ public class ReviewEntity extends BaseTimeEntity {
 
   private String situation;
 
-  private STRENGTH strength;
+  private Strength strength;
 
   private Long duration;
 
-  private SEASON season;
+  private DayType dayType;
 
   @Column(nullable = false)
   private Long perfumeId;
@@ -43,8 +43,8 @@ public class ReviewEntity extends BaseTimeEntity {
   protected ReviewEntity() {
   }
 
-  public ReviewEntity(Long id, String feeling, String situation, STRENGTH strength, Long duration,
-                      SEASON season, Long perfumeId, Long userId, LocalDateTime createdAt,
+  public ReviewEntity(Long id, String feeling, String situation, Strength strength, Long duration,
+                      DayType dayType, Long perfumeId, Long userId, LocalDateTime createdAt,
                       LocalDateTime updatedAt, LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
@@ -52,7 +52,7 @@ public class ReviewEntity extends BaseTimeEntity {
     this.situation = situation;
     this.strength = strength;
     this.duration = duration;
-    this.season = season;
+    this.dayType = dayType;
     this.perfumeId = perfumeId;
     this.userId = userId;
   }

@@ -18,8 +18,8 @@ import io.perfume.api.review.application.out.ReviewCommentRepository;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
-import io.perfume.api.review.domain.type.SEASON;
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import java.time.LocalDateTime;
@@ -79,8 +79,8 @@ class ReviewControllerTest {
     // given
     var dto = new CreateReviewRequestDto(
         1L,
-        SEASON.DAILY,
-        STRENGTH.LIGHT,
+        DayType.DAILY,
+        Strength.LIGHT,
         100L,
         "",
         "",
@@ -104,7 +104,7 @@ class ReviewControllerTest {
                     fieldWithPath("strength").type(JsonFieldType.STRING).description("향 확산력"),
                     fieldWithPath("duration").type(JsonFieldType.NUMBER).description("향 지속력"),
                     fieldWithPath("feeling").type(JsonFieldType.STRING).description("향수 느낌"),
-                    fieldWithPath("situation").type(JsonFieldType.STRING).description("추천 상황"),
+                    fieldWithPath("shortReview").type(JsonFieldType.STRING).description("추천 상황"),
                     fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그")
                 ),
                 responseFields(
@@ -121,9 +121,9 @@ class ReviewControllerTest {
     var review = reviewRepository.save(Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         1L,
         now
@@ -157,9 +157,9 @@ class ReviewControllerTest {
     var review = reviewRepository.save(Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         userId,
         now
@@ -210,9 +210,9 @@ class ReviewControllerTest {
     var review = reviewRepository.save(Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         user.getId(),
         now
@@ -263,9 +263,9 @@ class ReviewControllerTest {
     var review = reviewRepository.save(Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         user.getId(),
         now
@@ -343,9 +343,9 @@ class ReviewControllerTest {
     var review = reviewRepository.save(Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         user.getId(),
         now
@@ -387,9 +387,9 @@ class ReviewControllerTest {
     var review = reviewRepository.save(Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         user.getId(),
         now

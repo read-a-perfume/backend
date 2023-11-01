@@ -7,8 +7,8 @@ import io.perfume.api.review.application.exception.DeleteReviewPermissionDeniedE
 import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.in.DeleteReviewTagUseCase;
 import io.perfume.api.review.domain.Review;
-import io.perfume.api.review.domain.type.SEASON;
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.review.stub.StubReviewRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +37,7 @@ class DeleteReviewServiceTest {
     var reviewId = 1L;
     var now = LocalDateTime.now();
     var review =
-        new Review(reviewId, "", "", STRENGTH.LIGHT, 0L, SEASON.DAILY, 1L, userId, now, now, null);
+        new Review(reviewId, "", "", Strength.LIGHT, 0L, DayType.DAILY, 1L, userId, now, now, null);
     stubReviewRepository.addReview(review);
 
     // when
@@ -58,7 +58,7 @@ class DeleteReviewServiceTest {
     var reviewId = 1L;
     var now = LocalDateTime.now();
     var review =
-        new Review(reviewId, "", "", STRENGTH.LIGHT, 0L, SEASON.DAILY, 1L, userId, now, now, null);
+        new Review(reviewId, "", "", Strength.LIGHT, 0L, DayType.DAILY, 1L, userId, now, now, null);
     stubReviewRepository.addReview(review);
 
     // when & then

@@ -1,8 +1,9 @@
 package io.perfume.api.review.adapter.in.http.dto;
 
 import io.perfume.api.review.application.in.dto.CreateReviewCommand;
-import io.perfume.api.review.domain.type.SEASON;
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Season;
+import io.perfume.api.review.domain.type.Strength;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import java.util.Collections;
@@ -12,14 +13,15 @@ import org.hibernate.validator.constraints.Length;
 public record CreateReviewRequestDto(
     @Positive
     Long perfumeId,
-    SEASON season,
-    STRENGTH strength,
+    DayType dayType,
+    Strength strength,
+    Season season,
     @Positive
     Long duration,
     @NotEmpty
-    String feeling,
+    String shortReview,
     @NotEmpty
-    String situation,
+    String feeling,
     @Length(max = 3)
     List<Long> tags
 ) {
@@ -27,11 +29,12 @@ public record CreateReviewRequestDto(
   public CreateReviewCommand toCommand() {
     return new CreateReviewCommand(
         perfumeId,
-        season,
+        dayType,
         strength,
+        season,
         duration,
         feeling,
-        situation,
+        shortReview,
         Collections.unmodifiableList(tags)
     );
   }

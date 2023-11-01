@@ -1,13 +1,15 @@
 package io.perfume.api.review.application.in.dto;
 
-import io.perfume.api.review.domain.type.SEASON;
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Season;
+import io.perfume.api.review.domain.type.Strength;
 import java.util.List;
 
 public record CreateReviewCommand(
     Long perfumeId,
-    SEASON season,
-    STRENGTH strength,
+    DayType dayType,
+    Strength strength,
+    Season season,
     Long duration,
     String feeling,
     String situation,

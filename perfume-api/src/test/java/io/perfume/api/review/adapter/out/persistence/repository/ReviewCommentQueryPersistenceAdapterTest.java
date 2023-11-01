@@ -10,8 +10,8 @@ import io.perfume.api.review.adapter.out.persistence.mapper.ReviewCommentMapper;
 import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
-import io.perfume.api.review.domain.type.SEASON;
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
@@ -50,9 +50,9 @@ class ReviewCommentQueryPersistenceAdapterTest {
     ReviewEntity review = reviewMapper.toEntity(Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         1L,
         now
@@ -89,9 +89,9 @@ class ReviewCommentQueryPersistenceAdapterTest {
     ReviewEntity review = reviewMapper.toEntity(Review.create(
         "test",
         "test description",
-        STRENGTH.LIGHT,
+        Strength.LIGHT,
         1000L,
-        SEASON.DAILY,
+        DayType.DAILY,
         1L,
         1L,
         now
