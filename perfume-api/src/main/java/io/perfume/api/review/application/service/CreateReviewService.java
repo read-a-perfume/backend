@@ -25,25 +25,24 @@ public class CreateReviewService implements CreateReviewUseCase {
   }
 
   @NotNull
-  private static Review createReview(Long authorId, CreateReviewCommand command,
-                                     LocalDateTime now) {
+  private static Review createReview(Long authorId, CreateReviewCommand command) {
     return Review.create(
         command.feeling(),
         command.situation(),
         command.strength(),
         command.duration(),
-        command.season(),
+        command.dayType(),
         command.perfumeId(),
         authorId,
-        now
+        command.season(),
+        command.now()
     );
   }
 
   @Override
   @Transactional
   public ReviewResult create(Long authorId, CreateReviewCommand command) {
-    LocalDateTime now = LocalDateTime.now();
-    Review createdReview = reviewRepository.save(createReview(authorId, command, now));
+    Review createdReview = reviewRepository.save(createReview(authorId, command));
     addReviewTagUseCase.addTags(createdReview.getId(), command.tags());
 
     return ReviewResult.from(createdReview);

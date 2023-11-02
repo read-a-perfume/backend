@@ -12,12 +12,13 @@ public class ReviewMapper {
     return new Review(
         reviewEntity.getId(),
         reviewEntity.getFeeling(),
-        reviewEntity.getSituation(),
+        reviewEntity.getShortReview(),
         reviewEntity.getStrength(),
         reviewEntity.getDuration(),
-        reviewEntity.getSeason(),
+        reviewEntity.getDayType(),
         reviewEntity.getPerfumeId(),
         reviewEntity.getUserId(),
+        reviewEntity.getSeason(),
         reviewEntity.getCreatedAt(),
         reviewEntity.getUpdatedAt(),
         reviewEntity.getDeletedAt()
@@ -28,12 +29,13 @@ public class ReviewMapper {
     return new ReviewEntity(
         review.getId(),
         review.getFeeling(),
-        review.getSituation(),
+        review.getShortReview(),
         review.getStrength(),
         review.getDuration(),
-        review.getSeason(),
+        review.getDayType(),
         review.getPerfumeId(),
         review.getUserId(),
+        review.getSeason(),
         review.getCreatedAt(),
         review.getUpdatedAt(),
         review.getDeletedAt()

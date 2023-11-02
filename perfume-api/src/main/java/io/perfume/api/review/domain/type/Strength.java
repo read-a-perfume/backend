@@ -1,6 +1,6 @@
 package io.perfume.api.review.domain.type;
 
-public enum STRENGTH {
+public enum Strength {
   LIGHT,
   MODERATE,
   HEAVY
