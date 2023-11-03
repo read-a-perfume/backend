@@ -148,8 +148,7 @@ class RegisterControllerTest {
         "password",
         "test@mail.com",
         false,
-        false,
-        "sample name"
+        false
     );
 
     // when & then
@@ -167,7 +166,6 @@ class RegisterControllerTest {
                     fieldWithPath("username").type(JsonFieldType.STRING).description("사용자 이름"),
                     fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
                     fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                    fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
                     fieldWithPath("marketingConsent").type(JsonFieldType.BOOLEAN)
                         .description("마케팅 수신 동의 여부"),
                     fieldWithPath("promotionConsent").type(JsonFieldType.BOOLEAN)
@@ -202,7 +200,7 @@ class RegisterControllerTest {
     // given
     var now = LocalDateTime.now();
     userRepository.save(
-        User.generalUserJoin("sample", "sample@test.com", "password!@#$", "sample username", false,
+        User.generalUserJoin("sample", "sample@test.com", "password!@#$", false,
             false));
     CheckUsernameRequestDto dto = new CheckUsernameRequestDto("sample");
 

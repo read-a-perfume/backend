@@ -208,7 +208,6 @@ class ReviewControllerTest {
         "test",
         "test@mail.com",
         "test",
-        "test",
         false,
         false
     )).orElseThrow();
@@ -262,7 +261,6 @@ class ReviewControllerTest {
         "test",
         "test@mail.com",
         "test",
-        "test",
         false,
         false
     )).orElseThrow();
@@ -307,7 +305,6 @@ class ReviewControllerTest {
         "test",
         "test@mail.com",
         "test",
-        "test",
         false,
         false
     )).orElseThrow();
@@ -342,7 +339,6 @@ class ReviewControllerTest {
     var user = userRepository.save(User.generalUserJoin(
         "test",
         "test@mail.com",
-        "test",
         "test",
         false,
         false
@@ -387,7 +383,6 @@ class ReviewControllerTest {
     var user = userRepository.save(User.generalUserJoin(
         "test",
         "test@mail.com",
-        "test",
         "test",
         false,
         false

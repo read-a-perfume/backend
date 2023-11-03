@@ -23,7 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
     UserMapper.class})
 @DataJpaTest
 @EnableJpaAuditing
-public class SocialAccountQueryPersistenceAdapterTest {
+class SocialAccountQueryPersistenceAdapterTest {
 
   @Autowired
   private EntityManager entityManager;
@@ -43,7 +43,7 @@ public class SocialAccountQueryPersistenceAdapterTest {
     SocialAccount socialAccount =
         SocialAccount.createGoogleSocialAccount(identifier, now);
     User user = User.generalUserJoin(
-        "test", "test@mail.com", "test", "test", false, false);
+        "test", "test@mail.com", "test", false, false);
     socialAccount.connect(user);
     SocialAccountEntity entity = oauthMapper.toEntity(socialAccount);
     entityManager.persist(entity.user);
@@ -55,7 +55,7 @@ public class SocialAccountQueryPersistenceAdapterTest {
 
     // then
     assertThat(result.getIdentifier()).isEqualTo(identifier);
-    assertThat(result.getUser().getId()).isGreaterThanOrEqualTo(0L);
+    assertThat(result.getUser().getId()).isNotNegative();
   }
 
   @DisplayName("SocialAccount가 존재하지 않을 때 Optional empty 반환")
@@ -69,6 +69,6 @@ public class SocialAccountQueryPersistenceAdapterTest {
         oauthQueryPersistenceAdapter.findOneBySocialId(identifier);
 
     // then
-    assertThat(result.isEmpty()).isTrue();
+    assertThat(result).isEmpty();
   }
 }
