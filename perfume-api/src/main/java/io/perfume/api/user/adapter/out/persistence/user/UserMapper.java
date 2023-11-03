@@ -15,7 +15,6 @@ public class UserMapper {
         userEntity.getUsername(),
         userEntity.getEmail(),
         userEntity.getPassword(),
-        null,
         userEntity.getRole(),
         userEntity.getBusinessId(),
         userEntity.getThumbnailId(),

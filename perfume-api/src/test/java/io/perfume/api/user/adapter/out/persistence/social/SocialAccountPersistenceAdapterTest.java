@@ -25,19 +25,19 @@ class SocialAccountPersistenceAdapterTest {
 
   @Test
   @DisplayName("소셜 계정 정보를 저장한다.")
-  public void save() {
+  void save() {
     // given
     LocalDateTime now = LocalDateTime.now();
     SocialAccount socialAccount =
         SocialAccount.createGoogleSocialAccount("test", now);
     User user = User.generalUserJoin(
-        "test", "test@mail.com", "test", "test", false, false);
+        "test", "test@mail.com", "test", false, false);
     socialAccount.connect(user);
 
     // when
     SocialAccount createdSocialAccount = oauthRepository.save(socialAccount).orElseThrow();
 
     // then
-    assertThat(createdSocialAccount.getId()).isGreaterThanOrEqualTo(0L);
+    assertThat(createdSocialAccount.getId()).isNotNegative();
   }
 }
