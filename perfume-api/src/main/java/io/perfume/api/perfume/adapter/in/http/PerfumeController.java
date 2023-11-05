@@ -1,11 +1,13 @@
 package io.perfume.api.perfume.adapter.in.http;
 
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
+import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.SimplePerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
+import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import jakarta.annotation.Nullable;
 import java.util.List;
@@ -60,5 +62,11 @@ public class PerfumeController {
     Page<SimplePerfumeResult> perfumesByCategory = findPerfumeUseCase.findPerfumesByCategory(id, pageable);
     List<SimplePerfumeResponseDto> list = perfumesByCategory.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
     return new PageImpl<>(list, perfumesByCategory.getPageable(), perfumesByCategory.getTotalElements());
+  }
+
+  @GetMapping("/search")
+  public List<PerfumeNameResponseDto> searchPerfumeByQuery(@RequestParam String query) {
+    List<PerfumeNameResult> perfumesByQuery = findPerfumeUseCase.searchPerfumeByQuery(query);
+    return perfumesByQuery.stream().map(PerfumeNameResponseDto::of).toList();
   }
 }
