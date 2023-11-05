@@ -6,11 +6,13 @@ import io.perfume.api.note.application.port.in.FindCategoryUseCase;
 import io.perfume.api.note.application.port.in.dto.CategoryResult;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
+import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,5 +46,10 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   @Override
   public Page<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
     return perfumeQueryRepository.findPerfumesByCategory(categoryId, pageable);
+  }
+
+  @Override
+  public List<PerfumeNameResult> searchPerfumeByQuery(String query) {
+    return perfumeQueryRepository.searchPerfumeByQuery(query);
   }
 }
