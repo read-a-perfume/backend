@@ -79,8 +79,9 @@ public class ReviewController {
       @AuthenticationPrincipal User user,
       @RequestBody CreateReviewRequestDto requestDto
   ) {
-    var userId = Long.parseLong(user.getUsername());
-    var response = createReviewUseCase.create(userId, requestDto.toCommand());
+    final var userId = Long.parseLong(user.getUsername());
+    final var now = LocalDateTime.now();
+    var response = createReviewUseCase.create(userId, requestDto.toCommand(now));
 
     return new CreateReviewResponseDto(response.id());
   }

@@ -1,10 +1,13 @@
 package io.perfume.api.review.adapter.out.persistence.entity;
 
 import io.perfume.api.base.BaseTimeEntity;
-import io.perfume.api.review.domain.type.SEASON;
-import io.perfume.api.review.domain.type.STRENGTH;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Season;
+import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,13 +29,18 @@ public class ReviewEntity extends BaseTimeEntity {
 
   private String feeling;
 
-  private String situation;
+  private String shortReview;
 
-  private STRENGTH strength;
+  @Enumerated(EnumType.STRING)
+  private Strength strength;
 
   private Long duration;
 
-  private SEASON season;
+  @Enumerated(EnumType.STRING)
+  private DayType dayType;
+
+  @Enumerated(EnumType.STRING)
+  private Season season;
 
   @Column(nullable = false)
   private Long perfumeId;
@@ -43,18 +51,20 @@ public class ReviewEntity extends BaseTimeEntity {
   protected ReviewEntity() {
   }
 
-  public ReviewEntity(Long id, String feeling, String situation, STRENGTH strength, Long duration,
-                      SEASON season, Long perfumeId, Long userId, LocalDateTime createdAt,
+  public ReviewEntity(Long id, String feeling, String shortReview, Strength strength, Long duration,
+                      DayType dayType, Long perfumeId, Long userId, Season season,
+                      LocalDateTime createdAt,
                       LocalDateTime updatedAt, LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.feeling = feeling;
-    this.situation = situation;
+    this.shortReview = shortReview;
     this.strength = strength;
     this.duration = duration;
-    this.season = season;
+    this.dayType = dayType;
     this.perfumeId = perfumeId;
     this.userId = userId;
+    this.season = season;
   }
 
   @Override

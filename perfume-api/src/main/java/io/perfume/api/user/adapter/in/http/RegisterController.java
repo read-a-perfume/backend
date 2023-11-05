@@ -33,22 +33,20 @@ public class RegisterController {
 
   @PostMapping("/email")
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<EmailSignUpResponseDto> signUpByEmail(
-      @RequestBody @Valid RegisterDto registerDto) {
+  public EmailSignUpResponseDto signUpByEmail(@RequestBody @Valid RegisterDto registerDto) {
     SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
         registerDto.username(),
         registerDto.password(),
         registerDto.email(),
         registerDto.marketingConsent(),
-        registerDto.promotionConsent(),
-        registerDto.name()
+        registerDto.promotionConsent()
     );
     UserResult result = createUserUseCase.signUpGeneralUserByEmail(command);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(new EmailSignUpResponseDto(
+    return new EmailSignUpResponseDto(
         result.username(),
         result.email()
-    ));
+    );
   }
 
   @PostMapping("/check-username")

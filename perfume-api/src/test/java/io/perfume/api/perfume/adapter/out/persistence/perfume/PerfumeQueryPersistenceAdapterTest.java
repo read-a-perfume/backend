@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.perfume.api.brand.adapter.out.persistence.BrandEntity;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
+import io.perfume.api.note.adapter.out.persistence.category.CategoryJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaRepository;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
@@ -17,6 +19,7 @@ import io.perfume.api.perfume.domain.Concentration;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +28,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
@@ -181,5 +188,42 @@ class PerfumeQueryPersistenceAdapterTest {
     assertEquals(pageSize, perfumesByBrandLast.getSize());
     assertEquals(perfumeJpaEntities.size() - pageSize, perfumesByBrandLast.getContent().size());
     assertFalse(perfumesByBrandLast.hasNext());
+  }
+
+  @Test
+  @DisplayName("Category를 기준으로 향수 목록을 조회한다.")
+  void findPerfumesByCategory() {
+    // given
+    CategoryJpaEntity categoryJpaEntity =
+        CategoryJpaEntity.builder().name("플로럴").description("#기분좋은 #꽃향기").thumbnailId(1L).createdAt(LocalDateTime.now()).build();
+
+    entityManager.persist(categoryJpaEntity);
+
+    List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
+          .story("story" + i)
+          .concentration(Concentration.EAU_DE_PERFUME)
+          .price(150000L)
+          .capacity(50L)
+          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+          .brandId(1L)
+          .categoryId(categoryJpaEntity.getId())
+          .thumbnailId(1L)
+          .build();
+
+      entityManager.persist(perfumeJpaEntity);
+      perfumeJpaEntities.add(perfumeJpaEntity);
+    }
+
+    // when
+    int pageSize = 3;
+    Page<SimplePerfumeResult> perfumesByCategory =
+        perfumeQueryPersistenceAdapter.findPerfumesByCategory(categoryJpaEntity.getId(), PageRequest.of(0, 3));
+
+    // then
+    assertEquals(pageSize, perfumesByCategory.getSize());
+    assertEquals(5, perfumesByCategory.getTotalElements());
+    assertTrue(perfumesByCategory.hasNext());
   }
 }

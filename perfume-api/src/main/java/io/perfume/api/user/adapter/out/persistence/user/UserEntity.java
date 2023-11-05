@@ -15,6 +15,7 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.AccessLevel;
@@ -66,6 +67,16 @@ public class UserEntity extends BaseTimeEntity {
   @Column(nullable = false)
   private Role role;
 
+  @Comment("사용자 소개")
+  private String bio;
+
+  @Comment("사용자 생일")
+  private LocalDate birthday;
+
+  @Enumerated(EnumType.STRING)
+  @Comment("사용자 성별")
+  private Sex sex;
+
   @NotNull
   @Comment("마케팅 동의 여부")
   @Column(nullable = false)
@@ -81,10 +92,8 @@ public class UserEntity extends BaseTimeEntity {
   private Long thumbnailId;
 
   @Builder(access = AccessLevel.PACKAGE)
-  public UserEntity(Long id, String username, String email, String password,
-                    Role role, Boolean marketingConsent,
-                    Boolean promotionConsent, LocalDateTime createdAt, LocalDateTime updatedAt,
-                    LocalDateTime deletedAt) {
+  public UserEntity(Long id, String username, String email, String password, Role role, Boolean marketingConsent, Boolean promotionConsent,
+                    LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;

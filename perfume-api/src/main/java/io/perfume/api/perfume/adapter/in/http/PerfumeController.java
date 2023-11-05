@@ -11,6 +11,9 @@ import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
@@ -65,4 +68,10 @@ public class PerfumeController {
     userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, id);
   }
 
+  @GetMapping("/category/{id}")
+  public Page<SimplePerfumeResponseDto> getPerfumesByCategory(@PathVariable Long id, Pageable pageable) {
+    Page<SimplePerfumeResult> perfumesByCategory = findPerfumeUseCase.findPerfumesByCategory(id, pageable);
+    List<SimplePerfumeResponseDto> list = perfumesByCategory.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
+    return new PageImpl<>(list, perfumesByCategory.getPageable(), perfumesByCategory.getTotalElements());
+  }
 }

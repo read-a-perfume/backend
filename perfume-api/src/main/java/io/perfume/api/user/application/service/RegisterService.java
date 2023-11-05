@@ -49,7 +49,6 @@ public class RegisterService implements CreateUserUseCase {
         command.username(),
         command.email(),
         passwordEncoder.encode(command.password()),
-        command.name(),
         command.marketingConsent(),
         command.promotionConsent());
 
@@ -112,7 +111,6 @@ public class RegisterService implements CreateUserUseCase {
           User user = User.createSocialUser(
               command.username(),
               command.email(),
-              command.name(),
               command.password(),
               now);
 

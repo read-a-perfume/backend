@@ -25,10 +25,8 @@ public class User extends BaseTimeDomain {
   private Long thumbnailId;
 
   @Builder
-  private User(Long id, String username, String email, String password,
-               Role role, Long businessId,
-               Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
-               LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
+  private User(Long id, String username, String email, String password, Role role, Long businessId, Long thumbnailId, LocalDateTime createdAt,
+               LocalDateTime updatedAt, LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;
@@ -42,8 +40,7 @@ public class User extends BaseTimeDomain {
   }
 
   // 기업 사용자가 아닌 경우 회원가입시에 사용됩니다.
-  public static User generalUserJoin(String username, String email, String password, String name,
-                                     boolean marketingConsent, boolean promotionConsent) {
+  public static User generalUserJoin(String username, String email, String password, boolean marketingConsent, boolean promotionConsent) {
     return User.builder()
         .username(username)
         .email(email)
@@ -54,8 +51,7 @@ public class User extends BaseTimeDomain {
         .build();
   }
 
-  public static User createSocialUser(String username, String email, String name, String password,
-                                      LocalDateTime now) {
+  public static User createSocialUser(String username, String email, String password, LocalDateTime now) {
     return User.builder()
         .username(username)
         .email(email)
@@ -70,11 +66,8 @@ public class User extends BaseTimeDomain {
   }
 
   // Only Adapter
-  public static User withId(
-      Long id, String username, String email,
-      String password, String name, Role role,
-      Long businessId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
-      LocalDateTime deletedAt) {
+  public static User withId(Long id, String username, String email, String password, Role role, Long businessId, Long thumbnailId,
+                            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
     return User.builder()
         .id(id)
         .username(username)
