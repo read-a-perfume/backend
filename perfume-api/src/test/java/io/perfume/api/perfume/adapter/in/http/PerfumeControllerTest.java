@@ -21,7 +21,12 @@ import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.NotePyramidResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNoteResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
+import io.perfume.api.perfume.application.port.out.PerfumeFavoriteRepository;
+import io.perfume.api.perfume.application.port.out.PerfumeRepository;
 import io.perfume.api.perfume.domain.Concentration;
+import io.perfume.api.perfume.domain.NotePyramidIds;
+import io.perfume.api.perfume.domain.Perfume;
+import io.perfume.api.user.application.port.out.UserRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,8 +40,10 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -53,6 +60,12 @@ public class PerfumeControllerTest {
   private CreatePerfumeUseCase createPerfumeUseCase;
   @Autowired
   private ObjectMapper objectMapper;
+  @Autowired
+  private PerfumeRepository perfumeRepository;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private PerfumeFavoriteRepository perfumeFavoriteRepository;
 
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
@@ -184,5 +197,39 @@ public class PerfumeControllerTest {
                     fieldWithPath("baseNoteIds").type(JsonFieldType.ARRAY).description("향수 베이스 노트 ID 목록")
                 )
             ));
+  }
+
+  @Test
+  @WithMockUser(username = "1", roles = "USER")
+  void favoritePerfume() throws Exception {
+    var perfume = Perfume.builder()
+        .id(1L)
+        .name("샹스 오 드 빠르펭")
+        .story("예측할 수 없는 놀라움을 줍니다.")
+        .concentration(Concentration.EAU_DE_PERFUME)
+        .price(100L)
+        .capacity(255000L)
+        .brandId(1L)
+        .categoryId(1L)
+        .thumbnailId(1L)
+        .perfumeShopUrl("https://www.chanel.com/kr/fragrance/p/126520/chance-eau-de-parfum-spray/")
+        .notePyramidIds(
+            new NotePyramidIds(List.of(1L, 2L, 3L), List.of(4L, 5L, 6L), List.of(7L, 8L, 9L)))
+        .build();
+
+    perfumeRepository.save(perfume);
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.post("/v1/perfumes/favorite/{id}", perfume.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andDo(
+            document("favorite-perfume",
+                pathParameters(
+                    parameterWithName("id").description("즐겨찾기 향수 ID")
+                )));
   }
 }
