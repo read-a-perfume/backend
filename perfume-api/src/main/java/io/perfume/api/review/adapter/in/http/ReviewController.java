@@ -11,12 +11,14 @@ import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
+import io.perfume.api.review.adapter.in.http.dto.ReviewLikeResponseDto;
 import io.perfume.api.review.application.facade.ReviewDetailFacadeService;
 import io.perfume.api.review.application.in.CreateReviewCommentUseCase;
 import io.perfume.api.review.application.in.CreateReviewUseCase;
 import io.perfume.api.review.application.in.DeleteReviewCommentUseCase;
 import io.perfume.api.review.application.in.DeleteReviewUseCase;
 import io.perfume.api.review.application.in.UpdateReviewCommentUseCase;
+import io.perfume.api.review.application.service.ReviewService;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -49,12 +51,15 @@ public class ReviewController {
 
   private final UpdateReviewCommentUseCase updateReviewCommentUseCase;
 
+  private final ReviewService reviewService;
+
   public ReviewController(CreateReviewUseCase createReviewUseCase,
                           DeleteReviewUseCase deleteReviewUseCase,
                           ReviewDetailFacadeService reviewDetailFacadeService,
                           CreateReviewCommentUseCase createReviewCommentUseCase,
                           DeleteReviewCommentUseCase deleteReviewCommentUseCase,
-                          UpdateReviewCommentUseCase updateReviewCommentUseCase
+                          UpdateReviewCommentUseCase updateReviewCommentUseCase,
+                          ReviewService reviewService
   ) {
     this.createReviewUseCase = createReviewUseCase;
     this.deleteReviewUseCase = deleteReviewUseCase;
@@ -62,6 +67,7 @@ public class ReviewController {
     this.createReviewCommentUseCase = createReviewCommentUseCase;
     this.deleteReviewCommentUseCase = deleteReviewCommentUseCase;
     this.updateReviewCommentUseCase = updateReviewCommentUseCase;
+    this.reviewService = reviewService;
   }
 
   @GetMapping
@@ -160,5 +166,18 @@ public class ReviewController {
     updateReviewCommentUseCase.updateReviewComment(userId, commentId, comment);
 
     return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @PostMapping("/{id}/like")
+  public ResponseEntity<ReviewLikeResponseDto> likeReview(
+      @AuthenticationPrincipal User user,
+      @PathVariable Long id
+  ) {
+    final var userId = Long.parseLong(user.getUsername());
+    final var now = LocalDateTime.now();
+    reviewService.likeReview(userId, id, now);
+
+    return ResponseEntity.status(HttpStatus.OK).body(new ReviewLikeResponseDto(id));
   }
 }

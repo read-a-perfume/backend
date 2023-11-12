@@ -56,4 +56,8 @@ public class Review extends BaseTimeDomain {
   public boolean isOwner(Long userId) {
     return !Objects.isNull(this.userId) && this.userId.equals(userId);
   }
+
+  public boolean isMine(long userId) {
+    return this.userId.equals(userId);
+  }
 }
