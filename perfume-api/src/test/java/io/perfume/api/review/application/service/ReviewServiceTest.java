@@ -9,8 +9,10 @@ import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.DayType;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
+import io.perfume.api.review.stub.StubReviewLikeRepository;
 import io.perfume.api.review.stub.StubReviewRepository;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +22,16 @@ public class ReviewServiceTest {
 
   private final StubReviewRepository reviewQueryRepository = new StubReviewRepository();
 
-  private final ReviewService reviewService = new ReviewService(reviewQueryRepository);
+  private final StubReviewLikeRepository reviewLikeRepository = new StubReviewLikeRepository();
+
+  private final ReviewService reviewService =
+      new ReviewService(reviewQueryRepository, reviewLikeRepository);
+
+  @BeforeEach
+  void setUp() {
+    reviewQueryRepository.clear();
+    reviewLikeRepository.clear();
+  }
 
   @Test
   @DisplayName("리뷰에 좋아요를 표시한다.")
@@ -28,9 +39,10 @@ public class ReviewServiceTest {
     // given
     final long userId = 1L;
     final long reviewId = 1L;
+    final LocalDateTime now = LocalDateTime.now();
 
     // when
-    final long expectedReviewId = reviewService.likeReview(userId, reviewId);
+    final long expectedReviewId = reviewService.likeReview(userId, reviewId, now);
 
     // then
     assertThat(reviewId).isEqualTo(expectedReviewId);
@@ -42,9 +54,10 @@ public class ReviewServiceTest {
     // given
     final long userId = 1L;
     final long reviewId = 1L;
+    final LocalDateTime now = LocalDateTime.now();
 
     // when & then
-    assertThatThrownBy(() -> reviewService.likeReview(userId, reviewId))
+    assertThatThrownBy(() -> reviewService.likeReview(userId, reviewId, now))
         .isInstanceOf(NotFoundReviewException.class);
   }
 
@@ -73,7 +86,7 @@ public class ReviewServiceTest {
     );
 
     // when & then
-    assertThatThrownBy(() -> reviewService.likeReview(userId, reviewId))
+    assertThatThrownBy(() -> reviewService.likeReview(userId, reviewId, now))
         .isInstanceOf(NotPermittedLikeReviewException.class);
   }
 }
