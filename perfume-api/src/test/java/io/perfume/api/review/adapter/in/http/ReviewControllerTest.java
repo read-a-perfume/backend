@@ -325,7 +325,7 @@ class ReviewControllerTest {
                 responseFields(
                     fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
-                    fieldWithPath("error").type(JsonFieldType.STRING).description("에러 메시지")
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
                 )
             ));
   }
@@ -413,7 +413,7 @@ class ReviewControllerTest {
                 responseFields(
                     fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
-                    fieldWithPath("error").type(JsonFieldType.STRING).description("에러 메시지")
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
                 )
             ));
   }
