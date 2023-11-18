@@ -40,6 +40,22 @@ public class ReviewServiceTest {
     final long userId = 1L;
     final long reviewId = 1L;
     final LocalDateTime now = LocalDateTime.now();
+    reviewQueryRepository.addReview(
+        new Review(
+            reviewId,
+            "",
+            "",
+            Strength.LIGHT,
+            0L,
+            DayType.DAILY,
+            1L,
+            2L,
+            Season.SPRING,
+            now,
+            now,
+            null
+        )
+    );
 
     // when
     final long expectedReviewId = reviewService.likeReview(userId, reviewId, now);

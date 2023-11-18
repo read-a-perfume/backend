@@ -420,7 +420,7 @@ class ReviewControllerTest {
 
   @Test
   @DisplayName("리뷰에 좋아요 표시한다.")
-  @WithMockUser(username = "1", roles = "USER")
+  @WithMockUser(username = "2", roles = "USER")
   void testLikeReview () throws Exception {
     // given
     var now = LocalDateTime.now();
@@ -446,7 +446,7 @@ class ReviewControllerTest {
     // when & then
     mockMvc
         .perform(RestDocumentationRequestBuilders.post("/v1/reviews/{id}/like",
-                review.getId(), 1)
+                review.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
         )
