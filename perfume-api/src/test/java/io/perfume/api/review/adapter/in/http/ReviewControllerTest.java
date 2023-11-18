@@ -417,4 +417,46 @@ class ReviewControllerTest {
                 )
             ));
   }
+
+  @Test
+  @DisplayName("리뷰에 좋아요 표시한다.")
+  @WithMockUser(username = "2", roles = "USER")
+  void testLikeReview () throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var user = userRepository.save(User.generalUserJoin(
+        "test",
+        "test@mail.com",
+        "test",
+        false,
+        false
+    )).orElseThrow();
+    var review = reviewRepository.save(Review.create(
+        "test",
+        "test description",
+        Strength.LIGHT,
+        1000L,
+        DayType.DAILY,
+        1L,
+        user.getId(),
+        Season.SPRING,
+        now
+    ));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.post("/v1/reviews/{id}/like",
+                review.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("like-review",
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID")
+                )
+            ));
+  }
 }
