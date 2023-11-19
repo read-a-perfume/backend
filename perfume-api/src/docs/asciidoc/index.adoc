@@ -148,6 +148,14 @@ include::{snippets}/delete-review-comment/http-request.adoc[]
 include::{snippets}/delete-review-comment/http-response.adoc[]
 include::{snippets}/delete-review-comment/response-fields.adoc[]
 
+== 리뷰 좋아요 표시/취소
+=== 요청
+include::{snippets}/like-review/http-request.adoc[]
+
+=== 응답
+include::{snippets}/like-review/http-response.adoc[]
+include::{snippets}/like-review/response-fields.adoc[]
+
 == 샘플
 === 요청
 include::{snippets}/index/http-request.adoc[]
