@@ -1,6 +1,7 @@
 package io.perfume.api.perfume.adapter.in.http;
 
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
+import io.perfume.api.perfume.adapter.in.http.dto.FavoritePerfumeResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeFavoriteResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -60,9 +62,10 @@ public class PerfumeController {
 
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/favorite/{id}")
-  public void favoritePerfume(@AuthenticationPrincipal User user, @PathVariable("id") Long perfumeId) {
+  public ResponseEntity<FavoritePerfumeResponseDto> favoritePerfume(@AuthenticationPrincipal User user, @PathVariable("id") Long perfumeId) {
     var userId = Long.parseLong(user.getUsername());
     userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, perfumeId);
+    return ResponseEntity.status(HttpStatus.OK).body(new FavoritePerfumeResponseDto(userId, perfumeId));
   }
 
 

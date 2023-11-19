@@ -43,7 +43,8 @@ public class PerfumeFavoriteQueryPersistenceAdapter implements PerfumeFavoriteQu
   public List<PerfumeFavorite> findFavoritePerfumesByUser(Long userId) {
     return jpaQueryFactory
         .selectFrom(perfumeFavoriteJpaEntity)
-        .where(perfumeFavoriteJpaEntity.userId.eq(userId))
+        .where(perfumeFavoriteJpaEntity.userId.eq(userId)
+            .and(perfumeFavoriteJpaEntity.deletedAt.isNull()))
         .fetch()
         .stream()
         .map(perfumeFavoriteMapper::toDomain)
