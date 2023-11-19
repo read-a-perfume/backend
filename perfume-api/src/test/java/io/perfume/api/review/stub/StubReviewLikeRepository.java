@@ -25,6 +25,11 @@ public class StubReviewLikeRepository implements ReviewLikeRepository, ReviewLik
     return Optional.ofNullable(reviewLikes.get(0));
   }
 
+  @Override
+  public long countByReviewId(long reviewId) {
+    return 0;
+  }
+
   public void addReviewLike(ReviewLike reviewLike) {
     reviewLikes.add(reviewLike);
   }
