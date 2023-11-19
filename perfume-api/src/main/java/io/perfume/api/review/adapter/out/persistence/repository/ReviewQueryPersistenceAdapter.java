@@ -4,7 +4,6 @@ import static io.perfume.api.review.adapter.out.persistence.entity.QReviewEntity
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.application.out.ReviewQueryRepository;
 import io.perfume.api.review.domain.Review;
 import java.util.List;

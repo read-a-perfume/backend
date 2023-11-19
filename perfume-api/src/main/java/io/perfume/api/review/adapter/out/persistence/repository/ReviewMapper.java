@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.mapper;
+package io.perfume.api.review.adapter.out.persistence.repository;
 
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
 import io.perfume.api.review.domain.Review;

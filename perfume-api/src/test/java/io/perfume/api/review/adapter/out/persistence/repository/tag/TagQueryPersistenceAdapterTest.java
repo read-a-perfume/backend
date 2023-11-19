@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.tag;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -6,8 +6,9 @@ import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewTagEntity;
 import io.perfume.api.review.adapter.out.persistence.entity.TagEntity;
-import io.perfume.api.review.adapter.out.persistence.mapper.ReviewTagMapper;
-import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.tag.ReviewTagMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.tag.TagQueryPersistenceAdapter;
 import io.perfume.api.review.domain.Tag;
 import io.perfume.api.review.domain.type.DayType;
 import io.perfume.api.review.domain.type.Season;
