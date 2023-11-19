@@ -24,13 +24,20 @@ public class PerfumeFavoriteQueryPersistenceAdapter implements PerfumeFavoriteQu
     this.perfumeFavoriteMapper = perfumeFavoriteMapper;
   }
 
+  //  return jpaQueryFactory.selectFrom(reviewTagEntity)
+//      .where(reviewTagEntity.id.reviewId.eq(reviewId))
+//      .fetch()
+//        .stream()
+//        .map(reviewTagMapper::toDomain)
+//        .toList();
+
   @Override
-  public Optional<PerfumeFavorite> findByUserAndPerfume(Long userId, Long perfumeId) {
-    PerfumeFavoriteJpaEntity entity = jpaQueryFactory.select(perfumeFavoriteJpaEntity)
-        .from(perfumeFavoriteJpaEntity)
-        .where(perfumeFavoriteJpaEntity.userId.eq(userId)
-            .and(perfumeFavoriteJpaEntity.perfumeId.eq(perfumeId)))
+  public Optional<PerfumeFavorite> findByUserIdAndPerfumeId(Long userId, Long perfumeId) {
+    PerfumeFavoriteJpaEntity entity = jpaQueryFactory.selectFrom(perfumeFavoriteJpaEntity)
+        .where(perfumeFavoriteJpaEntity.id.userId.eq(userId)
+            .and(perfumeFavoriteJpaEntity.id.perfumeId.eq(perfumeId)))
         .fetchOne();
+
 
     if (Objects.isNull(entity)) {
       return Optional.empty();
@@ -40,10 +47,10 @@ public class PerfumeFavoriteQueryPersistenceAdapter implements PerfumeFavoriteQu
   }
 
   @Override
-  public List<PerfumeFavorite> findFavoritePerfumesByUser(Long userId) {
+  public List<PerfumeFavorite> findFavoritePerfumesByUserId(Long userId) {
     return jpaQueryFactory
         .selectFrom(perfumeFavoriteJpaEntity)
-        .where(perfumeFavoriteJpaEntity.userId.eq(userId)
+        .where(perfumeFavoriteJpaEntity.id.userId.eq(userId)
             .and(perfumeFavoriteJpaEntity.deletedAt.isNull()))
         .fetch()
         .stream()

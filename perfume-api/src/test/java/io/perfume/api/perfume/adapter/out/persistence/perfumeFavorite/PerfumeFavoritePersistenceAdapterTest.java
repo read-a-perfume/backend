@@ -1,5 +1,7 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfumeFavorite;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.perfume.api.perfume.adapter.out.persistence.perfumeFavorite.mapper.PerfumeFavoriteMapper;
 import io.perfume.api.perfume.domain.PerfumeFavorite;
 import java.time.LocalDateTime;
@@ -32,8 +34,7 @@ class PerfumeFavoritePersistenceAdapterTest {
     var followed = repository.save(follow);
 
     // then
-    Assertions.assertThat(followed.getUserId()).isEqualTo(1L);
-    Assertions.assertThat(followed.getPerfumeId()).isEqualTo(1L);
-    Assertions.assertThat(followed.getId()).isEqualTo(1L);
+    assertThat(followed.getUserId()).isEqualTo(1L);
+    assertThat(followed.getPerfumeId()).isEqualTo(1L);
   }
 }

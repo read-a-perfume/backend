@@ -41,14 +41,13 @@ class PerfumeFavoriteQueryPersistenceAdapterTest {
     );
 
     PerfumeFavoriteJpaEntity entity = jpaRepository.save(perfumeFavoriteMapper.toEntity(follow));
-    entityManager.clear();
 
     // when
-    PerfumeFavorite followed = queryRepository.findByUserAndPerfume(entity.getUserId(),
-        entity.getPerfumeId()).orElseThrow();
+    PerfumeFavorite followed = queryRepository.findByUserIdAndPerfumeId(
+        entity.getId().getUserId(), entity.getId().getPerfumeId())
+        .orElseThrow();
 
     // then
-    assertThat(followed.getId()).isEqualTo(entity.getId());
     assertThat(followed.getUserId()).isEqualTo(1L);
     assertThat(followed.getPerfumeId()).isEqualTo(1L);
     assertThat(followed.getUserId()).isEqualTo(follow.getUserId());
@@ -73,10 +72,9 @@ class PerfumeFavoriteQueryPersistenceAdapterTest {
       jpaRepository.save(perfumeFavoriteMapper.toEntity(follow));
     }
     perfumeId = 1L;
-    entityManager.clear();
 
     // when
-    List<PerfumeFavorite> followedPerfumes = queryRepository.findFavoritePerfumesByUser(userId);
+    List<PerfumeFavorite> followedPerfumes = queryRepository.findFavoritePerfumesByUserId(userId);
 
     // then
     assertThat(followedPerfumes.size()).isEqualTo(end - start);

@@ -77,7 +77,7 @@ public class PerfumeController {
   }
   
   @PreAuthorize("isAuthenticated()")
-  @GetMapping
+  @GetMapping("/favorites")
   public List<PerfumeFavoriteResponseDto> getFavoritePerfumes(@AuthenticationPrincipal User user) {
     var userId = Long.parseLong(user.getUsername());
     List<PerfumeFavoriteResult> favoritePerfumes = getFavoritePerfumesUseCase
