@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.comment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,8 +6,9 @@ import dto.repository.CursorDirection;
 import dto.repository.CursorPageable;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
-import io.perfume.api.review.adapter.out.persistence.mapper.ReviewCommentMapper;
-import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.ReviewMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.comment.ReviewCommentMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.comment.ReviewCommentQueryPersistenceAdapter;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
 import io.perfume.api.review.domain.type.DayType;

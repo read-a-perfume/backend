@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.comment;
 
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewCommentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
