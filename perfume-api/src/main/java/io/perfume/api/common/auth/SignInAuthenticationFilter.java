@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,9 +32,10 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
   private final ObjectMapper objectMapper;
 
   public SignInAuthenticationFilter(AuthenticationManager authenticationManager,
+                                    ObjectMapper objectMapper,
                                     MakeNewTokenUseCase makeNewTokenUseCase) {
-    this.objectMapper = new ObjectMapper();
     this.makeNewTokenUseCase = makeNewTokenUseCase;
+    this.objectMapper = objectMapper;
 
     super.setAuthenticationManager(authenticationManager);
     super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/v1/login", "POST"));
@@ -72,9 +75,11 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     SecurityContextHolder.getContext().setAuthentication(authResult);
     try {
+      Map<String, Object> map = new HashMap<>();
+      map.put("username",((UserPrincipal) authResult.getPrincipal()).getUsername());
+      map.put("userId",((UserPrincipal) authResult.getPrincipal()).getUser().getId());
       response.getWriter().write(
-          objectMapper.writeValueAsString(
-              (authResult.getPrincipal())));
+          objectMapper.writeValueAsString(map));
       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
