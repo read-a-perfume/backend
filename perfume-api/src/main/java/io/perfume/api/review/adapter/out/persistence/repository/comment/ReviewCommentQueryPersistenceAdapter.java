@@ -24,12 +24,11 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
 
   @Override
   public long countByReviewId(long reviewId) {
-    final var result = entityManager.createQuery(
-            "select count(1) from ReviewCommentEntity where reviewId = :reviewId and deletedAt is null")
+    return entityManager.createQuery(
+            "select count(1) from ReviewCommentEntity where reviewId = :reviewId and deletedAt is null",
+            Long.class)
         .setParameter("reviewId", reviewId)
         .getSingleResult();
-
-    return (long) result;
   }
 
   @Override
