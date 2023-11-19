@@ -1,5 +1,6 @@
 package io.perfume.api.perfume.adapter.in.http;
 
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
@@ -12,8 +13,6 @@ import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -58,10 +57,10 @@ public class PerfumeController {
   }
 
   @GetMapping("/category/{id}")
-  public Page<SimplePerfumeResponseDto> getPerfumesByCategory(@PathVariable Long id, Pageable pageable) {
-    Page<SimplePerfumeResult> perfumesByCategory = findPerfumeUseCase.findPerfumesByCategory(id, pageable);
+  public CustomPage<SimplePerfumeResponseDto> getPerfumesByCategory(@PathVariable Long id, Pageable pageable) {
+    CustomPage<SimplePerfumeResult> perfumesByCategory = findPerfumeUseCase.findPerfumesByCategory(id, pageable);
     List<SimplePerfumeResponseDto> list = perfumesByCategory.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
-    return new PageImpl<>(list, perfumesByCategory.getPageable(), perfumesByCategory.getTotalElements());
+    return new CustomPage<>(list, perfumesByCategory);
   }
 
   @GetMapping("/search")

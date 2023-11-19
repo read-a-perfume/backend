@@ -1,5 +1,6 @@
 package io.perfume.api.perfume.adapter.in.http;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -15,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
@@ -23,7 +25,9 @@ import io.perfume.api.perfume.application.port.in.dto.NotePyramidResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNoteResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.domain.Concentration;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +36,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -184,6 +189,51 @@ class PerfumeControllerTest {
                     fieldWithPath("topNoteIds").type(JsonFieldType.ARRAY).description("향수 탑 노트 ID 목록"),
                     fieldWithPath("middleNoteIds").type(JsonFieldType.ARRAY).description("향수 미들 노트 ID 목록"),
                     fieldWithPath("baseNoteIds").type(JsonFieldType.ARRAY).description("향수 베이스 노트 ID 목록")
+                )
+            ));
+  }
+
+  @Test
+  void getPerfumesByCategory() throws Exception {
+    // given
+    List<SimplePerfumeResult> perfumeResults = new ArrayList<>();
+    for(int i=0;i<3;i++) {
+      perfumeResults.add(new SimplePerfumeResult((long) i, "perfume"+i, Concentration.EAU_DE_PARFUM, "brand"+i, "http://thumbnail.url"));
+    }
+    given(findPerfumeUseCase.findPerfumesByCategory(anyLong(), any())).willReturn(new CustomPage<>(new PageImpl<>(perfumeResults)));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/perfumes/category/{id}", 1)
+            .queryParam("page", "0")
+            .queryParam("size", "3")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andDo(
+            document("create-perfume",
+                pathParameters(
+                    parameterWithName("id").description("카테고리 ID")
+                ),
+                queryParameters(
+                    parameterWithName("page").description("페이지 번호 (0부터 시작)"),
+                    parameterWithName("size").description("페이지에 존재하는 향수 개수")
+                ),
+                responseFields(
+                    fieldWithPath("content[].id").type(JsonFieldType.NUMBER).description("향수 ID"),
+                    fieldWithPath("content[].name").type(JsonFieldType.STRING).description("향수 이름"),
+                    fieldWithPath("content[].thumbnailUrl").type(JsonFieldType.STRING).description("향수 썸네일 사진 주소"),
+                    fieldWithPath("content[].brandName").type(JsonFieldType.STRING).description("향수 브랜드 이름"),
+                    fieldWithPath("content[].strength").type(JsonFieldType.STRING).description("향수 강도"),
+                    fieldWithPath("content[].duration").type(JsonFieldType.STRING).description("향수 지속 시간"),
+                    fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("페이지 처음인지 여부"),
+                    fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("페이지 마지막인지 여부"),
+                    fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 존재하는지 여부"),
+                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수"),
+                    fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 향수 개수"),
+                    fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                    fieldWithPath("size").type(JsonFieldType.NUMBER).description("현재 페이지의 향수 개수")
                 )
             ));
   }
