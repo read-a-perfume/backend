@@ -17,6 +17,7 @@ import io.perfume.api.review.application.in.CreateReviewCommentUseCase;
 import io.perfume.api.review.application.in.CreateReviewUseCase;
 import io.perfume.api.review.application.in.DeleteReviewCommentUseCase;
 import io.perfume.api.review.application.in.DeleteReviewUseCase;
+import io.perfume.api.review.application.in.LikeReviewUseCase;
 import io.perfume.api.review.application.in.UpdateReviewCommentUseCase;
 import io.perfume.api.review.application.service.ReviewService;
 import java.time.LocalDateTime;
@@ -51,7 +52,7 @@ public class ReviewController {
 
   private final UpdateReviewCommentUseCase updateReviewCommentUseCase;
 
-  private final ReviewService reviewService;
+  private final LikeReviewUseCase likeReviewUseCase;
 
   public ReviewController(CreateReviewUseCase createReviewUseCase,
                           DeleteReviewUseCase deleteReviewUseCase,
@@ -59,7 +60,7 @@ public class ReviewController {
                           CreateReviewCommentUseCase createReviewCommentUseCase,
                           DeleteReviewCommentUseCase deleteReviewCommentUseCase,
                           UpdateReviewCommentUseCase updateReviewCommentUseCase,
-                          ReviewService reviewService
+                          ReviewService likeReviewUseCase
   ) {
     this.createReviewUseCase = createReviewUseCase;
     this.deleteReviewUseCase = deleteReviewUseCase;
@@ -67,7 +68,7 @@ public class ReviewController {
     this.createReviewCommentUseCase = createReviewCommentUseCase;
     this.deleteReviewCommentUseCase = deleteReviewCommentUseCase;
     this.updateReviewCommentUseCase = updateReviewCommentUseCase;
-    this.reviewService = reviewService;
+    this.likeReviewUseCase = likeReviewUseCase;
   }
 
   @GetMapping
@@ -176,7 +177,7 @@ public class ReviewController {
   ) {
     final var userId = Long.parseLong(user.getUsername());
     final var now = LocalDateTime.now();
-    reviewService.likeReview(userId, id, now);
+    likeReviewUseCase.toggleLikeReview(userId, id, now);
 
     return ResponseEntity.status(HttpStatus.OK).body(new ReviewLikeResponseDto(id));
   }
