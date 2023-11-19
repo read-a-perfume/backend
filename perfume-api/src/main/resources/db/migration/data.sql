@@ -72,7 +72,7 @@ INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, 
                      created_at, updated_at)
 VALUES (1, '우드 세이지 앤 씨 솔트',
         '바람부는 해안을 따라 걸으며 일상을 벗어나보세요. 하얗게 부서지는 파도, 소금기를 머금은 신선한 바다 공기. 험준한 절벽에서 느껴지는 투박한 자연의 향기와 세이지의 우디한 흙 내음이 어우러져 자유롭고 활기찬 에너지와 즐거움이 가득합니다.',
-        30, 110000, 2, 1, 3, 'https://www.jomalone.co.kr/product/25946/32241/wood-sage-sea-salt-cologne', now(), now());
+        30, 110000, 'EAU_DE_COLOGNE', 1, 3, 'https://www.jomalone.co.kr/product/25946/32241/wood-sage-sea-salt-cologne', now(), now());
 
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
 VALUES (1, 1, 'TOP', now(), now());
@@ -83,7 +83,7 @@ VALUES (1, 3, 'BASE', now(), now());
 
 INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, category_id, perfume_shop_url,
                      created_at, updated_at)
-VALUES (2, '잉글리쉬 페어 앤 프리지아', '가을의 정수. 화이트 프리지아 부케향에 이제 막 익은 배의 신선함을 입히고 호박, 파출리, 우디향으로 은은함을 더했습니다.', 30, 110000, 2, 1,
+VALUES (2, '잉글리쉬 페어 앤 프리지아', '가을의 정수. 화이트 프리지아 부케향에 이제 막 익은 배의 신선함을 입히고 호박, 파출리, 우디향으로 은은함을 더했습니다.', 30, 110000, 'EAU_DE_COLOGNE', 1,
         2, 'https://www.jomalone.co.kr/product/25946/12553/english-pear-freesia-cologne', now(), now());
 
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
@@ -97,7 +97,7 @@ INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, 
                      created_at, updated_at)
 VALUES (3, '블랙베리 앤 베이',
         '순수의 향. 블랙베리를 따던 어린 시절의 추억, 블랙베리로 물든 입술과 손. 이제 막 수확한 월계수 잎의 신선함에 톡 쏘는 블랙베리 과즙을 가미하였습니다. 매력적이고 생기 넘치는 상쾌한 느낌의 향입니다.',
-        30, 110000, 2, 1, 1, 'https://www.jomalone.co.kr/product/25946/23540/blackberry-bay-cologne', now(), now());
+        30, 110000, 'EAU_DE_COLOGNE', 1, 1, 'https://www.jomalone.co.kr/product/25946/23540/blackberry-bay-cologne', now(), now());
 
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
 VALUES (3, 7, 'TOP', now(), now());
@@ -110,7 +110,7 @@ INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, 
                      created_at, updated_at)
 VALUES (4, '넥타린 블로썸 앤 허니',
         '이른 아침 런던 코벤트 가든의 시장. 아카시아 꿀 향기 속에 천도 복숭아, 복숭아, 카씨스와 어린 봄꽃의 향이 녹아있습니다. 달콤하고 유쾌한 향수입니다.',
-        30, 110000, 2, 1, 1, 'https://www.jomalone.co.kr/product/25946/10079/nectarine-blossom-honey-cologne', now(), now());
+        30, 110000, 'EAU_DE_COLOGNE', 1, 1, 'https://www.jomalone.co.kr/product/25946/10079/nectarine-blossom-honey-cologne', now(), now());
 
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
 VALUES (3, 10, 'TOP', now(), now());
@@ -124,7 +124,7 @@ INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, 
 
 VALUES (5, '앰버 앤 라벤더',
         '클래식하고 깔끔한 남성 향수. 프렌치 라벤더와 페티그레인은 빛나는 앰버향에 신선함을 더해줍니다. 코스모폴리탄에 어울리는 향수입니다.',
-        100, 220000, 2, 1, 3, 'https://www.jomalone.co.kr/product/25946/9947/amber-lavender-cologne', now(), now());
+        100, 220000, 'EAU_DE_COLOGNE', 1, 3, 'https://www.jomalone.co.kr/product/25946/9947/amber-lavender-cologne', now(), now());
 
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
 VALUES (3, 13, 'TOP', now(), now());
