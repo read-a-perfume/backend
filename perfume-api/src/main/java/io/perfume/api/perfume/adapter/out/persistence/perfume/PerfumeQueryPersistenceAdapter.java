@@ -56,7 +56,8 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
     List<Tuple> result = jpaQueryFactory
         .select(perfumeNoteEntity.noteId, perfumeNoteEntity.noteLevel, noteJpaEntity.name, noteJpaEntity.thumbnailId)
         .from(perfumeNoteEntity)
-        .where(perfumeNoteEntity.deletedAt.isNull())
+        .where(perfumeNoteEntity.deletedAt.isNull(),
+            perfumeNoteEntity.perfumeId.eq(perfumeId))
         .leftJoin(noteJpaEntity).on(perfumeNoteEntity.noteId.eq(noteJpaEntity.id)).fetchJoin()
         .fetch();
 
