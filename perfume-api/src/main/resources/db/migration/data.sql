@@ -7,7 +7,7 @@ VALUES (1, '프루티', '달콤한 과일의 향이 지속되어 생동감과 �
 INSERT INTO category (id, name, description, created_at, updated_at)
 VALUES (2, '플로럴', '꽃 향기를 가득 담아 사랑스러운 느낌을 줍니다.', now(), now());
 INSERT INTO category (id, name, description, created_at, updated_at)
-VALUES (3, '우디', '빽빽한 나무들이 있는 숲의 신선하고 무거운 향이 중후하고 따뜻한 느낌을 줍니다.', now(), now());
+VALUES (3, '우디', '나무 향을 의미하며, 건조하고 성숙한 느낌을 전달합니다.', now(), now());
 INSERT INTO category (id, name, description, created_at, updated_at)
 VALUES (4, '시트러스', '상큼하고 톡 쏘는 향으로 가볍고 산뜻한 느낌을 줍니다.', now(), now());
 INSERT INTO category (id, name, description, created_at, updated_at)
@@ -22,6 +22,8 @@ INSERT INTO category (id, name, description, created_at, updated_at)
 VALUES (9, '오리엔탈', '동양적인 향으로 성숙하고 강렬한 느낌을 줍니다.', now(), now());
 INSERT INTO category (id, name, description, created_at, updated_at)
 VALUES (10, '아쿠아', '맑고 깨끗한 물의 향으로 상쾌하고 청량감 있는 느낌을 줍니다.', now(), now());
+INSERT INTO category (id, name, description, created_at, updated_at)
+VALUES (11, '애니멀', '동물적인 느낌 혹은 원초적인 본능을 이끌어내는 향으로 따뜻한 느낌을 줍니다.', now(), now());
 
 INSERT INTO brand (id, name, story, created_at, updated_at)
 values (1, '조말론', '조말론은 18세기 영국에서 시작된 럭셔리 향수 브랜드입니다. 영국 왕실의 향수 제조사로 시작하여, 현재는 럭셔리 향수 브랜드로 자리잡고 있습니다.', now(), now());
@@ -32,6 +34,8 @@ values (3, '바이레도', '바이레도는 1996년 이탈리아에서 시작된
         now(), now());
 INSERT INTO brand (id, name, story, created_at, updated_at)
 values (4, '샤넬', '샤넬은 1910년 프랑스에서 시작된 럭셔리 패션 하우스이며, 향수 브랜드로도 유명하죠. 샤넬 No.5는 세계에서 가장 유명한 향수 중 하나입니다.', now(), now());
+INSERT INTO brand (id, name, story, created_at, updated_at)
+values (5, '톰 포드', '21세기 진정한 럭셔리 브랜드를 추구하는 톰 포드의 향수는 고급스럽고 독특한 향으로 유명하며, 세련된 디자인과 높은 품질로 유명합니다.', now(), now());
 
 INSERT INTO note (id, name, description, created_at, updated_at)
 VALUES (1, '씨 솔트', '바삭바삭한 질감, 산뜻함과 순수함을 선사하는 향', now(), now());
@@ -67,6 +71,53 @@ INSERT INTO note (id, name, description, created_at, updated_at)
 VALUES (14, '라벤더', '장뇌, 꿀, 건초의 상쾌하고 아로마틱한 향', now(), now());
 INSERT INTO note (id, name, description, created_at, updated_at)
 VALUES (15, '앰버', '우디한 따스함이 있는 관능적인 향', now(), now());
+
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (16, '체리', '달콤 상큼한 체리의 싱싱함이 느껴지는 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (17, '진저', '톡 쏘는 생강의 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (18, '자스민', '달콤하고 하얀 꽃들이 가득 넘치는 느낌을 주는 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (19, '머스크', '우디한 따스함이 있는 관능적인 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (20, '핑크 페퍼', '장미빛 뉘앙스가 가미된 신선하고 스파이시한 꽃과 허브의 향', now(), now());
+
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (21, '베르가못', '쌉쌀하고 새콤한 과일과 아로마의 복합적인 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (22, '블랙 커런트', '달콤하고 산뜻한, 그리고 약간의 신맛과 풍부한 과일이 어우러지는 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (23, '로즈', '달콤하고 산뜻한, 그리고 약간의 신맛과 풍부한 과일이 어우러지는 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (24, '제라늄', '잎사귀의 녹음과 장밋빛 뉘앙스를 주는 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (25, '다바나', '시트러스 및 허브, 우디 느낌을 주는 따뜻하고 달콤한 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (26, '모스', '유럽의 참나무에서 나는 이끼로부터 얻어내 씁쓸한 냄새가 나는 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (27, '베티베르', '흙내음과 녹음이 은은하게 느껴지는 향', now(), now());
+
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (28, '블러드 오렌지', '매우 달콤하고 과즙이 많은 오렌지와 비슷한 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (29, '카다멈', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (30, '헬리오트로프', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (31, '럼', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (32, '꼬냑', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (33, '샌달우드', '밀키하고 부드러우며 클래식한 우디 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (34, '벤조인', '바닐라를 연상시키는 따뜻한 발사믹 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (35, '바닐라', '익히 알려진 달콤하고 편안하며 쿠키를 구울 때 나는 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (36, '페루 발삼', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now());
+INSERT INTO note (id, name, description, created_at, updated_at)
+VALUES (37, '통카', '달콤한 과일과 아몬드, 담배를 살짝 섞은듯한 편안한 향', now(), now());
 
 INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, category_id, perfume_shop_url,
                      created_at, updated_at)
@@ -113,22 +164,100 @@ VALUES (4, '넥타린 블로썸 앤 허니',
         30, 110000, 'EAU_DE_COLOGNE', 1, 1, 'https://www.jomalone.co.kr/product/25946/10079/nectarine-blossom-honey-cologne', now(), now());
 
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
-VALUES (3, 10, 'TOP', now(), now());
+VALUES (4, 10, 'TOP', now(), now());
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
-VALUES (3, 11, 'MIDDLE', now(), now());
+VALUES (4, 11, 'MIDDLE', now(), now());
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
-VALUES (3, 12, 'BASE', now(), now());
+VALUES (4, 12, 'BASE', now(), now());
 
 INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, category_id, perfume_shop_url,
                      created_at, updated_at)
-
 VALUES (5, '앰버 앤 라벤더',
         '클래식하고 깔끔한 남성 향수. 프렌치 라벤더와 페티그레인은 빛나는 앰버향에 신선함을 더해줍니다. 코스모폴리탄에 어울리는 향수입니다.',
         100, 220000, 'EAU_DE_COLOGNE', 1, 3, 'https://www.jomalone.co.kr/product/25946/9947/amber-lavender-cologne', now(), now());
 
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
-VALUES (3, 13, 'TOP', now(), now());
+VALUES (5, 13, 'TOP', now(), now());
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
-VALUES (3, 14, 'MIDDLE', now(), now());
+VALUES (5, 14, 'MIDDLE', now(), now());
 INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
-VALUES (3, 15, 'BASE', now(), now());
+VALUES (5, 15, 'BASE', now(), now());
+
+INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, category_id, perfume_shop_url,
+                     created_at, updated_at)
+VALUES (6, '일렉트릭 체리',
+        '상쾌한 첫 봄날처럼 가볍고 상쾌한 향입니다. 부담스럽지 않은 과일 향을 누구나 쉽게 경험해 볼 수 있습니다.',
+        30, 350000, 'EAU_DE_PARFUM', 5, 1, 'https://www.tomford.com/electric-cherry-eau-de-parfum/TCRM01.html', now(), now());
+
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (6, 16, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (6, 17, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (6, 18, 'MIDDLE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (6, 19, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (6, 20, 'BASE', now(), now());
+
+INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, category_id, perfume_shop_url,
+                     created_at, updated_at)
+VALUES (7, '온 어 데이트',
+        '늦여름 저녁, 황금 시간대의 석양빛에 흠뻑 빠져 프로방스의 웅장한 포도밭이 내려다보이는 곳에서 하는 데이트를 연상시키는 향수입니다.',
+        100, 185000, 'EAU_DE_TOILETTE', 2, 1, 'https://www.maisonmargiela-fragrances.us/fragrances/replica-on-a-date/MM086.html', now(), now());
+
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 20, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 21, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 22, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 23, 'MIDDLE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 24, 'MIDDLE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 25, 'MIDDLE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 6, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 19, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 26, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (7, 27, 'BASE', now(), now());
+
+INSERT INTO perfume (id, name, story, capacity, price, concentration, brand_id, category_id, perfume_shop_url,
+                     created_at, updated_at)
+VALUES (8, '비터 피치',
+        '나무에서 갓 따낸 탐스러운 복숭아의 달콤함과 벗어날 수 없는 마력을 담은 향수입니다.',
+        30, 350000, 'EAU_DE_PARFUM', 5, 1, 'https://www.tomford.com/bitter-peach--eau-de-parfum/T941.html', now(), now());
+
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 12, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 28, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 29, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 30, 'TOP', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 18, 'MIDDLE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 25, 'MIDDLE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 31, 'MIDDLE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 32, 'MIDDLE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 6, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 33, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 34, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 35, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 36, 'BASE', now(), now());
+INSERT INTO perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+VALUES (8, 37, 'BASE', now(), now());
