@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.perfume.api.brand.adapter.out.persistence.BrandEntity;
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.note.adapter.out.persistence.category.CategoryJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaEntity;
@@ -29,7 +30,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -216,13 +216,13 @@ class PerfumeQueryPersistenceAdapterTest {
 
     // when
     int pageSize = 3;
-    Page<SimplePerfumeResult> perfumesByCategory =
+    CustomPage<SimplePerfumeResult> perfumesByCategory =
         perfumeQueryPersistenceAdapter.findPerfumesByCategory(categoryJpaEntity.getId(), PageRequest.of(0, 3));
 
     // then
     assertEquals(pageSize, perfumesByCategory.getSize());
     assertEquals(5, perfumesByCategory.getTotalElements());
-    assertTrue(perfumesByCategory.hasNext());
+    assertTrue(perfumesByCategory.isHasNext());
   }
 
   @Test
@@ -272,8 +272,8 @@ class PerfumeQueryPersistenceAdapterTest {
 
     // then
     assertEquals(10, perfumeNameResults.size());
-    for(int i=0;i<perfumeNameResults.size();i++) {
-      assertEquals("이솝 perfume"+i, perfumeNameResults.get(i).perfumeNameWithBrand());
+    for (int i = 0; i < perfumeNameResults.size(); i++) {
+      assertEquals("이솝 perfume" + i, perfumeNameResults.get(i).perfumeNameWithBrand());
     }
   }
 
