@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public class Follow extends BaseTimeDomain {
 
-  private Long id;
+  private final Long id;
 
-  private Long followerId;
+  private final Long followerId;
 
-  private Long followingId;
+  private final Long followingId;
 
   public Follow(Long id, Long followerId, Long followingId,
       LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {

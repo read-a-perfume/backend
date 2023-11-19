@@ -2,5 +2,5 @@ package io.perfume.api.mypage.application.port.in;
 
 public interface FollowUserUseCase {
 
-  void followAndunFollow(Long followerId, Long followingId);
+  void followAndUnFollow(Long followerId, Long followingId);
 }
