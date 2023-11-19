@@ -3,6 +3,8 @@ package io.perfume.api.perfume.adapter.out.persistence.perfume;
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.perfume.domain.Concentration;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,6 +35,7 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
   @NotNull
   private String story;
 
+  @Enumerated(EnumType.STRING)
   private Concentration concentration;
 
   private Long price;

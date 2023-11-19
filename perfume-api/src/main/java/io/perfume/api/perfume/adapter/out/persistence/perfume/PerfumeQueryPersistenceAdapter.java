@@ -13,6 +13,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteJpaRepository;
+import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
@@ -120,5 +121,17 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
         .fetchOne();
 
     return new PageImpl<>(results, pageable, total == null ? 0 : total);
+  }
+
+  @Override
+  public List<PerfumeNameResult> searchPerfumeByQuery(String query) {
+
+    return jpaQueryFactory.select(
+            Projections.constructor(PerfumeNameResult.class, brandEntity.name, perfumeJpaEntity.name, perfumeJpaEntity.id))
+        .from(perfumeJpaEntity)
+        .leftJoin(brandEntity).on(perfumeJpaEntity.brandId.eq(brandEntity.id)).fetchJoin()
+        .where(brandEntity.name.append(" ").append(perfumeJpaEntity.name).contains(query))
+        .limit(10L)
+        .fetch();
   }
 }

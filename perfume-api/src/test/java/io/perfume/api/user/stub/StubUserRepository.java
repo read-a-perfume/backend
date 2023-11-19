@@ -24,6 +24,11 @@ public class StubUserRepository implements UserRepository, UserQueryRepository {
   }
 
   @Override
+  public Boolean existByUsernameOrEmail(String username, String email) {
+    return null;
+  }
+
+  @Override
   public Optional<User> findOneByEmail(String email) {
     return Optional.empty();
   }

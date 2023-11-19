@@ -9,6 +9,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,6 +20,7 @@ import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.NotePyramidResult;
+import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNoteResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeFavoriteRepository;
@@ -43,7 +45,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -51,7 +52,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-public class PerfumeControllerTest {
+class PerfumeControllerTest {
 
   private MockMvc mockMvc;
   @MockBean
@@ -221,15 +222,39 @@ public class PerfumeControllerTest {
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.post("/v1/perfumes/favorite/{id}", perfume.getId())
+        .perform(RestDocumentationRequestBuilders.post("/v1/perfumes/favorite/{id}", perfume.getId()));
+  }
+
+  @Test
+  void searchPerfumeByQuery() throws Exception {
+    // given
+    List<PerfumeNameResult> perfumeNameResults =
+        List.of(new PerfumeNameResult("딥티크 롬브로단로 오 드 뚜왈렛", 1L),
+            new PerfumeNameResult("딥티크 롬브로단로 오 드 퍼퓸", 2L));
+
+    given(findPerfumeUseCase.searchPerfumeByQuery("딥티크 롬브로")).willReturn(perfumeNameResults);
+    // when
+    // then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/perfumes/search")
+            .queryParam("query", "딥티크 롬브로")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$[0].perfumeNameWithBrand").value(perfumeNameResults.get(0).perfumeNameWithBrand()))
+        .andExpect(jsonPath("$[0].perfumeId").value(perfumeNameResults.get(0).perfumeId()))
+        .andExpect(jsonPath("$[1].perfumeNameWithBrand").value(perfumeNameResults.get(1).perfumeNameWithBrand()))
+        .andExpect(jsonPath("$[1].perfumeId").value(perfumeNameResults.get(1).perfumeId()))
         .andDo(
-            document("favorite-perfume",
-                pathParameters(
-                    parameterWithName("id").description("즐겨찾기 향수 ID")
+            document("get-perfume",
+                queryParameters(
+                    parameterWithName("query").description("검색어 (브랜드 이름 / 향수 이름 / 브랜드 이름 + 향수 이름)만 입력 가능")
+                ),
+                responseFields(
+                    fieldWithPath("[].perfumeNameWithBrand").type(JsonFieldType.STRING).description("브랜드 이름 + 향수 이름"),
+                    fieldWithPath("[].perfumeId").type(JsonFieldType.NUMBER).description("향수 아이디")
                 )));
   }
 }

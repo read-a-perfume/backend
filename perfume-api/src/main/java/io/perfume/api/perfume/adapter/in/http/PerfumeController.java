@@ -2,6 +2,7 @@ package io.perfume.api.perfume.adapter.in.http;
 
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeFavoriteResponseDto;
+import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.SimplePerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
@@ -10,6 +11,7 @@ import io.perfume.api.perfume.application.port.in.GetFavoritePerfumesUseCase;
 import io.perfume.api.perfume.application.port.in.UserFavoritePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeFavoriteResult;
+import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +71,7 @@ public class PerfumeController {
     List<SimplePerfumeResponseDto> list = perfumesByCategory.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
     return new PageImpl<>(list, perfumesByCategory.getPageable(), perfumesByCategory.getTotalElements());
   }
-
+  
   @PreAuthorize("isAuthenticated()")
   @GetMapping
   public List<PerfumeFavoriteResponseDto> getFavoritePerfumes(@AuthenticationPrincipal User user) {
@@ -78,5 +80,11 @@ public class PerfumeController {
         .getFavoritePerfumes(userId);
 
     return PerfumeFavoriteResponseDto.from(favoritePerfumes);
+  }
+
+  @GetMapping("/search")
+  public List<PerfumeNameResponseDto> searchPerfumeByQuery(@RequestParam String query) {
+    List<PerfumeNameResult> perfumesByQuery = findPerfumeUseCase.searchPerfumeByQuery(query);
+    return perfumesByQuery.stream().map(PerfumeNameResponseDto::of).toList();
   }
 }
