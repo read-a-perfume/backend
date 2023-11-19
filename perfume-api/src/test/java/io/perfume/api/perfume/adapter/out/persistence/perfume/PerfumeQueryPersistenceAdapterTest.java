@@ -30,9 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
@@ -59,7 +57,7 @@ class PerfumeQueryPersistenceAdapterTest {
     Perfume perfume = Perfume.builder()
         .name("테싯 오 드 퍼퓸")
         .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
-        .concentration(Concentration.EAU_DE_PERFUME)
+        .concentration(Concentration.EAU_DE_PARFUM)
         .price(150000L)
         .capacity(50L)
         .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -92,7 +90,7 @@ class PerfumeQueryPersistenceAdapterTest {
     Perfume perfume = Perfume.builder()
         .name("테싯 오 드 퍼퓸")
         .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
-        .concentration(Concentration.EAU_DE_PERFUME)
+        .concentration(Concentration.EAU_DE_PARFUM)
         .price(150000L)
         .capacity(50L)
         .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -131,7 +129,7 @@ class PerfumeQueryPersistenceAdapterTest {
     for (int i = 0; i < 5; i++) {
       PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
           .story("story" + i)
-          .concentration(Concentration.EAU_DE_PERFUME)
+          .concentration(Concentration.EAU_DE_PARFUM)
           .price(150000L)
           .capacity(50L)
           .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -163,7 +161,7 @@ class PerfumeQueryPersistenceAdapterTest {
     for (int i = 0; i < 5; i++) {
       PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
           .story("story" + i)
-          .concentration(Concentration.EAU_DE_PERFUME)
+          .concentration(Concentration.EAU_DE_PARFUM)
           .price(150000L)
           .capacity(50L)
           .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -203,7 +201,7 @@ class PerfumeQueryPersistenceAdapterTest {
     for (int i = 0; i < 5; i++) {
       PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
           .story("story" + i)
-          .concentration(Concentration.EAU_DE_PERFUME)
+          .concentration(Concentration.EAU_DE_PARFUM)
           .price(150000L)
           .capacity(50L)
           .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -238,7 +236,7 @@ class PerfumeQueryPersistenceAdapterTest {
     for (int i = 0; i < 20; i++) {
       PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
           .story("story" + i)
-          .concentration(Concentration.EAU_DE_PERFUME)
+          .concentration(Concentration.EAU_DE_PARFUM)
           .price(150000L)
           .capacity(50L)
           .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -257,7 +255,7 @@ class PerfumeQueryPersistenceAdapterTest {
     for (int i = 10; i < 20; i++) {
       PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
           .story("story" + i)
-          .concentration(Concentration.EAU_DE_PERFUME)
+          .concentration(Concentration.EAU_DE_PARFUM)
           .price(150000L)
           .capacity(50L)
           .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -291,7 +289,7 @@ class PerfumeQueryPersistenceAdapterTest {
     for (int i = 0; i < 20; i++) {
       PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
           .story("story" + i)
-          .concentration(Concentration.EAU_DE_PERFUME)
+          .concentration(Concentration.EAU_DE_PARFUM)
           .price(150000L)
           .capacity(50L)
           .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -326,7 +324,7 @@ class PerfumeQueryPersistenceAdapterTest {
     for (int i = 0; i < 20; i++) {
       PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
           .story("story" + i)
-          .concentration(Concentration.EAU_DE_PERFUME)
+          .concentration(Concentration.EAU_DE_PARFUM)
           .price(150000L)
           .capacity(50L)
           .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
@@ -361,7 +359,7 @@ class PerfumeQueryPersistenceAdapterTest {
     for (int i = 0; i < 20; i++) {
       PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
           .story("story" + i)
-          .concentration(Concentration.EAU_DE_PERFUME)
+          .concentration(Concentration.EAU_DE_PARFUM)
           .price(150000L)
           .capacity(50L)
           .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")

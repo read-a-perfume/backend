@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
-import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
@@ -77,7 +76,7 @@ class PerfumeControllerTest {
     PerfumeResult perfumeResult = PerfumeResult.builder()
         .name("샹스 오 드 빠르펭")
         .story("예측할 수 없는 놀라움을 줍니다.")
-        .concentration(Concentration.EAU_DE_PERFUME)
+        .concentration(Concentration.EAU_DE_PARFUM)
         .capacity(100L)
         .price(255000L)
         .perfumeShopUrl("https://www.chanel.com/kr/fragrance/p/126520/chance-eau-de-parfum-spray/")
@@ -158,7 +157,7 @@ class PerfumeControllerTest {
   @Test
   void createPerfume() throws Exception {
     // given
-    CreatePerfumeRequestDto requestDto = new CreatePerfumeRequestDto("샹스 오 드 빠르펭", "예측할 수 없는 놀라움을 줍니다.", Concentration.EAU_DE_PERFUME, 100L, 255000L,
+    CreatePerfumeRequestDto requestDto = new CreatePerfumeRequestDto("샹스 오 드 빠르펭", "예측할 수 없는 놀라움을 줍니다.", Concentration.EAU_DE_PARFUM, 100L, 255000L,
         1L, 1L, 1L, "https://www.chanel.com/kr/fragrance/p/126520/chance-eau-de-parfum-spray/",
         List.of(1L, 2L, 3L), List.of(4L, 5L, 6L), List.of(7L, 8L, 9L));
 

@@ -56,7 +56,7 @@ class FindPerfumeServiceTest {
         .id(1L)
         .name("테싯 오 드 퍼퓸")
         .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
-        .concentration(Concentration.EAU_DE_PERFUME)
+        .concentration(Concentration.EAU_DE_PARFUM)
         .price(150000L)
         .capacity(50L)
         .brandId(1L)
