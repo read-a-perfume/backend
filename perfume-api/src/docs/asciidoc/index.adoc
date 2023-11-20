@@ -124,7 +124,7 @@ include::{snippets}/get-review-detail/http-request.adoc[]
 include::{snippets}/get-review-detail/http-response.adoc[]
 include::{snippets}/get-review-detail/response-fields.adoc[]
 
-== 리뷰 상세보기
+== 리뷰 목록 조회
 === 요청
 include::{snippets}/get-reviews/http-request.adoc[]
 
