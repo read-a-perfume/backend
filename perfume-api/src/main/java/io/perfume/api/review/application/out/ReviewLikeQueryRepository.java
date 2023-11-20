@@ -6,4 +6,6 @@ import java.util.Optional;
 public interface ReviewLikeQueryRepository {
 
   Optional<ReviewLike> findByUserIdAndReviewId(long userId, long reviewId);
+
+  long countByReviewId(long reviewId);
 }

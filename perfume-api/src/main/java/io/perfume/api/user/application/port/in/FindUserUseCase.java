@@ -11,4 +11,6 @@ public interface FindUserUseCase {
   Optional<UserResult> findOneBySocialId(String socialId);
 
   List<UserResult> findUsersByIds(List<Long> userIds);
+
+  Optional<UserResult> findUserById(long userId);
 }

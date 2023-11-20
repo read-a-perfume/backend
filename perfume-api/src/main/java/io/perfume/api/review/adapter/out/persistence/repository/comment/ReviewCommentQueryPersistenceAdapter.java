@@ -10,19 +10,25 @@ import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewCommentEntity;
 import io.perfume.api.review.application.out.ReviewCommentQueryRepository;
 import io.perfume.api.review.domain.ReviewComment;
+import jakarta.persistence.EntityManager;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
+@RequiredArgsConstructor
 public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryRepository {
 
   private final JPAQueryFactory jpaQueryFactory;
-
   private final ReviewCommentMapper reviewCommentMapper;
+  private final EntityManager entityManager;
 
-  public ReviewCommentQueryPersistenceAdapter(JPAQueryFactory jpaQueryFactory,
-                                              ReviewCommentMapper reviewCommentMapper) {
-    this.jpaQueryFactory = jpaQueryFactory;
-    this.reviewCommentMapper = reviewCommentMapper;
+  @Override
+  public long countByReviewId(long reviewId) {
+    return entityManager.createQuery(
+            "select count(1) from ReviewCommentEntity where reviewId = :reviewId and deletedAt is null",
+            Long.class)
+        .setParameter("reviewId", reviewId)
+        .getSingleResult();
   }
 
   @Override

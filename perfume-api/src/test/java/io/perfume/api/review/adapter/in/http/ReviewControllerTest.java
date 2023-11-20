@@ -459,4 +459,55 @@ class ReviewControllerTest {
                 )
             ));
   }
+
+  @Test
+  @DisplayName("리뷰의 상세정보를 조회한다.")
+  @WithMockUser(username = "2", roles = "USER")
+  void testGetReviewDetail() throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var user = userRepository.save(User.generalUserJoin(
+        "test",
+        "test@mail.com",
+        "test",
+        false,
+        false
+    )).orElseThrow();
+    var review = reviewRepository.save(Review.create(
+        "test",
+        "test description",
+        Strength.LIGHT,
+        1000L,
+        DayType.DAILY,
+        1L,
+        user.getId(),
+        Season.SPRING,
+        now
+    ));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/reviews/{id}",
+                review.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("get-review-detail",
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
+                    fieldWithPath("feeling").type(JsonFieldType.STRING).description("향수 느낌"),
+                    fieldWithPath("situation").type(JsonFieldType.STRING).description("향수 느낌"),
+                    fieldWithPath("author.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
+                    fieldWithPath("author.name").type(JsonFieldType.STRING)
+                        .description("리뷰 작성자 이름"),
+                    fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그"),
+                    fieldWithPath("images").type(JsonFieldType.ARRAY).description("리뷰 이미지"),
+                    fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                    fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 수")
+                )
+            ));
+  }
 }

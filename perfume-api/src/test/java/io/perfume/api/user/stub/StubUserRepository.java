@@ -47,4 +47,9 @@ public class StubUserRepository implements UserRepository, UserQueryRepository {
   public List<User> findUsersByIds(List<Long> userIds) {
     return null;
   }
+
+  @Override
+  public Optional<User> findUserById(long userId) {
+    return Optional.empty();
+  }
 }

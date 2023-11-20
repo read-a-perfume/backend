@@ -77,4 +77,21 @@ class ReviewLikeQueryPersistenceAdapterTest {
     // then
     assertThat(result).isEmpty();
   }
+
+  @Test
+  @DisplayName("리뷰 좋아요 수를 조회한다.")
+  void testCountByReviewId() {
+    // given
+    final var now = LocalDateTime.now();
+    ReviewLike reviewLike = reviewLikeMapper.toDomain(
+        new ReviewLikeEntity(null, 1L, 1L, now, now, null)
+    );
+    entityManager.persist(reviewLikeMapper.toEntity(reviewLike));
+
+    // when
+    final var result = repository.countByReviewId(1L);
+
+    // then
+    assertThat(result).isEqualTo(1L);
+  }
 }

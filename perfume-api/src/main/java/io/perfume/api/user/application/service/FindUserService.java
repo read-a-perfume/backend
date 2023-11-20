@@ -44,6 +44,12 @@ public class FindUserService implements FindUserUseCase {
         .toList();
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<UserResult> findUserById(long userId) {
+    return userQueryRepository.findUserById(userId).map(this::toDto);
+  }
+
   private UserResult toDto(User user) {
     return new UserResult(user.getId(), user.getUsername(), user.getEmail(), user.getCreatedAt());
   }
