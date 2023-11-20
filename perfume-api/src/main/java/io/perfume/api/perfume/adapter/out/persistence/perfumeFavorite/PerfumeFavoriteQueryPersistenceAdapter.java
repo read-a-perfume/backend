@@ -24,13 +24,6 @@ public class PerfumeFavoriteQueryPersistenceAdapter implements PerfumeFavoriteQu
     this.perfumeFavoriteMapper = perfumeFavoriteMapper;
   }
 
-  //  return jpaQueryFactory.selectFrom(reviewTagEntity)
-//      .where(reviewTagEntity.id.reviewId.eq(reviewId))
-//      .fetch()
-//        .stream()
-//        .map(reviewTagMapper::toDomain)
-//        .toList();
-
   @Override
   public Optional<PerfumeFavorite> findByUserIdAndPerfumeId(Long userId, Long perfumeId) {
     PerfumeFavoriteJpaEntity entity = jpaQueryFactory.selectFrom(perfumeFavoriteJpaEntity)
