@@ -108,6 +108,14 @@ include::{snippets}/get-perfume/http-request.adoc[]
 include::{snippets}/get-perfume/http-response.adoc[]
 include::{snippets}/get-perfume/response-fields.adoc[]
 
+== 향수 조회
+=== 요청
+include::{snippets}/get-perfume/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume/http-response.adoc[]
+include::{snippets}/get-perfume/response-fields.adoc[]
+
 == 향수 생성
 === 요청
 include::{snippets}/create-perfume/http-request.adoc[]
@@ -115,6 +123,28 @@ include::{snippets}/create-perfume/request-fields.adoc[]
 
 === 응답
 include::{snippets}/create-perfume/http-response.adoc[]
+
+== 브랜드 별 향수 조회
+=== 요청
+include::{snippets}/get-perfume-by-brand/http-request.adoc[]
+==== Query Parameters
+include::{snippets}/get-perfume-by-brand/query-parameters.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume-by-brand/http-response.adoc[]
+include::{snippets}/get-perfume-by-brand/response-fields.adoc[]
+
+== 카테고리 별 향수 조회
+=== 요청
+include::{snippets}/get-perfume-by-category/http-request.adoc[]
+==== Path Variables
+include::{snippets}/get-perfume-by-category/path-parameters.adoc[]
+==== Query Parameters
+include::{snippets}/get-perfume-by-category/query-parameters.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume-by-category/http-response.adoc[]
+include::{snippets}/get-perfume-by-category/response-fields.adoc[]
 
 == 리뷰 상세보기
 === 요청

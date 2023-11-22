@@ -1,6 +1,7 @@
 package io.perfume.api.perfume.adapter.in.http;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.common.page.CustomPage;
+import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
@@ -194,6 +196,44 @@ class PerfumeControllerTest {
   }
 
   @Test
+  void getPerfumesByBrand() throws Exception {
+    // given
+    List<SimplePerfumeResult> perfumeResults = new ArrayList<>();
+    for(int i=0;i<3;i++) {
+      perfumeResults.add(new SimplePerfumeResult((long) i, "perfume"+i, Concentration.EAU_DE_PARFUM, "brand"+i, "http://thumbnail.url"));
+    }
+    given(findPerfumeUseCase.findPerfumesByBrand(anyLong(), any(), anyInt())).willReturn(new CustomSlice<>(perfumeResults, true));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/perfumes")
+            .queryParam("brandId", "1")
+            .queryParam("lastPerfumeId", "")
+            .queryParam("pageSize", "3")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andDo(
+            document("get-perfume-by-brand",
+                queryParameters(
+                    parameterWithName("brandId").description("브랜드 ID"),
+                    parameterWithName("lastPerfumeId").description("앞서 조회한 향수 중 마지막 향수 ID. 첫 조회 시 `lastPerfumeId=` 와 같이 비워둔다."),
+                    parameterWithName("pageSize").description("페이지에 존재하는 향수 개수")
+                ),
+                responseFields(
+                    fieldWithPath("content[].id").type(JsonFieldType.NUMBER).description("향수 ID"),
+                    fieldWithPath("content[].name").type(JsonFieldType.STRING).description("향수 이름"),
+                    fieldWithPath("content[].thumbnailUrl").type(JsonFieldType.STRING).description("향수 썸네일 사진 주소"),
+                    fieldWithPath("content[].brandName").type(JsonFieldType.STRING).description("향수 브랜드 이름"),
+                    fieldWithPath("content[].strength").type(JsonFieldType.STRING).description("향수 강도"),
+                    fieldWithPath("content[].duration").type(JsonFieldType.STRING).description("향수 지속 시간"),
+                    fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 존재하는지 여부")
+                )
+            ));
+  }
+
+  @Test
   void getPerfumesByCategory() throws Exception {
     // given
     List<SimplePerfumeResult> perfumeResults = new ArrayList<>();
@@ -212,7 +252,7 @@ class PerfumeControllerTest {
         )
         .andExpect(status().isOk())
         .andDo(
-            document("create-perfume",
+            document("get-perfume-by-category",
                 pathParameters(
                     parameterWithName("id").description("카테고리 ID")
                 ),

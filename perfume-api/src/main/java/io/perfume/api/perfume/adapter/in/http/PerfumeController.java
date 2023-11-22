@@ -1,6 +1,7 @@
 package io.perfume.api.perfume.adapter.in.http;
 
 import io.perfume.api.common.page.CustomPage;
+import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
@@ -14,8 +15,6 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,11 +48,11 @@ public class PerfumeController {
   }
 
   @GetMapping
-  public Slice<SimplePerfumeResponseDto> getPerfumesByBrand(@RequestParam Long brandId, @RequestParam @Nullable Long lastPerfumeId,
-                                                            @RequestParam int pageSize) {
-    Slice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
+  public CustomSlice<SimplePerfumeResponseDto> getPerfumesByBrand(@RequestParam Long brandId, @RequestParam @Nullable Long lastPerfumeId,
+                                                                  @RequestParam int pageSize) {
+    CustomSlice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
     List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
-    return new SliceImpl<>(list, perfumesByBrand.getPageable(), perfumesByBrand.hasNext());
+    return new CustomSlice<>(list, perfumesByBrand.isHasNext());
   }
 
   @GetMapping("/category/{id}")
