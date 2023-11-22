@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.perfume.api.brand.adapter.out.persistence.BrandEntity;
 import io.perfume.api.common.page.CustomPage;
+import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.note.adapter.out.persistence.category.CategoryJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaEntity;
@@ -31,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -143,11 +143,10 @@ class PerfumeQueryPersistenceAdapterTest {
 
     // when
     int pageSize = 3;
-    Slice<SimplePerfumeResult> perfumesByBrand = perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
+    CustomSlice<SimplePerfumeResult> perfumesByBrand = perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
     // then
-    assertEquals(pageSize, perfumesByBrand.getSize());
     assertEquals(pageSize, perfumesByBrand.getContent().size());
-    assertEquals(true, perfumesByBrand.hasNext());
+    assertTrue(perfumesByBrand.isHasNext());
   }
 
   @Test
@@ -177,15 +176,15 @@ class PerfumeQueryPersistenceAdapterTest {
     // when
     int pageSize = 3;
     // 첫 3개 조회
-    Slice<SimplePerfumeResult> perfumesByBrandFirst = perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
+    CustomSlice<SimplePerfumeResult> perfumesByBrandFirst = perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
     // 위에서 구한 마지막 향수 아이디를 넣어 나머지 2개 조회
-    Slice<SimplePerfumeResult> perfumesByBrandLast =
+    CustomSlice<SimplePerfumeResult> perfumesByBrandLast =
         perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), perfumesByBrandFirst.getContent().get(pageSize - 1).id(), pageSize);
 
     // then
-    assertEquals(pageSize, perfumesByBrandLast.getSize());
+    assertEquals(pageSize, perfumesByBrandFirst.getContent().size());
     assertEquals(perfumeJpaEntities.size() - pageSize, perfumesByBrandLast.getContent().size());
-    assertFalse(perfumesByBrandLast.hasNext());
+    assertFalse(perfumesByBrandLast.isHasNext());
   }
 
   @Test
