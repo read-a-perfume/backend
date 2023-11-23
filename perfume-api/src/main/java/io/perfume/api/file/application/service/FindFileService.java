@@ -14,6 +14,9 @@ public class FindFileService implements FindFileUseCase {
 
   @Override
   public Optional<File> findFileById(Long id) {
+    if(id == null) {
+      return Optional.empty();
+    }
     return fileQueryRepository.findOneByFileId(id);
   }
 }
