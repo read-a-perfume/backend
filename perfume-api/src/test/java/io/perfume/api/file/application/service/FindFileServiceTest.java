@@ -1,6 +1,7 @@
 package io.perfume.api.file.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
@@ -9,6 +10,7 @@ import io.perfume.api.file.adapter.out.persistence.file.FileQueryPersistenceAdap
 import io.perfume.api.file.domain.File;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class FindFileServiceTest {
+class FindFileServiceTest {
 
   @InjectMocks
   private FindFileService findFileService;
@@ -43,5 +45,15 @@ public class FindFileServiceTest {
     assertEquals(now, resultFile.getCreatedAt());
     assertNull(resultFile.getUpdatedAt());
     assertNull(resultFile.getDeletedAt());
+  }
+
+  @DisplayName("주어진 id가 null일 때 빈 Optional을 반환한다.")
+  @Test
+  void failToFindFileById() {
+    // given & when
+    Optional<File> fileById = findFileService.findFileById(null);
+
+    // then
+    assertFalse(fileById.isPresent());
   }
 }
