@@ -7,7 +7,7 @@ plugins {
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.28"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "1.9.21"
     kotlin("plugin.spring") version "1.9.20"
     kotlin("plugin.jpa") version "1.9.21"
 }
