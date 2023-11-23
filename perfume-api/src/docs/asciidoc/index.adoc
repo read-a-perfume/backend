@@ -42,6 +42,21 @@ include::{snippets}/login/request-fields.adoc[]
 include::{snippets}/login/http-response.adoc[]
 include::{snippets}/login/response-cookies.adoc[]
 
+== 로그인 중인 회원 탈퇴
+include::{snippets}/leave-user/http-request.adoc[]
+
+=== 응답
+include::{snippets}/leave-user/http-response.adoc[]
+include::{snippets}/leave-user/response-fields.adoc[]
+
+
+== 로그인 중인 유저 프로필 조회
+include::{snippets}/get-me/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-me/http-response.adoc[]
+include::{snippets}/get-me/response-fields.adoc[]
+
 == 토큰 재발급
 === 요청
 include::{snippets}/reissue-access-token/http-request.adoc[]
