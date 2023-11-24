@@ -11,6 +11,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
+import io.perfume.api.common.page.CustomPage;
+import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteJpaRepository;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
@@ -22,12 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -56,7 +54,8 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
     List<Tuple> result = jpaQueryFactory
         .select(perfumeNoteEntity.noteId, perfumeNoteEntity.noteLevel, noteJpaEntity.name, noteJpaEntity.thumbnailId)
         .from(perfumeNoteEntity)
-        .where(perfumeNoteEntity.deletedAt.isNull())
+        .where(perfumeNoteEntity.deletedAt.isNull(),
+            perfumeNoteEntity.perfumeId.eq(perfumeId))
         .leftJoin(noteJpaEntity).on(perfumeNoteEntity.noteId.eq(noteJpaEntity.id)).fetchJoin()
         .fetch();
 
@@ -64,7 +63,7 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
   }
 
   @Override
-  public Slice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
+  public CustomSlice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
     List<SimplePerfumeResult> results = jpaQueryFactory.select(
             Projections.constructor(SimplePerfumeResult.class, perfumeJpaEntity.id, perfumeJpaEntity.name, perfumeJpaEntity.concentration,
                 brandEntity.name, fileJpaEntity.url))
@@ -84,7 +83,7 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
       hasNext = true;
     }
 
-    return new SliceImpl<>(results, PageRequest.of(0, pageSize), hasNext);
+    return new CustomSlice<>(results, hasNext);
   }
 
   private BooleanExpression ltPerfumeId(Long perfumeId) {
@@ -96,7 +95,7 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
   }
 
   @Override
-  public Page<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
+  public CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
 
     List<SimplePerfumeResult> results = jpaQueryFactory.select(
             Projections.constructor(SimplePerfumeResult.class, perfumeJpaEntity.id, perfumeJpaEntity.name, perfumeJpaEntity.concentration,
@@ -120,7 +119,7 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
         )
         .fetchOne();
 
-    return new PageImpl<>(results, pageable, total == null ? 0 : total);
+    return new CustomPage<>(new PageImpl<>(results, pageable, total == null ? 0 : total));
   }
 
   @Override

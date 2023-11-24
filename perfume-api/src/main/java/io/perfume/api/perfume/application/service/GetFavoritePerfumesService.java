@@ -24,8 +24,8 @@ public class GetFavoritePerfumesService implements GetFavoritePerfumesUseCase {
 
   @Override
   public List<PerfumeFavoriteResult> getFavoritePerfumes(Long authorId) {
-    System.out.println(perfumeFavoriteQueryRepository.findFavoritePerfumesByUser(authorId).size());
-    List<PerfumeFavorite> find = perfumeFavoriteQueryRepository.findFavoritePerfumesByUser(
+    System.out.println(perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(authorId).size());
+    List<PerfumeFavorite> find = perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(
         authorId);
 
     List<Long> perfume_id = find.stream()
@@ -49,7 +49,7 @@ public class GetFavoritePerfumesService implements GetFavoritePerfumesUseCase {
       System.out.println(perfume.getName());
     }
 
-    return perfumeFavoriteQueryRepository.findFavoritePerfumesByUser(authorId)
+    return perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(authorId)
         .stream()
         .map(
             perfumeFavorite

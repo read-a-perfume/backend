@@ -26,7 +26,7 @@ public class UserFavoritePerfumeService implements UserFavoritePerfumeUseCase {
   @Transactional
   public void addAndDeleteFavoritePerfume(Long authorId, Long perfumeId) {
     Optional<PerfumeFavorite> foundPerfumeFollow =
-        perfumeFavoriteQueryRepository.findByUserAndPerfume(authorId, perfumeId);
+        perfumeFavoriteQueryRepository.findByUserIdAndPerfumeId(authorId, perfumeId);
 
     if (foundPerfumeFollow.isPresent()) {
       deleteFavoritePerfume(foundPerfumeFollow.get());

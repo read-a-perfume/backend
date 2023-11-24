@@ -9,6 +9,7 @@ import io.perfume.api.review.adapter.in.http.dto.DeleteReviewCommentResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.DeleteReviewResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsResponseDto;
+import io.perfume.api.review.adapter.in.http.dto.GetReviewDetailResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.ReviewLikeResponseDto;
@@ -17,10 +18,11 @@ import io.perfume.api.review.application.in.CreateReviewCommentUseCase;
 import io.perfume.api.review.application.in.CreateReviewUseCase;
 import io.perfume.api.review.application.in.DeleteReviewCommentUseCase;
 import io.perfume.api.review.application.in.DeleteReviewUseCase;
+import io.perfume.api.review.application.in.LikeReviewUseCase;
 import io.perfume.api.review.application.in.UpdateReviewCommentUseCase;
-import io.perfume.api.review.application.service.ReviewService;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,37 +39,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/reviews")
+@RequiredArgsConstructor
 public class ReviewController {
 
   private final CreateReviewUseCase createReviewUseCase;
-
   private final DeleteReviewUseCase deleteReviewUseCase;
-
   private final ReviewDetailFacadeService reviewDetailFacadeService;
-
   private final CreateReviewCommentUseCase createReviewCommentUseCase;
-
   private final DeleteReviewCommentUseCase deleteReviewCommentUseCase;
-
   private final UpdateReviewCommentUseCase updateReviewCommentUseCase;
+  private final LikeReviewUseCase likeReviewUseCase;
 
-  private final ReviewService reviewService;
-
-  public ReviewController(CreateReviewUseCase createReviewUseCase,
-                          DeleteReviewUseCase deleteReviewUseCase,
-                          ReviewDetailFacadeService reviewDetailFacadeService,
-                          CreateReviewCommentUseCase createReviewCommentUseCase,
-                          DeleteReviewCommentUseCase deleteReviewCommentUseCase,
-                          UpdateReviewCommentUseCase updateReviewCommentUseCase,
-                          ReviewService reviewService
+  @GetMapping("/{id}")
+  public GetReviewDetailResponseDto getReview(
+      @PathVariable Long id
   ) {
-    this.createReviewUseCase = createReviewUseCase;
-    this.deleteReviewUseCase = deleteReviewUseCase;
-    this.reviewDetailFacadeService = reviewDetailFacadeService;
-    this.createReviewCommentUseCase = createReviewCommentUseCase;
-    this.deleteReviewCommentUseCase = deleteReviewCommentUseCase;
-    this.updateReviewCommentUseCase = updateReviewCommentUseCase;
-    this.reviewService = reviewService;
+    final var result = reviewDetailFacadeService.getReviewDetail(id);
+
+    return GetReviewDetailResponseDto.from(result);
   }
 
   @GetMapping
@@ -176,7 +165,7 @@ public class ReviewController {
   ) {
     final var userId = Long.parseLong(user.getUsername());
     final var now = LocalDateTime.now();
-    reviewService.likeReview(userId, id, now);
+    likeReviewUseCase.toggleLikeReview(userId, id, now);
 
     return ResponseEntity.status(HttpStatus.OK).body(new ReviewLikeResponseDto(id));
   }

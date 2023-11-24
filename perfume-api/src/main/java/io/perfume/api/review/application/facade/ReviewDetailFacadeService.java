@@ -2,9 +2,11 @@ package io.perfume.api.review.application.facade;
 
 import dto.repository.CursorPagination;
 import io.perfume.api.file.application.port.in.FindFileUseCase;
+import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailCommand;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailResult;
 import io.perfume.api.review.application.facade.dto.ReviewDetailResult;
+import io.perfume.api.review.application.facade.dto.ReviewViewDetailResult;
 import io.perfume.api.review.application.in.GetReviewCommentsUseCase;
 import io.perfume.api.review.application.in.GetReviewTagUseCase;
 import io.perfume.api.review.application.in.GetReviewsUseCase;
@@ -19,33 +21,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ReviewDetailFacadeService {
 
   private final GetReviewsUseCase getReviewsUseCase;
-
   private final FindUserUseCase findUserUseCase;
-
   private final FindFileUseCase findFileUseCase;
-
   private final GetReviewTagUseCase getReviewTagUseCase;
-
   private final GetReviewCommentsUseCase getReviewCommentsUseCase;
 
-  public ReviewDetailFacadeService(
-      GetReviewsUseCase getReviewsUseCase,
-      FindUserUseCase findUserUseCase,
-      FindFileUseCase findFileUseCase,
-      GetReviewTagUseCase getReviewTagUseCase,
-      GetReviewCommentsUseCase getReviewCommentsUseCase
-  ) {
-    this.getReviewsUseCase = getReviewsUseCase;
-    this.findUserUseCase = findUserUseCase;
-    this.findFileUseCase = findFileUseCase;
-    this.getReviewTagUseCase = getReviewTagUseCase;
-    this.getReviewCommentsUseCase = getReviewCommentsUseCase;
+  public ReviewViewDetailResult getReviewDetail(long reviewId) {
+    final var review = getReviewsUseCase
+        .getReview(reviewId)
+        .orElseThrow(() -> new NotFoundReviewException(reviewId));
+    final var author = findUserUseCase.findUserById(review.authorId()).orElse(UserResult.EMPTY);
+    final var tags = getReviewTagUseCase.getReviewTags(reviewId).stream()
+        .map(ReviewTagResult::name)
+        .toList();
+    final var likeCount = getReviewsUseCase.getLikeCount(reviewId);
+    final var commentCount = getReviewsUseCase.getCommentCount(reviewId);
+
+    return ReviewViewDetailResult.from(review, author, tags, Collections.emptyList(), likeCount,
+        commentCount);
   }
 
   public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
@@ -64,7 +65,8 @@ public class ReviewDetailFacadeService {
     return reviews.stream().map(mapReviewDetailResult(authors, tags)).toList();
   }
 
-  public CursorPagination<ReviewCommentDetailResult> getReviewComments(final ReviewCommentDetailCommand command) {
+  public CursorPagination<ReviewCommentDetailResult> getReviewComments(
+      final ReviewCommentDetailCommand command) {
     final var comments = getReviewCommentsUseCase.getReviewComments(
         new GetReviewCommentsCommand(command.size(), command.before(), command.after(),
             command.reviewId()));

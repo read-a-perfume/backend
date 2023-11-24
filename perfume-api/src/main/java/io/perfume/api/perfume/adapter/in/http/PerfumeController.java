@@ -1,5 +1,8 @@
 package io.perfume.api.perfume.adapter.in.http;
 
+import io.micrometer.common.lang.Nullable;
+import io.perfume.api.common.page.CustomPage;
+import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
 import io.perfume.api.perfume.adapter.in.http.dto.FavoritePerfumeResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeFavoriteResponseDto;
@@ -16,8 +19,6 @@ import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,25 +60,32 @@ public class PerfumeController {
     createPerfumeUseCase.createPerfume(createPerfumeCommand);
   }
 
-
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/favorite/{id}")
   public ResponseEntity<FavoritePerfumeResponseDto> favoritePerfume(@AuthenticationPrincipal User user, @PathVariable("id") Long perfumeId) {
     var userId = Long.parseLong(user.getUsername());
     userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, perfumeId);
-    return ResponseEntity.status(HttpStatus.OK).body(new FavoritePerfumeResponseDto(userId, perfumeId));
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(new FavoritePerfumeResponseDto(userId, perfumeId));
   }
 
+  @GetMapping
+  public CustomSlice<SimplePerfumeResponseDto> getPerfumesByBrand(@RequestParam Long brandId, @RequestParam @Nullable Long lastPerfumeId,
+                                                                  @RequestParam int pageSize) {
+    CustomSlice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
+    List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
+    return new CustomSlice<>(list, perfumesByBrand.isHasNext());
+  }
 
   @GetMapping("/category/{id}")
-  public Page<SimplePerfumeResponseDto> getPerfumesByCategory(@PathVariable Long id, Pageable pageable) {
-    Page<SimplePerfumeResult> perfumesByCategory = findPerfumeUseCase.findPerfumesByCategory(id, pageable);
+  public CustomPage<SimplePerfumeResponseDto> getPerfumesByCategory(@PathVariable Long id, Pageable pageable) {
+    CustomPage<SimplePerfumeResult> perfumesByCategory = findPerfumeUseCase.findPerfumesByCategory(id, pageable);
     List<SimplePerfumeResponseDto> list = perfumesByCategory.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
-    return new PageImpl<>(list, perfumesByCategory.getPageable(), perfumesByCategory.getTotalElements());
+    return new CustomPage<>(list, perfumesByCategory);
   }
   
   @PreAuthorize("isAuthenticated()")
-  @GetMapping
+  @GetMapping("/favorites")
   public List<PerfumeFavoriteResponseDto> getFavoritePerfumes(@AuthenticationPrincipal User user) {
     var userId = Long.parseLong(user.getUsername());
     List<PerfumeFavoriteResult> favoritePerfumes = getFavoritePerfumesUseCase

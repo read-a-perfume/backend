@@ -1,13 +1,18 @@
 package io.perfume.api.user.adapter.in.http;
 
+import io.perfume.api.file.application.port.in.FindFileUseCase;
+import io.perfume.api.user.adapter.in.http.dto.LeaveUserDto;
+import io.perfume.api.user.adapter.in.http.dto.UserProfileDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
+import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import io.perfume.api.user.application.port.in.UpdateAccountUseCase;
 import io.perfume.api.user.application.port.in.dto.UpdateEmailCommand;
 import io.perfume.api.user.application.port.in.dto.UpdatePasswordCommand;
+import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +26,17 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-public class UsersSupportController {
+public class UserSupportController {
 
   private final FindEncryptedUsernameUseCase findEncryptedUsernameUseCase;
+  private final FindUserUseCase findUserUseCase;
+  private final FindFileUseCase findFileUseCase;
   private final SendResetPasswordMailUseCase resetPasswordUserCase;
   private final UpdateAccountUseCase updateAccountUseCase;
 
@@ -54,10 +62,19 @@ public class UsersSupportController {
     return ResponseEntity.ok(encryptedUsername);
   }
 
+  @GetMapping("/me")
+  public UserProfileDto me(@AuthenticationPrincipal User user) {
+    long userId = Long.parseLong(user.getUsername());
+    UserProfileResult userProfileResult = findUserUseCase.findUserProfileById(userId);
+    return UserProfileDto.of(userProfileResult);
+  }
+
   @DeleteMapping("/user")
-  public ResponseEntity leaveUser(@AuthenticationPrincipal User user) {
-    leaveUserUseCase.leave(Long.parseLong(user.getUsername()));
-    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+  @ResponseStatus(HttpStatus.ACCEPTED)
+  public LeaveUserDto leaveUser(@AuthenticationPrincipal User user) {
+    long userId = Long.parseLong(user.getUsername());
+    leaveUserUseCase.leave(userId);
+    return new LeaveUserDto(userId);
   }
 
   @PatchMapping("/account/email")

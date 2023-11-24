@@ -1,12 +1,10 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.tag;
 
 import static io.perfume.api.review.adapter.out.persistence.entity.QReviewTagEntity.reviewTagEntity;
 import static io.perfume.api.review.adapter.out.persistence.entity.QTagEntity.tagEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.adapter.out.persistence.mapper.ReviewTagMapper;
-import io.perfume.api.review.adapter.out.persistence.mapper.TagMapper;
 import io.perfume.api.review.application.out.TagQueryRepository;
 import io.perfume.api.review.domain.ReviewTag;
 import io.perfume.api.review.domain.Tag;

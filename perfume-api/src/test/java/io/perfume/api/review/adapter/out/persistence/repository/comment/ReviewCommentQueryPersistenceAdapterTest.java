@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.comment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,8 +6,7 @@ import dto.repository.CursorDirection;
 import dto.repository.CursorPageable;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
-import io.perfume.api.review.adapter.out.persistence.mapper.ReviewCommentMapper;
-import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.ReviewMapper;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
 import io.perfume.api.review.domain.type.DayType;
@@ -112,7 +111,8 @@ class ReviewCommentQueryPersistenceAdapterTest {
     comments.forEach(entityManager::persist);
     entityManager.flush();
 
-    final var pageable = new CursorPageable<>(10, CursorDirection.PREVIOUS, comments.get(3).getId());
+    final var pageable =
+        new CursorPageable<>(10, CursorDirection.PREVIOUS, comments.get(3).getId());
 
     // when
     var result = repository.findByReviewId(pageable, review.getId());
@@ -122,5 +122,41 @@ class ReviewCommentQueryPersistenceAdapterTest {
     assertThat(result.getItems().get(0).getContent()).isEqualTo("test1");
     assertThat(result.getItems().get(1).getContent()).isEqualTo("test2");
     assertThat(result.getItems().get(2).getContent()).isEqualTo("test3");
+  }
+
+  @Test
+  @DisplayName("리뷰 댓글 개수를 조회한다.")
+  void testCountCommentByReviewId() {
+    // given
+    final var now = LocalDateTime.now();
+    ReviewEntity review = reviewMapper.toEntity(Review.create(
+        "test",
+        "test description",
+        Strength.LIGHT,
+        1000L,
+        DayType.DAILY,
+        1L,
+        1L,
+        Season.SPRING,
+        now
+    ));
+    entityManager.persist(review);
+
+    final var comments = Stream.of(
+        ReviewComment.create(review.getId(), 1L, "test1", now),
+        ReviewComment.create(review.getId(), 1L, "test2", now),
+        ReviewComment.create(review.getId(), 1L, "test3", now),
+        ReviewComment.create(review.getId(), 1L, "test4", now),
+        ReviewComment.create(review.getId(), 1L, "test5", now),
+        ReviewComment.create(review.getId(), 1L, "test6", now)
+    ).map(reviewCommentMapper::toEntity).toList();
+    comments.forEach(entityManager::persist);
+    entityManager.flush();
+
+    // when
+    var result = repository.countByReviewId(review.getId());
+
+    // then
+    assertThat(result).isEqualTo(6);
   }
 }

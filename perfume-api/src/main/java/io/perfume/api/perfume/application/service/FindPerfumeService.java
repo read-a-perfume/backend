@@ -2,6 +2,8 @@ package io.perfume.api.perfume.application.service;
 
 import io.perfume.api.brand.application.port.in.FindBrandUseCase;
 import io.perfume.api.brand.application.port.in.dto.BrandForPerfumeResult;
+import io.perfume.api.common.page.CustomPage;
+import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.note.application.port.in.FindCategoryUseCase;
 import io.perfume.api.note.application.port.in.dto.CategoryResult;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
@@ -14,9 +16,7 @@ import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,12 +39,12 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   }
 
   @Override
-  public Slice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
+  public CustomSlice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
     return perfumeQueryRepository.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
   }
 
   @Override
-  public Page<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
+  public CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
     return perfumeQueryRepository.findPerfumesByCategory(categoryId, pageable);
   }
 

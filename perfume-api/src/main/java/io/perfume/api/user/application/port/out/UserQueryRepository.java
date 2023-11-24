@@ -17,4 +17,6 @@ public interface UserQueryRepository {
   Optional<User> findOneByEmailOrUsername(String emailOrUsername);
 
   List<User> findUsersByIds(List<Long> userIds);
+
+  Optional<User> findUserById(long userId);
 }

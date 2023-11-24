@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface PerfumeFavoriteQueryRepository {
 
-  Optional<PerfumeFavorite> findByUserAndPerfume(Long userId, Long perfumeId);
+  Optional<PerfumeFavorite> findByUserIdAndPerfumeId(Long userId, Long perfumeId);
 
-  List<PerfumeFavorite> findFavoritePerfumesByUser(Long userId);
+  List<PerfumeFavorite> findFavoritePerfumesByUserId(Long userId);
 
 }

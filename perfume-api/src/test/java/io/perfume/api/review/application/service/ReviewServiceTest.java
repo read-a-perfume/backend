@@ -6,6 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.exception.NotPermittedLikeReviewException;
 import io.perfume.api.review.domain.Review;
+import io.perfume.api.review.domain.ReviewLike;
 import io.perfume.api.review.domain.type.DayType;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
@@ -25,7 +26,7 @@ public class ReviewServiceTest {
   private final StubReviewLikeRepository reviewLikeRepository = new StubReviewLikeRepository();
 
   private final ReviewService reviewService =
-      new ReviewService(reviewQueryRepository, reviewLikeRepository);
+      new ReviewService(reviewQueryRepository, reviewLikeRepository, reviewLikeRepository);
 
   @BeforeEach
   void setUp() {
@@ -58,7 +59,7 @@ public class ReviewServiceTest {
     );
 
     // when
-    final long expectedReviewId = reviewService.likeReview(userId, reviewId, now);
+    final long expectedReviewId = reviewService.toggleLikeReview(userId, reviewId, now);
 
     // then
     assertThat(reviewId).isEqualTo(expectedReviewId);
@@ -73,7 +74,7 @@ public class ReviewServiceTest {
     final LocalDateTime now = LocalDateTime.now();
 
     // when & then
-    assertThatThrownBy(() -> reviewService.likeReview(userId, reviewId, now))
+    assertThatThrownBy(() -> reviewService.toggleLikeReview(userId, reviewId, now))
         .isInstanceOf(NotFoundReviewException.class);
   }
 
@@ -102,7 +103,49 @@ public class ReviewServiceTest {
     );
 
     // when & then
-    assertThatThrownBy(() -> reviewService.likeReview(userId, reviewId, now))
+    assertThatThrownBy(() -> reviewService.toggleLikeReview(userId, reviewId, now))
         .isInstanceOf(NotPermittedLikeReviewException.class);
+  }
+
+  @Test
+  @DisplayName("이미 좋아요 표시한 경우 좋아요 취소한다.")
+  void testLikeReviewCancel() {
+    // given
+    final long userId = 1L;
+    final long reviewId = 1L;
+    final LocalDateTime now = LocalDateTime.now();
+    reviewQueryRepository.addReview(
+        new Review(
+            reviewId,
+            "",
+            "",
+            Strength.LIGHT,
+            0L,
+            DayType.DAILY,
+            1L,
+            2L,
+            Season.SPRING,
+            now,
+            now,
+            null
+        )
+    );
+    ReviewLike expectReviewLike = new ReviewLike(
+        1L,
+        userId,
+        reviewId,
+        now,
+        now,
+        null
+    );
+    reviewLikeRepository.addReviewLike(
+        expectReviewLike
+    );
+
+    // when
+    reviewService.toggleLikeReview(userId, reviewId, now);
+
+    // then
+    assertThat(expectReviewLike.getDeletedAt()).isEqualTo(now);
   }
 }

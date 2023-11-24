@@ -1,7 +1,6 @@
 package io.perfume.api.review.adapter.out.persistence.repository;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.adapter.out.persistence.mapper.ReviewMapper;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 
