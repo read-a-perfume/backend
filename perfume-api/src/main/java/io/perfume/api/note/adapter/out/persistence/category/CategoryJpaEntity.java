@@ -39,16 +39,19 @@ public class CategoryJpaEntity extends BaseTimeEntity {
 
   private String description;
 
+  @Column(nullable = false)
+  private String tags;
+
   private Long thumbnailId;
 
   @Builder
-  public CategoryJpaEntity(Long id, String name, String description, Long thumbnailId,
-                           LocalDateTime createdAt, LocalDateTime updatedAt,
+  public CategoryJpaEntity(Long id, String name, String description, String tags, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
                            LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
     this.description = description;
+    this.tags = tags;
     this.thumbnailId = thumbnailId;
   }
 }
