@@ -25,15 +25,16 @@ class CategoryPersistenceAdapterTest {
   void testCreateCategory() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    Category category = Category.create("test", "test description", 1L, now);
+    Category category = Category.create("프루티", "달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.", "#달달한 #과즙미", 1L, now);
 
     // when
     Category createdCategory = categoryPersistenceAdapter.save(category);
 
     // then
-    assertThat(createdCategory.getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdCategory.getName()).isEqualTo("test");
-    assertThat(createdCategory.getDescription()).isEqualTo("test description");
+    assertThat(createdCategory.getId()).isNotNegative();
+    assertThat(createdCategory.getName()).isEqualTo("프루티");
+    assertThat(createdCategory.getDescription()).isEqualTo("달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.");
+    assertThat(createdCategory.getTags()).isEqualTo("#달달한 #과즙미");
     assertThat(createdCategory.getThumbnailId()).isEqualTo(1L);
   }
 }

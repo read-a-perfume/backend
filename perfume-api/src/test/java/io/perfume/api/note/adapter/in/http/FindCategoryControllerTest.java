@@ -40,6 +40,11 @@ class FindCategoryControllerTest {
   @Autowired
   private CategoryRepository categoryRepository;
 
+  private static final String categoryName = "프루티";
+  private static final String categoryDesc = "달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.";
+  private static final String categoryTags = "#달달한 #과즙미";
+  private static final Category sampleCategory = Category.create(categoryName, categoryDesc, categoryTags, 1L, LocalDateTime.now());
+
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
              RestDocumentationContextProvider restDocumentation) {
@@ -51,9 +56,7 @@ class FindCategoryControllerTest {
   @Test
   void testFindNotes() throws Exception {
     // given
-    LocalDateTime now = LocalDateTime.now();
-    Category category =
-        categoryRepository.save(Category.create("sample", "sample description", 1L, now));
+    Category resultCategory = categoryRepository.save(sampleCategory);
 
     // when & then
     mockMvc
@@ -63,49 +66,51 @@ class FindCategoryControllerTest {
         )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("[0].id").value(category.getId()))
-        .andExpect(jsonPath("[0].name").value("sample"))
-        .andExpect(jsonPath("[0].description").value("sample description"))
+        .andExpect(jsonPath("[0].id").value(resultCategory.getId()))
+        .andExpect(jsonPath("[0].name").value(categoryName))
+        .andExpect(jsonPath("[0].description").value(categoryDesc))
+        .andExpect(jsonPath("[0].tags").value(categoryTags))
         .andExpect(jsonPath("[0].thumbnail").value(""))
         .andDo(
             document("get-categories",
                 responseFields(
-                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("노트 ID"),
-                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("노트 이름"),
-                    fieldWithPath("[].description").type(JsonFieldType.STRING).description("노트 설명"),
-                    fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("노트 이미지")
+                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
+                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
+                    fieldWithPath("[].description").type(JsonFieldType.STRING).description("카테고리 설명"),
+                    fieldWithPath("[].tags").type(JsonFieldType.STRING).description("카테고리 태그"),
+                    fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("카테고리 이미지 URL")
                 )));
   }
 
   @Test
-  void testFindNoteById() throws Exception {
+  void findCategoryById() throws Exception {
     // given
-    LocalDateTime now = LocalDateTime.now();
-    Category category =
-        categoryRepository.save(Category.create("sample", "sample description", 1L, now));
+    Category resultCategory = categoryRepository.save(sampleCategory);
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/categories/{id}", category.getId())
+        .perform(RestDocumentationRequestBuilders.get("/v1/categories/{id}", resultCategory.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.id").value(category.getId()))
-        .andExpect(jsonPath("$.name").value("sample"))
-        .andExpect(jsonPath("$.description").value("sample description"))
+        .andExpect(jsonPath("$.id").value(resultCategory.getId()))
+        .andExpect(jsonPath("$.name").value(categoryName))
+        .andExpect(jsonPath("$.description").value(categoryDesc))
+        .andExpect(jsonPath("$.tags").value(categoryTags))
         .andExpect(jsonPath("$.thumbnail").value(""))
         .andDo(
             document("get-category-by-id",
                 pathParameters(
-                    parameterWithName("id").description("노트 ID")
+                    parameterWithName("id").description("카테고리 ID")
                 ),
                 responseFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("노트 ID"),
-                    fieldWithPath("name").type(JsonFieldType.STRING).description("노트 이름"),
-                    fieldWithPath("description").type(JsonFieldType.STRING).description("노트 설명"),
-                    fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("노트 이미지")
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("카테고리 이름"),
+                    fieldWithPath("description").type(JsonFieldType.STRING).description("카테고리 설명"),
+                    fieldWithPath("tags").type(JsonFieldType.STRING).description("카테고리 태그"),
+                    fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("카테고리 URL")
                 )));
   }
 }
