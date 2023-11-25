@@ -66,7 +66,7 @@ class FindPerfumeServiceTest {
         .build();
 
     given(perfumeQueryRepository.findPerfumeById(anyLong())).willReturn(Optional.ofNullable(perfume));
-    CategoryResult category = new CategoryResult(1L, "시트러스", "testurl.com", "# 상큼 # 청량 # 싱그러움");
+    CategoryResult category = new CategoryResult(1L, "시트러스", "상큼하고 톡 쏘는 향으로 가볍고 산뜻한 느낌을 줍니다.", "#상큼한 #질리지않는", "thumbnailUrl.com");
     given(findCategoryUseCase.findCategoryById(anyLong()))
         .willReturn(category);
     BrandForPerfumeResult brand = new BrandForPerfumeResult("CHANEL");

@@ -192,7 +192,7 @@ class PerfumeQueryPersistenceAdapterTest {
   void findPerfumesByCategory() {
     // given
     CategoryJpaEntity categoryJpaEntity =
-        CategoryJpaEntity.builder().name("플로럴").description("#기분좋은 #꽃향기").thumbnailId(1L).createdAt(LocalDateTime.now()).build();
+        CategoryJpaEntity.builder().name("플로럴").description("꽃 향기를 가득 담아 사랑스러운 느낌을 줍니다.").tags("#우아한 #사랑스러운 #꽃향기").thumbnailId(1L).createdAt(LocalDateTime.now()).build();
 
     entityManager.persist(categoryJpaEntity);
 

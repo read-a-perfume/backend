@@ -44,6 +44,11 @@ class UserTasteControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
+  private static final String categoryName = "프루티";
+  private static final String categoryDesc = "달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.";
+  private static final String categoryTags = "#달달한 #과즙미";
+  private static final Category sampleCategory = Category.create(categoryName, categoryDesc, categoryTags, 1L, LocalDateTime.now());
+
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
              RestDocumentationContextProvider restDocumentation) {
@@ -57,7 +62,7 @@ class UserTasteControllerTest {
   void testGetTastes() throws Exception {
     // given
     LocalDateTime now = LocalDateTime.now();
-    Category category = categoryRepository.save(Category.create("sample", "sample", 1L, now));
+    Category category = categoryRepository.save(sampleCategory);
     categoryRepository.save(CategoryUser.create(1L, category, LocalDateTime.now()));
 
     // when & then
@@ -69,16 +74,15 @@ class UserTasteControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("[0].id").value(category.getId()))
-        .andExpect(jsonPath("[0].name").value("sample"))
-        .andExpect(jsonPath("[0].description").value("sample"))
+        .andExpect(jsonPath("[0].name").value(categoryName))
+        .andExpect(jsonPath("[0].description").value(categoryDesc))
         .andExpect(jsonPath("[0].thumbnail").value(""))
         .andDo(
             document("get-user-tastes",
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
-                    fieldWithPath("[].description").type(JsonFieldType.STRING)
-                        .description("카테고리 설명"),
+                    fieldWithPath("[].description").type(JsonFieldType.STRING).description("카테고리 설명"),
                     fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("카테고리 이미지")
                 )));
   }
@@ -88,7 +92,7 @@ class UserTasteControllerTest {
   void testCreateUserTaste() throws Exception {
     // given
     LocalDateTime now = LocalDateTime.now();
-    Category category = categoryRepository.save(Category.create("sample", "sample", 1L, now));
+    Category category = categoryRepository.save(sampleCategory);
     CreateUserTasteRequestDto dto = new CreateUserTasteRequestDto(category.getId());
 
     // when & then
