@@ -42,8 +42,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     String jwt = Objects.toString(credentials);
     LocalDateTime now = LocalDateTime.now();
-    if (!jsonWebTokenGenerator.verify(jwt, now)) {
-      return ANONYMOUS;
+    if (Boolean.FALSE.equals(jsonWebTokenGenerator.verify(jwt, now))) {
+      throw new TokenExpiredException();
     }
 
     return getAuthentication(jwt);

@@ -57,6 +57,13 @@ include::{snippets}/get-me/http-request.adoc[]
 include::{snippets}/get-me/http-response.adoc[]
 include::{snippets}/get-me/response-fields.adoc[]
 
+== 액세스 토큰 만료
+include::{snippets}/token-expired/http-request.adoc[]
+
+=== 응답
+include::{snippets}/token-expired/http-response.adoc[]
+include::{snippets}/token-expired/response-fields.adoc[]
+
 == 토큰 재발급
 === 요청
 include::{snippets}/reissue-access-token/http-request.adoc[]

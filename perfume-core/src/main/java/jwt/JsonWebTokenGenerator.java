@@ -29,7 +29,7 @@ public class JsonWebTokenGenerator {
                        LocalDateTime now) {
     assert subject != null;
     assert !subject.isEmpty();
-    assert expirationSeconds > 60 * 60;
+    assert expirationSeconds > 0;
     assert claims != null;
 
     return Jwts
