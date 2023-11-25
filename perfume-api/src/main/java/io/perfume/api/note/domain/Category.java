@@ -13,20 +13,21 @@ public class Category extends BaseTimeDomain {
 
   private final String description;
 
+  private final String tags;
+
   private final Long thumbnailId;
 
-  public Category(Long id, String name, String description,
-                  Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
+  public Category(Long id, String name, String description, String tags, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
                   LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
     this.description = description;
+    this.tags = tags;
     this.thumbnailId = thumbnailId;
   }
 
-  public static Category create(String name, String description, Long thumbnailId,
-                                LocalDateTime now) {
-    return new Category(null, name, description, thumbnailId, now, now, null);
+  public static Category create(String name, String description, String tags, Long thumbnailId, LocalDateTime now) {
+    return new Category(null, name, description, tags, thumbnailId, now, now, null);
   }
 }
