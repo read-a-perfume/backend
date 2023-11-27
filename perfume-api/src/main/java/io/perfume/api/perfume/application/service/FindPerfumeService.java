@@ -4,6 +4,8 @@ import io.perfume.api.brand.application.port.in.FindBrandUseCase;
 import io.perfume.api.brand.application.port.in.dto.BrandForPerfumeResult;
 import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.common.page.CustomSlice;
+import io.perfume.api.file.application.port.in.FindFileUseCase;
+import io.perfume.api.file.domain.File;
 import io.perfume.api.note.application.port.in.FindCategoryUseCase;
 import io.perfume.api.note.application.port.in.dto.CategoryResult;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
@@ -15,6 +17,7 @@ import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   private final PerfumeQueryRepository perfumeQueryRepository;
   private final FindCategoryUseCase findCategoryUseCase;
   private final FindBrandUseCase findBrandUseCase;
+  private final FindFileUseCase findFileUseCase;
 
   @Override
   public PerfumeResult findPerfumeById(Long id) {
@@ -33,9 +37,13 @@ public class FindPerfumeService implements FindPerfumeUseCase {
     CategoryResult categoryResult = findCategoryUseCase.findCategoryById(perfume.getCategoryId());
     BrandForPerfumeResult brandResult = findBrandUseCase.findBrandForPerfume(perfume.getBrandId());
     NotePyramid notePyramid = perfumeQueryRepository.getNotePyramidByPerfume(perfume.getId());
-    // TODO: file의 thumbnail을 얻어와야 한다.
+    Optional<File> fileById = findFileUseCase.findFileById(perfume.getThumbnailId());
+    String thumbnail = "";
+    if(fileById.isPresent()) {
+      thumbnail = fileById.get().getUrl();
+    }
 
-    return PerfumeResult.from(perfume, categoryResult, brandResult, notePyramid);
+    return PerfumeResult.from(perfume, categoryResult, brandResult, thumbnail, notePyramid);
   }
 
   @Override

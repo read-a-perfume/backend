@@ -97,13 +97,11 @@ class PerfumeControllerTest {
         .name("샹스 오 드 빠르펭")
         .story("예측할 수 없는 놀라움을 줍니다.")
         .concentration(Concentration.EAU_DE_PARFUM)
-        .capacity(100L)
-        .price(255000L)
         .perfumeShopUrl("https://www.chanel.com/kr/fragrance/p/126520/chance-eau-de-parfum-spray/")
         .brandName("CHANEL")
         .categoryName("플로럴")
-        .categoryDescription("#달달한 #우아한 #꽃")
-        .thumbnailUrl("testUrl.com")
+        .categoryTags("#달달한 #우아한 #꽃")
+        .thumbnail("testUrl.com")
         .notePyramidResult(notePyramidResult)
         .build();
 
@@ -121,13 +119,11 @@ class PerfumeControllerTest {
         .andExpect(jsonPath("$.name").value(perfumeResult.name()))
         .andExpect(jsonPath("$.story").value(perfumeResult.story()))
         .andExpect(jsonPath("$.concentration").value(perfumeResult.concentration().toString()))
-        .andExpect(jsonPath("$.price").value(perfumeResult.price()))
-        .andExpect(jsonPath("$.capacity").value(perfumeResult.capacity()))
         .andExpect(jsonPath("$.perfumeShopUrl").value(perfumeResult.perfumeShopUrl()))
         .andExpect(jsonPath("$.brandName").value(perfumeResult.brandName()))
         .andExpect(jsonPath("$.categoryName").value(perfumeResult.categoryName()))
-        .andExpect(jsonPath("$.categoryDescription").value(perfumeResult.categoryDescription()))
-        .andExpect(jsonPath("$.thumbnailUrl").value(perfumeResult.thumbnailUrl()))
+        .andExpect(jsonPath("$.categoryTags").value(perfumeResult.categoryTags()))
+        .andExpect(jsonPath("$.thumbnail").value(perfumeResult.thumbnail()))
         .andExpect(jsonPath("$.topNotes[0].name").value(perfumeResult.notePyramidResult().topNotes().get(0).name()))
         .andExpect(jsonPath("$.middleNotes[0].name").value(perfumeResult.notePyramidResult().middleNotes().get(0).name()))
         .andExpect(jsonPath("$.baseNotes[0].name").value(perfumeResult.notePyramidResult().baseNotes().get(0).name()))
@@ -140,25 +136,23 @@ class PerfumeControllerTest {
                     fieldWithPath("name").type(JsonFieldType.STRING).description("향수 이름"),
                     fieldWithPath("story").type(JsonFieldType.STRING).description("향수 스토리"),
                     fieldWithPath("concentration").type(JsonFieldType.STRING).description("향수 농도"),
-                    fieldWithPath("price").type(JsonFieldType.NUMBER).description("향수 가격"),
-                    fieldWithPath("capacity").type(JsonFieldType.NUMBER).description("향수 용량"),
                     fieldWithPath("perfumeShopUrl").type(JsonFieldType.STRING).description("향수 쇼핑몰 URL"),
                     fieldWithPath("brandName").type(JsonFieldType.STRING).description("향수 브랜드 이름"),
                     fieldWithPath("categoryName").type(JsonFieldType.STRING).description("향수 카테고리 이름"),
-                    fieldWithPath("categoryDescription").type(JsonFieldType.STRING).description("향수 카테고리 설명"),
-                    fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("향수 썸네일 URL"),
+                    fieldWithPath("categoryTags").type(JsonFieldType.STRING).description("향수 카테고리 태그"),
+                    fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("향수 썸네일 URL"),
                     fieldWithPath("topNotes").type(JsonFieldType.ARRAY).description("향수 탑 노트"),
                     fieldWithPath("topNotes[].id").type(JsonFieldType.NUMBER).description("향수 탑 노트 ID"),
                     fieldWithPath("topNotes[].name").type(JsonFieldType.STRING).description("향수 탑 노트 이름"),
-                    fieldWithPath("topNotes[].thumbnailUrl").type(JsonFieldType.STRING).description("향수 탑 노트 썸네일 URL"),
+                    fieldWithPath("topNotes[].thumbnail").type(JsonFieldType.STRING).description("향수 탑 노트 썸네일 URL"),
                     fieldWithPath("middleNotes").type(JsonFieldType.ARRAY).description("향수 미들 노트"),
                     fieldWithPath("middleNotes[].id").type(JsonFieldType.NUMBER).description("향수 미들 노트 ID"),
                     fieldWithPath("middleNotes[].name").type(JsonFieldType.STRING).description("향수 미들 노트 이름"),
-                    fieldWithPath("middleNotes[].thumbnailUrl").type(JsonFieldType.STRING).description("향수 미들 노트 썸네일 URL"),
+                    fieldWithPath("middleNotes[].thumbnail").type(JsonFieldType.STRING).description("향수 미들 노트 썸네일 URL"),
                     fieldWithPath("baseNotes").type(JsonFieldType.ARRAY).description("향수 베이스 노트"),
                     fieldWithPath("baseNotes[].id").type(JsonFieldType.NUMBER).description("향수 베이스 노트 ID"),
                     fieldWithPath("baseNotes[].name").type(JsonFieldType.STRING).description("향수 베이스 노트 이름"),
-                    fieldWithPath("baseNotes[].thumbnailUrl").type(JsonFieldType.STRING).description("향수 베이스 노트 썸네일 URL")
+                    fieldWithPath("baseNotes[].thumbnail").type(JsonFieldType.STRING).description("향수 베이스 노트 썸네일 URL")
                 )));
   }
 
@@ -177,7 +171,7 @@ class PerfumeControllerTest {
   @Test
   void createPerfume() throws Exception {
     // given
-    CreatePerfumeRequestDto requestDto = new CreatePerfumeRequestDto("샹스 오 드 빠르펭", "예측할 수 없는 놀라움을 줍니다.", Concentration.EAU_DE_PARFUM, 100L, 255000L,
+    CreatePerfumeRequestDto requestDto = new CreatePerfumeRequestDto("샹스 오 드 빠르펭", "예측할 수 없는 놀라움을 줍니다.", Concentration.EAU_DE_PARFUM,
         1L, 1L, 1L, "https://www.chanel.com/kr/fragrance/p/126520/chance-eau-de-parfum-spray/",
         List.of(1L, 2L, 3L), List.of(4L, 5L, 6L), List.of(7L, 8L, 9L));
 
@@ -195,8 +189,6 @@ class PerfumeControllerTest {
                     fieldWithPath("name").type(JsonFieldType.STRING).description("향수 이름"),
                     fieldWithPath("story").type(JsonFieldType.STRING).description("향수 스토리"),
                     fieldWithPath("concentration").type(JsonFieldType.STRING).description("향수 농도 ex) EAU_DE_PERFUME, EAU_DE_TOILETTE"),
-                    fieldWithPath("price").type(JsonFieldType.NUMBER).description("향수 가격"),
-                    fieldWithPath("capacity").type(JsonFieldType.NUMBER).description("향수 용량"),
                     fieldWithPath("brandId").type(JsonFieldType.NUMBER).description("향수 브랜드 ID(PK)"),
                     fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("향수 카테고리 ID(PK)"),
                     fieldWithPath("thumbnailId").type(JsonFieldType.NUMBER).description("향수 썸네일 ID(PK)"),
@@ -216,8 +208,6 @@ class PerfumeControllerTest {
         .name("샹스 오 드 빠르펭")
         .story("예측할 수 없는 놀라움을 줍니다.")
         .concentration(Concentration.EAU_DE_PARFUM)
-        .price(100L)
-        .capacity(255000L)
         .brandId(1L)
         .categoryId(1L)
         .thumbnailId(1L)
@@ -263,7 +253,7 @@ class PerfumeControllerTest {
                 responseFields(
                     fieldWithPath("content[].id").type(JsonFieldType.NUMBER).description("향수 ID"),
                     fieldWithPath("content[].name").type(JsonFieldType.STRING).description("향수 이름"),
-                    fieldWithPath("content[].thumbnailUrl").type(JsonFieldType.STRING).description("향수 썸네일 사진 주소"),
+                    fieldWithPath("content[].thumbnail").type(JsonFieldType.STRING).description("향수 썸네일 사진 주소"),
                     fieldWithPath("content[].brandName").type(JsonFieldType.STRING).description("향수 브랜드 이름"),
                     fieldWithPath("content[].strength").type(JsonFieldType.STRING).description("향수 강도"),
                     fieldWithPath("content[].duration").type(JsonFieldType.STRING).description("향수 지속 시간"),
@@ -302,7 +292,7 @@ class PerfumeControllerTest {
                 responseFields(
                     fieldWithPath("content[].id").type(JsonFieldType.NUMBER).description("향수 ID"),
                     fieldWithPath("content[].name").type(JsonFieldType.STRING).description("향수 이름"),
-                    fieldWithPath("content[].thumbnailUrl").type(JsonFieldType.STRING).description("향수 썸네일 사진 주소"),
+                    fieldWithPath("content[].thumbnail").type(JsonFieldType.STRING).description("향수 썸네일 사진 주소"),
                     fieldWithPath("content[].brandName").type(JsonFieldType.STRING).description("향수 브랜드 이름"),
                     fieldWithPath("content[].strength").type(JsonFieldType.STRING).description("향수 강도"),
                     fieldWithPath("content[].duration").type(JsonFieldType.STRING).description("향수 지속 시간"),

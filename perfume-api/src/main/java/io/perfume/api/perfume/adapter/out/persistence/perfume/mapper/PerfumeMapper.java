@@ -1,24 +1,20 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfume.mapper;
 
-import static io.perfume.api.brand.adapter.out.persistence.QBrandEntity.brandEntity;
-import static io.perfume.api.file.adapter.out.persistence.file.QFileJpaEntity.fileJpaEntity;
 import static io.perfume.api.note.adapter.out.persistence.note.QNoteJpaEntity.noteJpaEntity;
-import static io.perfume.api.perfume.adapter.out.persistence.perfume.QPerfumeJpaEntity.perfumeJpaEntity;
 import static io.perfume.api.perfume.adapter.out.persistence.perfumeNote.QPerfumeNoteEntity.perfumeNoteEntity;
 
 import com.querydsl.core.Tuple;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
-import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.NotePyramidIds;
 import io.perfume.api.perfume.domain.Perfume;
 import io.perfume.api.perfume.domain.PerfumeNote;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +25,7 @@ public class PerfumeMapper {
         .id(perfumeJpaEntity.getId())
         .name(perfumeJpaEntity.getName())
         .story(perfumeJpaEntity.getStory())
-        .price(perfumeJpaEntity.getPrice())
         .concentration(perfumeJpaEntity.getConcentration())
-        .capacity(perfumeJpaEntity.getCapacity())
         .perfumeShopUrl(perfumeJpaEntity.getPerfumeShopUrl())
         .brandId(perfumeJpaEntity.getBrandId())
         .categoryId(perfumeJpaEntity.getCategoryId())
@@ -47,9 +41,7 @@ public class PerfumeMapper {
         .id(perfumeJpaEntity.getId())
         .name(perfumeJpaEntity.getName())
         .story(perfumeJpaEntity.getStory())
-        .price(perfumeJpaEntity.getPrice())
         .concentration(perfumeJpaEntity.getConcentration())
-        .capacity(perfumeJpaEntity.getCapacity())
         .perfumeShopUrl(perfumeJpaEntity.getPerfumeShopUrl())
         .brandId(perfumeJpaEntity.getBrandId())
         .categoryId(perfumeJpaEntity.getCategoryId())
@@ -95,7 +87,7 @@ public class PerfumeMapper {
 
     fetchedTuples.forEach(
         tuple -> {
-          switch (tuple.get(perfumeNoteEntity.noteLevel)) {
+          switch (Objects.requireNonNull(tuple.get(perfumeNoteEntity.noteLevel))) {
             case TOP:
               topPerfumeNotes.add(toPerfumeNote(tuple));
               break;
@@ -122,8 +114,6 @@ public class PerfumeMapper {
         .name(perfume.getName())
         .story(perfume.getStory())
         .concentration(perfume.getConcentration())
-        .price(perfume.getPrice())
-        .capacity(perfume.getCapacity())
         .perfumeShopUrl(perfume.getPerfumeShopUrl())
         .brandId(perfume.getBrandId())
         .categoryId(perfume.getCategoryId())
@@ -139,14 +129,14 @@ public class PerfumeMapper {
             toPerfumeNoteEntities(notePyramidIds.getBaseNoteIds(), perfumeId, NoteLevel.BASE)
         )
         .flatMap(List::stream)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   private List<PerfumeNoteEntity> toPerfumeNoteEntities(List<Long> noteIds, Long perfumeId,
                                                         NoteLevel noteLevel) {
     return noteIds.stream()
         .map(toPerfumeNoteEntity(perfumeId, noteLevel))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   private Function<Long, PerfumeNoteEntity> toPerfumeNoteEntity(Long perfumeId,
@@ -155,22 +145,6 @@ public class PerfumeMapper {
         .perfumeId(perfumeId)
         .noteId(noteId)
         .noteLevel(noteLevel)
-        .build();
-  }
-
-  public List<SimplePerfumeResult> toSimplePerfumeResults(List<Tuple> fetchedTuples) {
-    return fetchedTuples.stream()
-        .map(this::toSimplePerfumeResult)
-        .toList();
-  }
-
-  private SimplePerfumeResult toSimplePerfumeResult(Tuple tuple) {
-    return SimplePerfumeResult.builder()
-        .id(tuple.get(perfumeJpaEntity.id))
-        .name(tuple.get(perfumeJpaEntity.name))
-        .concentration(tuple.get(perfumeJpaEntity.concentration))
-        .brandName(tuple.get(brandEntity.name))
-        .thumbnailUrl(tuple.get(fileJpaEntity.url))
         .build();
   }
 }

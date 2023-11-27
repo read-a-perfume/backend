@@ -66,7 +66,7 @@ class UserSupportControllerTest {
   void me() throws Exception {
     // given
     Long userId =1L;
-    UserProfileResult userProfileResult = new UserProfileResult(userId, "username", "thumbnailUrl.com");
+    UserProfileResult userProfileResult = new UserProfileResult(userId, "username", "thumbnail.com");
     given(findUserUseCase.findUserProfileById(anyLong())).willReturn(userProfileResult);
 
     // when & then
@@ -75,13 +75,13 @@ class UserSupportControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.userId").value(userProfileResult.userId()))
         .andExpect(jsonPath("$.username").value(userProfileResult.username()))
-        .andExpect(jsonPath("$.thumbnailUrl").value(userProfileResult.thumbnailUrl()))
+        .andExpect(jsonPath("$.thumbnail").value(userProfileResult.thumbnail()))
         .andDo(
             document("get-me",
                 responseFields(
                     fieldWithPath("userId").description("현재 로그인 중인 유저의 PK"),
                     fieldWithPath("username").description("현재 로그인 중인 유저의 이름"),
-                    fieldWithPath("thumbnailUrl").description("현재 로그인 중인 유저의 프로필 사진 URL")
+                    fieldWithPath("thumbnail").description("현재 로그인 중인 유저의 프로필 사진 URL")
                 )
             )
         );
