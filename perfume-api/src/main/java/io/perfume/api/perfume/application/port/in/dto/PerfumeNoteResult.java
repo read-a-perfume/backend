@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 
 public record PerfumeNoteResult(Long id, String name, String thumbnail) {
   public static PerfumeNoteResult from(PerfumeNote perfumeNote) {
-    return new PerfumeNoteResult(perfumeNote.noteId(), perfumeNote.name(), "perfumeNote.thumbnailUrl()");
+    return new PerfumeNoteResult(perfumeNote.noteId(), perfumeNote.name(), "perfumeNote.thumbnail()");
   }
 
   public static List<PerfumeNoteResult> from(List<PerfumeNote> perfumeNotes) {
     return perfumeNotes.stream()
         .map(PerfumeNoteResult::from)
-        .collect(Collectors.toList());
+        .toList();
   }
 }

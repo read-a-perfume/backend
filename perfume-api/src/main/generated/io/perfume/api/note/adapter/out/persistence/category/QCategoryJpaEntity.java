@@ -33,6 +33,8 @@ public class QCategoryJpaEntity extends EntityPathBase<CategoryJpaEntity> {
 
     public final StringPath name = createString("name");
 
+    public final StringPath tags = createString("tags");
+
     public final NumberPath<Long> thumbnailId = createNumber("thumbnailId", Long.class);
 
     //inherited

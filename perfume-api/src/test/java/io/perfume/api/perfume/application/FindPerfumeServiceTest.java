@@ -6,6 +6,8 @@ import static org.mockito.BDDMockito.given;
 
 import io.perfume.api.brand.application.port.in.FindBrandUseCase;
 import io.perfume.api.brand.application.port.in.dto.BrandForPerfumeResult;
+import io.perfume.api.file.application.port.in.FindFileUseCase;
+import io.perfume.api.file.domain.File;
 import io.perfume.api.note.application.port.in.FindCategoryUseCase;
 import io.perfume.api.note.application.port.in.dto.CategoryResult;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
@@ -36,6 +38,8 @@ class FindPerfumeServiceTest {
   private FindCategoryUseCase findCategoryUseCase;
   @Mock
   private FindBrandUseCase findBrandUseCase;
+  @Mock
+  private FindFileUseCase findFileUseCase;
 
   @Test
   void findPerfumeById() {
@@ -57,8 +61,6 @@ class FindPerfumeServiceTest {
         .name("테싯 오 드 퍼퓸")
         .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
         .concentration(Concentration.EAU_DE_PARFUM)
-        .price(150000L)
-        .capacity(50L)
         .brandId(1L)
         .categoryId(1L)
         .thumbnailId(1L)
@@ -66,13 +68,13 @@ class FindPerfumeServiceTest {
         .build();
 
     given(perfumeQueryRepository.findPerfumeById(anyLong())).willReturn(Optional.ofNullable(perfume));
-    CategoryResult category = new CategoryResult(1L, "시트러스", "상큼하고 톡 쏘는 향으로 가볍고 산뜻한 느낌을 줍니다.", "#상큼한 #질리지않는", "thumbnailUrl.com");
+    CategoryResult category = new CategoryResult(1L, "시트러스", "상큼하고 톡 쏘는 향으로 가볍고 산뜻한 느낌을 줍니다.", "#상큼한 #질리지않는", "thumbnail.com");
     given(findCategoryUseCase.findCategoryById(anyLong()))
         .willReturn(category);
     BrandForPerfumeResult brand = new BrandForPerfumeResult("CHANEL");
     given(findBrandUseCase.findBrandForPerfume(anyLong())).willReturn(brand);
     given(perfumeQueryRepository.getNotePyramidByPerfume(anyLong())).willReturn(notePyramid);
-
+    given(findFileUseCase.findFileById(anyLong())).willReturn(Optional.ofNullable(File.builder().url("thumbnail.com").build()));
     // when
     PerfumeResult perfumeResult = findPerfumeService.findPerfumeById(1L);
 
@@ -80,10 +82,8 @@ class FindPerfumeServiceTest {
     assertEquals(perfume.getName(), perfumeResult.name());
     assertEquals(perfume.getStory(), perfumeResult.story());
     assertEquals(perfume.getConcentration(), perfumeResult.concentration());
-    assertEquals(perfume.getPrice(), perfumeResult.price());
-    assertEquals(perfume.getCapacity(), perfumeResult.capacity());
     assertEquals(brand.name(), perfumeResult.brandName());
     assertEquals(category.name(), perfumeResult.categoryName());
-    assertEquals(category.description(), perfumeResult.categoryDescription());
+    assertEquals(category.tags(), perfumeResult.categoryTags());
   }
 }

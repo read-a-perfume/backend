@@ -35,7 +35,7 @@ class FindUserServiceTest {
         .id(userId)
         .username("username")
         .thumbnailId(1L).build();
-    File file = File.builder().id(1L).url("thumbnailUrl.com").userId(userId).build();
+    File file = File.builder().id(1L).url("thumbnail.com").userId(userId).build();
 
     given(userQueryRepository.findUserById(anyLong())).willReturn(Optional.ofNullable(user));
     given(findFileUseCase.findFileById(anyLong())).willReturn(Optional.ofNullable(file));
@@ -46,6 +46,6 @@ class FindUserServiceTest {
     // then
     assertEquals(userId, userProfile.userId());
     assertEquals(user.getUsername(), userProfile.username());
-    assertEquals(file.getUrl(), userProfile.thumbnailUrl());
+    assertEquals(file.getUrl(), userProfile.thumbnail());
   }
 }
