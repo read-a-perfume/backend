@@ -187,6 +187,7 @@ include::{snippets}/get-reviews/response-fields.adoc[]
 == 리뷰 생성
 === 요청
 include::{snippets}/create-review/http-request.adoc[]
+include::{snippets}/create-review/request-fields.adoc[]
 
 === 응답
 include::{snippets}/create-review/http-response.adoc[]
@@ -203,10 +204,15 @@ include::{snippets}/delete-review/response-fields.adoc[]
 == 리뷰 댓글 추가
 === 요청
 include::{snippets}/create-review-comment/http-request.adoc[]
+include::{snippets}/create-review-comment/request-fields.adoc[]
 
 === 응답
 include::{snippets}/create-review-comment/http-response.adoc[]
 include::{snippets}/create-review-comment/response-fields.adoc[]
+
+=== 실패 응답
+include::{snippets}/create-review-comment-failed/http-response.adoc[]
+include::{snippets}/create-review-comment-failed/response-fields.adoc[]
 
 == 리뷰 댓글 삭제
 === 요청
@@ -215,6 +221,10 @@ include::{snippets}/delete-review-comment/http-request.adoc[]
 === 응답
 include::{snippets}/delete-review-comment/http-response.adoc[]
 include::{snippets}/delete-review-comment/response-fields.adoc[]
+
+=== 실패 응답
+include::{snippets}/delete-review-comment-failed/http-response.adoc[]
+include::{snippets}/delete-review-comment-failed/response-fields.adoc[]
 
 == 리뷰 좋아요 표시/취소
 === 요청
