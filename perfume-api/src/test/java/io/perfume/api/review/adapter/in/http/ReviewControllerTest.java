@@ -9,11 +9,13 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewCommentRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewRequestDto;
+import io.perfume.api.review.adapter.out.persistence.repository.comment.ReviewCommentMapper;
 import io.perfume.api.review.application.out.ReviewCommentRepository;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
@@ -31,6 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -275,7 +278,8 @@ class ReviewControllerTest {
         Season.SPRING,
         now
     ));
-    var dto = new CreateReviewCommentRequestDto("test");
+    String content = "사실적인 리뷰라서 좋네요.";
+    var dto = new CreateReviewCommentRequestDto(content);
 
     // when & then
     mockMvc
@@ -289,8 +293,14 @@ class ReviewControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
             document("create-review-comment",
+                pathParameters(
+                    parameterWithName("id").description("리뷰 ID")
+                ),
+                requestFields(
+                    fieldWithPath("content").type(JsonFieldType.STRING).description("리뷰 댓글 내용")
+                ),
                 responseFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID")
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 댓글 ID")
                 )
             ));
   }
@@ -320,8 +330,11 @@ class ReviewControllerTest {
         .andDo(print())
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
+        .andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()))
+        .andExpect(jsonPath("$.message").value("존재하지 않는 리뷰 정보입니다."))
         .andDo(
-            document("create-review-comment",
+            document("create-review-comment-failed",
                 responseFields(
                     fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
@@ -368,6 +381,10 @@ class ReviewControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
             document("delete-review-comment",
+                pathParameters(
+                    parameterWithName("id").description("리뷰 ID"),
+                    parameterWithName("commentId").description("삭제할 리뷰 댓글의 ID")
+                ),
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 댓글 ID")
                 )
@@ -408,8 +425,11 @@ class ReviewControllerTest {
         )
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
+        .andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()))
+        .andExpect(jsonPath("$.message").value("존재하지 않는 리뷰 댓글입니다."))
         .andDo(
-            document("delete-review-comment",
+            document("delete-review-comment-failed",
                 responseFields(
                     fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
