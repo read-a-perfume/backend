@@ -2,6 +2,7 @@ package io.perfume.api.review.domain;
 
 import io.perfume.api.base.BaseTimeDomain;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class Review extends BaseTimeDomain {
 
   private final Strength strength;
 
-  private final Long duration;
+  private final Duration duration;
 
   private final DayType dayType;
 
@@ -29,7 +30,7 @@ public class Review extends BaseTimeDomain {
 
   private final Long userId;
 
-  public Review(Long id, String feeling, String shortReview, Strength strength, Long duration,
+  public Review(Long id, String feeling, String shortReview, Strength strength, Duration duration,
                 DayType dayType, Long perfumeId, Long userId, Season season,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt, LocalDateTime deletedAt) {
@@ -45,7 +46,7 @@ public class Review extends BaseTimeDomain {
     this.season = season;
   }
 
-  public static Review create(String feeling, String situation, Strength strength, Long duration,
+  public static Review create(String feeling, String situation, Strength strength, Duration duration,
                               DayType dayType, Long perfumeId, Long userId, Season season,
                               LocalDateTime now) {
     return new Review(null, feeling, situation, strength, duration, dayType, perfumeId, userId,

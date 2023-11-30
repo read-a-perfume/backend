@@ -11,6 +11,7 @@ import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
 import io.perfume.api.review.adapter.out.persistence.repository.tag.TagQueryPersistenceAdapter;
 import io.perfume.api.review.domain.Tag;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.EntityManager;
@@ -79,7 +80,7 @@ class TagQueryPersistenceAdapterTest {
     var tag = new TagEntity(null, "test", now, now, null);
     entityManager.persist(tag);
     var review =
-        new ReviewEntity(null, "", "", Strength.LIGHT, 0L, DayType.DAILY, 1L, 1L, Season.SPRING, now, now, null);
+        new ReviewEntity(null, "", "", Strength.LIGHT, Duration.TOO_SHORT, DayType.DAILY, 1L, 1L, Season.SPRING, now, now, null);
     entityManager.persist(
         review);
     entityManager.persist(new ReviewTagEntity(review.getId(), tag.getId(), now, now, null));

@@ -7,6 +7,7 @@ import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
 import io.perfume.api.review.application.out.ReviewQueryRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.EntityManager;
@@ -58,7 +59,7 @@ class ReviewQueryPersistenceAdapterTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         1L,
@@ -74,6 +75,6 @@ class ReviewQueryPersistenceAdapterTest {
     var result = queryRepository.findById(1L).orElseThrow();
 
     // then
-    assertThat(result.getId()).isGreaterThan(0L);
+    assertThat(result.getId()).isPositive();
   }
 }
