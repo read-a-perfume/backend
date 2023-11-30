@@ -1,7 +1,7 @@
 create table perfume_favorite
 (
     user_id bigint not null,
-    perfume_id bigint notnull,
+    perfume_id bigint not null,
     created_at datetime not null,
     updated_at datetime not null,
     deleted_at datetime null,
