@@ -11,7 +11,7 @@ public class ReviewMapper {
   public Review toDomain(@NotNull ReviewEntity reviewEntity) {
     return new Review(
         reviewEntity.getId(),
-        reviewEntity.getFeeling(),
+        reviewEntity.getFullReview(),
         reviewEntity.getShortReview(),
         reviewEntity.getStrength(),
         reviewEntity.getDuration(),

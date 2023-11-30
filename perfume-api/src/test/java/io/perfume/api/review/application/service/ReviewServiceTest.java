@@ -8,6 +8,7 @@ import io.perfume.api.review.application.exception.NotPermittedLikeReviewExcepti
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewLike;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.review.stub.StubReviewLikeRepository;
@@ -19,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ReviewServiceTest {
+class ReviewServiceTest {
 
   private final StubReviewRepository reviewQueryRepository = new StubReviewRepository();
 
@@ -47,7 +48,7 @@ public class ReviewServiceTest {
             "",
             "",
             Strength.LIGHT,
-            0L,
+            Duration.TOO_SHORT,
             DayType.DAILY,
             1L,
             2L,
@@ -91,7 +92,7 @@ public class ReviewServiceTest {
             "",
             "",
             Strength.LIGHT,
-            0L,
+            Duration.TOO_SHORT,
             DayType.DAILY,
             1L,
             1L,
@@ -120,7 +121,7 @@ public class ReviewServiceTest {
             "",
             "",
             Strength.LIGHT,
-            0L,
+            Duration.TOO_SHORT,
             DayType.DAILY,
             1L,
             2L,

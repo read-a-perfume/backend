@@ -8,6 +8,7 @@ import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.in.DeleteReviewTagUseCase;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.review.stub.StubReviewRepository;
@@ -38,7 +39,7 @@ class DeleteReviewServiceTest {
     var reviewId = 1L;
     var now = LocalDateTime.now();
     var review =
-        new Review(reviewId, "", "", Strength.LIGHT, 0L, DayType.DAILY, 1L, userId, Season.SPRING,
+        new Review(reviewId, "", "", Strength.LIGHT, Duration.TOO_SHORT, DayType.DAILY, 1L, userId, Season.SPRING,
             now, now, null);
     stubReviewRepository.addReview(review);
 
@@ -60,7 +61,7 @@ class DeleteReviewServiceTest {
     var reviewId = 1L;
     var now = LocalDateTime.now();
     var review =
-        new Review(reviewId, "", "", Strength.LIGHT, 0L, DayType.DAILY, 1L, userId, Season.SPRING,
+        new Review(reviewId, "", "", Strength.LIGHT, Duration.TOO_SHORT, DayType.DAILY, 1L, userId, Season.SPRING,
             now, now, null);
     stubReviewRepository.addReview(review);
 

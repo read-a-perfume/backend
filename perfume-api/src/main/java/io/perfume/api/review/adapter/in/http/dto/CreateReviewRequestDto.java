@@ -2,6 +2,7 @@ package io.perfume.api.review.adapter.in.http.dto;
 
 import io.perfume.api.review.application.in.dto.CreateReviewCommand;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,15 +15,13 @@ import org.hibernate.validator.constraints.Length;
 public record CreateReviewRequestDto(
     @Positive
     Long perfumeId,
-    DayType dayType,
-    Strength strength,
-    Season season,
-    @Positive
-    Long duration,
+    String dayType,
+    String strength,
+    String season,
+    String duration,
     @NotEmpty
     String shortReview,
-    @NotEmpty
-    String feeling,
+    String fullReview,
     @Length(max = 3)
     List<Long> tags
 ) {
@@ -30,12 +29,12 @@ public record CreateReviewRequestDto(
   public CreateReviewCommand toCommand(LocalDateTime now) {
     return new CreateReviewCommand(
         perfumeId,
-        dayType,
-        strength,
-        season,
-        duration,
-        feeling,
+        DayType.of(dayType),
+        Strength.of(strength),
+        Season.of(season),
+        Duration.of(duration),
         shortReview,
+        fullReview,
         Collections.unmodifiableList(tags),
         now
     );
