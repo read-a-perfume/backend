@@ -6,9 +6,9 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-public record PerfumeResponseDto(String name, String story, Concentration concentration, Long price, Long capacity,
-                                 String perfumeShopUrl, String brandName, String categoryName, String categoryDescription,
-                                 String thumbnailUrl, List<NoteResponseDto> topNotes, List<NoteResponseDto> middleNotes,
+public record PerfumeResponseDto(String name, String story, Concentration concentration,
+                                 String perfumeShopUrl, String brandName, String categoryName, String categoryTags,
+                                 String thumbnail, List<NoteResponseDto> topNotes, List<NoteResponseDto> middleNotes,
                                  List<NoteResponseDto> baseNotes) {
 
   public static PerfumeResponseDto of(PerfumeResult perfumeResult) {
@@ -16,13 +16,11 @@ public record PerfumeResponseDto(String name, String story, Concentration concen
         .name(perfumeResult.name())
         .story(perfumeResult.story())
         .concentration(perfumeResult.concentration())
-        .capacity(perfumeResult.capacity())
-        .price(perfumeResult.price())
         .perfumeShopUrl(perfumeResult.perfumeShopUrl())
         .categoryName(perfumeResult.categoryName())
-        .categoryDescription(perfumeResult.categoryDescription())
+        .categoryTags(perfumeResult.categoryTags())
         .brandName(perfumeResult.brandName())
-        .thumbnailUrl(perfumeResult.thumbnailUrl())
+        .thumbnail(perfumeResult.thumbnail())
         .topNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().topNotes()))
         .middleNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().middleNotes()))
         .baseNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().baseNotes()))

@@ -23,8 +23,6 @@ public class QPerfumeJpaEntity extends EntityPathBase<PerfumeJpaEntity> {
 
     public final NumberPath<Long> brandId = createNumber("brandId", Long.class);
 
-    public final NumberPath<Long> capacity = createNumber("capacity", Long.class);
-
     public final NumberPath<Long> categoryId = createNumber("categoryId", Long.class);
 
     public final EnumPath<io.perfume.api.perfume.domain.Concentration> concentration = createEnum("concentration", io.perfume.api.perfume.domain.Concentration.class);
@@ -40,8 +38,6 @@ public class QPerfumeJpaEntity extends EntityPathBase<PerfumeJpaEntity> {
     public final StringPath name = createString("name");
 
     public final StringPath perfumeShopUrl = createString("perfumeShopUrl");
-
-    public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final StringPath story = createString("story");
 

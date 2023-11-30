@@ -42,6 +42,28 @@ include::{snippets}/login/request-fields.adoc[]
 include::{snippets}/login/http-response.adoc[]
 include::{snippets}/login/response-cookies.adoc[]
 
+== 로그인 중인 회원 탈퇴
+include::{snippets}/leave-user/http-request.adoc[]
+
+=== 응답
+include::{snippets}/leave-user/http-response.adoc[]
+include::{snippets}/leave-user/response-fields.adoc[]
+
+
+== 로그인 중인 유저 프로필 조회
+include::{snippets}/get-me/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-me/http-response.adoc[]
+include::{snippets}/get-me/response-fields.adoc[]
+
+== 액세스 토큰 만료
+include::{snippets}/token-expired/http-request.adoc[]
+
+=== 응답
+include::{snippets}/token-expired/http-response.adoc[]
+include::{snippets}/token-expired/response-fields.adoc[]
+
 == 토큰 재발급
 === 요청
 include::{snippets}/reissue-access-token/http-request.adoc[]
@@ -108,6 +130,14 @@ include::{snippets}/get-perfume/http-request.adoc[]
 include::{snippets}/get-perfume/http-response.adoc[]
 include::{snippets}/get-perfume/response-fields.adoc[]
 
+== 향수 조회
+=== 요청
+include::{snippets}/get-perfume/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume/http-response.adoc[]
+include::{snippets}/get-perfume/response-fields.adoc[]
+
 == 향수 생성
 === 요청
 include::{snippets}/create-perfume/http-request.adoc[]
@@ -116,9 +146,48 @@ include::{snippets}/create-perfume/request-fields.adoc[]
 === 응답
 include::{snippets}/create-perfume/http-response.adoc[]
 
+== 브랜드 별 향수 조회
+=== 요청
+include::{snippets}/get-perfume-by-brand/http-request.adoc[]
+==== Query Parameters
+include::{snippets}/get-perfume-by-brand/query-parameters.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume-by-brand/http-response.adoc[]
+include::{snippets}/get-perfume-by-brand/response-fields.adoc[]
+
+== 카테고리 별 향수 조회
+=== 요청
+include::{snippets}/get-perfume-by-category/http-request.adoc[]
+==== Path Variables
+include::{snippets}/get-perfume-by-category/path-parameters.adoc[]
+==== Query Parameters
+include::{snippets}/get-perfume-by-category/query-parameters.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume-by-category/http-response.adoc[]
+include::{snippets}/get-perfume-by-category/response-fields.adoc[]
+
+== 리뷰 상세보기
+=== 요청
+include::{snippets}/get-review-detail/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-review-detail/http-response.adoc[]
+include::{snippets}/get-review-detail/response-fields.adoc[]
+
+== 리뷰 목록 조회
+=== 요청
+include::{snippets}/get-reviews/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-reviews/http-response.adoc[]
+include::{snippets}/get-reviews/response-fields.adoc[]
+
 == 리뷰 생성
 === 요청
 include::{snippets}/create-review/http-request.adoc[]
+include::{snippets}/create-review/request-fields.adoc[]
 
 === 응답
 include::{snippets}/create-review/http-response.adoc[]
@@ -135,10 +204,15 @@ include::{snippets}/delete-review/response-fields.adoc[]
 == 리뷰 댓글 추가
 === 요청
 include::{snippets}/create-review-comment/http-request.adoc[]
+include::{snippets}/create-review-comment/request-fields.adoc[]
 
 === 응답
 include::{snippets}/create-review-comment/http-response.adoc[]
 include::{snippets}/create-review-comment/response-fields.adoc[]
+
+=== 실패 응답
+include::{snippets}/create-review-comment-failed/http-response.adoc[]
+include::{snippets}/create-review-comment-failed/response-fields.adoc[]
 
 == 리뷰 댓글 삭제
 === 요청
@@ -147,6 +221,18 @@ include::{snippets}/delete-review-comment/http-request.adoc[]
 === 응답
 include::{snippets}/delete-review-comment/http-response.adoc[]
 include::{snippets}/delete-review-comment/response-fields.adoc[]
+
+=== 실패 응답
+include::{snippets}/delete-review-comment-failed/http-response.adoc[]
+include::{snippets}/delete-review-comment-failed/response-fields.adoc[]
+
+== 리뷰 좋아요 표시/취소
+=== 요청
+include::{snippets}/like-review/http-request.adoc[]
+
+=== 응답
+include::{snippets}/like-review/http-response.adoc[]
+include::{snippets}/like-review/response-fields.adoc[]
 
 == 샘플
 === 요청

@@ -87,4 +87,15 @@ public class UserQueryPersistenceAdapter implements UserQueryRepository {
         .map(userMapper::toUser)
         .toList();
   }
+
+  @Override
+  public Optional<User> findUserById(long userId) {
+    return Optional.ofNullable(jpaQueryFactory
+            .selectFrom(userEntity)
+            .where(
+                userEntity.id.eq(userId)
+                    .and(userEntity.deletedAt.isNull()))
+            .fetchOne())
+        .map(userMapper::toUser);
+  }
 }

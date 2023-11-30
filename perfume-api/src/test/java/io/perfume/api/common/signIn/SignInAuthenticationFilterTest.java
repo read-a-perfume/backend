@@ -54,6 +54,7 @@ class SignInAuthenticationFilterTest {
 
   private final String email = "test@test.com";
   private final String password = "test12341234";
+
   private MockMvc mockMvc;
   @Autowired
   private ObjectMapper objectMapper;
@@ -65,16 +66,16 @@ class SignInAuthenticationFilterTest {
   private MakeNewTokenUseCase makeNewTokenUseCase;
   @Autowired
   private AuthenticationManagerBuilder authenticationManagerBuilder;
-  private SignInAuthenticationFilter filter;
+
 
   @BeforeEach
   void setUp(WebApplicationContext webApplicationContext,
              RestDocumentationContextProvider restDocumentation) {
-    filter = new SignInAuthenticationFilter(authenticationManagerBuilder.getOrBuild(),
-        makeNewTokenUseCase);
+    SignInAuthenticationFilter signInAuthenticationFilter =
+        new SignInAuthenticationFilter(authenticationManagerBuilder.getOrBuild(), objectMapper, makeNewTokenUseCase);
     this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
         .apply(documentationConfiguration(restDocumentation))
-        .addFilter(filter)
+        .addFilter(signInAuthenticationFilter)
         .build();
   }
 
@@ -99,7 +100,7 @@ class SignInAuthenticationFilterTest {
         .andExpect(result -> {
           String token = result.getResponse().getCookie("X-Access-Token").getValue();
           assertNotNull(token);
-          assertEquals(token.substring(0, 7), "Bearer ");
+          assertEquals("Bearer ", token.substring(0, 7));
         })
         .andDo(document("login",
             requestFields(

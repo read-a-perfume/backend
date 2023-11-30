@@ -7,6 +7,7 @@ import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeCommand;
 import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.user.application.exception.FailedRegisterException;
+import io.perfume.api.user.application.exception.UserConflictException;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
@@ -45,11 +46,14 @@ public class RegisterService implements CreateUserUseCase {
 
   @Override
   public UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command) {
+    if (Boolean.TRUE.equals(userRepository.existByUsernameOrEmail(command.username(), command.email()))) {
+      throw new UserConflictException(command.username(), command.email());
+    }
+
     User user = User.generalUserJoin(
         command.username(),
         command.email(),
         passwordEncoder.encode(command.password()),
-        command.name(),
         command.marketingConsent(),
         command.promotionConsent());
 
@@ -112,7 +116,6 @@ public class RegisterService implements CreateUserUseCase {
           User user = User.createSocialUser(
               command.username(),
               command.email(),
-              command.name(),
               command.password(),
               now);
 

@@ -27,9 +27,7 @@ class PerfumePersistenceAdapterTest {
     Perfume perfume = Perfume.builder()
         .name("테싯 오 드 퍼퓸")
         .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
-        .concentration(Concentration.EAU_DE_PERFUME)
-        .price(150000L)
-        .capacity(50L)
+        .concentration(Concentration.EAU_DE_PARFUM)
         .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
         .brandId(1L)
         .categoryId(1L)
@@ -48,8 +46,6 @@ class PerfumePersistenceAdapterTest {
     assertEquals(perfume.getName(), savedPerfume.getName());
     assertEquals(perfume.getStory(), savedPerfume.getStory());
     assertEquals(perfume.getConcentration(), savedPerfume.getConcentration());
-    assertEquals(perfume.getPrice(), savedPerfume.getPrice());
-    assertEquals(perfume.getCapacity(), savedPerfume.getCapacity());
     assertEquals(perfume.getBrandId(), savedPerfume.getBrandId());
     assertEquals(perfume.getCategoryId(), savedPerfume.getCategoryId());
     assertEquals(perfume.getThumbnailId(), savedPerfume.getThumbnailId());

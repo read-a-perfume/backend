@@ -3,13 +3,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("checkstyle")
     id("org.springframework.boot") version "3.1.5"
-    id("io.spring.dependency-management") version "1.1.3"
+    id("io.spring.dependency-management") version "1.1.4"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.28"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
-    kotlin("jvm") version "1.9.10"
-    kotlin("plugin.spring") version "1.9.20"
-    kotlin("plugin.jpa") version "1.9.20"
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.spring") version "1.9.21"
+    kotlin("plugin.jpa") version "1.9.21"
 }
 
 group = "io.perfume"
@@ -37,9 +37,9 @@ subprojects {
 
     dependencies {
         // kotlin
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.10")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10")
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.21")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
 
         // spring boot
         implementation("org.springframework.boot:spring-boot-starter:3.1.5")

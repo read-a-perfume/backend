@@ -1,6 +1,10 @@
 package io.perfume.api.user.application.service;
 
+import io.perfume.api.file.application.port.in.FindFileUseCase;
+import io.perfume.api.file.domain.File;
+import io.perfume.api.user.application.exception.UserNotFoundException;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
+import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import io.perfume.api.user.application.port.in.dto.UserResult;
 import io.perfume.api.user.application.port.out.SocialAccountQueryRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
@@ -8,21 +12,19 @@ import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class FindUserService implements FindUserUseCase {
 
   private final UserQueryRepository userQueryRepository;
 
   private final SocialAccountQueryRepository oauthQueryRepository;
 
-  public FindUserService(UserQueryRepository userQueryRepository,
-                         SocialAccountQueryRepository oauthQueryRepository) {
-    this.userQueryRepository = userQueryRepository;
-    this.oauthQueryRepository = oauthQueryRepository;
-  }
+  private final FindFileUseCase findFileUseCase;
 
   @Override
   @Transactional(readOnly = true)
@@ -42,6 +44,23 @@ public class FindUserService implements FindUserUseCase {
     return userQueryRepository.findUsersByIds(userIds).stream()
         .map(this::toDto)
         .toList();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<UserResult> findUserById(long userId) {
+    return userQueryRepository.findUserById(userId).map(this::toDto);
+  }
+
+  @Override
+  public UserProfileResult findUserProfileById(long userId) {
+    User user = userQueryRepository.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    Optional<File> fileById = findFileUseCase.findFileById(user.getThumbnailId());
+    String thumbnailUrl = "";
+    if(fileById.isPresent()) {
+      thumbnailUrl = fileById.get().getUrl();
+    }
+    return new UserProfileResult(user.getId(), user.getUsername(), thumbnailUrl);
   }
 
   private UserResult toDto(User user) {

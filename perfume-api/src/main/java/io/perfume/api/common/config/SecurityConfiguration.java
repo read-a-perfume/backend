@@ -1,5 +1,8 @@
 package io.perfume.api.common.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.perfume.api.common.auth.SignInAuthenticationFilter;
 import io.perfume.api.common.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -89,7 +92,7 @@ public class SecurityConfiguration {
                                                      AuthenticationProvider jwtAuthenticationProvider,
                                                      @Qualifier("daoAuthenticationProvider")
                                                      AuthenticationProvider daoAuthenticationProvider
-  ) throws Exception {
+  ) {
     AuthenticationManagerBuilder authenticationManagerBuilder =
         http.getSharedObject(AuthenticationManagerBuilder.class);
 
@@ -97,5 +100,12 @@ public class SecurityConfiguration {
         .authenticationProvider(jwtAuthenticationProvider)
         .authenticationProvider(daoAuthenticationProvider)
         .getOrBuild();
+  }
+
+  @Bean
+  public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    return objectMapper;
   }
 }

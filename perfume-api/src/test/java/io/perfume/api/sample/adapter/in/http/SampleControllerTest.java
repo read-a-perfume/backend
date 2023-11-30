@@ -151,6 +151,6 @@ class SampleControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.status").value("I'm a teapot"))
         .andExpect(jsonPath("$.statusCode").value(418))
-        .andExpect(jsonPath("$.error").value("I AM A TEAPOT"));
+        .andExpect(jsonPath("$.message").value("I AM A TEAPOT"));
   }
 }

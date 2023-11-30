@@ -2,6 +2,7 @@ package io.perfume.api.common.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
+import io.perfume.api.common.advice.ErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,8 +10,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -27,9 +32,10 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
   private final ObjectMapper objectMapper;
 
   public SignInAuthenticationFilter(AuthenticationManager authenticationManager,
+                                    ObjectMapper objectMapper,
                                     MakeNewTokenUseCase makeNewTokenUseCase) {
-    this.objectMapper = new ObjectMapper();
     this.makeNewTokenUseCase = makeNewTokenUseCase;
+    this.objectMapper = objectMapper;
 
     super.setAuthenticationManager(authenticationManager);
     super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/v1/login", "POST"));
@@ -44,7 +50,7 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
       signInDto = objectMapper.readValue(StreamUtils.copyToString(
           request.getInputStream(), StandardCharsets.UTF_8), SignInDto.class);
     } catch (IOException e) {
-      throw new IllegalArgumentException(e);
+      throw new SignInFormInValidException("Username or password cannot be empty");
     }
 
     UsernamePasswordAuthenticationToken authenticationToken
@@ -69,9 +75,11 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     SecurityContextHolder.getContext().setAuthentication(authResult);
     try {
+      Map<String, Object> map = new HashMap<>();
+      map.put("username",((UserPrincipal) authResult.getPrincipal()).getUsername());
+      map.put("userId",((UserPrincipal) authResult.getPrincipal()).getUser().getId());
       response.getWriter().write(
-          objectMapper.writeValueAsString(
-              (authResult.getPrincipal())));
+          objectMapper.writeValueAsString(map));
       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
@@ -84,10 +92,13 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
                                             AuthenticationException failed) throws IOException {
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-    String errorMessage = "Authentication failed: " + failed.getMessage();
+    ErrorResponse errorResponse = ErrorResponse.builder()
+        .status(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+        .statusCode(HttpStatus.UNAUTHORIZED.value())
+        .message(getUnsuccessfulMessage(failed))
+        .build();
     response.getWriter().write(
-        objectMapper.writeValueAsString(errorMessage));
+        objectMapper.writeValueAsString(errorResponse));
   }
 
   private Cookie createCookie(String cookieName, String cookieValue) {
@@ -96,5 +107,17 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
     cookie.setHttpOnly(true);
 
     return cookie;
+  }
+
+  private String getUnsuccessfulMessage(AuthenticationException failed) {
+    if (failed instanceof BadCredentialsException) {
+      return "Username or password is incorrect";
+    }
+
+    if (failed instanceof SignInFormInValidException) {
+      return failed.getMessage();
+    }
+
+    return "Unknown sign-in error";
   }
 }

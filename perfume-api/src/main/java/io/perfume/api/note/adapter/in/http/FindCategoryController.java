@@ -1,6 +1,6 @@
 package io.perfume.api.note.adapter.in.http;
 
-import io.perfume.api.note.adapter.in.http.dto.NoteResponse;
+import io.perfume.api.note.adapter.in.http.dto.CategoryResponse;
 import io.perfume.api.note.application.port.in.FindCategoryUseCase;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -23,12 +23,12 @@ public class FindCategoryController {
   }
 
   @GetMapping()
-  public List<NoteResponse> findCategories() {
-    return findCategoryUseCase.findCategories().stream().map(NoteResponse::from).toList();
+  public List<CategoryResponse> findCategories() {
+    return findCategoryUseCase.findCategories().stream().map(CategoryResponse::from).toList();
   }
 
   @GetMapping("/{id}")
-  public NoteResponse findCategoryById(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
-    return NoteResponse.from(findCategoryUseCase.findCategoryById(id));
+  public CategoryResponse findCategoryById(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    return CategoryResponse.from(findCategoryUseCase.findCategoryById(id));
   }
 }

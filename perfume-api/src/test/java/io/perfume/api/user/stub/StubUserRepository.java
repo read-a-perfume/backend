@@ -24,6 +24,11 @@ public class StubUserRepository implements UserRepository, UserQueryRepository {
   }
 
   @Override
+  public Boolean existByUsernameOrEmail(String username, String email) {
+    return null;
+  }
+
+  @Override
   public Optional<User> findOneByEmail(String email) {
     return Optional.empty();
   }
@@ -41,5 +46,10 @@ public class StubUserRepository implements UserRepository, UserQueryRepository {
   @Override
   public List<User> findUsersByIds(List<Long> userIds) {
     return null;
+  }
+
+  @Override
+  public Optional<User> findUserById(long userId) {
+    return Optional.empty();
   }
 }

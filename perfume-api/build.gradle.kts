@@ -21,7 +21,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     implementation("mysql:mysql-connector-java:8.0.33")
-    implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     implementation("org.flywaydb:flyway-mysql:9.22.3")
 
@@ -35,11 +35,11 @@ dependencies {
     annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
 
     testImplementation("com.h2database:h2:2.2.224")
-    testImplementation("org.mockito:mockito-core:5.6.0")
+    testImplementation("org.mockito:mockito-core:5.7.0")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
     testImplementation("io.rest-assured:rest-assured:5.3.2")
-    testImplementation("org.springframework.security:spring-security-test:6.1.5")
+    testImplementation("org.springframework.security:spring-security-test:6.2.0")
 }
 
 tasks.jar {

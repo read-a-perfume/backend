@@ -3,6 +3,8 @@ package io.perfume.api.perfume.adapter.out.persistence.perfume;
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.perfume.domain.Concentration;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,11 +35,9 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
   @NotNull
   private String story;
 
+  @Enumerated(EnumType.STRING)
   private Concentration concentration;
 
-  private Long price;
-
-  private Long capacity;
   private String perfumeShopUrl;
   @NotNull
   private Long brandId;
@@ -48,7 +48,7 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
 
   @Builder
   public PerfumeJpaEntity(
-      Long id, String name, String story, Concentration concentration, Long price, Long capacity, String perfumeShopUrl,
+      Long id, String name, String story, Concentration concentration, String perfumeShopUrl,
       Long brandId, Long categoryId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
       LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
@@ -56,8 +56,6 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
     this.name = name;
     this.story = story;
     this.concentration = concentration;
-    this.price = price;
-    this.capacity = capacity;
     this.perfumeShopUrl = perfumeShopUrl;
     this.brandId = brandId;
     this.categoryId = categoryId;

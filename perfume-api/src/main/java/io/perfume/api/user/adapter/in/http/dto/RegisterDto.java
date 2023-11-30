@@ -9,7 +9,6 @@ public record RegisterDto(
     @Email
     String email,
     boolean marketingConsent,
-    boolean promotionConsent,
-    String name
+    boolean promotionConsent
 ) {
 }
