@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "follow", indexes = {
+@Table(name = "user_follow", indexes = {
     @Index(name = "idx_follower_id", columnList = "followerId"),
     @Index(name = "idx_following_id", columnList = "followingId")
 })

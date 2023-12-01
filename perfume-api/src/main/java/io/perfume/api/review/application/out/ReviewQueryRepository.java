@@ -12,4 +12,6 @@ public interface ReviewQueryRepository {
   List<Review> findByPage(long page, long size);
 
   ReviewFeatureCount getReviewFeatureCount(Long perfumeId);
+
+  Long findReviewCountByUserId(Long userId);
 }
