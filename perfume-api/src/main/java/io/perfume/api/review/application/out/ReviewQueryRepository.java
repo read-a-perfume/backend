@@ -9,4 +9,6 @@ public interface ReviewQueryRepository {
   Optional<Review> findById(Long id);
 
   List<Review> findByPage(long page, long size);
+
+  Long findReviewCountByUserId(Long userId);
 }

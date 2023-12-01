@@ -82,7 +82,7 @@ class FollowQueryPersistenceAdapterTest {
   }
 
   @Test
-  @DisplayName("사용자의 팔로잉 수 확인")
+  @DisplayName("사용자 팔로잉  확인")
   void testFindFollowingCountByFollowerId() {
     long followCount = 10;
 
@@ -113,7 +113,7 @@ class FollowQueryPersistenceAdapterTest {
   }
 
   @Test
-  @DisplayName("사용자를 팔로우한 수 확인")
+  @DisplayName("사용자를 팔로우 확인")
   void testFindFollowerCountByFollowingId() {
     long followCount = 10;
 
@@ -137,7 +137,6 @@ class FollowQueryPersistenceAdapterTest {
 
     // when
     Long find = queryRepository.findFollowerCountByFollowingId(1L);
-    System.out.println(find);
 
     // then
     assertThat(followCount).isEqualTo(10L);

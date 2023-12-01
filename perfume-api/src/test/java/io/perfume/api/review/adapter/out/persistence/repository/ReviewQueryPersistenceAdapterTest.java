@@ -11,12 +11,14 @@ import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
@@ -75,5 +77,33 @@ class ReviewQueryPersistenceAdapterTest {
 
     // then
     assertThat(result.getId()).isGreaterThan(0L);
+  }
+
+  @Test
+  void testReviewCountByUser() {
+    // given
+    var now = LocalDateTime.now();
+    var userId = 1L;
+    var review = Review.create(
+        "test",
+        "test description",
+        Strength.LIGHT,
+        1000L,
+        DayType.DAILY,
+        1L,
+        userId,
+        Season.SPRING,
+        now
+    );
+    var createdReview = reviewMapper.toEntity(review);
+    entityManager.persist(createdReview);
+    entityManager.flush();
+    entityManager.clear();
+
+    // when
+    var count = queryRepository.findReviewCountByUserId(userId);
+
+    // then
+    assertThat(count).isEqualTo(1);
   }
 }

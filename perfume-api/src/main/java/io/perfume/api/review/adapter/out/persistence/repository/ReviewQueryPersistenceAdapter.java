@@ -50,4 +50,13 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
         .map(reviewMapper::toDomain)
         .toList();
   }
+
+  @Override
+  public Long findReviewCountByUserId(Long userId) {
+    return jpaQueryFactory.select(reviewEntity.count())
+        .from(reviewEntity)
+        .where(reviewEntity.userId.eq(userId)
+            .and(reviewEntity.deletedAt.isNull()))
+        .fetchOne();
+  }
 }
