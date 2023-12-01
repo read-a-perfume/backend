@@ -28,7 +28,7 @@ public class ReviewMapper {
   public ReviewEntity toEntity(@NotNull Review review) {
     return new ReviewEntity(
         review.getId(),
-        review.getFeeling(),
+        review.getFullReview(),
         review.getShortReview(),
         review.getStrength(),
         review.getDuration(),

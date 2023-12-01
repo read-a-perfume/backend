@@ -46,7 +46,7 @@ class ReviewPersistenceAdapterTest {
 
     // then
     assertThat(createdNote.getId()).isNotNegative();
-    assertThat(createdNote.getFeeling()).isEqualTo("test");
+    assertThat(createdNote.getFullReview()).isEqualTo("test");
     assertThat(createdNote.getShortReview()).isEqualTo("test description");
     assertThat(createdNote.getStrength()).isEqualTo(Strength.LIGHT);
     assertThat(createdNote.getDuration()).isEqualTo(Duration.TOO_SHORT);
