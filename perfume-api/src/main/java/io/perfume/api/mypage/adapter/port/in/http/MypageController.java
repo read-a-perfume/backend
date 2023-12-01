@@ -31,13 +31,17 @@ public class MypageController {
 
   private final GetReviewCountUseCase getReviewCountUseCase;
 
+  private final FindCategoryUseCase findCategoryUseCase;
+
   public MypageController(
       FollowUserUseCase followUserUseCase,
       GetFollowCountUseCase getFollowCountUseCase,
-      GetReviewCountUseCase getReviewCountUseCase) {
+      GetReviewCountUseCase getReviewCountUseCase,
+      FindCategoryUseCase findCategoryUseCase) {
     this.followUserUseCase = followUserUseCase;
     this.getFollowCountUseCase = getFollowCountUseCase;
     this.getReviewCountUseCase = getReviewCountUseCase;
+    this.findCategoryUseCase = findCategoryUseCase;
   }
 
   @PostMapping("/{id}/follow")
@@ -64,5 +68,14 @@ public class MypageController {
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(new ReviewCountResponseDto(reviewCount));
+  }
+
+  // TODO : 컨트롤러 test
+  @GetMapping("/categories")
+  public ResponseEntity<List<CategoryResult>> getCategories(@AuthenticationPrincipal User user) {
+    var userId = Long.parseLong(user.getUsername());
+
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(findCategoryUseCase.findTasteByUserId(userId));
   }
 }
