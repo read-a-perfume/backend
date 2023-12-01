@@ -13,7 +13,7 @@ public record CreateReviewCommand(
     Strength strength,
     Season season,
     Duration duration,
-    String feeling,
+    String shortReview,
     String situation,
     List<Long> tags,
     LocalDateTime now

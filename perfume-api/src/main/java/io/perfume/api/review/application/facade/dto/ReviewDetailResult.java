@@ -6,7 +6,7 @@ import java.util.List;
 
 public record ReviewDetailResult(
     Long id,
-    String feeling,
+    String shortReview,
     ReviewDetailUserResult user,
     List<String> tags
 ) {
@@ -15,6 +15,6 @@ public record ReviewDetailResult(
                                         List<String> tags) {
     final var reviewDetailUserResult = ReviewDetailUserResult.from(user);
 
-    return new ReviewDetailResult(review.id(), review.feeling(), reviewDetailUserResult, tags);
+    return new ReviewDetailResult(review.id(), review.shortReview(), reviewDetailUserResult, tags);
   }
 }
