@@ -85,10 +85,10 @@ class ReviewControllerTest {
     // given
     var dto = new CreateReviewRequestDto(
         1L,
-        DayType.DAILY.getDescription(),
-        Strength.LIGHT.getDescription(),
-        Season.SPRING.getDescription(),
-        Duration.TOO_SHORT.getDescription(),
+        DayType.DAILY,
+        Strength.LIGHT,
+        Season.SPRING,
+        Duration.TOO_SHORT,
         "",
         "",
         List.of(1L, 2L, 3L, 4L, 5L)

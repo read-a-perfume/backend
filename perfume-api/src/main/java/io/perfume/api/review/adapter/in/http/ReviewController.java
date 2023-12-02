@@ -72,8 +72,8 @@ public class ReviewController {
   @PreAuthorize("isAuthenticated()")
   @PostMapping
   public CreateReviewResponseDto createReview(
-      @AuthenticationPrincipal User user,
-      @RequestBody CreateReviewRequestDto requestDto
+      @AuthenticationPrincipal final User user,
+      @RequestBody final CreateReviewRequestDto requestDto
   ) {
     final var userId = Long.parseLong(user.getUsername());
     final var now = LocalDateTime.now();
@@ -173,7 +173,8 @@ public class ReviewController {
 
   @GetMapping("/options")
   public ResponseEntity<List<GetReviewOptionItemResponseDto>> getReviewCategories(
-      final String type) {
+      final String type
+  ) {
     return switch (type) {
       case "strength" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getStrength());
       case "season" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getSeason());
