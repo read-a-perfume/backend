@@ -10,6 +10,7 @@ import io.perfume.api.review.adapter.in.http.dto.DeleteReviewResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewDetailResponseDto;
+import io.perfume.api.review.adapter.in.http.dto.GetReviewOptionItemResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.ReviewLikeResponseDto;
@@ -168,5 +169,17 @@ public class ReviewController {
     likeReviewUseCase.toggleLikeReview(userId, id, now);
 
     return ResponseEntity.status(HttpStatus.OK).body(new ReviewLikeResponseDto(id));
+  }
+
+  @GetMapping("/options")
+  public ResponseEntity<List<GetReviewOptionItemResponseDto>> getReviewCategories(
+      final String type) {
+    return switch (type) {
+      case "strength" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getStrength());
+      case "season" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getSeason());
+      case "duration" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getDuration());
+      case "dayType" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getDayType());
+      default -> ResponseEntity.badRequest().build();
+    };
   }
 }

@@ -7,6 +7,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -15,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewCommentRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewRequestDto;
-import io.perfume.api.review.adapter.out.persistence.repository.comment.ReviewCommentMapper;
 import io.perfume.api.review.application.out.ReviewCommentRepository;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
@@ -53,6 +53,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
+@SuppressWarnings("NonAsciiCharacters")
 class ReviewControllerTest {
 
   private MockMvc mockMvc;
@@ -527,11 +528,35 @@ class ReviewControllerTest {
                     fieldWithPath("duration").type(JsonFieldType.STRING).description("향수 지속력"),
                     fieldWithPath("perfumeId").type(JsonFieldType.NUMBER).description("향수 ID"),
                     fieldWithPath("author.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
-                    fieldWithPath("author.name").type(JsonFieldType.STRING).description("리뷰 작성자 이름"),
+                    fieldWithPath("author.name").type(JsonFieldType.STRING)
+                        .description("리뷰 작성자 이름"),
                     fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그"),
                     fieldWithPath("images").type(JsonFieldType.ARRAY).description("리뷰 이미지"),
                     fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
                     fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 수")
+                )
+            ));
+  }
+
+  @Test
+  void 리뷰_항목_조회() throws Exception {
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/reviews/options?type=strength")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("get-review-options",
+                queryParameters(
+                    parameterWithName("type").description(
+                        "리뷰 항목 타입 (strength, season, duration, dayType)")
+                ),
+                responseFields(
+                    fieldWithPath("[].code").type(JsonFieldType.STRING).description("리뷰 항목 코드"),
+                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("리뷰 항목 이름")
                 )
             ));
   }
