@@ -5,7 +5,7 @@ import java.util.List;
 
 public record GetReviewsResponseDto(
     Long id,
-    String feeling,
+    String shortReview,
     ReviewUser user,
     List<String> tags
 ) {
@@ -16,7 +16,7 @@ public record GetReviewsResponseDto(
         .map(result ->
             new GetReviewsResponseDto(
                 result.id(),
-                result.feeling(),
+                result.shortReview(),
                 new ReviewUser(result.user().id(), result.user().name(), ""),
                 result.tags())
         )

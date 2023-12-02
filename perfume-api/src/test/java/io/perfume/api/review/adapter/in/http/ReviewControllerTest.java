@@ -21,6 +21,7 @@ import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.application.port.out.UserRepository;
@@ -83,10 +84,10 @@ class ReviewControllerTest {
     // given
     var dto = new CreateReviewRequestDto(
         1L,
-        DayType.DAILY,
-        Strength.LIGHT,
-        Season.SPRING,
-        100L,
+        DayType.DAILY.getDescription(),
+        Strength.LIGHT.getDescription(),
+        Season.SPRING.getDescription(),
+        Duration.TOO_SHORT.getDescription(),
         "",
         "",
         List.of(1L, 2L, 3L, 4L, 5L)
@@ -105,12 +106,12 @@ class ReviewControllerTest {
             document("create-review",
                 requestFields(
                     fieldWithPath("perfumeId").type(JsonFieldType.NUMBER).description("향수 ID"),
-                    fieldWithPath("season").type(JsonFieldType.STRING).description("추천 계절"),
-                    fieldWithPath("dayType").type(JsonFieldType.STRING).description("추천 시간대"),
-                    fieldWithPath("strength").type(JsonFieldType.STRING).description("향 확산력"),
-                    fieldWithPath("duration").type(JsonFieldType.NUMBER).description("향 지속력"),
-                    fieldWithPath("feeling").type(JsonFieldType.STRING).description("향수 느낌"),
-                    fieldWithPath("shortReview").type(JsonFieldType.STRING).description("추천 상황"),
+                    fieldWithPath("season").type(JsonFieldType.STRING).description("어울리는 계절"),
+                    fieldWithPath("dayType").type(JsonFieldType.STRING).description("어울리는 날"),
+                    fieldWithPath("strength").type(JsonFieldType.STRING).description("향수 강도"),
+                    fieldWithPath("duration").type(JsonFieldType.STRING).description("향수 지속력"),
+                    fieldWithPath("shortReview").type(JsonFieldType.STRING).description("한줄 리뷰"),
+                    fieldWithPath("fullReview").type(JsonFieldType.STRING).description("상세 리뷰"),
                     fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그")
                 ),
                 responseFields(
@@ -128,7 +129,7 @@ class ReviewControllerTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         1L,
@@ -165,7 +166,7 @@ class ReviewControllerTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         userId,
@@ -218,7 +219,7 @@ class ReviewControllerTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         user.getId(),
@@ -243,7 +244,7 @@ class ReviewControllerTest {
             document("get-reviews",
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
-                    fieldWithPath("[].feeling").type(JsonFieldType.STRING).description("향수 느낌"),
+                    fieldWithPath("[].shortReview").type(JsonFieldType.STRING).description("향수 느낌"),
                     fieldWithPath("[].user.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
                     fieldWithPath("[].user.username").type(JsonFieldType.STRING)
                         .description("리뷰 작성자 이름"),
@@ -271,7 +272,7 @@ class ReviewControllerTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         user.getId(),
@@ -360,7 +361,7 @@ class ReviewControllerTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         user.getId(),
@@ -408,7 +409,7 @@ class ReviewControllerTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         user.getId(),
@@ -441,7 +442,7 @@ class ReviewControllerTest {
   @Test
   @DisplayName("리뷰에 좋아요 표시한다.")
   @WithMockUser(username = "2", roles = "USER")
-  void testLikeReview () throws Exception {
+  void testLikeReview() throws Exception {
     // given
     var now = LocalDateTime.now();
     var user = userRepository.save(User.generalUserJoin(
@@ -455,7 +456,7 @@ class ReviewControllerTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         user.getId(),
@@ -497,7 +498,7 @@ class ReviewControllerTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         user.getId(),
@@ -518,11 +519,15 @@ class ReviewControllerTest {
             document("get-review-detail",
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
-                    fieldWithPath("feeling").type(JsonFieldType.STRING).description("향수 느낌"),
-                    fieldWithPath("situation").type(JsonFieldType.STRING).description("향수 느낌"),
+                    fieldWithPath("shortReview").type(JsonFieldType.STRING).description("한줄 리뷰"),
+                    fieldWithPath("fullReview").type(JsonFieldType.STRING).description("상세 리뷰"),
+                    fieldWithPath("dayType").type(JsonFieldType.STRING).description("향수와 어울리는 날"),
+                    fieldWithPath("strength").type(JsonFieldType.STRING).description("향수 강도"),
+                    fieldWithPath("season").type(JsonFieldType.STRING).description("향수와 어울리는 계절"),
+                    fieldWithPath("duration").type(JsonFieldType.STRING).description("향수 지속력"),
+                    fieldWithPath("perfumeId").type(JsonFieldType.NUMBER).description("향수 ID"),
                     fieldWithPath("author.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
-                    fieldWithPath("author.name").type(JsonFieldType.STRING)
-                        .description("리뷰 작성자 이름"),
+                    fieldWithPath("author.name").type(JsonFieldType.STRING).description("리뷰 작성자 이름"),
                     fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그"),
                     fieldWithPath("images").type(JsonFieldType.ARRAY).description("리뷰 이미지"),
                     fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),

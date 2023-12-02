@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ class ReviewPersistenceAdapterTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.TOO_SHORT,
         DayType.DAILY,
         1L,
         1L,
@@ -44,11 +45,11 @@ class ReviewPersistenceAdapterTest {
     var createdNote = repository.save(review);
 
     // then
-    assertThat(createdNote.getId()).isGreaterThanOrEqualTo(0L);
-    assertThat(createdNote.getFeeling()).isEqualTo("test");
+    assertThat(createdNote.getId()).isNotNegative();
+    assertThat(createdNote.getFullReview()).isEqualTo("test");
     assertThat(createdNote.getShortReview()).isEqualTo("test description");
     assertThat(createdNote.getStrength()).isEqualTo(Strength.LIGHT);
-    assertThat(createdNote.getDuration()).isEqualTo(1000L);
+    assertThat(createdNote.getDuration()).isEqualTo(Duration.TOO_SHORT);
     assertThat(createdNote.getDayType()).isEqualTo(DayType.DAILY);
     assertThat(createdNote.getPerfumeId()).isEqualTo(1L);
     assertThat(createdNote.getUserId()).isEqualTo(1L);

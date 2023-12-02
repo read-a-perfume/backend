@@ -15,7 +15,7 @@ class ReviewTest {
     // given
     var userId = 1L;
     var review = Review.create(
-        "feeling",
+        "shortReview",
         "shortReview",
         Strength.LIGHT,
         null,
@@ -39,7 +39,7 @@ class ReviewTest {
     // given
     var userId = 1L;
     var review = Review.create(
-        "feeling",
+        "shortReview",
         "shortReview",
         Strength.LIGHT,
         null,

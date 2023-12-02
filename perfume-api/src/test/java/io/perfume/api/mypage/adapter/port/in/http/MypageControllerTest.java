@@ -1,6 +1,5 @@
 package io.perfume.api.mypage.adapter.port.in.http;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -33,7 +32,6 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -69,13 +67,12 @@ class MypageControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "2", roles = "USER")
+  @WithMockUser(username = "100", roles = "USER")
   void testFollowUser() throws Exception {
     // given
     var user = userRepository.save(User.generalUserJoin(
         "test",
         "test@mail.com",
-        "test",
         "test",
         false,
         false
@@ -101,13 +98,12 @@ class MypageControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "2", roles = "USER")
+  @WithMockUser(username = "100", roles = "USER")
   void testGetFollowCount() throws Exception {
     // given
     var user = userRepository.save(User.generalUserJoin(
         "test",
         "test@mail.com",
-        "test",
         "test",
         false,
         false
@@ -134,7 +130,7 @@ class MypageControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "1", roles = "USER")
+  @WithMockUser(username = "100", roles = "USER")
   void test() throws Exception {
     // given
     var now = LocalDateTime.now();
