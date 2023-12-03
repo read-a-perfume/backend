@@ -77,7 +77,7 @@ class FindCategoryControllerTest {
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
                     fieldWithPath("[].description").type(JsonFieldType.STRING).description("카테고리 설명"),
-                    fieldWithPath("[].keywords").type(JsonFieldType.STRING).description("카테고리 태그"),
+                    fieldWithPath("[].tags").type(JsonFieldType.STRING).description("카테고리 태그"),
                     fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("카테고리 이미지 URL")
                 )));
   }

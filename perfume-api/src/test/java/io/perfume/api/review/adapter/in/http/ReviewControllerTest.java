@@ -91,6 +91,7 @@ class ReviewControllerTest {
         Duration.TOO_SHORT,
         "",
         "",
+        List.of(1L, 2L, 3L, 4L, 5L),
         List.of(1L, 2L, 3L, 4L, 5L)
     );
 
@@ -113,7 +114,8 @@ class ReviewControllerTest {
                     fieldWithPath("duration").type(JsonFieldType.STRING).description("향수 지속력"),
                     fieldWithPath("shortReview").type(JsonFieldType.STRING).description("한줄 리뷰"),
                     fieldWithPath("fullReview").type(JsonFieldType.STRING).description("상세 리뷰"),
-                    fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그")
+                    fieldWithPath("keywords").type(JsonFieldType.ARRAY).description("리뷰 태그"),
+                    fieldWithPath("thumbnails").type(JsonFieldType.ARRAY).description("리뷰 썸네일 이미지")
                 ),
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID")
@@ -530,8 +532,8 @@ class ReviewControllerTest {
                     fieldWithPath("author.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
                     fieldWithPath("author.name").type(JsonFieldType.STRING)
                         .description("리뷰 작성자 이름"),
-                    fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그"),
-                    fieldWithPath("images").type(JsonFieldType.ARRAY).description("리뷰 이미지"),
+                    fieldWithPath("keywords").type(JsonFieldType.ARRAY).description("리뷰 태그"),
+                    fieldWithPath("thumbnails").type(JsonFieldType.ARRAY).description("리뷰 이미지"),
                     fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
                     fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 수")
                 )

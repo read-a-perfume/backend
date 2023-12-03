@@ -23,7 +23,8 @@ public record CreateReviewRequestDto(
     String shortReview,
     String fullReview,
     @Length(max = 3)
-    List<Long> keywords
+    List<Long> keywords,
+    List<Long> thumbnails
 ) {
 
   public CreateReviewCommand toCommand(LocalDateTime now) {
@@ -35,6 +36,7 @@ public record CreateReviewRequestDto(
         duration,
         shortReview,
         fullReview,
+        Collections.unmodifiableList(thumbnails),
         Collections.unmodifiableList(keywords),
         now
     );
