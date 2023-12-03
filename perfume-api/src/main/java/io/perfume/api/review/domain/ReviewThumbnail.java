@@ -5,18 +5,18 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
-public class ReviewTag extends BaseTimeDomain {
+public class ReviewThumbnail extends BaseTimeDomain {
 
   private final Long reviewId;
 
-  private final Long tagId;
+  private final Long thumbnailId;
 
-  public ReviewTag(Long reviewId, Long tagId, LocalDateTime createdAt, LocalDateTime updatedAt,
-                   LocalDateTime deletedAt) {
+  public ReviewThumbnail(Long reviewId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
+                         LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.reviewId = reviewId;
-    this.tagId = tagId;
+    this.thumbnailId = thumbnailId;
   }
 
   public static ReviewTag create(Long reviewId, Long tagId, LocalDateTime now) {

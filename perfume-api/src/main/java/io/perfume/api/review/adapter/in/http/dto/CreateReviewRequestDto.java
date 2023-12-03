@@ -23,7 +23,7 @@ public record CreateReviewRequestDto(
     String shortReview,
     String fullReview,
     @Length(max = 3)
-    List<Long> keywords,
+    List<Long> keywords
 ) {
 
   public CreateReviewCommand toCommand(LocalDateTime now) {
