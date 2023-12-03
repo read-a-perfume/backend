@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 
 public interface PerfumeQueryRepository {
-
+  boolean existsPerfumeById(Long id);
   Optional<Perfume> findPerfumeById(Long id);
 
   NotePyramid getNotePyramidByPerfume(Long perfumeId);
