@@ -3,6 +3,7 @@ package io.perfume.api.review.stub;
 import io.perfume.api.review.application.out.ReviewQueryRepository;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
+import io.perfume.api.review.domain.ReviewFeatureCount;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,11 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
 
   @Override
   public List<Review> findByPage(long page, long size) {
+    return null;
+  }
+
+  @Override
+  public ReviewFeatureCount getReviewFeatureCount(Long perfumeId) {
     return null;
   }
 
