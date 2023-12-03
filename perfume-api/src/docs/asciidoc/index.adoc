@@ -248,6 +248,14 @@ include::{snippets}/like-review/http-request.adoc[]
 include::{snippets}/like-review/http-response.adoc[]
 include::{snippets}/like-review/response-fields.adoc[]
 
+== 리뷰 옵션 조회
+=== 요청
+include::{snippets}/get-review-options/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-review-options/http-response.adoc[]
+include::{snippets}/get-review-options/response-fields.adoc[]
+
 == 샘플
 === 요청
 include::{snippets}/index/http-request.adoc[]
