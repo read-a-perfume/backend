@@ -10,6 +10,7 @@ import io.perfume.api.review.adapter.in.http.dto.DeleteReviewResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewDetailResponseDto;
+import io.perfume.api.review.adapter.in.http.dto.GetReviewOptionItemRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewOptionItemResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
@@ -173,14 +174,12 @@ public class ReviewController {
 
   @GetMapping("/options")
   public ResponseEntity<List<GetReviewOptionItemResponseDto>> getReviewCategories(
-      final String type
-  ) {
-    return switch (type) {
-      case "strength" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getStrength());
-      case "season" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getSeason());
-      case "duration" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getDuration());
-      case "dayType" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getDayType());
-      default -> ResponseEntity.badRequest().build();
+      final GetReviewOptionItemRequestDto type) {
+    return switch (type.type()) {
+      case STRENGTH -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getStrength());
+      case SEASON -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getSeason());
+      case DURATION -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getDuration());
+      case DAY_TYPE -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getDayType());
     };
   }
 }

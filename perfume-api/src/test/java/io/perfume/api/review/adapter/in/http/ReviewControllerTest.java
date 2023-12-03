@@ -542,18 +542,17 @@ class ReviewControllerTest {
   void 리뷰_항목_조회() throws Exception {
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/reviews/options?type=strength")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/reviews/options?type=DAY_TYPE")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
             document("get-review-options",
                 queryParameters(
-                    parameterWithName("type").description(
-                        "리뷰 항목 타입 (strength, season, duration, dayType)")
-                ),
+                    parameterWithName("type")
+                        .description("리뷰 항목 타입 (STRENGTH, SEASON, DURATION, DAY_TYPE)")),
                 responseFields(
                     fieldWithPath("[].code").type(JsonFieldType.STRING).description("리뷰 항목 코드"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("리뷰 항목 이름")
