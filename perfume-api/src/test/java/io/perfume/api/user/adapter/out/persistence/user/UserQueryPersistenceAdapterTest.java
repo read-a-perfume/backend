@@ -32,11 +32,16 @@ class UserQueryPersistenceAdapterTest {
     // given
     String email = "test@mail.com";
     LocalDateTime now = LocalDateTime.now();
-    entityManager.persist(
-        new UserEntity(
-            null, "username", email, "abcd", Role.USER, false, false, now, now, null
-        )
-    );
+    UserEntity userEntity = UserEntity.builder()
+        .username("admin")
+        .email(email)
+        .password("admin")
+        .sex(Sex.MALE)
+        .role(Role.USER)
+        .marketingConsent(false)
+        .promotionConsent(false)
+        .build();
+    entityManager.persist(userEntity);
     entityManager.flush();
     entityManager.clear();
 
@@ -44,7 +49,7 @@ class UserQueryPersistenceAdapterTest {
     Optional<User> actual = userQueryPersistenceAdapter.findOneByEmail(email);
 
     // then
-    assertThat(actual.isPresent()).isTrue();
+    assertThat(actual).isPresent();
     assertThat(actual.get().getEmail()).isEqualTo(email);
   }
 
@@ -53,19 +58,25 @@ class UserQueryPersistenceAdapterTest {
     // given
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
-    UserEntity entity = new UserEntity(
-        null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, null
-    );
-    entityManager.persist(entity);
+    UserEntity userEntity = UserEntity.builder()
+        .username("admin")
+        .email("admin@admin.com")
+        .password("admin")
+        .sex(Sex.MALE)
+        .role(Role.USER)
+        .marketingConsent(false)
+        .promotionConsent(false)
+        .build();
+    entityManager.persist(userEntity);
     entityManager.flush();
     entityManager.clear();
 
     // when
-    Optional<User> actual = userQueryPersistenceAdapter.loadUser(entity.getId());
+    Optional<User> actual = userQueryPersistenceAdapter.loadUser(userEntity.getId());
 
     // then
-    assertThat(actual.isPresent()).isTrue();
-    assertThat(actual.get().getId()).isEqualTo(entity.getId());
+    assertThat(actual).isPresent();
+    assertThat(actual.get().getId()).isEqualTo(userEntity.getId());
   }
 
   @Test
@@ -73,10 +84,18 @@ class UserQueryPersistenceAdapterTest {
     // given
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
-    entityManager.persist(
-        new UserEntity(
-            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, null
-        ));
+
+    UserEntity userEntity = UserEntity.builder()
+        .username(username)
+        .email("admin@admin.com")
+        .password("admin")
+        .role(Role.USER)
+        .sex(Sex.MALE)
+        .role(Role.USER)
+        .marketingConsent(false)
+        .promotionConsent(false)
+        .build();
+    entityManager.persist(userEntity);
     entityManager.flush();
     entityManager.clear();
 
@@ -84,7 +103,7 @@ class UserQueryPersistenceAdapterTest {
     Optional<User> actual = userQueryPersistenceAdapter.findByUsername(username);
 
     // then
-    assertThat(actual.isPresent()).isTrue();
+    assertThat(actual).isPresent();
     assertThat(actual.get().getUsername()).isEqualTo(username);
   }
 
@@ -93,10 +112,16 @@ class UserQueryPersistenceAdapterTest {
     // given
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
-    entityManager.persist(
-        new UserEntity(
-            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, now
-        ));
+    UserEntity userEntity = UserEntity.builder()
+        .username("admin")
+        .email("admin@admin.com")
+        .password("admin")
+        .sex(Sex.MALE)
+        .role(Role.USER)
+        .marketingConsent(false)
+        .promotionConsent(false)
+        .build();
+    entityManager.persist(userEntity);
     entityManager.flush();
     entityManager.clear();
 
@@ -104,6 +129,6 @@ class UserQueryPersistenceAdapterTest {
     Optional<User> actual = userQueryPersistenceAdapter.findOneByEmailOrUsername(username);
 
     // then
-    assertThat(actual.isPresent()).isFalse();
+    assertThat(actual).isNotPresent();
   }
 }
