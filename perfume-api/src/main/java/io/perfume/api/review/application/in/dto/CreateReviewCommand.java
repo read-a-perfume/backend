@@ -1,6 +1,7 @@
 package io.perfume.api.review.application.in.dto;
 
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import java.time.LocalDateTime;
@@ -11,8 +12,8 @@ public record CreateReviewCommand(
     DayType dayType,
     Strength strength,
     Season season,
-    Long duration,
-    String feeling,
+    Duration duration,
+    String shortReview,
     String situation,
     List<Long> tags,
     LocalDateTime now

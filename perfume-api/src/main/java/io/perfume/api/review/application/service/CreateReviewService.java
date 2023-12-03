@@ -6,7 +6,6 @@ import io.perfume.api.review.application.in.dto.CreateReviewCommand;
 import io.perfume.api.review.application.in.dto.ReviewResult;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
-import java.time.LocalDateTime;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ public class CreateReviewService implements CreateReviewUseCase {
   @NotNull
   private static Review createReview(Long authorId, CreateReviewCommand command) {
     return Review.create(
-        command.feeling(),
+        command.shortReview(),
         command.situation(),
         command.strength(),
         command.duration(),

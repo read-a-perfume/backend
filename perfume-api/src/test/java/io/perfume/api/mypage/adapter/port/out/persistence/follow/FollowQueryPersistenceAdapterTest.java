@@ -42,8 +42,8 @@ class FollowQueryPersistenceAdapterTest {
 
     var entity = followMapper.toEntity(follow);
     entityManager.persist(entity);
-    entityManager.flush();
-    entityManager.clear();
+//    entityManager.flush();
+//    entityManager.clear();
 
     // when
     var find = queryRepository.findByFollowerId(followerId).orElseThrow();

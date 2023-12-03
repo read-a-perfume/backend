@@ -2,6 +2,7 @@ package io.perfume.api.review.adapter.out.persistence.entity;
 
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.Column;
@@ -27,18 +28,24 @@ public class ReviewEntity extends BaseTimeEntity {
   @Column(name = "id", nullable = false)
   private Long id;
 
-  private String feeling;
-
+  @Column(nullable = false)
   private String shortReview;
 
+  private String fullReview;
+
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private Strength strength;
 
-  private Long duration;
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private Duration duration;
 
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private DayType dayType;
 
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private Season season;
 
@@ -51,13 +58,13 @@ public class ReviewEntity extends BaseTimeEntity {
   protected ReviewEntity() {
   }
 
-  public ReviewEntity(Long id, String feeling, String shortReview, Strength strength, Long duration,
+  public ReviewEntity(Long id, String fullReview, String shortReview, Strength strength, Duration duration,
                       DayType dayType, Long perfumeId, Long userId, Season season,
                       LocalDateTime createdAt,
                       LocalDateTime updatedAt, LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
-    this.feeling = feeling;
+    this.fullReview = fullReview;
     this.shortReview = shortReview;
     this.strength = strength;
     this.duration = duration;

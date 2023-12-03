@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.review.stub.StubReviewRepository;
@@ -27,7 +28,7 @@ class GetReviewCountServiceTest {
         "test",
         "test description",
         Strength.LIGHT,
-        1000L,
+        Duration.LONG,
         DayType.DAILY,
         1L,
         userId,
@@ -39,7 +40,7 @@ class GetReviewCountServiceTest {
         "test2",
         "test2 description",
         Strength.LIGHT,
-        1000L,
+        Duration.LONG,
         DayType.DAILY,
         1L,
         userId,
