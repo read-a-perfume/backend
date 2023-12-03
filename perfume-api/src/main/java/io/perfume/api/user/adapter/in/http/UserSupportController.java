@@ -5,6 +5,7 @@ import io.perfume.api.user.adapter.in.http.dto.LeaveUserDto;
 import io.perfume.api.user.adapter.in.http.dto.UserProfileDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
+import io.perfume.api.user.adapter.in.http.exception.UserNotAuthenticatedException;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
@@ -64,6 +65,9 @@ public class UserSupportController {
 
   @GetMapping("/me")
   public UserProfileDto me(@AuthenticationPrincipal User user) {
+    if(user == null) {
+      throw new UserNotAuthenticatedException();
+    }
     long userId = Long.parseLong(user.getUsername());
     UserProfileResult userProfileResult = findUserUseCase.findUserProfileById(userId);
     return UserProfileDto.of(userProfileResult);
