@@ -57,6 +57,10 @@ include::{snippets}/get-me/http-request.adoc[]
 include::{snippets}/get-me/http-response.adoc[]
 include::{snippets}/get-me/response-fields.adoc[]
 
+=== 실패 응답
+include::{snippets}/get-me-failed/http-response.adoc[]
+include::{snippets}/get-me-failed/response-fields.adoc[]
+
 == 액세스 토큰 만료
 include::{snippets}/token-expired/http-request.adoc[]
 
@@ -167,6 +171,16 @@ include::{snippets}/get-perfume-by-category/query-parameters.adoc[]
 === 응답
 include::{snippets}/get-perfume-by-category/http-response.adoc[]
 include::{snippets}/get-perfume-by-category/response-fields.adoc[]
+
+== 향수 통계 데이터 조회
+=== 요청
+include::{snippets}/get-perfume-statistics/http-request.adoc[]
+==== Path Variables
+include::{snippets}/get-perfume-statistics/path-parameters.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume-statistics/http-response.adoc[]
+include::{snippets}/get-perfume-statistics/response-fields.adoc[]
 
 == 리뷰 상세보기
 === 요청
