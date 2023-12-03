@@ -20,11 +20,9 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class SampleQueryRepositoryImplTest {
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private SampleQueryRepositoryImpl sampleQueryRepository;
+  @Autowired private SampleQueryRepositoryImpl sampleQueryRepository;
 
   @Test
   void find() {

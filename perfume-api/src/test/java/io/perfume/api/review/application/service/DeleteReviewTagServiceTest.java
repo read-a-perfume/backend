@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class DeleteReviewTagServiceTest {
 
-  private final StubTagRepository stubTagRepository =
-      new StubTagRepository();
+  private final StubTagRepository stubTagRepository = new StubTagRepository();
 
   private final DeleteReviewTagService deleteReviewTagService =
       new DeleteReviewTagService(stubTagRepository, stubTagRepository);

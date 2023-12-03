@@ -19,10 +19,10 @@ public class DeleteReviewService implements DeleteReviewUseCase {
 
   private final DeleteReviewTagUseCase deleteReviewTagUseCase;
 
-  public DeleteReviewService(ReviewQueryRepository reviewQueryRepository,
-                             ReviewRepository reviewRepository,
-                             DeleteReviewTagUseCase deleteReviewTagUseCase
-  ) {
+  public DeleteReviewService(
+      ReviewQueryRepository reviewQueryRepository,
+      ReviewRepository reviewRepository,
+      DeleteReviewTagUseCase deleteReviewTagUseCase) {
     this.reviewQueryRepository = reviewQueryRepository;
     this.reviewRepository = reviewRepository;
     this.deleteReviewTagUseCase = deleteReviewTagUseCase;

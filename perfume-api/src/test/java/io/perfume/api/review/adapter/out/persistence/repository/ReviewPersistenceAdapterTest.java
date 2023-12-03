@@ -21,25 +21,24 @@ import org.springframework.test.context.ActiveProfiles;
 @DataJpaTest
 class ReviewPersistenceAdapterTest {
 
-  @Autowired
-  private ReviewPersistenceAdapter repository;
+  @Autowired private ReviewPersistenceAdapter repository;
 
   @Test
   @DisplayName("리뷰를 저장한다.")
   void testSave() {
     // given
     var now = LocalDateTime.now();
-    var review = Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.SPRING,
-        now
-    );
+    var review =
+        Review.create(
+            "test",
+            "test description",
+            Strength.LIGHT,
+            Duration.TOO_SHORT,
+            DayType.DAILY,
+            1L,
+            1L,
+            Season.SPRING,
+            now);
 
     // when
     var createdNote = repository.save(review);

@@ -5,6 +5,4 @@ public record SignUpGeneralUserCommand(
     String password,
     String email,
     boolean marketingConsent,
-    boolean promotionConsent
-) {
-}
+    boolean promotionConsent) {}

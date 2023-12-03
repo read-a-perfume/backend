@@ -16,6 +16,4 @@ public record CreateReviewCommand(
     String shortReview,
     String situation,
     List<Long> tags,
-    LocalDateTime now
-) {
-}
+    LocalDateTime now) {}

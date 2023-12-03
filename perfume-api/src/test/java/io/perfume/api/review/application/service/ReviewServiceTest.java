@@ -55,9 +55,7 @@ class ReviewServiceTest {
             Season.SPRING,
             now,
             now,
-            null
-        )
-    );
+            null));
 
     // when
     final long expectedReviewId = reviewService.toggleLikeReview(userId, reviewId, now);
@@ -99,9 +97,7 @@ class ReviewServiceTest {
             Season.SPRING,
             now,
             now,
-            null
-        )
-    );
+            null));
 
     // when & then
     assertThatThrownBy(() -> reviewService.toggleLikeReview(userId, reviewId, now))
@@ -128,20 +124,9 @@ class ReviewServiceTest {
             Season.SPRING,
             now,
             now,
-            null
-        )
-    );
-    ReviewLike expectReviewLike = new ReviewLike(
-        1L,
-        userId,
-        reviewId,
-        now,
-        now,
-        null
-    );
-    reviewLikeRepository.addReviewLike(
-        expectReviewLike
-    );
+            null));
+    ReviewLike expectReviewLike = new ReviewLike(1L, userId, reviewId, now, now, null);
+    reviewLikeRepository.addReviewLike(expectReviewLike);
 
     // when
     reviewService.toggleLikeReview(userId, reviewId, now);

@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
 
 public class PerfumeNotFoundException extends CustomHttpException {
   public PerfumeNotFoundException(Long id) {
-    super(HttpStatus.NOT_FOUND, "cannot find perfume by id: " + id, "cannot find perfume by id: " + id, LogLevel.WARN);
+    super(
+        HttpStatus.NOT_FOUND,
+        "cannot find perfume by id: " + id,
+        "cannot find perfume by id: " + id,
+        LogLevel.WARN);
   }
 }

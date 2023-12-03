@@ -1,12 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("checkstyle")
     id("org.springframework.boot") version "3.2.0"
     id("io.spring.dependency-management") version "1.1.4"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.28"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
+    id("com.diffplug.spotless") version "6.22.0"
     kotlin("jvm") version "1.9.21"
     kotlin("plugin.spring") version "1.9.21"
     kotlin("plugin.jpa") version "1.9.21"
@@ -33,7 +33,7 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "kotlin-spring")
     apply(plugin = "org.asciidoctor.jvm.convert")
-    apply(plugin = "checkstyle")
+    apply(plugin = "com.diffplug.spotless")
 
     dependencies {
         // kotlin
@@ -63,17 +63,31 @@ subprojects {
         useJUnitPlatform()
     }
 
-    tasks.checkstyleMain {
-        configFile = rootProject.file("config/checkstyle/google-checkstyle.xml")
-        ignoreFailures = true
-        source = fileTree("src/main/java")
-        include("**/*.java")
+    spotless {
+        java {
+            targetExclude("**/build/generated/**")
+            removeUnusedImports()
+            trimTrailingWhitespace()
+            indentWithTabs()
+            endWithNewline()
+            importOrder("java", "javax", "org", "com")
+            googleJavaFormat()
+        }
+        format("misc") {
+            target("**/*.gradle", "**/*.md", "**/.gitignore")
+            trimTrailingWhitespace()
+            indentWithTabs()
+            endWithNewline()
+        }
+        kotlin {
+            target("**/*.kt")
+            ktlint()
+        }
     }
+}
 
-    tasks.checkstyleTest {
-        configFile = rootProject.file("config/checkstyle/google-checkstyle.xml")
-        ignoreFailures = true
-        source = fileTree("src/test/java")
-        include("**/*.java")
+task("addPreCommitGitHookOnBuild") {
+    exec {
+        commandLine("cp", "./scripts/pre-commit", "./.git/hooks")
     }
 }

@@ -25,8 +25,8 @@ public class UserTasteController {
 
   private final CreateUserTasteUseCase createUserTasteUseCase;
 
-  public UserTasteController(FindUserTasteUseCase findUserTasteUseCase,
-                             CreateUserTasteUseCase createUserTasteUseCase) {
+  public UserTasteController(
+      FindUserTasteUseCase findUserTasteUseCase, CreateUserTasteUseCase createUserTasteUseCase) {
     this.findUserTasteUseCase = findUserTasteUseCase;
     this.createUserTasteUseCase = createUserTasteUseCase;
   }
@@ -37,9 +37,7 @@ public class UserTasteController {
     UserDetails authentication =
         (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    return findUserTasteUseCase
-        .getUserTastes(Long.parseLong(authentication.getUsername()))
-        .stream()
+    return findUserTasteUseCase.getUserTastes(Long.parseLong(authentication.getUsername())).stream()
         .map(GetUserTasteResponseDto::from)
         .toList();
   }
@@ -50,11 +48,10 @@ public class UserTasteController {
     UserDetails authentication =
         (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    createUserTasteUseCase.createUserTaste(Long.parseLong(authentication.getUsername()),
-        dto.noteId());
+    createUserTasteUseCase.createUserTaste(
+        Long.parseLong(authentication.getUsername()), dto.noteId());
 
-    return ResponseEntity
-        .status(HttpStatus.CREATED)
+    return ResponseEntity.status(HttpStatus.CREATED)
         .contentType(MediaType.APPLICATION_JSON)
         .build();
   }

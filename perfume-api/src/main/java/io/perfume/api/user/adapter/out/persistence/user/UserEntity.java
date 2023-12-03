@@ -29,14 +29,13 @@ import org.hibernate.proxy.HibernateProxy;
 @Entity(name = "member")
 @Table(
     indexes = {
-        @Index(name = "idx_business_id", columnList = "businessId"),
-        @Index(name = "idx_thumbnail_id", columnList = "thumbnailId")
+      @Index(name = "idx_business_id", columnList = "businessId"),
+      @Index(name = "idx_thumbnail_id", columnList = "thumbnailId")
     },
     uniqueConstraints = {
-        @UniqueConstraint(name = "uni_email", columnNames = "email"),
-        @UniqueConstraint(name = "uni_username", columnNames = "username"),
-    }
-)
+      @UniqueConstraint(name = "uni_email", columnNames = "email"),
+      @UniqueConstraint(name = "uni_username", columnNames = "username"),
+    })
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
@@ -92,8 +91,17 @@ public class UserEntity extends BaseTimeEntity {
   private Long thumbnailId;
 
   @Builder(access = AccessLevel.PACKAGE)
-  public UserEntity(Long id, String username, String email, String password, Role role, Boolean marketingConsent, Boolean promotionConsent,
-                    LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public UserEntity(
+      Long id,
+      String username,
+      String email,
+      String password,
+      Role role,
+      Boolean marketingConsent,
+      Boolean promotionConsent,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;
@@ -112,12 +120,14 @@ public class UserEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
@@ -127,8 +137,8 @@ public class UserEntity extends BaseTimeEntity {
 
   @Override
   public final int hashCode() {
-    return this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-        getClass().hashCode();
+    return this instanceof HibernateProxy
+        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+        : getClass().hashCode();
   }
 }

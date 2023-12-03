@@ -10,6 +10,7 @@ import io.perfume.api.review.adapter.in.http.dto.DeleteReviewResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewCommentsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewDetailResponseDto;
+import io.perfume.api.review.adapter.in.http.dto.GetReviewOptionItemResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.ReviewLikeResponseDto;
@@ -51,18 +52,14 @@ public class ReviewController {
   private final LikeReviewUseCase likeReviewUseCase;
 
   @GetMapping("/{id}")
-  public GetReviewDetailResponseDto getReview(
-      @PathVariable Long id
-  ) {
+  public GetReviewDetailResponseDto getReview(@PathVariable Long id) {
     final var result = reviewDetailFacadeService.getReviewDetail(id);
 
     return GetReviewDetailResponseDto.from(result);
   }
 
   @GetMapping
-  public List<GetReviewsResponseDto> getReviews(
-      GetReviewsRequestDto dto
-  ) {
+  public List<GetReviewsResponseDto> getReviews(GetReviewsRequestDto dto) {
     final var results = reviewDetailFacadeService.getPaginatedReviews(dto.offset(), dto.limit());
 
     return GetReviewsResponseDto.from(results);
@@ -71,9 +68,8 @@ public class ReviewController {
   @PreAuthorize("isAuthenticated()")
   @PostMapping
   public CreateReviewResponseDto createReview(
-      @AuthenticationPrincipal User user,
-      @RequestBody CreateReviewRequestDto requestDto
-  ) {
+      @AuthenticationPrincipal final User user,
+      @RequestBody final CreateReviewRequestDto requestDto) {
     final var userId = Long.parseLong(user.getUsername());
     final var now = LocalDateTime.now();
     var response = createReviewUseCase.create(userId, requestDto.toCommand(now));
@@ -84,9 +80,7 @@ public class ReviewController {
   @PreAuthorize("isAuthenticated()")
   @DeleteMapping("/{id}")
   public ResponseEntity<DeleteReviewResponseDto> deleteReview(
-      @AuthenticationPrincipal User user,
-      @PathVariable Long id
-  ) {
+      @AuthenticationPrincipal User user, @PathVariable Long id) {
     var now = LocalDateTime.now();
     var userId = Long.parseLong(user.getUsername());
     deleteReviewUseCase.delete(userId, id, now);
@@ -99,8 +93,7 @@ public class ReviewController {
   public ResponseEntity<CreateReviewCommentResponseDto> createReviewComment(
       @AuthenticationPrincipal User user,
       @PathVariable Long id,
-      @RequestBody CreateReviewCommentRequestDto requestDto
-  ) {
+      @RequestBody CreateReviewCommentRequestDto requestDto) {
     final var now = LocalDateTime.now();
     final var userId = Long.parseLong(user.getUsername());
     final var response =
@@ -112,35 +105,29 @@ public class ReviewController {
 
   @GetMapping("/{id}/comments")
   public ResponseEntity<CursorResponse<GetReviewCommentsResponseDto, Long>> getReviewComments(
-      @PathVariable Long id,
-      GetReviewCommentsRequestDto dto
-  ) {
+      @PathVariable Long id, GetReviewCommentsRequestDto dto) {
     final var comments = reviewDetailFacadeService.getReviewComments(dto.toCommand(id));
     final var responseItems =
         comments.getItems().stream().map(GetReviewCommentsResponseDto::from).toList();
 
-    return ResponseEntity.ok(CursorResponse.of(
-        responseItems,
-        comments.hasNext(),
-        comments.hasPrevious(),
-        comments.getFirstCursor().id(),
-        comments.getLastCursor().id()
-    ));
+    return ResponseEntity.ok(
+        CursorResponse.of(
+            responseItems,
+            comments.hasNext(),
+            comments.hasPrevious(),
+            comments.getFirstCursor().id(),
+            comments.getLastCursor().id()));
   }
 
   @PreAuthorize("isAuthenticated()")
   @DeleteMapping("/{id}/comments/{commentId}")
   public ResponseEntity<DeleteReviewCommentResponseDto> deleteReviewComment(
-      @AuthenticationPrincipal User user,
-      @PathVariable Long id,
-      @PathVariable Long commentId
-  ) {
+      @AuthenticationPrincipal User user, @PathVariable Long id, @PathVariable Long commentId) {
     final var now = LocalDateTime.now();
     final var userId = Long.parseLong(user.getUsername());
     deleteReviewCommentUseCase.delete(commentId, userId, now);
 
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(new DeleteReviewCommentResponseDto(commentId));
+    return ResponseEntity.status(HttpStatus.OK).body(new DeleteReviewCommentResponseDto(commentId));
   }
 
   @PreAuthorize("isAuthenticated()")
@@ -149,8 +136,7 @@ public class ReviewController {
       @AuthenticationPrincipal User user,
       @PathVariable Long id,
       @PathVariable Long commentId,
-      @RequestBody String comment
-  ) {
+      @RequestBody String comment) {
     final var userId = Long.parseLong(user.getUsername());
     updateReviewCommentUseCase.updateReviewComment(userId, commentId, comment);
 
@@ -160,13 +146,23 @@ public class ReviewController {
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/{id}/like")
   public ResponseEntity<ReviewLikeResponseDto> likeReview(
-      @AuthenticationPrincipal User user,
-      @PathVariable Long id
-  ) {
+      @AuthenticationPrincipal User user, @PathVariable Long id) {
     final var userId = Long.parseLong(user.getUsername());
     final var now = LocalDateTime.now();
     likeReviewUseCase.toggleLikeReview(userId, id, now);
 
     return ResponseEntity.status(HttpStatus.OK).body(new ReviewLikeResponseDto(id));
+  }
+
+  @GetMapping("/options")
+  public ResponseEntity<List<GetReviewOptionItemResponseDto>> getReviewCategories(
+      final String type) {
+    return switch (type) {
+      case "strength" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getStrength());
+      case "season" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getSeason());
+      case "duration" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getDuration());
+      case "dayType" -> ResponseEntity.ok(GetReviewOptionItemResponseDto.getDayType());
+      default -> ResponseEntity.badRequest().build();
+    };
   }
 }

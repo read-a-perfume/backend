@@ -25,8 +25,19 @@ public class User extends BaseTimeDomain {
   private Long thumbnailId;
 
   @Builder
-  private User(Long id, String username, String email, String password, Role role, Long businessId, Long thumbnailId, LocalDateTime createdAt,
-               LocalDateTime updatedAt, LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
+  private User(
+      Long id,
+      String username,
+      String email,
+      String password,
+      Role role,
+      Long businessId,
+      Long thumbnailId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt,
+      boolean marketingConsent,
+      boolean promotionConsent) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.username = username;
@@ -40,7 +51,12 @@ public class User extends BaseTimeDomain {
   }
 
   // 기업 사용자가 아닌 경우 회원가입시에 사용됩니다.
-  public static User generalUserJoin(String username, String email, String password, boolean marketingConsent, boolean promotionConsent) {
+  public static User generalUserJoin(
+      String username,
+      String email,
+      String password,
+      boolean marketingConsent,
+      boolean promotionConsent) {
     return User.builder()
         .username(username)
         .email(email)
@@ -51,7 +67,8 @@ public class User extends BaseTimeDomain {
         .build();
   }
 
-  public static User createSocialUser(String username, String email, String password, LocalDateTime now) {
+  public static User createSocialUser(
+      String username, String email, String password, LocalDateTime now) {
     return User.builder()
         .username(username)
         .email(email)
@@ -66,8 +83,17 @@ public class User extends BaseTimeDomain {
   }
 
   // Only Adapter
-  public static User withId(Long id, String username, String email, String password, Role role, Long businessId, Long thumbnailId,
-                            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public static User withId(
+      Long id,
+      String username,
+      String email,
+      String password,
+      Role role,
+      Long businessId,
+      Long thumbnailId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     return User.builder()
         .id(id)
         .username(username)
@@ -109,10 +135,9 @@ public class User extends BaseTimeDomain {
   }
 
   /**
-   * 사용자가 암호를 잊어버리는 경우 사용된다.
-   * 현재 시간을 기준으로 해당 user의 password에 새로운 암호를 할당한다.
+   * 사용자가 암호를 잊어버리는 경우 사용된다. 현재 시간을 기준으로 해당 user의 password에 새로운 암호를 할당한다.
    *
-   * @param now             랜덤값을 만들기 위한 씨앗
+   * @param now 랜덤값을 만들기 위한 씨앗
    * @param oneWayEncryptor 암호화 유틸 클래스
    */
   public void resetPasswordFromForgotten(LocalDateTime now, OneWayEncryptor oneWayEncryptor) {
@@ -130,8 +155,8 @@ public class User extends BaseTimeDomain {
     this.email = email;
   }
 
-  public void updatePassword(PasswordEncoder passwordEncoder, String oldPassword,
-                             String newPassword) {
+  public void updatePassword(
+      PasswordEncoder passwordEncoder, String oldPassword, String newPassword) {
     if (!passwordEncoder.matches(oldPassword, this.password)) {
       throw new UserPasswordNotMatchException(this.id);
     }

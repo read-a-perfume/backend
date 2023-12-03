@@ -24,13 +24,11 @@ public class GetReviewTagService implements GetReviewTagUseCase {
   @Override
   public List<ReviewTagResult> getReviewTags(Long reviewId) {
     final var reviewTags =
-        tagQueryRepository.findReviewTags(reviewId)
-            .stream()
+        tagQueryRepository.findReviewTags(reviewId).stream()
             .collect(Collectors.toMap(ReviewTag::getTagId, Function.identity()));
     final var tagIds = reviewTags.keySet().stream().toList();
 
-    return tagQueryRepository.findByIds(tagIds)
-        .stream()
+    return tagQueryRepository.findByIds(tagIds).stream()
         .map(toReviewTagResult(reviewTags))
         .toList();
   }
@@ -38,13 +36,11 @@ public class GetReviewTagService implements GetReviewTagUseCase {
   @Override
   public List<ReviewTagResult> getReviewsTags(List<Long> reviewIds) {
     final var reviewTags =
-        tagQueryRepository.findReviewsTags(reviewIds)
-            .stream()
+        tagQueryRepository.findReviewsTags(reviewIds).stream()
             .collect(Collectors.toMap(ReviewTag::getTagId, Function.identity()));
     final var tagIds = reviewTags.keySet().stream().toList();
 
-    return tagQueryRepository.findByIds(tagIds)
-        .stream()
+    return tagQueryRepository.findByIds(tagIds).stream()
         .map(toReviewTagResult(reviewTags))
         .toList();
   }

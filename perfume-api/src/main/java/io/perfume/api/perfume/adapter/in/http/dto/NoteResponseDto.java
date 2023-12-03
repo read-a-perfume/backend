@@ -6,7 +6,9 @@ import java.util.List;
 public record NoteResponseDto(Long id, String name, String thumbnail) {
   public static List<NoteResponseDto> of(List<PerfumeNoteResult> noteResults) {
     return noteResults.stream()
-        .map(noteResult -> new NoteResponseDto(noteResult.id(), noteResult.name(), noteResult.thumbnail()))
+        .map(
+            noteResult ->
+                new NoteResponseDto(noteResult.id(), noteResult.name(), noteResult.thumbnail()))
         .toList();
   }
 }

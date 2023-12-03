@@ -29,14 +29,15 @@ public class ReviewService implements LikeReviewUseCase {
 
     Optional<ReviewLike> reviewLike =
         reviewLikeQueryRepository.findByUserIdAndReviewId(userId, reviewId);
-    reviewLike.ifPresentOrElse(like -> deleteReviewLike(like, now),
-        () -> addReviewLike(userId, reviewId, now));
+    reviewLike.ifPresentOrElse(
+        like -> deleteReviewLike(like, now), () -> addReviewLike(userId, reviewId, now));
 
     return reviewId;
   }
 
   private Review findReviewById(long reviewId) {
-    return reviewQueryRepository.findById(reviewId)
+    return reviewQueryRepository
+        .findById(reviewId)
         .orElseThrow(() -> new NotFoundReviewException(reviewId));
   }
 

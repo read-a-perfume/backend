@@ -35,26 +35,22 @@ public class ReviewDetailFacadeService {
   private final GetReviewCommentsUseCase getReviewCommentsUseCase;
 
   public ReviewViewDetailResult getReviewDetail(long reviewId) {
-    final var review = getReviewsUseCase
-        .getReview(reviewId)
-        .orElseThrow(() -> new NotFoundReviewException(reviewId));
+    final var review =
+        getReviewsUseCase
+            .getReview(reviewId)
+            .orElseThrow(() -> new NotFoundReviewException(reviewId));
     final var author = findUserUseCase.findUserById(review.authorId()).orElse(UserResult.EMPTY);
-    final var tags = getReviewTagUseCase.getReviewTags(reviewId).stream()
-        .map(ReviewTagResult::name)
-        .toList();
+    final var tags =
+        getReviewTagUseCase.getReviewTags(reviewId).stream().map(ReviewTagResult::name).toList();
     final var likeCount = getReviewsUseCase.getLikeCount(reviewId);
     final var commentCount = getReviewsUseCase.getCommentCount(reviewId);
 
-    return ReviewViewDetailResult.from(review, author, tags, Collections.emptyList(), likeCount,
-        commentCount);
+    return ReviewViewDetailResult.from(
+        review, author, tags, Collections.emptyList(), likeCount, commentCount);
   }
 
   public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
-    final var reviews =
-        getReviewsUseCase
-            .getPaginatedReviews(page, size)
-            .stream()
-            .toList();
+    final var reviews = getReviewsUseCase.getPaginatedReviews(page, size).stream().toList();
 
     final var authorIds = reviews.stream().map(ReviewResult::authorId).toList();
     final var authors = getAuthorsMap(authorIds);
@@ -67,24 +63,22 @@ public class ReviewDetailFacadeService {
 
   public CursorPagination<ReviewCommentDetailResult> getReviewComments(
       final ReviewCommentDetailCommand command) {
-    final var comments = getReviewCommentsUseCase.getReviewComments(
-        new GetReviewCommentsCommand(command.size(), command.before(), command.after(),
-            command.reviewId()));
+    final var comments =
+        getReviewCommentsUseCase.getReviewComments(
+            new GetReviewCommentsCommand(
+                command.size(), command.before(), command.after(), command.reviewId()));
 
     final var userIds = comments.getItems().stream().map(ReviewComment::getUserId).toList();
     final var authorsMap = getAuthorsMap(userIds);
 
-    final var result = comments.getItems().stream()
-        .map(mapReviewCommentDetailResult(authorsMap))
-        .toList();
+    final var result =
+        comments.getItems().stream().map(mapReviewCommentDetailResult(authorsMap)).toList();
 
     return CursorPagination.of(result, comments.hasNext(), comments.hasPrevious());
   }
 
   private Map<Long, UserResult> getAuthorsMap(List<Long> authorIds) {
-    return findUserUseCase
-        .findUsersByIds(authorIds)
-        .stream()
+    return findUserUseCase.findUsersByIds(authorIds).stream()
         .map(user -> Map.entry(user.id(), user))
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
@@ -95,14 +89,11 @@ public class ReviewDetailFacadeService {
   }
 
   private Function<ReviewResult, ReviewDetailResult> mapReviewDetailResult(
-      Map<Long, UserResult> usersMap,
-      Map<Long, List<ReviewTagResult>> tagsMap) {
+      Map<Long, UserResult> usersMap, Map<Long, List<ReviewTagResult>> tagsMap) {
     return review -> {
       final var author = usersMap.getOrDefault(review.authorId(), UserResult.EMPTY);
       final var tags =
-          tagsMap
-              .getOrDefault(review.id(), Collections.emptyList())
-              .stream()
+          tagsMap.getOrDefault(review.id(), Collections.emptyList()).stream()
               .map(ReviewTagResult::name)
               .toList();
 

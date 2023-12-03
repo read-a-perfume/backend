@@ -1,6 +1,5 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfumeFavorite.mapper;
 
-import io.perfume.api.perfume.adapter.out.persistence.perfumeFavorite.PerfumeFavoriteId;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeFavorite.PerfumeFavoriteJpaEntity;
 import io.perfume.api.perfume.domain.PerfumeFavorite;
 import org.springframework.stereotype.Component;
@@ -16,6 +15,7 @@ public class PerfumeFavoriteMapper {
         perfumeFollowEntity.getUpdatedAt(),
         perfumeFollowEntity.getDeletedAt());
   }
+
   public PerfumeFavoriteJpaEntity toEntity(PerfumeFavorite perfumeFavorite) {
     return new PerfumeFavoriteJpaEntity(
         perfumeFavorite.getUserId(),

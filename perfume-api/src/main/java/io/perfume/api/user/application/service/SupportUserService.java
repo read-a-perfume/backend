@@ -30,17 +30,14 @@ public class SupportUserService
 
   private final JsonWebTokenGenerator jsonWebTokenGenerator;
 
-  /**
-   * TODO
-   * 비밀번호 변경파트 고민하기
-   * 1. 이메일과 아이디를 알면 누구나 다른 사용자의 암호를 수정할 수 있음
-   * 2. "새로운 패스워드 할당" 이메일 템플릿 정하기
-   */
+  /** TODO 비밀번호 변경파트 고민하기 1. 이메일과 아이디를 알면 누구나 다른 사용자의 암호를 수정할 수 있음 2. "새로운 패스워드 할당" 이메일 템플릿 정하기 */
   @Override
   @Transactional
   public void sendNewPasswordToEmail(String email, String username) {
-    User user = userQueryRepository.findOneByEmailAndUsername(email, username)
-        .orElseThrow(NotFoundUserException::new);
+    User user =
+        userQueryRepository
+            .findOneByEmailAndUsername(email, username)
+            .orElseThrow(NotFoundUserException::new);
 
     LocalDateTime now = LocalDateTime.now();
 
@@ -51,8 +48,7 @@ public class SupportUserService
     mailSender.send(
         email,
         "[read a perfume] " + user.getUsername() + "님의 새로운 암호입니다.",
-        "[read a perfume] 사용자의 암호 : " + user.getPassword()
-    );
+        "[read a perfume] 사용자의 암호 : " + user.getPassword());
   }
 
   @Override
@@ -82,8 +78,6 @@ public class SupportUserService
       failedLeaveException.initCause(e);
 
       throw failedLeaveException;
-
     }
   }
-
 }

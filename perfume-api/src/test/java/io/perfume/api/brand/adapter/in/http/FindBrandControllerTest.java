@@ -36,15 +36,16 @@ import org.springframework.web.context.WebApplicationContext;
 public class FindBrandControllerTest {
   private MockMvc mockMvc;
 
-  @MockBean
-  private FindBrandUseCase findBrandUseCase;
+  @MockBean private FindBrandUseCase findBrandUseCase;
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .build();
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .build();
   }
 
   @Test
@@ -56,11 +57,8 @@ public class FindBrandControllerTest {
         "샤넬 향수는 특별한 향과 함께 있는 그대로의 모습을 드러내는 작품입니다. 특별한 시리즈를 통해 샤넬 향수에 관련된 노하우와 전문 기술, 창의성을 끊임없이 추구하는 샤넬의 여정을 확인해 보세요.";
     String thumbnailUrl = "testUrl.com";
 
-    BrandResponse brandResponse = BrandResponse.builder()
-        .name(name)
-        .story(story)
-        .thumbnailUrl(thumbnailUrl)
-        .build();
+    BrandResponse brandResponse =
+        BrandResponse.builder().name(name).story(story).thumbnailUrl(thumbnailUrl).build();
 
     BrandResult brandResult = new BrandResult(name, story, thumbnailUrl);
 
@@ -69,22 +67,23 @@ public class FindBrandControllerTest {
     // when
     // then
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/v1/brands/{brandId}", 1L)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            MockMvcRequestBuilders.get("/v1/brands/{brandId}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.name").value(brandResponse.name()))
         .andExpect(jsonPath("$.story").value(brandResponse.story()))
         .andExpect(jsonPath("$.thumbnailUrl").value(brandResponse.thumbnailUrl()))
         .andDo(
-            document("get-brand",
+            document(
+                "get-brand",
                 responseFields(
                     fieldWithPath("name").type(JsonFieldType.STRING).description("브랜드 이름"),
                     fieldWithPath("story").type(JsonFieldType.STRING).description("브랜드 이야기"),
-                    fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING)
-                        .description("브랜드 썸네일 이미지")
-                )));
+                    fieldWithPath("thumbnailUrl")
+                        .type(JsonFieldType.STRING)
+                        .description("브랜드 썸네일 이미지"))));
   }
 }

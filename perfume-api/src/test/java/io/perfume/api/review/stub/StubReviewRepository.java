@@ -13,9 +13,7 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
 
   @Override
   public Optional<Review> findById(Long id) {
-    return reviews.stream()
-        .filter(review -> review.getId().equals(id))
-        .findFirst();
+    return reviews.stream().filter(review -> review.getId().equals(id)).findFirst();
   }
 
   @Override

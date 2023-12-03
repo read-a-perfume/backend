@@ -28,11 +28,15 @@ public class ReviewLikeEntity extends BaseTimeEntity {
   @Column(nullable = false)
   private long reviewId;
 
-  protected ReviewLikeEntity() {
-  }
+  protected ReviewLikeEntity() {}
 
-  public ReviewLikeEntity(Long id, long userId, long reviewId, LocalDateTime createdAt,
-                          LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public ReviewLikeEntity(
+      Long id,
+      long userId,
+      long reviewId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.userId = userId;
@@ -47,12 +51,14 @@ public class ReviewLikeEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
@@ -62,8 +68,8 @@ public class ReviewLikeEntity extends BaseTimeEntity {
 
   @Override
   public final int hashCode() {
-    return this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-        getClass().hashCode();
+    return this instanceof HibernateProxy
+        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+        : getClass().hashCode();
   }
 }

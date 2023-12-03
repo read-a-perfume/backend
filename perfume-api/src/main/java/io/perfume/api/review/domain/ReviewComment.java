@@ -18,9 +18,14 @@ public class ReviewComment extends BaseTimeDomain {
   private String content;
 
   @Builder
-  public ReviewComment(LocalDateTime createdAt, LocalDateTime updatedAt,
-                       LocalDateTime deletedAt, Long id, Long reviewId, Long userId,
-                       String content) {
+  public ReviewComment(
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt,
+      Long id,
+      Long reviewId,
+      Long userId,
+      String content) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.reviewId = reviewId;
@@ -28,8 +33,8 @@ public class ReviewComment extends BaseTimeDomain {
     this.content = content;
   }
 
-  public static ReviewComment create(final Long reviewId, final Long userId, final String content,
-                                     final LocalDateTime now) {
+  public static ReviewComment create(
+      final Long reviewId, final Long userId, final String content, final LocalDateTime now) {
     Assert.notNull(reviewId, "reviewId must not be null");
     Assert.notNull(userId, "userId must not be null");
     Assert.hasText(content, "content must not be empty");

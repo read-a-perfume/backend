@@ -33,13 +33,16 @@ public class FindPerfumeService implements FindPerfumeUseCase {
 
   @Override
   public PerfumeResult findPerfumeById(Long id) {
-    Perfume perfume = perfumeQueryRepository.findPerfumeById(id).orElseThrow(() -> new PerfumeNotFoundException(id));
+    Perfume perfume =
+        perfumeQueryRepository
+            .findPerfumeById(id)
+            .orElseThrow(() -> new PerfumeNotFoundException(id));
     CategoryResult categoryResult = findCategoryUseCase.findCategoryById(perfume.getCategoryId());
     BrandForPerfumeResult brandResult = findBrandUseCase.findBrandForPerfume(perfume.getBrandId());
     NotePyramid notePyramid = perfumeQueryRepository.getNotePyramidByPerfume(perfume.getId());
     Optional<File> fileById = findFileUseCase.findFileById(perfume.getThumbnailId());
     String thumbnail = "";
-    if(fileById.isPresent()) {
+    if (fileById.isPresent()) {
       thumbnail = fileById.get().getUrl();
     }
 
@@ -47,12 +50,14 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   }
 
   @Override
-  public CustomSlice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
+  public CustomSlice<SimplePerfumeResult> findPerfumesByBrand(
+      Long brandId, Long lastPerfumeId, int pageSize) {
     return perfumeQueryRepository.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
   }
 
   @Override
-  public CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
+  public CustomPage<SimplePerfumeResult> findPerfumesByCategory(
+      Long categoryId, Pageable pageable) {
     return perfumeQueryRepository.findPerfumesByCategory(categoryId, pageable);
   }
 

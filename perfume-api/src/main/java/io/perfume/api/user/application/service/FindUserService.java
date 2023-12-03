@@ -41,9 +41,7 @@ public class FindUserService implements FindUserUseCase {
   @Override
   @Transactional(readOnly = true)
   public List<UserResult> findUsersByIds(List<Long> userIds) {
-    return userQueryRepository.findUsersByIds(userIds).stream()
-        .map(this::toDto)
-        .toList();
+    return userQueryRepository.findUsersByIds(userIds).stream().map(this::toDto).toList();
   }
 
   @Override
@@ -54,10 +52,13 @@ public class FindUserService implements FindUserUseCase {
 
   @Override
   public UserProfileResult findUserProfileById(long userId) {
-    User user = userQueryRepository.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    User user =
+        userQueryRepository
+            .findUserById(userId)
+            .orElseThrow(() -> new UserNotFoundException(userId));
     Optional<File> fileById = findFileUseCase.findFileById(user.getThumbnailId());
     String thumbnailUrl = "";
-    if(fileById.isPresent()) {
+    if (fileById.isPresent()) {
       thumbnailUrl = fileById.get().getUrl();
     }
     return new UserProfileResult(user.getId(), user.getUsername(), thumbnailUrl);

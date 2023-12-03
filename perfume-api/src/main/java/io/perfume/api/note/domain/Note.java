@@ -15,8 +15,14 @@ public class Note extends BaseTimeDomain {
 
   private final Long thumbnailId;
 
-  public Note(Long id, String name, String description, Long thumbnailId,
-              LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public Note(
+      Long id,
+      String name,
+      String description,
+      Long thumbnailId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
@@ -24,7 +30,7 @@ public class Note extends BaseTimeDomain {
     this.thumbnailId = thumbnailId;
   }
 
-  static public Note create(String name, String description, Long thumbnailId) {
+  public static Note create(String name, String description, Long thumbnailId) {
     return new Note(null, name, description, thumbnailId, null, null, null);
   }
 }

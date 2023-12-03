@@ -16,15 +16,16 @@ public class CategoryQueryPersistenceAdapter implements CategoryQueryRepository 
 
   private final CategoryMapper categoryMapper;
 
-  public CategoryQueryPersistenceAdapter(JPAQueryFactory jpaQueryFactory,
-                                         CategoryMapper categoryMapper) {
+  public CategoryQueryPersistenceAdapter(
+      JPAQueryFactory jpaQueryFactory, CategoryMapper categoryMapper) {
     this.jpaQueryFactory = jpaQueryFactory;
     this.categoryMapper = categoryMapper;
   }
 
   @Override
   public List<Category> find() {
-    return jpaQueryFactory.selectFrom(QCategoryJpaEntity.categoryJpaEntity)
+    return jpaQueryFactory
+        .selectFrom(QCategoryJpaEntity.categoryJpaEntity)
         .where(QCategoryJpaEntity.categoryJpaEntity.deletedAt.isNull())
         .fetch()
         .stream()
@@ -34,10 +35,15 @@ public class CategoryQueryPersistenceAdapter implements CategoryQueryRepository 
 
   @Override
   public Optional<Category> findById(Long id) {
-    var category = jpaQueryFactory.selectFrom(QCategoryJpaEntity.categoryJpaEntity)
-        .where(QCategoryJpaEntity.categoryJpaEntity.id.eq(id)
-            .and(QCategoryJpaEntity.categoryJpaEntity.deletedAt.isNull()))
-        .fetchOne();
+    var category =
+        jpaQueryFactory
+            .selectFrom(QCategoryJpaEntity.categoryJpaEntity)
+            .where(
+                QCategoryJpaEntity.categoryJpaEntity
+                    .id
+                    .eq(id)
+                    .and(QCategoryJpaEntity.categoryJpaEntity.deletedAt.isNull()))
+            .fetchOne();
 
     if (Objects.isNull(category)) {
       return Optional.empty();
@@ -48,16 +54,20 @@ public class CategoryQueryPersistenceAdapter implements CategoryQueryRepository 
 
   @Override
   public List<Category> findCategoryUserByUserId(Long id) {
-    return jpaQueryFactory.select(QCategoryJpaEntity.categoryJpaEntity)
+    return jpaQueryFactory
+        .select(QCategoryJpaEntity.categoryJpaEntity)
         .from(QCategoryUserJpaEntity.categoryUserJpaEntity)
         .innerJoin(QCategoryJpaEntity.categoryJpaEntity)
         .on(
-            QCategoryJpaEntity.categoryJpaEntity.id.eq(
-                    QCategoryUserJpaEntity.categoryUserJpaEntity.category.id)
-                .and(QCategoryJpaEntity.categoryJpaEntity.deletedAt.isNull())
-        )
-        .where(QCategoryUserJpaEntity.categoryUserJpaEntity.userId.eq(id)
-            .and(QCategoryUserJpaEntity.categoryUserJpaEntity.deletedAt.isNull()))
+            QCategoryJpaEntity.categoryJpaEntity
+                .id
+                .eq(QCategoryUserJpaEntity.categoryUserJpaEntity.category.id)
+                .and(QCategoryJpaEntity.categoryJpaEntity.deletedAt.isNull()))
+        .where(
+            QCategoryUserJpaEntity.categoryUserJpaEntity
+                .userId
+                .eq(id)
+                .and(QCategoryUserJpaEntity.categoryUserJpaEntity.deletedAt.isNull()))
         .fetch()
         .stream()
         .map(categoryMapper::toDomain)

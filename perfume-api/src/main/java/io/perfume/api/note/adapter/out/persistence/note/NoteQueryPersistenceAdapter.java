@@ -22,7 +22,8 @@ public class NoteQueryPersistenceAdapter implements NoteQueryRepository {
 
   @Override
   public List<Note> find() {
-    return jpaQueryFactory.selectFrom(QNoteJpaEntity.noteJpaEntity)
+    return jpaQueryFactory
+        .selectFrom(QNoteJpaEntity.noteJpaEntity)
         .where(QNoteJpaEntity.noteJpaEntity.deletedAt.isNull())
         .fetch()
         .stream()
@@ -31,9 +32,11 @@ public class NoteQueryPersistenceAdapter implements NoteQueryRepository {
   }
 
   public Optional<Note> findById(long id) {
-    NoteJpaEntity entity = jpaQueryFactory.selectFrom(QNoteJpaEntity.noteJpaEntity)
-        .where(QNoteJpaEntity.noteJpaEntity.id.eq(id))
-        .fetchOne();
+    NoteJpaEntity entity =
+        jpaQueryFactory
+            .selectFrom(QNoteJpaEntity.noteJpaEntity)
+            .where(QNoteJpaEntity.noteJpaEntity.id.eq(id))
+            .fetchOne();
 
     if (Objects.isNull(entity)) {
       return Optional.empty();

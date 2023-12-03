@@ -9,7 +9,8 @@ public interface ReviewCommentQueryRepository {
 
   Optional<ReviewComment> findById(Long id);
 
-  CursorPagination<ReviewComment> findByReviewId(final CursorPageable<Long> pageable, final long reviewId);
+  CursorPagination<ReviewComment> findByReviewId(
+      final CursorPageable<Long> pageable, final long reviewId);
 
   long countByReviewId(final long reviewId);
 }

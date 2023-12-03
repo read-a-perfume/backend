@@ -20,8 +20,7 @@ public class CategoryUserMapper {
         categoryMapper.toDomain(entity.getCategory()),
         entity.getCreatedAt(),
         entity.getUpdatedAt(),
-        entity.getDeletedAt()
-    );
+        entity.getDeletedAt());
   }
 
   public CategoryUserJpaEntity toEntity(CategoryUser domain) {
@@ -31,7 +30,6 @@ public class CategoryUserMapper {
         domain.getUserId(),
         domain.getCreatedAt(),
         domain.getUpdatedAt(),
-        domain.getDeletedAt()
-    );
+        domain.getDeletedAt());
   }
 }

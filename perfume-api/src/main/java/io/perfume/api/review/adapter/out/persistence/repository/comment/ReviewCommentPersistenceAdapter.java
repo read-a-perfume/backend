@@ -11,8 +11,9 @@ public class ReviewCommentPersistenceAdapter implements ReviewCommentRepository 
 
   private final ReviewCommentMapper reviewCommentMapper;
 
-  public ReviewCommentPersistenceAdapter(ReviewCommentJpaRepository reviewCommentJpaRepository,
-                                         ReviewCommentMapper reviewCommentMapper) {
+  public ReviewCommentPersistenceAdapter(
+      ReviewCommentJpaRepository reviewCommentJpaRepository,
+      ReviewCommentMapper reviewCommentMapper) {
     this.reviewCommentJpaRepository = reviewCommentJpaRepository;
     this.reviewCommentMapper = reviewCommentMapper;
   }

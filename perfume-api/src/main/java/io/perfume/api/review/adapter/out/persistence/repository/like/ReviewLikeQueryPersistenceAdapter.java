@@ -19,19 +19,23 @@ public class ReviewLikeQueryPersistenceAdapter implements ReviewLikeQueryReposit
 
   @Override
   public Optional<ReviewLike> findByUserIdAndReviewId(long userId, long reviewId) {
-    return Optional.ofNullable(jpaQueryFactory.selectFrom(QReviewLikeEntity.reviewLikeEntity)
-            .where(
-                QReviewLikeEntity.reviewLikeEntity.userId.eq(userId)
-                    .and(QReviewLikeEntity.reviewLikeEntity.reviewId.eq(reviewId))
-                    .and(QReviewLikeEntity.reviewLikeEntity.deletedAt.isNull())
-            )
-            .fetchOne())
+    return Optional.ofNullable(
+            jpaQueryFactory
+                .selectFrom(QReviewLikeEntity.reviewLikeEntity)
+                .where(
+                    QReviewLikeEntity.reviewLikeEntity
+                        .userId
+                        .eq(userId)
+                        .and(QReviewLikeEntity.reviewLikeEntity.reviewId.eq(reviewId))
+                        .and(QReviewLikeEntity.reviewLikeEntity.deletedAt.isNull()))
+                .fetchOne())
         .map(reviewLikeMapper::toDomain);
   }
 
   @Override
   public long countByReviewId(long reviewId) {
-    return entityManager.createQuery(
+    return entityManager
+        .createQuery(
             "select count(rl) from ReviewLikeEntity rl where rl.reviewId = :reviewId", Long.class)
         .setParameter("reviewId", reviewId)
         .getSingleResult();

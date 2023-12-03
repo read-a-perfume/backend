@@ -17,8 +17,15 @@ public class Category extends BaseTimeDomain {
 
   private final Long thumbnailId;
 
-  public Category(Long id, String name, String description, String tags, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
-                  LocalDateTime deletedAt) {
+  public Category(
+      Long id,
+      String name,
+      String description,
+      String tags,
+      Long thumbnailId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
@@ -27,7 +34,8 @@ public class Category extends BaseTimeDomain {
     this.thumbnailId = thumbnailId;
   }
 
-  public static Category create(String name, String description, String tags, Long thumbnailId, LocalDateTime now) {
+  public static Category create(
+      String name, String description, String tags, Long thumbnailId, LocalDateTime now) {
     return new Category(null, name, description, tags, thumbnailId, now, now, null);
   }
 }

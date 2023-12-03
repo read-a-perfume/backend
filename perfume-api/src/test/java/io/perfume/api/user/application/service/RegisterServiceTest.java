@@ -51,8 +51,7 @@ class RegisterServiceTest {
           checkEmailCertificateUseCase,
           createVerificationCodeUseCase,
           stubMailSender,
-          passwordEncoder
-      );
+          passwordEncoder);
 
   @BeforeEach
   void setUp() {
@@ -70,14 +69,9 @@ class RegisterServiceTest {
     String username = "testusername";
     String name = "testname";
     String password = "testpassword";
-    SignUpSocialUserCommand command = new SignUpSocialUserCommand(
-        "abcd12341234",
-        email,
-        username,
-        password,
-        name,
-        SocialProvider.GOOGLE
-    );
+    SignUpSocialUserCommand command =
+        new SignUpSocialUserCommand(
+            "abcd12341234", email, username, password, name, SocialProvider.GOOGLE);
 
     // when
     UserResult result = registerService.signUpSocialUser(command, now);

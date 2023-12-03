@@ -22,16 +22,13 @@ public class AuthenticationKeyQueryRepositoryImpl implements AuthenticationKeyQu
             .selectFrom(QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity)
             .where(
                 QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.signKey.eq(key),
-                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.deletedAt.isNull()
-            )
+                QAuthenticationKeyJpaEntity.authenticationKeyJpaEntity.deletedAt.isNull())
             .fetchFirst();
 
     if (authenticationKeyJpaEntity == null) {
       return Optional.empty();
     }
 
-    return Optional.of(
-        authenticationKeyMapper.toDomain(authenticationKeyJpaEntity)
-    );
+    return Optional.of(authenticationKeyMapper.toDomain(authenticationKeyJpaEntity));
   }
 }

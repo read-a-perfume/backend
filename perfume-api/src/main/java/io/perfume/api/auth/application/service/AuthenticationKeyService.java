@@ -33,8 +33,8 @@ public class AuthenticationKeyService
   @Override
   @Transactional
   public CheckEmailCertificateResult checkEmailCertificate(CheckEmailCertificateCommand command) {
-    Optional<AuthenticationKey> authenticationKey = authenticationKeyQueryRepository
-        .findByKey(command.key());
+    Optional<AuthenticationKey> authenticationKey =
+        authenticationKeyQueryRepository.findByKey(command.key());
     if (authenticationKey.isEmpty()) {
       return new CheckEmailCertificateResult(CheckEmailStatus.NOT_FOUND, null);
     }
@@ -44,8 +44,8 @@ public class AuthenticationKeyService
     if (unwraapedAuthenticationKey.isExpired(command.confirmedAt())) {
       return new CheckEmailCertificateResult(CheckEmailStatus.EXPIRED, email);
     }
-    if (!unwraapedAuthenticationKey.matchKey(command.code(), command.key(),
-        command.confirmedAt())) {
+    if (!unwraapedAuthenticationKey.matchKey(
+        command.code(), command.key(), command.confirmedAt())) {
       return new CheckEmailCertificateResult(CheckEmailStatus.NOT_MATCH, email);
     }
     authenticationKeyRepository.save(unwraapedAuthenticationKey);
@@ -59,11 +59,9 @@ public class AuthenticationKeyService
         getSignKey(createVerificationCodeCommand.metadata(), createVerificationCodeCommand.now());
     String randomCode = generator.generate(6);
 
-    AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey(
-        randomCode,
-        signKey,
-        createVerificationCodeCommand.now()
-    );
+    AuthenticationKey authenticationKey =
+        AuthenticationKey.createAuthenticationKey(
+            randomCode, signKey, createVerificationCodeCommand.now());
     this.authenticationKeyRepository.save(authenticationKey);
 
     return new CreateVerificationCodeResult(

@@ -11,8 +11,12 @@ public class ReviewTag extends BaseTimeDomain {
 
   private final Long tagId;
 
-  public ReviewTag(Long reviewId, Long tagId, LocalDateTime createdAt, LocalDateTime updatedAt,
-                   LocalDateTime deletedAt) {
+  public ReviewTag(
+      Long reviewId,
+      Long tagId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.reviewId = reviewId;

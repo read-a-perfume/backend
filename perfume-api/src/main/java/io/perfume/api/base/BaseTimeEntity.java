@@ -26,8 +26,8 @@ public abstract class BaseTimeEntity {
 
   private LocalDateTime deletedAt;
 
-  protected BaseTimeEntity(LocalDateTime createdAt, LocalDateTime updatedAt,
-                           LocalDateTime deletedAt) {
+  protected BaseTimeEntity(
+      LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;

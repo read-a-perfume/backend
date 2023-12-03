@@ -21,11 +21,9 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class UserQueryPersistenceAdapterTest {
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private UserQueryPersistenceAdapter userQueryPersistenceAdapter;
+  @Autowired private UserQueryPersistenceAdapter userQueryPersistenceAdapter;
 
   @Test
   void findOneByEmail() {
@@ -33,10 +31,7 @@ class UserQueryPersistenceAdapterTest {
     String email = "test@mail.com";
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
-        new UserEntity(
-            null, "username", email, "abcd", Role.USER, false, false, now, now, null
-        )
-    );
+        new UserEntity(null, "username", email, "abcd", Role.USER, false, false, now, now, null));
     entityManager.flush();
     entityManager.clear();
 
@@ -53,9 +48,9 @@ class UserQueryPersistenceAdapterTest {
     // given
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
-    UserEntity entity = new UserEntity(
-        null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, null
-    );
+    UserEntity entity =
+        new UserEntity(
+            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, null);
     entityManager.persist(entity);
     entityManager.flush();
     entityManager.clear();
@@ -75,8 +70,7 @@ class UserQueryPersistenceAdapterTest {
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
         new UserEntity(
-            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, null
-        ));
+            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, null));
     entityManager.flush();
     entityManager.clear();
 
@@ -95,8 +89,7 @@ class UserQueryPersistenceAdapterTest {
     LocalDateTime now = LocalDateTime.now();
     entityManager.persist(
         new UserEntity(
-            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, now
-        ));
+            null, username, "test@mail.com", "abcd", Role.USER, false, false, now, now, now));
     entityManager.flush();
     entityManager.clear();
 

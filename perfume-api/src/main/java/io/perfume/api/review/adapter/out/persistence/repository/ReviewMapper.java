@@ -21,8 +21,7 @@ public class ReviewMapper {
         reviewEntity.getSeason(),
         reviewEntity.getCreatedAt(),
         reviewEntity.getUpdatedAt(),
-        reviewEntity.getDeletedAt()
-    );
+        reviewEntity.getDeletedAt());
   }
 
   public ReviewEntity toEntity(@NotNull Review review) {
@@ -38,7 +37,6 @@ public class ReviewMapper {
         review.getSeason(),
         review.getCreatedAt(),
         review.getUpdatedAt(),
-        review.getDeletedAt()
-    );
+        review.getDeletedAt());
   }
 }

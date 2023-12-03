@@ -14,8 +14,8 @@ public class DeleteReviewTagService implements DeleteReviewTagUseCase {
 
   private final TagQueryRepository tagQueryRepository;
 
-  public DeleteReviewTagService(TagRepository tagRepository,
-                                TagQueryRepository tagQueryRepository) {
+  public DeleteReviewTagService(
+      TagRepository tagRepository, TagQueryRepository tagQueryRepository) {
     this.tagRepository = tagRepository;
     this.tagQueryRepository = tagQueryRepository;
   }
@@ -23,8 +23,7 @@ public class DeleteReviewTagService implements DeleteReviewTagUseCase {
   @Override
   public void deleteReviewTag(Long reviewId, @NotNull LocalDateTime now) {
     var reviewTags =
-        tagQueryRepository
-            .findReviewTags(reviewId).stream()
+        tagQueryRepository.findReviewTags(reviewId).stream()
             .peek(reviewTag -> reviewTag.markDelete(now))
             .toList();
 

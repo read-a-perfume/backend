@@ -24,7 +24,8 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
 
   @Override
   public long countByReviewId(long reviewId) {
-    return entityManager.createQuery(
+    return entityManager
+        .createQuery(
             "select count(1) from ReviewCommentEntity where reviewId = :reviewId and deletedAt is null",
             Long.class)
         .setParameter("reviewId", reviewId)
@@ -33,9 +34,11 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
 
   @Override
   public Optional<ReviewComment> findById(Long id) {
-    ReviewCommentEntity entity = jpaQueryFactory.selectFrom(reviewCommentEntity)
-        .where(reviewCommentEntity.id.eq(id).and(reviewCommentEntity.deletedAt.isNull()))
-        .fetchOne();
+    ReviewCommentEntity entity =
+        jpaQueryFactory
+            .selectFrom(reviewCommentEntity)
+            .where(reviewCommentEntity.id.eq(id).and(reviewCommentEntity.deletedAt.isNull()))
+            .fetchOne();
 
     if (entity == null) {
       return Optional.empty();
@@ -45,11 +48,16 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
   }
 
   @Override
-  public CursorPagination<ReviewComment> findByReviewId(CursorPageable<Long> pageable,
-                                                        final long reviewId) {
-    final var qb = jpaQueryFactory.selectFrom(reviewCommentEntity)
-        .where(reviewCommentEntity.reviewId.eq(reviewId)
-            .and(reviewCommentEntity.deletedAt.isNull()));
+  public CursorPagination<ReviewComment> findByReviewId(
+      CursorPageable<Long> pageable, final long reviewId) {
+    final var qb =
+        jpaQueryFactory
+            .selectFrom(reviewCommentEntity)
+            .where(
+                reviewCommentEntity
+                    .reviewId
+                    .eq(reviewId)
+                    .and(reviewCommentEntity.deletedAt.isNull()));
 
     if (pageable.getCursor() != null) {
       if (pageable.getDirection() == CursorDirection.NEXT) {
@@ -59,14 +67,10 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
       }
     }
 
-    final var comments = qb
-        .limit(pageable.getSize())
-        .fetch()
-        .stream()
-        .map(reviewCommentMapper::toDomain)
-        .toList();
+    final var comments =
+        qb.limit(pageable.getSize()).fetch().stream().map(reviewCommentMapper::toDomain).toList();
 
-    return CursorPagination.of(comments, pageable.getSize(), pageable.getDirection(),
-        pageable.getCursor() != null);
+    return CursorPagination.of(
+        comments, pageable.getSize(), pageable.getDirection(), pageable.getCursor() != null);
   }
 }

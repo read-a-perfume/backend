@@ -23,12 +23,11 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
 
   @Override
   public Optional<Review> findById(Long id) {
-    var entity = jpaQueryFactory
-        .selectFrom(reviewEntity)
-        .where(
-            reviewEntity.id.eq(id)
-                .and(reviewEntity.deletedAt.isNull()))
-        .fetchOne();
+    var entity =
+        jpaQueryFactory
+            .selectFrom(reviewEntity)
+            .where(reviewEntity.id.eq(id).and(reviewEntity.deletedAt.isNull()))
+            .fetchOne();
 
     if (entity == null) {
       return Optional.empty();

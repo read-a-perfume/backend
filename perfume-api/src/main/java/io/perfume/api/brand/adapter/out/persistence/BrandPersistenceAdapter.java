@@ -3,9 +3,7 @@ package io.perfume.api.brand.adapter.out.persistence;
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.brand.application.port.out.BrandRepository;
 import io.perfume.api.brand.domain.Brand;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-
 
 @PersistenceAdapter
 @RequiredArgsConstructor

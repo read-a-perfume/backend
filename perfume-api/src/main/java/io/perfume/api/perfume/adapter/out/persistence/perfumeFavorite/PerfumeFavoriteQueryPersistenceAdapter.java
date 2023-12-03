@@ -18,19 +18,24 @@ public class PerfumeFavoriteQueryPersistenceAdapter implements PerfumeFavoriteQu
   private final JPAQueryFactory jpaQueryFactory;
   private final PerfumeFavoriteMapper perfumeFavoriteMapper;
 
-  public PerfumeFavoriteQueryPersistenceAdapter(JPAQueryFactory jpaQueryFactory,
-      PerfumeFavoriteMapper perfumeFavoriteMapper) {
+  public PerfumeFavoriteQueryPersistenceAdapter(
+      JPAQueryFactory jpaQueryFactory, PerfumeFavoriteMapper perfumeFavoriteMapper) {
     this.jpaQueryFactory = jpaQueryFactory;
     this.perfumeFavoriteMapper = perfumeFavoriteMapper;
   }
 
   @Override
   public Optional<PerfumeFavorite> findByUserIdAndPerfumeId(Long userId, Long perfumeId) {
-    PerfumeFavoriteJpaEntity entity = jpaQueryFactory.selectFrom(perfumeFavoriteJpaEntity)
-        .where(perfumeFavoriteJpaEntity.id.userId.eq(userId)
-            .and(perfumeFavoriteJpaEntity.id.perfumeId.eq(perfumeId)))
-        .fetchOne();
-
+    PerfumeFavoriteJpaEntity entity =
+        jpaQueryFactory
+            .selectFrom(perfumeFavoriteJpaEntity)
+            .where(
+                perfumeFavoriteJpaEntity
+                    .id
+                    .userId
+                    .eq(userId)
+                    .and(perfumeFavoriteJpaEntity.id.perfumeId.eq(perfumeId)))
+            .fetchOne();
 
     if (Objects.isNull(entity)) {
       return Optional.empty();
@@ -43,8 +48,12 @@ public class PerfumeFavoriteQueryPersistenceAdapter implements PerfumeFavoriteQu
   public List<PerfumeFavorite> findFavoritePerfumesByUserId(Long userId) {
     return jpaQueryFactory
         .selectFrom(perfumeFavoriteJpaEntity)
-        .where(perfumeFavoriteJpaEntity.id.userId.eq(userId)
-            .and(perfumeFavoriteJpaEntity.deletedAt.isNull()))
+        .where(
+            perfumeFavoriteJpaEntity
+                .id
+                .userId
+                .eq(userId)
+                .and(perfumeFavoriteJpaEntity.deletedAt.isNull()))
         .fetch()
         .stream()
         .map(perfumeFavoriteMapper::toDomain)

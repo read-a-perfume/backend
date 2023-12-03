@@ -18,10 +18,11 @@ public class CategoryPersistenceAdapter implements CategoryRepository {
 
   private final CategoryUserMapper categoryUserMapper;
 
-  public CategoryPersistenceAdapter(CategoryJpaRepository categoryJpaRepository,
-                                    CategoryUserJpaRepository categoryUserJpaRepository,
-                                    CategoryMapper categoryMapper,
-                                    CategoryUserMapper categoryUserMapper) {
+  public CategoryPersistenceAdapter(
+      CategoryJpaRepository categoryJpaRepository,
+      CategoryUserJpaRepository categoryUserJpaRepository,
+      CategoryMapper categoryMapper,
+      CategoryUserMapper categoryUserMapper) {
     this.categoryJpaRepository = categoryJpaRepository;
     this.categoryUserJpaRepository = categoryUserJpaRepository;
     this.categoryMapper = categoryMapper;

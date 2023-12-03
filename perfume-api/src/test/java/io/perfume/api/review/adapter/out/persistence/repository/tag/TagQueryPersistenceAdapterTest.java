@@ -6,9 +6,6 @@ import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
 import io.perfume.api.review.adapter.out.persistence.entity.ReviewTagEntity;
 import io.perfume.api.review.adapter.out.persistence.entity.TagEntity;
-import io.perfume.api.review.adapter.out.persistence.repository.tag.ReviewTagMapper;
-import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
-import io.perfume.api.review.adapter.out.persistence.repository.tag.TagQueryPersistenceAdapter;
 import io.perfume.api.review.domain.Tag;
 import io.perfume.api.review.domain.type.DayType;
 import io.perfume.api.review.domain.type.Duration;
@@ -27,20 +24,21 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({TagQueryPersistenceAdapter.class, TagMapper.class, ReviewTagMapper.class,
-    TestQueryDSLConfiguration.class})
+@Import({
+  TagQueryPersistenceAdapter.class,
+  TagMapper.class,
+  ReviewTagMapper.class,
+  TestQueryDSLConfiguration.class
+})
 @DataJpaTest
 @EnableJpaAuditing
 class TagQueryPersistenceAdapterTest {
 
-  @Autowired
-  private TagMapper tagMapper;
+  @Autowired private TagMapper tagMapper;
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private TagQueryPersistenceAdapter queryRepository;
+  @Autowired private TagQueryPersistenceAdapter queryRepository;
 
   @Test
   @DisplayName("태그 id를 조회한다.")
@@ -80,9 +78,20 @@ class TagQueryPersistenceAdapterTest {
     var tag = new TagEntity(null, "test", now, now, null);
     entityManager.persist(tag);
     var review =
-        new ReviewEntity(null, "", "", Strength.LIGHT, Duration.TOO_SHORT, DayType.DAILY, 1L, 1L, Season.SPRING, now, now, null);
-    entityManager.persist(
-        review);
+        new ReviewEntity(
+            null,
+            "",
+            "",
+            Strength.LIGHT,
+            Duration.TOO_SHORT,
+            DayType.DAILY,
+            1L,
+            1L,
+            Season.SPRING,
+            now,
+            now,
+            null);
+    entityManager.persist(review);
     entityManager.persist(new ReviewTagEntity(review.getId(), tag.getId(), now, now, null));
 
     // when

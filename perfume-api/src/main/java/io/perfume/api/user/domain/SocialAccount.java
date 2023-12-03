@@ -14,9 +14,14 @@ public class SocialAccount {
   private final LocalDateTime deletedAt;
   private User user;
 
-  public SocialAccount(Long id, String identifier, SocialProvider socialProvider,
-                       User user,
-                       LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public SocialAccount(
+      Long id,
+      String identifier,
+      SocialProvider socialProvider,
+      User user,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     this.id = id;
     this.identifier = identifier;
     this.socialProvider = socialProvider;
@@ -26,8 +31,7 @@ public class SocialAccount {
     this.deletedAt = deletedAt;
   }
 
-  public static SocialAccount createGoogleSocialAccount(
-      String identifier, LocalDateTime now) {
+  public static SocialAccount createGoogleSocialAccount(String identifier, LocalDateTime now) {
 
     return new SocialAccount(null, identifier, SocialProvider.GOOGLE, null, now, now, null);
   }

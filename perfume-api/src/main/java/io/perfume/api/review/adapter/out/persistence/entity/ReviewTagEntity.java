@@ -14,15 +14,16 @@ import org.hibernate.proxy.HibernateProxy;
 @Getter
 public class ReviewTagEntity extends BaseTimeEntity {
 
-  @EmbeddedId
-  private ReviewTagId id;
+  @EmbeddedId private ReviewTagId id;
 
-  protected ReviewTagEntity() {
-  }
+  protected ReviewTagEntity() {}
 
-  public ReviewTagEntity(Long reviewId, Long tagId, LocalDateTime createdAt,
-                         LocalDateTime updatedAt,
-                         LocalDateTime deletedAt) {
+  public ReviewTagEntity(
+      Long reviewId,
+      Long tagId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.id = new ReviewTagId(reviewId, tagId);
@@ -36,12 +37,14 @@ public class ReviewTagEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }

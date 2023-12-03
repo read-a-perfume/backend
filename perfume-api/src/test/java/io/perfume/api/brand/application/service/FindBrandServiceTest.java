@@ -19,12 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class FindBrandServiceTest {
-  @InjectMocks
-  private FindBrandService findBrandService;
-  @Mock
-  private BrandQueryRepository brandQueryRepository;
-  @Mock
-  private FindFileUseCase findFileUseCase;
+  @InjectMocks private FindBrandService findBrandService;
+  @Mock private BrandQueryRepository brandQueryRepository;
+  @Mock private FindFileUseCase findFileUseCase;
 
   @Test
   void findBrandById() throws FileNotFoundException {
@@ -32,16 +29,9 @@ public class FindBrandServiceTest {
     Long id = 1L;
     Long thumbnailId = 1L;
     LocalDateTime now = LocalDateTime.now();
-    Brand brand = Brand.builder()
-        .id(id)
-        .name("CHANEL")
-        .story("스토리")
-        .thumbnailId(thumbnailId)
-        .build();
-    File file = File.builder()
-        .id(id)
-        .url("fileurl")
-        .build();
+    Brand brand =
+        Brand.builder().id(id).name("CHANEL").story("스토리").thumbnailId(thumbnailId).build();
+    File file = File.builder().id(id).url("fileurl").build();
     given(brandQueryRepository.findBrandById(id)).willReturn(Optional.ofNullable(brand));
     given(findFileUseCase.findFileById(thumbnailId)).willReturn(Optional.ofNullable(file));
 

@@ -17,21 +17,23 @@ public class CreateReviewsCommentService implements CreateReviewCommentUseCase {
 
   private final ReviewQueryRepository reviewQueryRepository;
 
-  public CreateReviewsCommentService(ReviewCommentRepository reviewCommentRepository,
-                                     ReviewQueryRepository reviewQueryRepository) {
+  public CreateReviewsCommentService(
+      ReviewCommentRepository reviewCommentRepository,
+      ReviewQueryRepository reviewQueryRepository) {
     this.reviewCommentRepository = reviewCommentRepository;
     this.reviewQueryRepository = reviewQueryRepository;
   }
 
   @Override
-  public ReviewCommentResult createComment(final CreateReviewCommentCommand command,
-                                           final LocalDateTime now) {
+  public ReviewCommentResult createComment(
+      final CreateReviewCommentCommand command, final LocalDateTime now) {
     reviewQueryRepository
         .findById(command.reviewId())
         .orElseThrow(() -> new NotFoundReviewException(command.reviewId()));
 
-    final var createdReviewComment = reviewCommentRepository.save(
-        ReviewComment.create(command.reviewId(), command.userId(), command.content(), now));
+    final var createdReviewComment =
+        reviewCommentRepository.save(
+            ReviewComment.create(command.reviewId(), command.userId(), command.content(), now));
     return ReviewCommentResult.from(createdReviewComment);
   }
 }

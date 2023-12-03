@@ -16,7 +16,8 @@ public interface PerfumeQueryRepository {
 
   NotePyramid getNotePyramidByPerfume(Long perfumeId);
 
-  CustomSlice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize);
+  CustomSlice<SimplePerfumeResult> findPerfumesByBrand(
+      Long brandId, Long lastPerfumeId, int pageSize);
 
   CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable);
 

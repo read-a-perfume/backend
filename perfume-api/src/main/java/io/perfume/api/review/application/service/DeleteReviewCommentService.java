@@ -14,8 +14,9 @@ public class DeleteReviewCommentService implements DeleteReviewCommentUseCase {
 
   private final ReviewCommentQueryRepository reviewCommentQueryRepository;
 
-  public DeleteReviewCommentService(ReviewCommentRepository reviewCommentRepository,
-                                    ReviewCommentQueryRepository reviewCommentQueryRepository) {
+  public DeleteReviewCommentService(
+      ReviewCommentRepository reviewCommentRepository,
+      ReviewCommentQueryRepository reviewCommentQueryRepository) {
     this.reviewCommentRepository = reviewCommentRepository;
     this.reviewCommentQueryRepository = reviewCommentQueryRepository;
   }

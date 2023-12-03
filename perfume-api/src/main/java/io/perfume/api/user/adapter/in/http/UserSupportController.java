@@ -2,9 +2,9 @@ package io.perfume.api.user.adapter.in.http;
 
 import io.perfume.api.file.application.port.in.FindFileUseCase;
 import io.perfume.api.user.adapter.in.http.dto.LeaveUserDto;
-import io.perfume.api.user.adapter.in.http.dto.UserProfileDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.UserProfileDto;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
@@ -42,13 +42,10 @@ public class UserSupportController {
 
   private final LeaveUserUseCase leaveUserUseCase;
 
-  /**
-   * TODO OAUTH 가입자의 경우 uesrname도 같이 넣는 흐름이 이상하다.
-   */
+  /** TODO OAUTH 가입자의 경우 uesrname도 같이 넣는 흐름이 이상하다. */
   @GetMapping("/email/reset-password")
   public ResponseEntity<Object> sendPasswordToUsersEmail(
-      @RequestParam @Email String email,
-      @RequestParam @NotBlank String username) {
+      @RequestParam @Email String email, @RequestParam @NotBlank String username) {
 
     resetPasswordUserCase.sendNewPasswordToEmail(email, username);
 
@@ -78,23 +75,24 @@ public class UserSupportController {
   }
 
   @PatchMapping("/account/email")
-  public void updateEmailByUser(@AuthenticationPrincipal User user,
-                                @RequestBody UpdateEmailRequestDto updateEmailDto) {
-    UpdateEmailCommand updateEmailCommand = new UpdateEmailCommand(
-        Long.parseLong(user.getUsername()),
-        updateEmailDto.verified(),
-        updateEmailDto.email());
+  public void updateEmailByUser(
+      @AuthenticationPrincipal User user, @RequestBody UpdateEmailRequestDto updateEmailDto) {
+    UpdateEmailCommand updateEmailCommand =
+        new UpdateEmailCommand(
+            Long.parseLong(user.getUsername()), updateEmailDto.verified(), updateEmailDto.email());
 
     updateAccountUseCase.updateUserEmail(updateEmailCommand);
   }
 
   @PatchMapping("/account/password")
-  public void updatePasswordByUser(@AuthenticationPrincipal User user,
-                                   @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto) {
-    UpdatePasswordCommand updatePasswordCommand = new UpdatePasswordCommand(
-        Long.parseLong(user.getUsername()),
-        updatePasswordRequestDto.oldPassword(),
-        updatePasswordRequestDto.newPassword());
+  public void updatePasswordByUser(
+      @AuthenticationPrincipal User user,
+      @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto) {
+    UpdatePasswordCommand updatePasswordCommand =
+        new UpdatePasswordCommand(
+            Long.parseLong(user.getUsername()),
+            updatePasswordRequestDto.oldPassword(),
+            updatePasswordRequestDto.newPassword());
 
     updateAccountUseCase.updateUserPassword(updatePasswordCommand);
   }

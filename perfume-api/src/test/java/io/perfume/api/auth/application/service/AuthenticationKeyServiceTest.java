@@ -30,8 +30,8 @@ class AuthenticationKeyServiceTest {
   StubGenerator generator = new StubGenerator();
 
   AuthenticationKeyService authenticationKeyService =
-      new AuthenticationKeyService(authenticationKeyRepository, authenticationKeyQueryRepository,
-          encryptor, generator);
+      new AuthenticationKeyService(
+          authenticationKeyRepository, authenticationKeyQueryRepository, encryptor, generator);
 
   @BeforeEach
   void setUp() {
@@ -75,8 +75,9 @@ class AuthenticationKeyServiceTest {
   void testCheckEmailCertificateWhenExpired() {
     // given
     int EXPIRED_MINUTES = 3;
-    authenticationKeyQueryRepository.add(AuthenticationKey.createAuthenticationKey("code", "key",
-        LocalDateTime.now().minusMinutes(EXPIRED_MINUTES)));
+    authenticationKeyQueryRepository.add(
+        AuthenticationKey.createAuthenticationKey(
+            "code", "key", LocalDateTime.now().minusMinutes(EXPIRED_MINUTES)));
     CheckEmailCertificateCommand command =
         new CheckEmailCertificateCommand("key", "code", LocalDateTime.now());
 

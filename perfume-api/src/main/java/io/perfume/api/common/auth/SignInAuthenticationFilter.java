@@ -31,9 +31,10 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
   private final MakeNewTokenUseCase makeNewTokenUseCase;
   private final ObjectMapper objectMapper;
 
-  public SignInAuthenticationFilter(AuthenticationManager authenticationManager,
-                                    ObjectMapper objectMapper,
-                                    MakeNewTokenUseCase makeNewTokenUseCase) {
+  public SignInAuthenticationFilter(
+      AuthenticationManager authenticationManager,
+      ObjectMapper objectMapper,
+      MakeNewTokenUseCase makeNewTokenUseCase) {
     this.makeNewTokenUseCase = makeNewTokenUseCase;
     this.objectMapper = objectMapper;
 
@@ -42,27 +43,29 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
   }
 
   @Override
-  public Authentication attemptAuthentication(HttpServletRequest request,
-                                              HttpServletResponse response)
-      throws AuthenticationException {
+  public Authentication attemptAuthentication(
+      HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
     SignInDto signInDto;
     try {
-      signInDto = objectMapper.readValue(StreamUtils.copyToString(
-          request.getInputStream(), StandardCharsets.UTF_8), SignInDto.class);
+      signInDto =
+          objectMapper.readValue(
+              StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8),
+              SignInDto.class);
     } catch (IOException e) {
       throw new SignInFormInValidException("Username or password cannot be empty");
     }
 
-    UsernamePasswordAuthenticationToken authenticationToken
-        = new UsernamePasswordAuthenticationToken(signInDto.getUsername(), signInDto.getPassword());
+    UsernamePasswordAuthenticationToken authenticationToken =
+        new UsernamePasswordAuthenticationToken(signInDto.getUsername(), signInDto.getPassword());
     return this.getAuthenticationManager().authenticate(authenticationToken);
   }
 
   @Override
-  protected void successfulAuthentication(HttpServletRequest request,
-                                          HttpServletResponse response,
-                                          FilterChain filter,
-                                          Authentication authResult) {
+  protected void successfulAuthentication(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      FilterChain filter,
+      Authentication authResult) {
     UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
 
     String accessToken =
@@ -76,10 +79,9 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
     SecurityContextHolder.getContext().setAuthentication(authResult);
     try {
       Map<String, Object> map = new HashMap<>();
-      map.put("username",((UserPrincipal) authResult.getPrincipal()).getUsername());
-      map.put("userId",((UserPrincipal) authResult.getPrincipal()).getUser().getId());
-      response.getWriter().write(
-          objectMapper.writeValueAsString(map));
+      map.put("username", ((UserPrincipal) authResult.getPrincipal()).getUsername());
+      map.put("userId", ((UserPrincipal) authResult.getPrincipal()).getUser().getId());
+      response.getWriter().write(objectMapper.writeValueAsString(map));
       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
@@ -87,23 +89,23 @@ public class SignInAuthenticationFilter extends UsernamePasswordAuthenticationFi
   }
 
   @Override
-  protected void unsuccessfulAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            AuthenticationException failed) throws IOException {
+  protected void unsuccessfulAuthentication(
+      HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
+      throws IOException {
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    ErrorResponse errorResponse = ErrorResponse.builder()
-        .status(HttpStatus.UNAUTHORIZED.getReasonPhrase())
-        .statusCode(HttpStatus.UNAUTHORIZED.value())
-        .message(getUnsuccessfulMessage(failed))
-        .build();
-    response.getWriter().write(
-        objectMapper.writeValueAsString(errorResponse));
+    ErrorResponse errorResponse =
+        ErrorResponse.builder()
+            .status(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+            .statusCode(HttpStatus.UNAUTHORIZED.value())
+            .message(getUnsuccessfulMessage(failed))
+            .build();
+    response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
   }
 
   private Cookie createCookie(String cookieName, String cookieValue) {
     Cookie cookie = new Cookie(cookieName, cookieValue);
-//    cookie.setSecure(true);
+    //    cookie.setSecure(true);
     cookie.setHttpOnly(true);
 
     return cookie;

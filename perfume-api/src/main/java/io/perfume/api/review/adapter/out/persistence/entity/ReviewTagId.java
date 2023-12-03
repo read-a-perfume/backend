@@ -1,6 +1,5 @@
 package io.perfume.api.review.adapter.out.persistence.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
@@ -18,8 +17,7 @@ public class ReviewTagId implements Serializable {
   @Column(name = "tag_id")
   private Long tagId;
 
-  protected ReviewTagId() {
-  }
+  protected ReviewTagId() {}
 
   public ReviewTagId(Long reviewId, Long tagId) {
     this.reviewId = reviewId;
@@ -34,18 +32,22 @@ public class ReviewTagId implements Serializable {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
     ReviewTagId that = (ReviewTagId) o;
-    return reviewId != null && Objects.equals(reviewId, that.reviewId)
-        && tagId != null && Objects.equals(tagId, that.tagId);
+    return reviewId != null
+        && Objects.equals(reviewId, that.reviewId)
+        && tagId != null
+        && Objects.equals(tagId, that.tagId);
   }
 
   @Override

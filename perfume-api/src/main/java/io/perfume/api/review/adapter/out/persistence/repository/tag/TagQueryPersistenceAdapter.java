@@ -19,8 +19,8 @@ public class TagQueryPersistenceAdapter implements TagQueryRepository {
 
   private final JPAQueryFactory jpaQueryFactory;
 
-  public TagQueryPersistenceAdapter(TagMapper tagMapper, ReviewTagMapper reviewTagMapper,
-                                    JPAQueryFactory jpaQueryFactory) {
+  public TagQueryPersistenceAdapter(
+      TagMapper tagMapper, ReviewTagMapper reviewTagMapper, JPAQueryFactory jpaQueryFactory) {
     this.tagMapper = tagMapper;
     this.jpaQueryFactory = jpaQueryFactory;
     this.reviewTagMapper = reviewTagMapper;
@@ -28,17 +28,15 @@ public class TagQueryPersistenceAdapter implements TagQueryRepository {
 
   @Override
   public List<Tag> findByIds(List<Long> ids) {
-    return jpaQueryFactory.selectFrom(tagEntity)
-        .where(tagEntity.id.in(ids))
-        .fetch()
-        .stream()
+    return jpaQueryFactory.selectFrom(tagEntity).where(tagEntity.id.in(ids)).fetch().stream()
         .map(tagMapper::toDomain)
         .toList();
   }
 
   @Override
   public List<ReviewTag> findReviewTags(Long reviewId) {
-    return jpaQueryFactory.selectFrom(reviewTagEntity)
+    return jpaQueryFactory
+        .selectFrom(reviewTagEntity)
         .where(reviewTagEntity.id.reviewId.eq(reviewId))
         .fetch()
         .stream()
@@ -48,7 +46,8 @@ public class TagQueryPersistenceAdapter implements TagQueryRepository {
 
   @Override
   public List<ReviewTag> findReviewsTags(List<Long> reviewIds) {
-    return jpaQueryFactory.selectFrom(reviewTagEntity)
+    return jpaQueryFactory
+        .selectFrom(reviewTagEntity)
         .where(reviewTagEntity.id.reviewId.in(reviewIds))
         .fetch()
         .stream()

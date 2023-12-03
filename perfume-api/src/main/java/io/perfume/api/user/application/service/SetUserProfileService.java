@@ -20,8 +20,10 @@ public class SetUserProfileService implements SetUserProfileUseCase {
   private final UserRepository userRepository;
   private final SaveFileService fileUploadService;
 
-  public SetUserProfileService(UserQueryRepository userQueryRepository,
-                               UserRepository userRepository, SaveFileService fileUploadService) {
+  public SetUserProfileService(
+      UserQueryRepository userQueryRepository,
+      UserRepository userRepository,
+      SaveFileService fileUploadService) {
     this.userQueryRepository = userQueryRepository;
     this.userRepository = userRepository;
     this.fileUploadService = fileUploadService;

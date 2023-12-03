@@ -28,8 +28,8 @@ class DeleteReviewServiceTest {
       Mockito.mock(DeleteReviewTagUseCase.class);
 
   private final DeleteReviewService deleteReviewService =
-      new DeleteReviewService(stubReviewRepository, stubReviewRepository,
-          mockDeleteReviewTagUseCase);
+      new DeleteReviewService(
+          stubReviewRepository, stubReviewRepository, mockDeleteReviewTagUseCase);
 
   @Test
   @DisplayName("리뷰를 삭제한다.")
@@ -39,8 +39,19 @@ class DeleteReviewServiceTest {
     var reviewId = 1L;
     var now = LocalDateTime.now();
     var review =
-        new Review(reviewId, "", "", Strength.LIGHT, Duration.TOO_SHORT, DayType.DAILY, 1L, userId, Season.SPRING,
-            now, now, null);
+        new Review(
+            reviewId,
+            "",
+            "",
+            Strength.LIGHT,
+            Duration.TOO_SHORT,
+            DayType.DAILY,
+            1L,
+            userId,
+            Season.SPRING,
+            now,
+            now,
+            null);
     stubReviewRepository.addReview(review);
 
     // when
@@ -48,9 +59,7 @@ class DeleteReviewServiceTest {
 
     // then
     assertThat(review.getDeletedAt()).isNotNull();
-    Mockito
-        .verify(mockDeleteReviewTagUseCase, Mockito.times(1))
-        .deleteReviewTag(reviewId, now);
+    Mockito.verify(mockDeleteReviewTagUseCase, Mockito.times(1)).deleteReviewTag(reviewId, now);
   }
 
   @Test
@@ -61,18 +70,26 @@ class DeleteReviewServiceTest {
     var reviewId = 1L;
     var now = LocalDateTime.now();
     var review =
-        new Review(reviewId, "", "", Strength.LIGHT, Duration.TOO_SHORT, DayType.DAILY, 1L, userId, Season.SPRING,
-            now, now, null);
+        new Review(
+            reviewId,
+            "",
+            "",
+            Strength.LIGHT,
+            Duration.TOO_SHORT,
+            DayType.DAILY,
+            1L,
+            userId,
+            Season.SPRING,
+            now,
+            now,
+            null);
     stubReviewRepository.addReview(review);
 
     // when & then
     assertThrows(
         DeleteReviewPermissionDeniedException.class,
-        () ->
-            deleteReviewService.delete(userId + 1, reviewId, now));
-    Mockito
-        .verify(mockDeleteReviewTagUseCase, Mockito.times(0))
-        .deleteReviewTag(reviewId, now);
+        () -> deleteReviewService.delete(userId + 1, reviewId, now));
+    Mockito.verify(mockDeleteReviewTagUseCase, Mockito.times(0)).deleteReviewTag(reviewId, now);
   }
 
   @Test
@@ -85,11 +102,7 @@ class DeleteReviewServiceTest {
 
     // when & then
     assertThrows(
-        NotFoundReviewException.class,
-        () ->
-            deleteReviewService.delete(userId, reviewId, now));
-    Mockito
-        .verify(mockDeleteReviewTagUseCase, Mockito.times(0))
-        .deleteReviewTag(reviewId, now);
+        NotFoundReviewException.class, () -> deleteReviewService.delete(userId, reviewId, now));
+    Mockito.verify(mockDeleteReviewTagUseCase, Mockito.times(0)).deleteReviewTag(reviewId, now);
   }
 }

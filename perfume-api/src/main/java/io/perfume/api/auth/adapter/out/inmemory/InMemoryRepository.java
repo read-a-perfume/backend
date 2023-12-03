@@ -22,5 +22,4 @@ class InMemoryRepository {
   void delete(UUID tokenId) {
     db.remove(tokenId);
   }
-
 }

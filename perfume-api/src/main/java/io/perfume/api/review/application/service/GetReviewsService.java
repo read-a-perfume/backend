@@ -20,11 +20,7 @@ public class GetReviewsService implements GetReviewsUseCase {
 
   @Override
   public List<ReviewResult> getPaginatedReviews(long page, long size) {
-    return reviewQueryRepository
-        .findByPage(page, size)
-        .stream()
-        .map(ReviewResult::from)
-        .toList();
+    return reviewQueryRepository.findByPage(page, size).stream().map(ReviewResult::from).toList();
   }
 
   @Override

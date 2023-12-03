@@ -19,9 +19,19 @@ public class Perfume extends BaseTimeDomain {
   private NotePyramidIds notePyramidIds;
 
   @Builder
-  public Perfume(Long id, String name, String story, Concentration concentration, String perfumeShopUrl, Long brandId,
-                 Long thumbnailId, NotePyramidIds notePyramidIds, Long categoryId, LocalDateTime createdAt, LocalDateTime updatedAt,
-                 LocalDateTime deletedAt) {
+  public Perfume(
+      Long id,
+      String name,
+      String story,
+      Concentration concentration,
+      String perfumeShopUrl,
+      Long brandId,
+      Long thumbnailId,
+      NotePyramidIds notePyramidIds,
+      Long categoryId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;

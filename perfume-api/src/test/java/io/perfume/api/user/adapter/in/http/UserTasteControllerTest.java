@@ -38,23 +38,24 @@ class UserTasteControllerTest {
 
   private MockMvc mockMvc;
 
-  @Autowired
-  private CategoryRepository categoryRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
   private static final String categoryName = "프루티";
   private static final String categoryDesc = "달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.";
   private static final String categoryTags = "#달달한 #과즙미";
-  private static final Category sampleCategory = Category.create(categoryName, categoryDesc, categoryTags, 1L, LocalDateTime.now());
+  private static final Category sampleCategory =
+      Category.create(categoryName, categoryDesc, categoryTags, 1L, LocalDateTime.now());
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .build();
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .build();
   }
 
   @Test
@@ -67,10 +68,10 @@ class UserTasteControllerTest {
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/v1/user/tastes")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            MockMvcRequestBuilders.get("/v1/user/tastes")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("[0].id").value(category.getId()))
@@ -78,13 +79,17 @@ class UserTasteControllerTest {
         .andExpect(jsonPath("[0].description").value(categoryDesc))
         .andExpect(jsonPath("[0].thumbnail").value(""))
         .andDo(
-            document("get-user-tastes",
+            document(
+                "get-user-tastes",
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
-                    fieldWithPath("[].description").type(JsonFieldType.STRING).description("카테고리 설명"),
-                    fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("카테고리 이미지")
-                )));
+                    fieldWithPath("[].description")
+                        .type(JsonFieldType.STRING)
+                        .description("카테고리 설명"),
+                    fieldWithPath("[].thumbnail")
+                        .type(JsonFieldType.STRING)
+                        .description("카테고리 이미지"))));
   }
 
   @Test
@@ -97,11 +102,11 @@ class UserTasteControllerTest {
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.post("/v1/user/tastes")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(dto))
-        )
+        .perform(
+            MockMvcRequestBuilders.post("/v1/user/tastes")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isCreated())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }

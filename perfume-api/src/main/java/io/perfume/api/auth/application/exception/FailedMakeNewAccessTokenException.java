@@ -10,7 +10,10 @@ public class FailedMakeNewAccessTokenException extends CustomHttpException {
   }
 
   public FailedMakeNewAccessTokenException() {
-    super(HttpStatus.INTERNAL_SERVER_ERROR, "새로운 액세스 토큰 발급이 불가합니다.", "refresh token mismatch",
+    super(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "새로운 액세스 토큰 발급이 불가합니다.",
+        "refresh token mismatch",
         LogLevel.WARN);
   }
 }

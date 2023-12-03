@@ -15,12 +15,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "perfume_note",
+@Table(
+    name = "perfume_note",
     indexes = {
-        @Index(name = "idx_perfume_note_1", columnList = "perfumeId"),
-        @Index(name = "idx_perfume_note_2", columnList = "noteId")
-    }
-)
+      @Index(name = "idx_perfume_note_1", columnList = "perfumeId"),
+      @Index(name = "idx_perfume_note_2", columnList = "noteId")
+    })
 @NoArgsConstructor
 @Getter
 public class PerfumeNoteEntity extends BaseTimeEntity {
@@ -29,11 +29,9 @@ public class PerfumeNoteEntity extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull
-  private Long perfumeId;
+  @NotNull private Long perfumeId;
 
-  @NotNull
-  private Long noteId;
+  @NotNull private Long noteId;
 
   @Enumerated(EnumType.STRING)
   @NotNull

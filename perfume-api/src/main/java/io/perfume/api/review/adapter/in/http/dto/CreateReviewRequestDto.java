@@ -13,30 +13,25 @@ import java.util.List;
 import org.hibernate.validator.constraints.Length;
 
 public record CreateReviewRequestDto(
-    @Positive
-    Long perfumeId,
-    String dayType,
-    String strength,
-    String season,
-    String duration,
-    @NotEmpty
-    String shortReview,
+    @Positive Long perfumeId,
+    DayType dayType,
+    Strength strength,
+    Season season,
+    Duration duration,
+    @NotEmpty String shortReview,
     String fullReview,
-    @Length(max = 3)
-    List<Long> tags
-) {
+    @Length(max = 3) List<Long> tags) {
 
   public CreateReviewCommand toCommand(LocalDateTime now) {
     return new CreateReviewCommand(
         perfumeId,
-        DayType.of(dayType),
-        Strength.of(strength),
-        Season.of(season),
-        Duration.of(duration),
+        dayType,
+        strength,
+        season,
+        duration,
         shortReview,
         fullReview,
         Collections.unmodifiableList(tags),
-        now
-    );
+        now);
   }
 }

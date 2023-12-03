@@ -21,9 +21,8 @@ public class PerfumePersistenceAdapter implements PerfumeRepository {
   public Perfume save(Perfume perfume) {
     PerfumeJpaEntity perfumeJpaEntity = perfumeMapper.toPerfumeJpaEntity(perfume);
     perfumeJpaRepository.save(perfumeJpaEntity);
-    List<PerfumeNoteEntity> perfumeNoteEntities = perfumeMapper.toPerfumeNoteEntities(
-        perfumeJpaEntity.getId(),
-        perfume.getNotePyramidIds());
+    List<PerfumeNoteEntity> perfumeNoteEntities =
+        perfumeMapper.toPerfumeNoteEntities(perfumeJpaEntity.getId(), perfume.getNotePyramidIds());
     perfumeNoteJpaRepository.saveAll(perfumeNoteEntities);
     return perfumeMapper.toPerfume(perfumeJpaEntity, perfumeNoteEntities);
   }

@@ -7,6 +7,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -15,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewCommentRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewRequestDto;
-import io.perfume.api.review.adapter.out.persistence.repository.comment.ReviewCommentMapper;
 import io.perfume.api.review.application.out.ReviewCommentRepository;
 import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
@@ -57,24 +57,22 @@ class ReviewControllerTest {
 
   private MockMvc mockMvc;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
-  @Autowired
-  private ReviewRepository reviewRepository;
+  @Autowired private ReviewRepository reviewRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-  @Autowired
-  private ReviewCommentRepository reviewCommentRepository;
+  @Autowired private ReviewCommentRepository reviewCommentRepository;
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .build();
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .build();
   }
 
   @Test
@@ -82,28 +80,29 @@ class ReviewControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testCreateReview() throws Exception {
     // given
-    var dto = new CreateReviewRequestDto(
-        1L,
-        DayType.DAILY.getDescription(),
-        Strength.LIGHT.getDescription(),
-        Season.SPRING.getDescription(),
-        Duration.TOO_SHORT.getDescription(),
-        "",
-        "",
-        List.of(1L, 2L, 3L, 4L, 5L)
-    );
+    var dto =
+        new CreateReviewRequestDto(
+            1L,
+            DayType.DAILY,
+            Strength.LIGHT,
+            Season.SPRING,
+            Duration.TOO_SHORT,
+            "",
+            "",
+            List.of(1L, 2L, 3L, 4L, 5L));
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.post("/v1/reviews")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(dto))
-        )
+        .perform(
+            MockMvcRequestBuilders.post("/v1/reviews")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("create-review",
+            document(
+                "create-review",
                 requestFields(
                     fieldWithPath("perfumeId").type(JsonFieldType.NUMBER).description("향수 ID"),
                     fieldWithPath("season").type(JsonFieldType.STRING).description("어울리는 계절"),
@@ -112,11 +111,9 @@ class ReviewControllerTest {
                     fieldWithPath("duration").type(JsonFieldType.STRING).description("향수 지속력"),
                     fieldWithPath("shortReview").type(JsonFieldType.STRING).description("한줄 리뷰"),
                     fieldWithPath("fullReview").type(JsonFieldType.STRING).description("상세 리뷰"),
-                    fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그")
-                ),
+                    fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그")),
                 responseFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID")
-                )));
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID"))));
   }
 
   @Test
@@ -125,34 +122,33 @@ class ReviewControllerTest {
   void testDeleteReview() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.SPRING,
-        now
-    ));
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                1L,
+                Season.SPRING,
+                now));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.delete("/v1/reviews/{id}", review.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.delete("/v1/reviews/{id}", review.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("delete-review",
-                pathParameters(
-                    parameterWithName("id").description("삭제한 리뷰 ID")
-                ),
+            document(
+                "delete-review",
+                pathParameters(parameterWithName("id").description("삭제한 리뷰 ID")),
                 responseFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("삭제된 리뷰 ID")
-                )));
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("삭제된 리뷰 ID"))));
   }
 
   @Test
@@ -162,24 +158,25 @@ class ReviewControllerTest {
     // given
     var now = LocalDateTime.now();
     var userId = 2L;
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        userId,
-        Season.SPRING,
-        now
-    ));
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                userId,
+                Season.SPRING,
+                now));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.delete("/v1/reviews/{id}", review.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.delete("/v1/reviews/{id}", review.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isForbidden())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
@@ -194,10 +191,10 @@ class ReviewControllerTest {
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.delete("/v1/reviews/{id}", 999)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.delete("/v1/reviews/{id}", 999)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
@@ -208,51 +205,50 @@ class ReviewControllerTest {
   void testGetReviews() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        user.getId(),
-        Season.SPRING,
-        now
-    ));
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                user.getId(),
+                Season.SPRING,
+                now));
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("page", "1");
     params.add("size", "10");
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/reviews")
-            .params(params)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/reviews")
+                .params(params)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("get-reviews",
+            document(
+                "get-reviews",
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
                     fieldWithPath("[].shortReview").type(JsonFieldType.STRING).description("향수 느낌"),
                     fieldWithPath("[].user.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
-                    fieldWithPath("[].user.username").type(JsonFieldType.STRING)
+                    fieldWithPath("[].user.username")
+                        .type(JsonFieldType.STRING)
                         .description("리뷰 작성자 이름"),
-                    fieldWithPath("[].user.thumbnailUrl").type(JsonFieldType.STRING)
+                    fieldWithPath("[].user.thumbnailUrl")
+                        .type(JsonFieldType.STRING)
                         .description("리뷰 작성자 프로필 이미지"),
-                    fieldWithPath("[].tags").type(JsonFieldType.ARRAY).description("리뷰 태그")
-                )
-            ));
+                    fieldWithPath("[].tags").type(JsonFieldType.ARRAY).description("리뷰 태그"))));
   }
 
   @Test
@@ -261,49 +257,43 @@ class ReviewControllerTest {
   void testCreateReviewComment() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        user.getId(),
-        Season.SPRING,
-        now
-    ));
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                user.getId(),
+                Season.SPRING,
+                now));
     String content = "사실적인 리뷰라서 좋네요.";
     var dto = new CreateReviewCommentRequestDto(content);
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.post("/v1/reviews/{id}/comments", review.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(dto))
-        )
+        .perform(
+            RestDocumentationRequestBuilders.post("/v1/reviews/{id}/comments", review.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
         .andDo(print())
         .andExpect(status().isCreated())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("create-review-comment",
-                pathParameters(
-                    parameterWithName("id").description("리뷰 ID")
-                ),
+            document(
+                "create-review-comment",
+                pathParameters(parameterWithName("id").description("리뷰 ID")),
                 requestFields(
-                    fieldWithPath("content").type(JsonFieldType.STRING).description("리뷰 댓글 내용")
-                ),
+                    fieldWithPath("content").type(JsonFieldType.STRING).description("리뷰 댓글 내용")),
                 responseFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 댓글 ID")
-                )
-            ));
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 댓글 ID"))));
   }
 
   @Test
@@ -312,22 +302,19 @@ class ReviewControllerTest {
   void testCreateReviewCommentIfNotExists() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
     var dto = new CreateReviewCommentRequestDto("test");
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.post("/v1/reviews/{id}/comments", 1)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(dto))
-        )
+        .perform(
+            RestDocumentationRequestBuilders.post("/v1/reviews/{id}/comments", 1)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
         .andDo(print())
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -335,13 +322,12 @@ class ReviewControllerTest {
         .andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()))
         .andExpect(jsonPath("$.message").value("존재하지 않는 리뷰 정보입니다."))
         .andDo(
-            document("create-review-comment-failed",
+            document(
+                "create-review-comment-failed",
                 responseFields(
                     fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
-                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
-                )
-            ));
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지"))));
   }
 
   @Test
@@ -350,46 +336,43 @@ class ReviewControllerTest {
   void testDeleteReviewComment() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        user.getId(),
-        Season.SPRING,
-        now
-    ));
-    var comment = reviewCommentRepository
-        .save(ReviewComment.create(review.getId(), user.getId(), "test", now));
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                user.getId(),
+                Season.SPRING,
+                now));
+    var comment =
+        reviewCommentRepository.save(
+            ReviewComment.create(review.getId(), user.getId(), "test", now));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.delete("/v1/reviews/{id}/comments/{commentId}",
-                review.getId(), comment.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.delete(
+                    "/v1/reviews/{id}/comments/{commentId}", review.getId(), comment.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("delete-review-comment",
+            document(
+                "delete-review-comment",
                 pathParameters(
                     parameterWithName("id").description("리뷰 ID"),
-                    parameterWithName("commentId").description("삭제할 리뷰 댓글의 ID")
-                ),
+                    parameterWithName("commentId").description("삭제할 리뷰 댓글의 ID")),
                 responseFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 댓글 ID")
-                )
-            ));
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 댓글 ID"))));
   }
 
   @Test
@@ -398,45 +381,42 @@ class ReviewControllerTest {
   void testDeleteReviewCommentIfNotExists() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        user.getId(),
-        Season.SPRING,
-        now
-    ));
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                user.getId(),
+                Season.SPRING,
+                now));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.delete("/v1/reviews/{id}/comments/{commentId}",
-                review.getId(), 1)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.delete(
+                    "/v1/reviews/{id}/comments/{commentId}", review.getId(), 1)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
         .andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()))
         .andExpect(jsonPath("$.message").value("존재하지 않는 리뷰 댓글입니다."))
         .andDo(
-            document("delete-review-comment-failed",
+            document(
+                "delete-review-comment-failed",
                 responseFields(
                     fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
-                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
-                )
-            ));
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지"))));
   }
 
   @Test
@@ -445,40 +425,36 @@ class ReviewControllerTest {
   void testLikeReview() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        user.getId(),
-        Season.SPRING,
-        now
-    ));
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                user.getId(),
+                Season.SPRING,
+                now));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.post("/v1/reviews/{id}/like",
-                review.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.post("/v1/reviews/{id}/like", review.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("like-review",
+            document(
+                "like-review",
                 responseFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID")
-                )
-            ));
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID"))));
   }
 
   @Test
@@ -487,36 +463,34 @@ class ReviewControllerTest {
   void testGetReviewDetail() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        user.getId(),
-        Season.SPRING,
-        now
-    ));
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                user.getId(),
+                Season.SPRING,
+                now));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/reviews/{id}",
-                review.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/reviews/{id}", review.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("get-review-detail",
+            document(
+                "get-review-detail",
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
                     fieldWithPath("shortReview").type(JsonFieldType.STRING).description("한줄 리뷰"),
@@ -527,12 +501,33 @@ class ReviewControllerTest {
                     fieldWithPath("duration").type(JsonFieldType.STRING).description("향수 지속력"),
                     fieldWithPath("perfumeId").type(JsonFieldType.NUMBER).description("향수 ID"),
                     fieldWithPath("author.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
-                    fieldWithPath("author.name").type(JsonFieldType.STRING).description("리뷰 작성자 이름"),
+                    fieldWithPath("author.name")
+                        .type(JsonFieldType.STRING)
+                        .description("리뷰 작성자 이름"),
                     fieldWithPath("tags").type(JsonFieldType.ARRAY).description("리뷰 태그"),
                     fieldWithPath("images").type(JsonFieldType.ARRAY).description("리뷰 이미지"),
                     fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
-                    fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 수")
-                )
-            ));
+                    fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 수"))));
+  }
+
+  @Test
+  void 리뷰_항목_조회() throws Exception {
+    // when & then
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/reviews/options?type=strength")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document(
+                "get-review-options",
+                queryParameters(
+                    parameterWithName("type")
+                        .description("리뷰 항목 타입 (strength, season, duration, dayType)")),
+                responseFields(
+                    fieldWithPath("[].code").type(JsonFieldType.STRING).description("리뷰 항목 코드"),
+                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("리뷰 항목 이름"))));
   }
 }

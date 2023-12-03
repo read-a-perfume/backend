@@ -17,8 +17,7 @@ public class PerfumeFavoriteId implements Serializable {
   @Column(name = "perfume_id")
   private Long perfumeId;
 
-  protected PerfumeFavoriteId() {
-  }
+  protected PerfumeFavoriteId() {}
 
   public PerfumeFavoriteId(Long userId, Long perfumeId) {
     this.userId = userId;
@@ -33,18 +32,22 @@ public class PerfumeFavoriteId implements Serializable {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
     PerfumeFavoriteId that = (PerfumeFavoriteId) o;
-    return userId != null && Objects.equals(userId, that.userId)
-        && perfumeId != null && Objects.equals(perfumeId, that.perfumeId);
+    return userId != null
+        && Objects.equals(userId, that.userId)
+        && perfumeId != null
+        && Objects.equals(perfumeId, that.perfumeId);
   }
 
   @Override

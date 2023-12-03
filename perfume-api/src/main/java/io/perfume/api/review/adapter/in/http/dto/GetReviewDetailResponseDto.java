@@ -17,8 +17,7 @@ public record GetReviewDetailResponseDto(
     Long perfumeId,
     ReviewDetailUserResult author,
     long likeCount,
-    long commentCount
-) {
+    long commentCount) {
 
   public static GetReviewDetailResponseDto from(ReviewViewDetailResult result) {
     return new GetReviewDetailResponseDto(
@@ -34,7 +33,6 @@ public record GetReviewDetailResponseDto(
         result.perfumeId(),
         result.author(),
         result.likeCount(),
-        result.commentCount()
-    );
+        result.commentCount());
   }
 }

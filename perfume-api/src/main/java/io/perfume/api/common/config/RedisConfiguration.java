@@ -7,5 +7,4 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @Configuration
 @EnableRedisRepositories
 @RequiredArgsConstructor
-public class RedisConfiguration {
-}
+public class RedisConfiguration {}

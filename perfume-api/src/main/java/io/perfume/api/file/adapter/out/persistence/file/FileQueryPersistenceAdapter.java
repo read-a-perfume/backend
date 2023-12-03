@@ -22,10 +22,9 @@ public class FileQueryPersistenceAdapter implements FileQueryRepository {
   public Optional<File> findOneByFileId(Long fileId) {
     QFileJpaEntity file = QFileJpaEntity.fileJpaEntity;
     FileJpaEntity fileJpaEntity =
-        jpaQueryFactory.selectFrom(file)
-            .where(
-                file.id.eq(fileId)
-                    .and(file.deletedAt.isNull()))
+        jpaQueryFactory
+            .selectFrom(file)
+            .where(file.id.eq(fileId).and(file.deletedAt.isNull()))
             .fetchOne();
     return Optional.ofNullable(fileMapper.toDomain(fileJpaEntity));
   }
@@ -34,10 +33,9 @@ public class FileQueryPersistenceAdapter implements FileQueryRepository {
   public Optional<File> findOneByFileURL(String fileURL) {
     QFileJpaEntity file = QFileJpaEntity.fileJpaEntity;
     FileJpaEntity fileJpaEntity =
-        jpaQueryFactory.selectFrom(file)
-            .where(
-                file.url.eq(fileURL)
-                    .and(file.deletedAt.isNull()))
+        jpaQueryFactory
+            .selectFrom(file)
+            .where(file.url.eq(fileURL).and(file.deletedAt.isNull()))
             .fetchOne();
     return Optional.ofNullable(fileMapper.toDomain(fileJpaEntity));
   }

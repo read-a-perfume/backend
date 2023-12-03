@@ -1,8 +1,3 @@
 package io.perfume.api.review.adapter.in.http.dto;
 
-public record ReviewUser(
-    Long id,
-    String username,
-    String thumbnailUrl
-) {
-}
+public record ReviewUser(Long id, String username, String thumbnailUrl) {}

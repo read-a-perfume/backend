@@ -14,8 +14,9 @@ public class UpdateReviewCommentService implements UpdateReviewCommentUseCase {
 
   private final ReviewCommentQueryRepository reviewQueryRepository;
 
-  public UpdateReviewCommentService(ReviewCommentRepository reviewCommentRepository,
-                                    ReviewCommentQueryRepository reviewQueryRepository) {
+  public UpdateReviewCommentService(
+      ReviewCommentRepository reviewCommentRepository,
+      ReviewCommentQueryRepository reviewQueryRepository) {
     this.reviewCommentRepository = reviewCommentRepository;
     this.reviewQueryRepository = reviewQueryRepository;
   }
@@ -23,7 +24,8 @@ public class UpdateReviewCommentService implements UpdateReviewCommentUseCase {
   @Override
   public void updateReviewComment(Long userId, Long commentId, String newComment) {
     final var comment =
-        reviewQueryRepository.findById(commentId)
+        reviewQueryRepository
+            .findById(commentId)
             .orElseThrow(() -> new NotFoundReviewCommentException(commentId));
 
     if (!comment.isOwned(userId)) {

@@ -21,23 +21,23 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({ReviewQueryPersistenceAdapter.class, ReviewMapper.class, TagMapper.class,
-    TestQueryDSLConfiguration.class})
+@Import({
+  ReviewQueryPersistenceAdapter.class,
+  ReviewMapper.class,
+  TagMapper.class,
+  TestQueryDSLConfiguration.class
+})
 @DataJpaTest
 @EnableJpaAuditing
 class ReviewQueryPersistenceAdapterTest {
 
-  @Autowired
-  private ReviewQueryRepository queryRepository;
+  @Autowired private ReviewQueryRepository queryRepository;
 
-  @Autowired
-  private ReviewMapper reviewMapper;
+  @Autowired private ReviewMapper reviewMapper;
 
-  @Autowired
-  private TagMapper tagMapper;
+  @Autowired private TagMapper tagMapper;
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
   @Test
   @DisplayName("존재하지 않는 데이터를 조회할 경우 빈 객체를 반환한다.")
@@ -55,17 +55,17 @@ class ReviewQueryPersistenceAdapterTest {
   void testFindById() {
     // given
     var now = LocalDateTime.now();
-    var review = Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.SPRING,
-        now
-    );
+    var review =
+        Review.create(
+            "test",
+            "test description",
+            Strength.LIGHT,
+            Duration.TOO_SHORT,
+            DayType.DAILY,
+            1L,
+            1L,
+            Season.SPRING,
+            now);
     var createdReview = reviewMapper.toEntity(review);
     entityManager.persist(createdReview);
     entityManager.flush();

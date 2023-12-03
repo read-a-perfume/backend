@@ -17,8 +17,8 @@ public class CreateReviewService implements CreateReviewUseCase {
 
   private final AddReviewTagUseCase addReviewTagUseCase;
 
-  public CreateReviewService(ReviewRepository reviewRepository,
-                             AddReviewTagUseCase addReviewTagUseCase) {
+  public CreateReviewService(
+      ReviewRepository reviewRepository, AddReviewTagUseCase addReviewTagUseCase) {
     this.reviewRepository = reviewRepository;
     this.addReviewTagUseCase = addReviewTagUseCase;
   }
@@ -34,8 +34,7 @@ public class CreateReviewService implements CreateReviewUseCase {
         command.perfumeId(),
         authorId,
         command.season(),
-        command.now()
-    );
+        command.now());
   }
 
   @Override
