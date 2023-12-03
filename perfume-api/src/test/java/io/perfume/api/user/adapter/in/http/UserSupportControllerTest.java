@@ -4,28 +4,25 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.perfume.api.file.domain.File;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import io.perfume.api.user.application.port.in.dto.UserProfileResult;
-import io.perfume.api.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -41,7 +38,6 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-@WithMockUser(username = "1")
 class UserSupportControllerTest {
   private MockMvc mockMvc;
 
@@ -63,6 +59,7 @@ class UserSupportControllerTest {
 
   @Test
   @DisplayName("현재 로그인 중인 유저의 이름과 프로필 사진을 조회한다.")
+  @WithMockUser(username = "1")
   void me() throws Exception {
     // given
     Long userId =1L;
@@ -88,7 +85,31 @@ class UserSupportControllerTest {
   }
 
   @Test
+  @DisplayName("현재 로그인 중이지 않다면 유저의 이름과 프로필 사진을 조회할 수 없다.")
+  void failedToGetMe() throws Exception {
+    // given
+
+    // when & then
+    mockMvc.perform(RestDocumentationRequestBuilders.get("/v1/me")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.status").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+        .andExpect(jsonPath("$.statusCode").value(HttpStatus.UNAUTHORIZED.value()))
+        .andExpect(jsonPath("$.message").value("User Not Authenticated. Please login."))
+        .andDo(
+            document("get-me-failed",
+                responseFields(
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
+                )
+            )
+        );
+  }
+
+  @Test
   @DisplayName("현재 로그인 중인 유저를 탈퇴시킨다.")
+  @WithMockUser(username = "1")
   void leave() throws Exception {
     // given
     doNothing().when(leaveUserUseCase).leave(anyLong());
