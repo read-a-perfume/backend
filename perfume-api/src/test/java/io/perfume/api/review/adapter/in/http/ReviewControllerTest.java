@@ -251,7 +251,7 @@ class ReviewControllerTest {
                         .description("리뷰 작성자 이름"),
                     fieldWithPath("[].user.thumbnailUrl").type(JsonFieldType.STRING)
                         .description("리뷰 작성자 프로필 이미지"),
-                    fieldWithPath("[].tags").type(JsonFieldType.ARRAY).description("리뷰 태그")
+                    fieldWithPath("[].keywords").type(JsonFieldType.ARRAY).description("리뷰 태그")
                 )
             ));
   }

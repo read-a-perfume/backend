@@ -42,7 +42,7 @@ public class CreateReviewService implements CreateReviewUseCase {
   @Transactional
   public ReviewResult create(Long authorId, CreateReviewCommand command) {
     Review createdReview = reviewRepository.save(createReview(authorId, command));
-    addReviewTagUseCase.addTags(createdReview.getId(), command.tags());
+    addReviewTagUseCase.addTags(createdReview.getId(), command.keywords());
 
     return ReviewResult.from(createdReview);
   }

@@ -15,7 +15,7 @@ public record CreateReviewCommand(
     Duration duration,
     String shortReview,
     String situation,
-    List<Long> tags,
+    List<Long> keywords,
     LocalDateTime now
 ) {
 }
