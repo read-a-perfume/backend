@@ -8,6 +8,7 @@ import io.perfume.api.perfume.adapter.in.http.dto.FavoritePerfumeResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeFavoriteResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
+import io.perfume.api.perfume.adapter.in.http.dto.PerfumeStatisticResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.SimplePerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
@@ -17,8 +18,6 @@ import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeFavoriteResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
-import io.perfume.api.review.application.in.ReviewStatisticUseCase;
-import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -48,8 +47,6 @@ public class PerfumeController {
   private final UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
 
   private final GetFavoritePerfumesUseCase getFavoritePerfumesUseCase;
-
-  private final ReviewStatisticUseCase reviewStatisticUseCase;
 
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
@@ -105,7 +102,7 @@ public class PerfumeController {
   }
 
   @GetMapping("/{id}/statistics")
-  public ReviewStatisticResult getStatistics(@PathVariable Long id) {
-    return reviewStatisticUseCase.getStatisticByPerfume(id);
+  public PerfumeStatisticResponseDto getStatistics(@PathVariable Long id) {
+    return PerfumeStatisticResponseDto.from(findPerfumeUseCase.getStatistics(id));
   }
 }

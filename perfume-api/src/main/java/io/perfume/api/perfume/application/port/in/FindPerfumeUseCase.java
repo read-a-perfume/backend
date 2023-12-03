@@ -5,6 +5,7 @@ import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
+import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -17,4 +18,6 @@ public interface FindPerfumeUseCase {
   CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable);
 
   List<PerfumeNameResult> searchPerfumeByQuery(String query);
+
+  ReviewStatisticResult getStatistics(Long id);
 }

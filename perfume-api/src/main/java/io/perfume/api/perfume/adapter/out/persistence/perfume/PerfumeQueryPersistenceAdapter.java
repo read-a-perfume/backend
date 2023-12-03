@@ -35,6 +35,13 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
   private final PerfumeMapper perfumeMapper;
 
   @Override
+  public boolean existsPerfumeById(Long id) {
+    return jpaQueryFactory.from(perfumeJpaEntity)
+        .where(perfumeNoteEntity.id.eq(id))
+        .fetchFirst() != null;
+  }
+
+  @Override
   public Optional<Perfume> findPerfumeById(Long id) {
     PerfumeJpaEntity entity = jpaQueryFactory.select(perfumeJpaEntity)
         .from(perfumeJpaEntity)

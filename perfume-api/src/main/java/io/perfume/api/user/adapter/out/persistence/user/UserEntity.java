@@ -75,7 +75,8 @@ public class UserEntity extends BaseTimeEntity {
 
   @Enumerated(EnumType.STRING)
   @Comment("사용자 성별")
-  private Sex sex;
+  @Column(nullable = false)
+  private Sex sex = Sex.OTHER;
 
   @NotNull
   @Comment("마케팅 동의 여부")
@@ -91,8 +92,8 @@ public class UserEntity extends BaseTimeEntity {
 
   private Long thumbnailId;
 
-  @Builder(access = AccessLevel.PACKAGE)
-  public UserEntity(Long id, String username, String email, String password, Role role, Boolean marketingConsent, Boolean promotionConsent,
+  @Builder
+  public UserEntity(Long id, String username, String email, String password, Role role, String bio, LocalDate birthday, Sex sex, Boolean marketingConsent, Boolean promotionConsent, Long thumbnailId,
                     LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
@@ -100,8 +101,12 @@ public class UserEntity extends BaseTimeEntity {
     this.email = email;
     this.password = password;
     this.role = role;
+    this.bio = bio;
+    this.birthday = birthday;
+    this.sex = sex;
     this.marketingConsent = marketingConsent;
     this.promotionConsent = promotionConsent;
+    this.thumbnailId = thumbnailId;
   }
 
   @Override
