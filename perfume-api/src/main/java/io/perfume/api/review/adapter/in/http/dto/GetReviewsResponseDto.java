@@ -7,7 +7,7 @@ public record GetReviewsResponseDto(
     Long id,
     String shortReview,
     ReviewUser user,
-    List<String> tags
+    List<String> keywords
 ) {
 
   public static List<GetReviewsResponseDto> from(List<ReviewDetailResult> results) {

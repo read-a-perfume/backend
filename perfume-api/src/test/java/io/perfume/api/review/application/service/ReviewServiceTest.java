@@ -13,31 +13,37 @@ import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.review.stub.StubReviewLikeRepository;
 import io.perfume.api.review.stub.StubReviewRepository;
+import io.perfume.api.review.stub.StubReviewThumbnailRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@SuppressWarnings("NonAsciiCharacters")
 class ReviewServiceTest {
 
   private final StubReviewRepository reviewQueryRepository = new StubReviewRepository();
-
   private final StubReviewLikeRepository reviewLikeRepository = new StubReviewLikeRepository();
+  private final StubReviewThumbnailRepository reviewThumbnailRepository =
+      new StubReviewThumbnailRepository();
 
-  private final ReviewService reviewService =
-      new ReviewService(reviewQueryRepository, reviewLikeRepository, reviewLikeRepository);
+  private final ReviewService reviewService = new ReviewService(
+      reviewQueryRepository,
+      reviewQueryRepository,
+      reviewLikeRepository,
+      reviewLikeRepository,
+      reviewThumbnailRepository);
 
   @BeforeEach
   void setUp() {
     reviewQueryRepository.clear();
     reviewLikeRepository.clear();
+    reviewThumbnailRepository.clear();
   }
 
   @Test
-  @DisplayName("리뷰에 좋아요를 표시한다.")
-  void testLikeReview() {
+  void 리뷰_좋아요_표시() {
     // given
     final long userId = 1L;
     final long reviewId = 1L;
@@ -67,8 +73,7 @@ class ReviewServiceTest {
   }
 
   @Test
-  @DisplayName("리뷰가 존재하지 않을 경우 좋아요 요청이 실패한다.")
-  void testLikeReviewFailIfReviewNotExist() {
+  void 없는_리뷰_좋아요_요청_실패() {
     // given
     final long userId = 1L;
     final long reviewId = 1L;
@@ -80,8 +85,7 @@ class ReviewServiceTest {
   }
 
   @Test
-  @DisplayName("자신의 리뷰에 좋아료를 표시할 수 없다.")
-  void testLikeReviewFailIfReviewIsMine() {
+  void 본인_리뷰_좋아요_차단() {
     // given
     final long userId = 1L;
     final long reviewId = 1L;
@@ -109,8 +113,7 @@ class ReviewServiceTest {
   }
 
   @Test
-  @DisplayName("이미 좋아요 표시한 경우 좋아요 취소한다.")
-  void testLikeReviewCancel() {
+  void 이미_좋아요한_경우_취소() {
     // given
     final long userId = 1L;
     final long reviewId = 1L;
