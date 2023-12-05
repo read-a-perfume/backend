@@ -14,6 +14,7 @@ import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.adapter.out.persistence.user.Sex;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -62,6 +63,17 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
 
   @Override
   public ReviewFeatureCount getReviewFeatureCount(Long perfumeId) {
+    Long totalReviews = jpaQueryFactory.select(reviewEntity.id.count())
+        .from(reviewEntity)
+        .where(reviewEntity.perfumeId.eq(perfumeId),
+            reviewEntity.deletedAt.isNull())
+        .fetchOne();
+
+    if (totalReviews == null || totalReviews == 0) {
+      return new ReviewFeatureCount(Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
+          Collections.emptyMap(), totalReviews);
+    }
+
     Map<Strength, Long> strengthMap = jpaQueryFactory
         .from(reviewEntity)
         .where(reviewEntity.perfumeId.eq(perfumeId))
@@ -94,12 +106,7 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
         .groupBy(userEntity.sex)
         .transform(groupBy(userEntity.sex).as(reviewEntity.id.count()));
 
-    Long totalReviews = jpaQueryFactory.select(reviewEntity.id.count())
-        .from(reviewEntity)
-        .fetchOne();
-
-    return new ReviewFeatureCount(strengthMap, durationMap, seasonMap, dayTypeMap, sexMap,
-        totalReviews);
+    return new ReviewFeatureCount(strengthMap, durationMap, seasonMap, dayTypeMap, sexMap, totalReviews);
   }
 
   public Long findReviewCountByUserId(Long userId) {
