@@ -68,7 +68,7 @@ class JwtAuthenticationFilterTest {
   void FailToAuthenticateWithExpiredToken() throws Exception {
     String jwt = jsonWebTokenGenerator.create("access_token", Map.of("userId", 1L, "roles", List.of("ROLE_USER")), 1, LocalDateTime.now());
     Long userId = 1L;
-    UserProfileResult userProfileResult = new UserProfileResult(userId, "username", "thumbnailUrl.com");
+    UserProfileResult userProfileResult = new UserProfileResult(userId, "username", "thumbnail.com");
     given(findUserUseCase.findUserProfileById(anyLong())).willReturn(userProfileResult);
 
     Thread.sleep(1000);

@@ -33,7 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-public class FindBrandControllerTest {
+class FindBrandControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
@@ -54,15 +54,15 @@ public class FindBrandControllerTest {
     String name = "CHANEL";
     String story =
         "샤넬 향수는 특별한 향과 함께 있는 그대로의 모습을 드러내는 작품입니다. 특별한 시리즈를 통해 샤넬 향수에 관련된 노하우와 전문 기술, 창의성을 끊임없이 추구하는 샤넬의 여정을 확인해 보세요.";
-    String thumbnailUrl = "testUrl.com";
+    String thumbnail = "testUrl.com";
 
     BrandResponse brandResponse = BrandResponse.builder()
         .name(name)
         .story(story)
-        .thumbnailUrl(thumbnailUrl)
+        .thumbnail(thumbnail)
         .build();
 
-    BrandResult brandResult = new BrandResult(name, story, thumbnailUrl);
+    BrandResult brandResult = new BrandResult(name, story, thumbnail);
 
     given(findBrandUseCase.findBrandById(anyLong())).willReturn(brandResult);
 
@@ -77,13 +77,13 @@ public class FindBrandControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.name").value(brandResponse.name()))
         .andExpect(jsonPath("$.story").value(brandResponse.story()))
-        .andExpect(jsonPath("$.thumbnailUrl").value(brandResponse.thumbnailUrl()))
+        .andExpect(jsonPath("$.thumbnail").value(brandResponse.thumbnail()))
         .andDo(
             document("get-brand",
                 responseFields(
                     fieldWithPath("name").type(JsonFieldType.STRING).description("브랜드 이름"),
                     fieldWithPath("story").type(JsonFieldType.STRING).description("브랜드 이야기"),
-                    fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING)
+                    fieldWithPath("thumbnail").type(JsonFieldType.STRING)
                         .description("브랜드 썸네일 이미지")
                 )));
   }

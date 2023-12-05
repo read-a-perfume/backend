@@ -251,7 +251,7 @@ class ReviewControllerTest {
                     fieldWithPath("[].user.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
                     fieldWithPath("[].user.username").type(JsonFieldType.STRING)
                         .description("리뷰 작성자 이름"),
-                    fieldWithPath("[].user.thumbnailUrl").type(JsonFieldType.STRING)
+                    fieldWithPath("[].user.thumbnail").type(JsonFieldType.STRING)
                         .description("리뷰 작성자 프로필 이미지"),
                     fieldWithPath("[].keywords").type(JsonFieldType.ARRAY).description("리뷰 태그")
                 )
