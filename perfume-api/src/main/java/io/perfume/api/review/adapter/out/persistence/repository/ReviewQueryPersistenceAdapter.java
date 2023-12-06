@@ -98,6 +98,15 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
         .from(reviewEntity)
         .fetchOne();
 
-    return new ReviewFeatureCount(strengthMap, durationMap, seasonMap, dayTypeMap, sexMap, totalReviews);
+    return new ReviewFeatureCount(strengthMap, durationMap, seasonMap, dayTypeMap, sexMap,
+        totalReviews);
+  }
+
+  public Long findReviewCountByUserId(Long userId) {
+    return jpaQueryFactory.select(reviewEntity.count())
+        .from(reviewEntity)
+        .where(reviewEntity.userId.eq(userId)
+            .and(reviewEntity.deletedAt.isNull()))
+        .fetchOne();
   }
 }

@@ -35,6 +35,10 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
     return null;
   }
 
+  public Long findReviewCountByUserId(Long userId) {
+    return (long) reviews.size();
+  }
+
   public Review addReview(Review review) {
     reviews.add(review);
     return review;

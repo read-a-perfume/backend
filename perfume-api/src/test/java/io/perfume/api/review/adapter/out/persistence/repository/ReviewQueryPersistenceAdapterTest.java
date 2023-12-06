@@ -19,6 +19,7 @@ import io.perfume.api.user.domain.Role;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,5 +156,33 @@ class ReviewQueryPersistenceAdapterTest {
     assertThat(reviewFeatureCount.durationMap()).containsEntry(Duration.MEDIUM, 5L);
     assertThat(reviewFeatureCount.durationMap()).containsEntry(Duration.SHORT, 3L);
     assertThat(reviewFeatureCount.durationMap().containsKey(Duration.TOO_SHORT)).isFalse(); // 아예 지표가 없는 항목의 경우 저장되지 않음
+  }
+
+  @Test
+  void testReviewCountByUser() {
+    // given
+    var now = LocalDateTime.now();
+    var userId = 1L;
+    var review = Review.create(
+        "test",
+        "test description",
+        Strength.LIGHT,
+        Duration.LONG,
+        DayType.DAILY,
+        1L,
+        userId,
+        Season.SPRING,
+        now
+    );
+    var createdReview = reviewMapper.toEntity(review);
+    entityManager.persist(createdReview);
+    entityManager.flush();
+    entityManager.clear();
+
+    // when
+    var count = queryRepository.findReviewCountByUserId(userId);
+
+    // then
+    assertThat(count).isEqualTo(1);
   }
 }
