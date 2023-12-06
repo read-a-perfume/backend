@@ -56,11 +56,11 @@ public class FindUserService implements FindUserUseCase {
   public UserProfileResult findUserProfileById(long userId) {
     User user = userQueryRepository.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     Optional<File> fileById = findFileUseCase.findFileById(user.getThumbnailId());
-    String thumbnailUrl = "";
+    String thumbnail = "";
     if(fileById.isPresent()) {
-      thumbnailUrl = fileById.get().getUrl();
+      thumbnail = fileById.get().getUrl();
     }
-    return new UserProfileResult(user.getId(), user.getUsername(), thumbnailUrl);
+    return new UserProfileResult(user.getId(), user.getUsername(), thumbnail);
   }
 
   private UserResult toDto(User user) {

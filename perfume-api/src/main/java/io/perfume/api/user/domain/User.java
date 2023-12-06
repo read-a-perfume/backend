@@ -2,7 +2,9 @@ package io.perfume.api.user.domain;
 
 import encryptor.OneWayEncryptor;
 import io.perfume.api.base.BaseTimeDomain;
+import io.perfume.api.user.adapter.out.persistence.user.Sex;
 import io.perfume.api.user.application.exception.UserPasswordNotMatchException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -19,13 +21,16 @@ public class User extends BaseTimeDomain {
   private String email;
   private String password;
   private Role role;
+  private String bio;
+  private LocalDate birthday;
+  private Sex sex;
   private boolean marketingConsent;
   private boolean promotionConsent;
   private Long businessId;
   private Long thumbnailId;
 
   @Builder
-  private User(Long id, String username, String email, String password, Role role, Long businessId, Long thumbnailId, LocalDateTime createdAt,
+  private User(Long id, String username, String email, String password, Role role, String bio, LocalDate birthday, Sex sex, Long businessId, Long thumbnailId, LocalDateTime createdAt,
                LocalDateTime updatedAt, LocalDateTime deletedAt, boolean marketingConsent, boolean promotionConsent) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
@@ -33,6 +38,9 @@ public class User extends BaseTimeDomain {
     this.email = email;
     this.password = password;
     this.role = role;
+    this.bio = bio;
+    this.birthday = birthday;
+    this.sex = sex;
     this.businessId = businessId;
     this.thumbnailId = thumbnailId;
     this.marketingConsent = marketingConsent;
@@ -46,6 +54,7 @@ public class User extends BaseTimeDomain {
         .email(email)
         .password(password)
         .role(Role.USER)
+        .sex(Sex.OTHER)
         .marketingConsent(marketingConsent)
         .promotionConsent(promotionConsent)
         .build();
@@ -57,6 +66,7 @@ public class User extends BaseTimeDomain {
         .email(email)
         .password(password)
         .role(Role.USER)
+        .sex(Sex.OTHER)
         .marketingConsent(false)
         .promotionConsent(false)
         .createdAt(now)
@@ -66,7 +76,7 @@ public class User extends BaseTimeDomain {
   }
 
   // Only Adapter
-  public static User withId(Long id, String username, String email, String password, Role role, Long businessId, Long thumbnailId,
+  public static User withId(Long id, String username, String email, String password, Role role, String bio, LocalDate birthday, Sex sex, Long businessId, Long thumbnailId,
                             LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
     return User.builder()
         .id(id)
@@ -74,6 +84,11 @@ public class User extends BaseTimeDomain {
         .email(email)
         .password(password)
         .role(role)
+        .bio(bio)
+        .birthday(birthday)
+        .sex(sex)
+        .marketingConsent(false)
+        .promotionConsent(false)
         .businessId(businessId)
         .thumbnailId(thumbnailId)
         .createdAt(createdAt)

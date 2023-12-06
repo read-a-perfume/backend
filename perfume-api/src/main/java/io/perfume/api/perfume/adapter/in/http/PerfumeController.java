@@ -8,6 +8,7 @@ import io.perfume.api.perfume.adapter.in.http.dto.FavoritePerfumeResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeFavoriteResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
+import io.perfume.api.perfume.adapter.in.http.dto.PerfumeStatisticResponseDto;
 import io.perfume.api.perfume.adapter.in.http.dto.SimplePerfumeResponseDto;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
@@ -98,5 +99,10 @@ public class PerfumeController {
   public List<PerfumeNameResponseDto> searchPerfumeByQuery(@RequestParam String query) {
     List<PerfumeNameResult> perfumesByQuery = findPerfumeUseCase.searchPerfumeByQuery(query);
     return perfumesByQuery.stream().map(PerfumeNameResponseDto::of).toList();
+  }
+
+  @GetMapping("/{id}/statistics")
+  public PerfumeStatisticResponseDto getStatistics(@PathVariable Long id) {
+    return PerfumeStatisticResponseDto.from(findPerfumeUseCase.getStatistics(id));
   }
 }

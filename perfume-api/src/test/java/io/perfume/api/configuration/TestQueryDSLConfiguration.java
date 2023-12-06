@@ -1,5 +1,6 @@
 package io.perfume.api.configuration;
 
+import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.auth.adapter.out.persistence.AuthenticationKeyMapper;
 import io.perfume.api.auth.adapter.out.persistence.AuthenticationKeyQueryRepositoryImpl;
@@ -19,7 +20,7 @@ public class TestQueryDSLConfiguration {
 
   @Bean
   public JPAQueryFactory jpaQueryFactory() {
-    return new JPAQueryFactory(entityManager);
+    return new JPAQueryFactory(JPQLTemplates.DEFAULT, entityManager);
   }
 
   @Bean

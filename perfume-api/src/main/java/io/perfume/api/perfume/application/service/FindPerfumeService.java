@@ -16,6 +16,8 @@ import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
+import io.perfume.api.review.application.in.ReviewStatisticUseCase;
+import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   private final FindCategoryUseCase findCategoryUseCase;
   private final FindBrandUseCase findBrandUseCase;
   private final FindFileUseCase findFileUseCase;
+  private final ReviewStatisticUseCase reviewStatisticUseCase;
 
   @Override
   public PerfumeResult findPerfumeById(Long id) {
@@ -39,7 +42,7 @@ public class FindPerfumeService implements FindPerfumeUseCase {
     NotePyramid notePyramid = perfumeQueryRepository.getNotePyramidByPerfume(perfume.getId());
     Optional<File> fileById = findFileUseCase.findFileById(perfume.getThumbnailId());
     String thumbnail = "";
-    if(fileById.isPresent()) {
+    if (fileById.isPresent()) {
       thumbnail = fileById.get().getUrl();
     }
 
@@ -59,5 +62,13 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   @Override
   public List<PerfumeNameResult> searchPerfumeByQuery(String query) {
     return perfumeQueryRepository.searchPerfumeByQuery(query);
+  }
+
+  @Override
+  public ReviewStatisticResult getStatistics(Long id) {
+    if (!perfumeQueryRepository.existsPerfumeById(id)) {
+      throw new PerfumeNotFoundException(id);
+    }
+    return reviewStatisticUseCase.getStatisticByPerfume(id);
   }
 }

@@ -16,6 +16,9 @@ public class UserMapper {
         userEntity.getEmail(),
         userEntity.getPassword(),
         userEntity.getRole(),
+        userEntity.getBio(),
+        userEntity.getBirthday(),
+        userEntity.getSex(),
         userEntity.getBusinessId(),
         userEntity.getThumbnailId(),
         userEntity.getCreatedAt(),
@@ -33,6 +36,9 @@ public class UserMapper {
         .email(user.getEmail())
         .password(user.getPassword())
         .role(user.getRole())
+        .bio(user.getBio())
+        .birthday(user.getBirthday())
+        .sex(user.getSex())
         .promotionConsent(user.isPromotionConsent())
         .marketingConsent(user.isMarketingConsent())
         .createdAt(user.getCreatedAt())

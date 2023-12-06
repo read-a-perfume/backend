@@ -14,7 +14,6 @@ import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
-import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteJpaRepository;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
@@ -31,8 +30,15 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
   private final JPAQueryFactory jpaQueryFactory;
-  private final PerfumeNoteJpaRepository perfumeNoteJpaRepository;
   private final PerfumeMapper perfumeMapper;
+
+  @Override
+  public boolean existsPerfumeById(Long id) {
+    return jpaQueryFactory.from(perfumeJpaEntity)
+        .where(perfumeJpaEntity.id.eq(id),
+            perfumeJpaEntity.deletedAt.isNull())
+        .fetchFirst() != null;
+  }
 
   @Override
   public Optional<Perfume> findPerfumeById(Long id) {

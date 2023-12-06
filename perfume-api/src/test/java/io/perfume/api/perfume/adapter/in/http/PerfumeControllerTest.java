@@ -33,10 +33,18 @@ import io.perfume.api.perfume.application.port.out.PerfumeRepository;
 import io.perfume.api.perfume.domain.Concentration;
 import io.perfume.api.perfume.domain.NotePyramidIds;
 import io.perfume.api.perfume.domain.Perfume;
+import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
+import io.perfume.api.review.domain.type.Season;
+import io.perfume.api.review.domain.type.Strength;
+import io.perfume.api.user.adapter.out.persistence.user.Sex;
 import io.perfume.api.user.application.port.out.UserRepository;
-import io.perfume.api.perfume.domain.Concentration;
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +58,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -338,5 +347,70 @@ class PerfumeControllerTest {
                     fieldWithPath("[].perfumeNameWithBrand").type(JsonFieldType.STRING).description("브랜드 이름 + 향수 이름"),
                     fieldWithPath("[].perfumeId").type(JsonFieldType.NUMBER).description("향수 아이디")
                 )));
+  }
+
+  @Test
+  void getStatistics() throws Exception {
+    //given
+
+    Map<Strength, Long> strengthMap = new HashMap<>();
+    EnumSet.allOf(Strength.class).forEach(
+        enumValue -> strengthMap.put(enumValue, 25L)
+    );
+    Map<Duration, Long> durationMap = new HashMap<>();
+    EnumSet.allOf(Duration.class).forEach(
+        enumValue -> durationMap.put(enumValue, 25L)
+    );
+    Map<Season, Long> seasonMap = new HashMap<>();
+    EnumSet.allOf(Season.class).forEach(
+        enumValue -> seasonMap.put(enumValue, 25L)
+    );
+    Map<DayType, Long> dayTypeMap = new HashMap<>();
+    EnumSet.allOf(DayType.class).forEach(
+        enumValue -> dayTypeMap.put(enumValue, 25L)
+    );
+    Map<Sex, Long> sexMap = new HashMap<>();
+    EnumSet.allOf(Sex.class).forEach(
+        enumValue -> sexMap.put(enumValue, 25L)
+    );
+
+    ReviewStatisticResult result = new ReviewStatisticResult(strengthMap, durationMap, seasonMap, dayTypeMap, sexMap);
+    given(findPerfumeUseCase.getStatistics(anyLong())).willReturn(result);
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/perfumes/{id}/statistics", 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("get-perfume-statistics",
+                pathParameters(
+                  parameterWithName("id").description("향수 ID")
+                ),
+                responseFields(
+                    fieldWithPath("strength.LIGHT").type(JsonFieldType.NUMBER).description("향수 강도가 약하다고 리뷰한 비율"),
+                    fieldWithPath("strength.MODERATE").type(JsonFieldType.NUMBER).description("향수 강도가 적당하다고 리뷰한 비율"),
+                    fieldWithPath("strength.HEAVY").type(JsonFieldType.NUMBER).description("향수 강도가 강하다고 리뷰한 비율"),
+                    fieldWithPath("duration.TOO_SHORT").type(JsonFieldType.NUMBER).description("향수 지속력이 매우 약하다고 리뷰한 비율"),
+                    fieldWithPath("duration.SHORT").type(JsonFieldType.NUMBER).description("향수 지속력이 약하다고 리뷰한 비율"),
+                    fieldWithPath("duration.MEDIUM").type(JsonFieldType.NUMBER).description("향수 지속력이 적당하다고 리뷰한 비율"),
+                    fieldWithPath("duration.LONG").type(JsonFieldType.NUMBER).description("향수 지속력이 강하다고 리뷰한 비율"),
+                    fieldWithPath("season.SPRING").type(JsonFieldType.NUMBER).description("봄이 어울리는 계절이라고 리뷰한 비율"),
+                    fieldWithPath("season.SUMMER").type(JsonFieldType.NUMBER).description("여름이 어울리는 계절이라고 리뷰한 비율"),
+                    fieldWithPath("season.FALL").type(JsonFieldType.NUMBER).description("가을이 어울리는 계절이라고 리뷰한 비율"),
+                    fieldWithPath("season.WINTER").type(JsonFieldType.NUMBER).description("겨울이  어울리는 계절이라고 리뷰한 비율"),
+                    fieldWithPath("dayType.DAILY").type(JsonFieldType.NUMBER).description("매일 뿌리기 좋다고 리뷰한 비율"),
+                    fieldWithPath("dayType.SPECIAL").type(JsonFieldType.NUMBER).description("특별한 날 뿌리기 좋다고 리뷰한 비율"),
+                    fieldWithPath("dayType.REST").type(JsonFieldType.NUMBER).description("휴식할 때 뿌리기 좋다고 리뷰한 비율"),
+                    fieldWithPath("dayType.TRAVEL").type(JsonFieldType.NUMBER).description("여행갈 때 뿌리기 좋다고 리뷰한 비율"),
+                    fieldWithPath("sex.MALE").type(JsonFieldType.NUMBER).description("남자가 리뷰한 비율"),
+                    fieldWithPath("sex.FEMALE").type(JsonFieldType.NUMBER).description("여자가 리뷰한 비율"),
+                    fieldWithPath("sex.OTHER").type(JsonFieldType.NUMBER).description("성별 지정 안 한 사람이 리뷰한 비율")
+                )
+            )
+        );
   }
 }

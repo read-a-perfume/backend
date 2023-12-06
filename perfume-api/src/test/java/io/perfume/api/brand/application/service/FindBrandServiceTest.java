@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class FindBrandServiceTest {
+class FindBrandServiceTest {
   @InjectMocks
   private FindBrandService findBrandService;
   @Mock
@@ -51,6 +51,6 @@ public class FindBrandServiceTest {
     // then
     assertEquals(brand.getName(), brandResult.name());
     assertEquals(brand.getStory(), brandResult.story());
-    assertEquals(file.getUrl(), brandResult.thumbnailUrl());
+    assertEquals(file.getUrl(), brandResult.thumbnail());
   }
 }
