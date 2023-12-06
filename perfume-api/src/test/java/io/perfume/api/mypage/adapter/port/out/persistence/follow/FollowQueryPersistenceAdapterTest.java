@@ -31,8 +31,8 @@ class FollowQueryPersistenceAdapterTest {
   @Test
   void testFindByFollowerId() {
     // given
-    var followerId = 0L;
-    var followingId = 1L;
+    var followerId = 1L;
+    var followingId = 2L;
     var now = LocalDateTime.now();
     var follow = Follow.create(
         followerId,
@@ -42,16 +42,16 @@ class FollowQueryPersistenceAdapterTest {
 
     var entity = followMapper.toEntity(follow);
     entityManager.persist(entity);
-//    entityManager.flush();
-//    entityManager.clear();
+    entityManager.flush();
+    entityManager.clear();
 
     // when
     var find = queryRepository.findByFollowerId(followerId).orElseThrow();
 
     // then
     assertThat(find.getId()).isEqualTo(1L);
-    assertThat(find.getFollowerId()).isEqualTo(0L);
-    assertThat(find.getFollowingId()).isEqualTo(1L);
+    assertThat(find.getFollowerId()).isEqualTo(1L);
+    assertThat(find.getFollowingId()).isEqualTo(2L);
     assertThat(find.getDeletedAt()).isNull();
   }
 
@@ -59,8 +59,8 @@ class FollowQueryPersistenceAdapterTest {
   @DisplayName("팔로워와 팔로잉 id로 조회")
   void testFindByFollowerIdAndFollowingId() {
     // given
-    var followerId = 0L;
-    var followingId = 1L;
+    var followerId = 1L;
+    var followingId = 2L;
     var now = LocalDateTime.now();
     var follow = Follow.create(
         followerId,
@@ -100,9 +100,9 @@ class FollowQueryPersistenceAdapterTest {
 
       var entity = followMapper.toEntity(follow);
       entityManager.persist(entity);
+      entityManager.flush();
+      entityManager.clear();
     }
-    entityManager.flush();
-    entityManager.clear();
 
     // when
     Long find = queryRepository.findFollowingCountByFollowerId(0L);
