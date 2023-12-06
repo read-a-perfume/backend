@@ -7,6 +7,7 @@ import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.domain.Concentration;
 import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
 import io.perfume.api.review.application.out.ReviewQueryRepository;
+import io.perfume.api.review.application.out.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewFeatureCount;
 import io.perfume.api.review.domain.type.DayType;
@@ -18,6 +19,7 @@ import io.perfume.api.user.adapter.out.persistence.user.UserEntity;
 import io.perfume.api.user.domain.Role;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -30,13 +32,15 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @Import({ReviewQueryPersistenceAdapter.class, ReviewMapper.class, TagMapper.class,
-    TestQueryDSLConfiguration.class})
+    TestQueryDSLConfiguration.class, ReviewPersistenceAdapter.class})
 @DataJpaTest
 @EnableJpaAuditing
 class ReviewQueryPersistenceAdapterTest {
 
   @Autowired
   private ReviewQueryRepository queryRepository;
+  @Autowired
+  private ReviewRepository reviewRepository;
 
   @Autowired
   private ReviewMapper reviewMapper;
@@ -80,16 +84,16 @@ class ReviewQueryPersistenceAdapterTest {
         Season.SPRING,
         now
     );
-    var createdReview = reviewMapper.toEntity(review);
-    entityManager.persist(createdReview);
+    Review savedReview = reviewRepository.save(review);
     entityManager.flush();
     entityManager.clear();
 
     // when
-    var result = queryRepository.findById(1L).orElseThrow();
+    Optional<Review> result = queryRepository.findById(savedReview.getId());
 
     // then
-    assertThat(result.getId()).isPositive();
+    assertThat(result).isPresent();
+    assertThat(result.get().getId()).isPositive();
   }
 
   @Test
