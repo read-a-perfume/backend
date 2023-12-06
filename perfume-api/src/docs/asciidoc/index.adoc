@@ -248,6 +248,7 @@ include::{snippets}/like-review/http-request.adoc[]
 include::{snippets}/like-review/http-response.adoc[]
 include::{snippets}/like-review/response-fields.adoc[]
 
+<<<<<<< HEAD
 == 리뷰 옵션 조회
 === 요청
 include::{snippets}/get-review-options/http-request.adoc[]
@@ -255,6 +256,31 @@ include::{snippets}/get-review-options/http-request.adoc[]
 === 응답
 include::{snippets}/get-review-options/http-response.adoc[]
 include::{snippets}/get-review-options/response-fields.adoc[]
+=======
+== 유저 팔로우/언팔로우
+=== 요청
+include::{snippets}/follow-user/http-request.adoc[]
+
+=== 응답
+include::{snippets}/follow-user/http-response.adoc[]
+include::{snippets}/follow-user/request-fields.adoc[]
+
+== 팔로우/팔로워 수 조회
+=== 요청
+include::{snippets}/get-follows/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-follows/http-response.adoc[]
+include::{snippets}/get-follows/response-fields.adoc[]
+
+== 마이페이지 리뷰 수 조회
+=== 요청
+include::{snippets}/get-mypage-reviews/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-mypage-reviews/http-response.adoc[]
+include::{snippets}/get-mypage-reviews/response-fields.adoc[]
+>>>>>>> b7dcdb6 (feat: restdocs 추가)
 
 == 샘플
 === 요청
