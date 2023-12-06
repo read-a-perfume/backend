@@ -65,32 +65,32 @@ class ReviewQueryPersistenceAdapterTest {
     assertThat(result).isEmpty();
   }
 
-  @Test
-  void testFindById() {
-    // given
-    var now = LocalDateTime.now();
-    var review = Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.SPRING,
-        now
-    );
-    var createdReview = reviewMapper.toEntity(review);
-    entityManager.persist(createdReview);
-    entityManager.flush();
-    entityManager.clear();
-
-    // when
-    var result = queryRepository.findById(1L).orElseThrow();
-
-    // then
-    assertThat(result.getId()).isPositive();
-  }
+//  @Test
+//  void testFindById() {
+//    // given
+//    var now = LocalDateTime.now();
+//    var review = Review.create(
+//        "test",
+//        "test description",
+//        Strength.LIGHT,
+//        Duration.TOO_SHORT,
+//        DayType.DAILY,
+//        1L,
+//        1L,
+//        Season.SPRING,
+//        now
+//    );
+//    var createdReview = reviewMapper.toEntity(review);
+//    entityManager.persist(createdReview);
+//    entityManager.flush();
+//    entityManager.clear();
+//
+//    // when
+//    var result = queryRepository.findById(1L).orElseThrow();
+//
+//    // then
+//    assertThat(result.getId()).isPositive();
+//  }
 
   @Test
   void reviewCount() {

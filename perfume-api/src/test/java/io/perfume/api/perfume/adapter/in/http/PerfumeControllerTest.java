@@ -12,6 +12,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,10 +21,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
+import io.perfume.api.perfume.adapter.in.http.dto.PerfumeFavoriteResponseDto;
 import io.perfume.api.perfume.application.exception.PerfumeNotFoundException;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
+import io.perfume.api.perfume.application.port.in.GetFavoritePerfumesUseCase;
+import io.perfume.api.perfume.application.port.in.UserFavoritePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.NotePyramidResult;
+import io.perfume.api.perfume.application.port.in.dto.PerfumeFavoriteResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNoteResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
@@ -76,6 +81,10 @@ class PerfumeControllerTest {
   private FindPerfumeUseCase findPerfumeUseCase;
   @MockBean
   private CreatePerfumeUseCase createPerfumeUseCase;
+  @MockBean
+  private GetFavoritePerfumesUseCase getFavoritePerfumesUseCase;
+  @MockBean
+  private UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
   @Autowired
   private ObjectMapper objectMapper;
   @Autowired
@@ -230,7 +239,54 @@ class PerfumeControllerTest {
     // when & then
     mockMvc
         .perform(
-            RestDocumentationRequestBuilders.post("/v1/perfumes/favorite/{id}", perfume.getId()));
+            RestDocumentationRequestBuilders.post("/v1/perfumes/favorite/{id}", perfume.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of("id", perfume.getId())))
+        )
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andDo(
+            document("favorite-perfume",
+                pathParameters(
+                    parameterWithName("id").description("즐겨찾기 향수 ID")
+                ),
+                requestFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("향수 ID")
+                ),
+                responseFields(
+                    fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저 ID"),
+                    fieldWithPath("perfumeId").type(JsonFieldType.NUMBER).description("향수 ID")
+                ))
+        );
+  }
+
+  @Test
+  @WithMockUser(username = "1", roles = "USER")
+  void getFavoritePerfumes() throws Exception {
+    // given
+    List<PerfumeFavoriteResult> perfumeFavoriteResult = List.of(
+        new PerfumeFavoriteResult("딥티크 롬브로단로 오 드 뚜왈렛"),
+        new PerfumeFavoriteResult("딥티크 롬브로단로 오 드 퍼퓸"));
+
+    given(getFavoritePerfumesUseCase.getFavoritePerfumes(1L)).willReturn(perfumeFavoriteResult);
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/perfumes/favorites")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document("get-favorites",
+                responseFields(
+                    fieldWithPath("[].perfumeName").type(JsonFieldType.STRING).description("향수 이름")
+                )
+            )
+        );
   }
 
   @Test

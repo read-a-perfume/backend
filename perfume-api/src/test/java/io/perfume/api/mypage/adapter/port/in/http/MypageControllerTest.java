@@ -91,11 +91,12 @@ class MypageControllerTest {
         .andDo(
             document("follow-user",
                 pathParameters(
-                    parameterWithName("id").description("팔로우 할 유저 ID")
+                    parameterWithName("id").description("유저 ID")
                 ),
                 requestFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("팔로우 한 유저 ID")
-                )));
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("유저 ID")
+                ))
+        );
   }
   @Test
   @WithMockUser(username = "100", roles = "USER")
