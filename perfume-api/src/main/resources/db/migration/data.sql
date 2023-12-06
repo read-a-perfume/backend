@@ -1,5 +1,9 @@
 INSERT INTO member (id, username, email, password, role, promotion_consent, marketing_consent, created_at, updated_at)
+<<<<<<< HEAD
 VALUES (1, 'admin', 'admin@admin.com', '$2a$10$JqiVSGED0ceSJj7qMwXRmO8Otam7IrvqY4j6K.mklPDgo54SP49sa', 'USER', 0, 0,
+=======
+VALUES (100, 'admin', 'admin@admin.com', '$2a$10$JqiVSGED0ceSJj7qMwXRmO8Otam7IrvqY4j6K.mklPDgo54SP49sa', 'USER', 0, 0,
+>>>>>>> 1b9571e (feat: user_follow script 추가)
         now(), now());
 
 INSERT INTO category (id, name, description, tags, created_at, updated_at)
@@ -185,6 +189,7 @@ VALUES ('DAILY', 'SPRING', 'MODERATE', 'SHORT', '달달한 향이라 너무 좋�
        ('SPECIAL', 'SPRING', 'MODERATE', 'LONG', '난별로난별로난별로', '생각보다는 별로', 1, 6, now(), now()),
        ('DAILY', 'SPRING', 'MODERATE', 'SHORT', '니치 향수의 끝판왕 브랜드답다', '역시 톰포드', 1, 6, now(), now()),
        ('SPECIAL', 'SPRING', 'MODERATE', 'MEDIUM', '썸남이 무슨 향수냐고 물어봄', '아직 대답은 안해줌', 1, 6, now(), now());
+<<<<<<< HEAD
 
 INSERT INTO tag (id, name, created_at, updated_at)
 VALUES (1, '자연스러운', now(), now()),
@@ -197,3 +202,5 @@ VALUES (1, '자연스러운', now(), now()),
        (8, '시크한', now(), now()),
        (9, '섹시한', now(), now()),
        (10, '독특한', now(), now());
+=======
+>>>>>>> 1b9571e (feat: user_follow script 추가)

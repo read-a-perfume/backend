@@ -71,12 +71,10 @@ include::{snippets}/token-expired/response-fields.adoc[]
 == 토큰 재발급
 === 요청
 include::{snippets}/reissue-access-token/http-request.adoc[]
-쿠키
 include::{snippets}/reissue-access-token/request-cookies.adoc[]
 
 === 응답
 include::{snippets}/reissue-access-token/http-response.adoc[]
-쿠키
 include::{snippets}/reissue-access-token/response-cookies.adoc[]
 
 == 브랜드 조회
@@ -255,6 +253,30 @@ include::{snippets}/get-review-options/http-request.adoc[]
 === 응답
 include::{snippets}/get-review-options/http-response.adoc[]
 include::{snippets}/get-review-options/response-fields.adoc[]
+
+== 유저 팔로우/언팔로우
+=== 요청
+include::{snippets}/follow-user/http-request.adoc[]
+
+=== 응답
+include::{snippets}/follow-user/http-response.adoc[]
+include::{snippets}/follow-user/request-fields.adoc[]
+
+== 팔로우/팔로워 수 조회
+=== 요청
+include::{snippets}/get-follows/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-follows/http-response.adoc[]
+include::{snippets}/get-follows/response-fields.adoc[]
+
+== 마이페이지 리뷰 수 조회
+=== 요청
+include::{snippets}/get-mypage-reviews/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-mypage-reviews/http-response.adoc[]
+include::{snippets}/get-mypage-reviews/response-fields.adoc[]
 
 == 샘플
 === 요청
