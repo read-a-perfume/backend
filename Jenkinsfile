@@ -3,10 +3,19 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = 'dockerhub'
-        DOCKER_IMAGE_NAME = 'webdev0594/perfume-backend'
+        DOCKER_REPOSITORY_NAME = 'webdev0594'
     }
 
     stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    env.GIT_COMMIT_HASH = sh(returnStdout: true, script: 'git rev-parse HEAD | cut -c 1-10').trim()
+                    env.DOCKER_IMAGE_NAME = "${DOCKER_REPOSITORY_NAME}/perfume-backend"
+                }
+            }
+        }
+
         stage('Clone Repository') {
             steps {
                 checkout scm
@@ -22,7 +31,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def customImage = docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}", "--file Dockerfile.dev.api .")
+                    def customImage = docker.build("${DOCKER_IMAGE_NAME}:${env.GIT_COMMIT_HASH}", "--file Dockerfile.dev.api .")
                 }
             }
         }
@@ -31,8 +40,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("https://index.docker.io/v1/", DOCKER_HUB_CREDENTIALS) {
-                        def customImage = docker.image("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
-                        customImage.push("${env.BUILD_NUMBER}")
+                        def customImage = docker.image("${env.DOCKER_IMAGE_NAME}:${env.GIT_COMMIT_HASH}")
+                        customImage.push("${env.GIT_COMMIT_HASH}")
                         customImage.push("latest")
                     }
                 }
