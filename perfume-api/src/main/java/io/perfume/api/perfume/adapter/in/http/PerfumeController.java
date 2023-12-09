@@ -70,19 +70,41 @@ public class PerfumeController {
         .body(new FavoritePerfumeResponseDto(userId, perfumeId));
   }
 
-  @GetMapping
-  public CustomSlice<SimplePerfumeResponseDto> getPerfumesByBrand(@RequestParam Long brandId, @RequestParam @Nullable Long lastPerfumeId,
-                                                                  @RequestParam int pageSize) {
-    CustomSlice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
-    List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
-    return new CustomSlice<>(list, perfumesByBrand.isHasNext());
-  }
-
   @GetMapping("/category/{id}")
   public CustomPage<SimplePerfumeResponseDto> getPerfumesByCategory(@PathVariable Long id, Pageable pageable) {
     CustomPage<SimplePerfumeResult> perfumesByCategory = findPerfumeUseCase.findPerfumesByCategory(id, pageable);
     List<SimplePerfumeResponseDto> list = perfumesByCategory.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
     return new CustomPage<>(list, perfumesByCategory);
+  }
+
+  @GetMapping
+  public CustomSlice<SimplePerfumeResponseDto> getPerfumesByCursorPaging(@RequestParam String sort,
+                                                                         @RequestParam @Nullable Long lastPerfumeId,
+                                                                         @RequestParam int pageSize,
+                                                                         @RequestParam @Nullable Long brandId) {
+    PerfumeSort perfumeSort = PerfumeSort.fromString(sort);
+    if (perfumeSort == PerfumeSort.BRAND) {
+      if (brandId == null) {
+        throw new IllegalArgumentException("brand 기준으로 정렬하려면 brandId가 필요합니다.");
+      }
+      return getPerfumesByBrand(brandId, lastPerfumeId, pageSize);
+    }
+    if (perfumeSort == PerfumeSort.FAVORITE) {
+      return getPerfumesByFavorite(lastPerfumeId, pageSize);
+    }
+    throw new IllegalArgumentException("정렬 기준으로는 brand, farovite만 가능합니다.");
+  }
+
+  private CustomSlice<SimplePerfumeResponseDto> getPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
+    CustomSlice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
+    List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
+    return new CustomSlice<>(list, perfumesByBrand.isHasNext());
+  }
+
+  private CustomSlice<SimplePerfumeResponseDto> getPerfumesByFavorite(Long lastPerfumeId, int pageSize) {
+    CustomSlice<SimplePerfumeResult> perfumesByFavorite = findPerfumeUseCase.findPerfumesByFavorite(lastPerfumeId, pageSize);
+    List<SimplePerfumeResponseDto> list = perfumesByFavorite.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
+    return new CustomSlice<>(list, perfumesByFavorite.isHasNext());
   }
   
   @PreAuthorize("isAuthenticated()")

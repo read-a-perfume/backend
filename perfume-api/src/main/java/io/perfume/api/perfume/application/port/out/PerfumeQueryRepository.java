@@ -20,5 +20,7 @@ public interface PerfumeQueryRepository {
 
   CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable);
 
+  CustomSlice<SimplePerfumeResult> findPerfumesByFavorite(Long lastPerfumeId, int pageSize);
+
   List<PerfumeNameResult> searchPerfumeByQuery(String query);
 }
