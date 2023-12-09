@@ -60,6 +60,11 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   }
 
   @Override
+  public CustomSlice<SimplePerfumeResult> findPerfumesByFavorite(Long lastPerfumeId, int pageSize) {
+    return perfumeQueryRepository.findPerfumesByFavorite(lastPerfumeId, pageSize);
+  }
+
+  @Override
   public List<PerfumeNameResult> searchPerfumeByQuery(String query) {
     return perfumeQueryRepository.searchPerfumeByQuery(query);
   }

@@ -17,6 +17,8 @@ public interface FindPerfumeUseCase {
 
   CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable);
 
+  CustomSlice<SimplePerfumeResult> findPerfumesByFavorite(Long lastPerfumeId, int pageSize);
+
   List<PerfumeNameResult> searchPerfumeByQuery(String query);
 
   ReviewStatisticResult getStatistics(Long id);
