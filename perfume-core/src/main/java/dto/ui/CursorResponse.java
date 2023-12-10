@@ -14,8 +14,8 @@ public class CursorResponse<T, CURSOR> {
 
   private final CURSOR prevCursor;
 
-  private CursorResponse(List<T> items, boolean hasNext, boolean hasPrev, CURSOR nextCursor,
-                         CURSOR prevCursor) {
+  private CursorResponse(
+      List<T> items, boolean hasNext, boolean hasPrev, CURSOR nextCursor, CURSOR prevCursor) {
     this.items = items;
     this.hasNext = hasNext;
     this.hasPrev = hasPrev;
@@ -23,9 +23,8 @@ public class CursorResponse<T, CURSOR> {
     this.prevCursor = prevCursor;
   }
 
-  public static <T, CURSOR> CursorResponse<T, CURSOR> of(List<T> items, boolean hasNext,
-                                                         boolean hasPrev, CURSOR nextCursor,
-                                                         CURSOR prevCursor) {
+  public static <T, CURSOR> CursorResponse<T, CURSOR> of(
+      List<T> items, boolean hasNext, boolean hasPrev, CURSOR nextCursor, CURSOR prevCursor) {
     return new CursorResponse<>(items, hasNext, hasPrev, nextCursor, prevCursor);
   }
 }

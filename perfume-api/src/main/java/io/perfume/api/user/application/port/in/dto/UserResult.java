@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 
 public record UserResult(Long id, String username, String email, LocalDateTime createdAt) {
 
-  static public UserResult EMPTY = new UserResult(0L, "(알 수 없음)", "", LocalDateTime.now());
+  public static UserResult EMPTY = new UserResult(0L, "(알 수 없음)", "", LocalDateTime.now());
 }

@@ -6,10 +6,18 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-public record PerfumeResponseDto(String name, String story, Concentration concentration,
-                                 String perfumeShopUrl, String brandName, String categoryName, String categoryTags,
-                                 String thumbnail, List<NoteResponseDto> topNotes, List<NoteResponseDto> middleNotes,
-                                 List<NoteResponseDto> baseNotes) {
+public record PerfumeResponseDto(
+    String name,
+    String story,
+    Concentration concentration,
+    String perfumeShopUrl,
+    String brandName,
+    String categoryName,
+    String categoryTags,
+    String thumbnail,
+    List<NoteResponseDto> topNotes,
+    List<NoteResponseDto> middleNotes,
+    List<NoteResponseDto> baseNotes) {
 
   public static PerfumeResponseDto of(PerfumeResult perfumeResult) {
     return PerfumeResponseDto.builder()

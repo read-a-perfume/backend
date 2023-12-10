@@ -21,26 +21,25 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class UserQueryPersistenceAdapterTest {
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private UserQueryPersistenceAdapter userQueryPersistenceAdapter;
+  @Autowired private UserQueryPersistenceAdapter userQueryPersistenceAdapter;
 
   @Test
   void findOneByEmail() {
     // given
     String email = "test@mail.com";
     LocalDateTime now = LocalDateTime.now();
-    UserEntity userEntity = UserEntity.builder()
-        .username("admin")
-        .email(email)
-        .password("admin")
-        .sex(Sex.MALE)
-        .role(Role.USER)
-        .marketingConsent(false)
-        .promotionConsent(false)
-        .build();
+    UserEntity userEntity =
+        UserEntity.builder()
+            .username("admin")
+            .email(email)
+            .password("admin")
+            .sex(Sex.MALE)
+            .role(Role.USER)
+            .marketingConsent(false)
+            .promotionConsent(false)
+            .build();
     entityManager.persist(userEntity);
     entityManager.flush();
     entityManager.clear();
@@ -58,15 +57,16 @@ class UserQueryPersistenceAdapterTest {
     // given
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
-    UserEntity userEntity = UserEntity.builder()
-        .username("admin")
-        .email("admin@admin.com")
-        .password("admin")
-        .sex(Sex.MALE)
-        .role(Role.USER)
-        .marketingConsent(false)
-        .promotionConsent(false)
-        .build();
+    UserEntity userEntity =
+        UserEntity.builder()
+            .username("admin")
+            .email("admin@admin.com")
+            .password("admin")
+            .sex(Sex.MALE)
+            .role(Role.USER)
+            .marketingConsent(false)
+            .promotionConsent(false)
+            .build();
     entityManager.persist(userEntity);
     entityManager.flush();
     entityManager.clear();
@@ -85,16 +85,17 @@ class UserQueryPersistenceAdapterTest {
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
 
-    UserEntity userEntity = UserEntity.builder()
-        .username(username)
-        .email("admin@admin.com")
-        .password("admin")
-        .role(Role.USER)
-        .sex(Sex.MALE)
-        .role(Role.USER)
-        .marketingConsent(false)
-        .promotionConsent(false)
-        .build();
+    UserEntity userEntity =
+        UserEntity.builder()
+            .username(username)
+            .email("admin@admin.com")
+            .password("admin")
+            .role(Role.USER)
+            .sex(Sex.MALE)
+            .role(Role.USER)
+            .marketingConsent(false)
+            .promotionConsent(false)
+            .build();
     entityManager.persist(userEntity);
     entityManager.flush();
     entityManager.clear();
@@ -112,15 +113,16 @@ class UserQueryPersistenceAdapterTest {
     // given
     String username = "username";
     LocalDateTime now = LocalDateTime.now();
-    UserEntity userEntity = UserEntity.builder()
-        .username("admin")
-        .email("admin@admin.com")
-        .password("admin")
-        .sex(Sex.MALE)
-        .role(Role.USER)
-        .marketingConsent(false)
-        .promotionConsent(false)
-        .build();
+    UserEntity userEntity =
+        UserEntity.builder()
+            .username("admin")
+            .email("admin@admin.com")
+            .password("admin")
+            .sex(Sex.MALE)
+            .role(Role.USER)
+            .marketingConsent(false)
+            .promotionConsent(false)
+            .build();
     entityManager.persist(userEntity);
     entityManager.flush();
     entityManager.clear();

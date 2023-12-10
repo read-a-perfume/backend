@@ -6,12 +6,14 @@ import org.springframework.security.config.annotation.web.configurers.AuthorizeH
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomAuthorizeHttpRequestConfigurer implements
-    Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> {
+public class CustomAuthorizeHttpRequestConfigurer
+    implements Customizer<
+        AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> {
 
   @Override
   public void customize(
-      AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationManagerRequestMatcherRegistry) {
+      AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry
+          authorizationManagerRequestMatcherRegistry) {
     authorizationManagerRequestMatcherRegistry.anyRequest().permitAll();
   }
 }

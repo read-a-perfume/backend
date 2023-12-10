@@ -56,27 +56,24 @@ class SignInAuthenticationFilterTest {
   private final String password = "test12341234";
 
   private MockMvc mockMvc;
-  @Autowired
-  private ObjectMapper objectMapper;
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-  @MockBean
-  private CustomUserDetailsService customUserDetailsService;
-  @MockBean
-  private MakeNewTokenUseCase makeNewTokenUseCase;
-  @Autowired
-  private AuthenticationManagerBuilder authenticationManagerBuilder;
-
+  @Autowired private ObjectMapper objectMapper;
+  @Autowired private PasswordEncoder passwordEncoder;
+  @MockBean private CustomUserDetailsService customUserDetailsService;
+  @MockBean private MakeNewTokenUseCase makeNewTokenUseCase;
+  @Autowired private AuthenticationManagerBuilder authenticationManagerBuilder;
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
     SignInAuthenticationFilter signInAuthenticationFilter =
-        new SignInAuthenticationFilter(authenticationManagerBuilder.getOrBuild(), objectMapper, makeNewTokenUseCase);
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .addFilter(signInAuthenticationFilter)
-        .build();
+        new SignInAuthenticationFilter(
+            authenticationManagerBuilder.getOrBuild(), objectMapper, makeNewTokenUseCase);
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .addFilter(signInAuthenticationFilter)
+            .build();
   }
 
   @Test
@@ -88,55 +85,65 @@ class SignInAuthenticationFilterTest {
     UserPrincipal userPrincipal = new UserPrincipal(createUser(email, password));
     // when & then
     when(customUserDetailsService.loadUserByUsername(anyString())).thenReturn(userPrincipal);
-    when(makeNewTokenUseCase.createAccessToken(anyLong(), any(LocalDateTime.class))).thenReturn(
-        "Bearer SampleAccessToken");
+    when(makeNewTokenUseCase.createAccessToken(anyLong(), any(LocalDateTime.class)))
+        .thenReturn("Bearer SampleAccessToken");
 
-    this.mockMvc.perform(MockMvcRequestBuilders.post("/v1/login")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(signInDto))
-        )
+    this.mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/v1/login")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(signInDto)))
         .andExpect(status().isOk())
-        .andExpect(result -> {
-          String token = result.getResponse().getCookie("X-Access-Token").getValue();
-          assertNotNull(token);
-          assertEquals("Bearer ", token.substring(0, 7));
-        })
-        .andDo(document("login",
-            requestFields(
-                fieldWithPath("username").description("유저의 아이디"),
-                fieldWithPath("password").description("유저의 비밀번호")
-            ),
-            responseCookies(
-                cookieWithName("X-Access-Token").description("액세스 토큰"),
-                cookieWithName("X-Refresh-Token").description("재발급을 위해 필요한 리프레시 토큰")
-            )));
+        .andExpect(
+            result -> {
+              String token = result.getResponse().getCookie("X-Access-Token").getValue();
+              assertNotNull(token);
+              assertEquals("Bearer ", token.substring(0, 7));
+            })
+        .andDo(
+            document(
+                "login",
+                requestFields(
+                    fieldWithPath("username").description("유저의 아이디"),
+                    fieldWithPath("password").description("유저의 비밀번호")),
+                responseCookies(
+                    cookieWithName("X-Access-Token").description("액세스 토큰"),
+                    cookieWithName("X-Refresh-Token").description("재발급을 위해 필요한 리프레시 토큰"))));
   }
 
   @Test
   @DisplayName("로그인 실패 시 jwt 토큰을 생성하지 않는다.")
   void failLoginGenerateToken() throws Exception {
     // given
-//        userRepository.save(createUser(email, password));
+    //        userRepository.save(createUser(email, password));
     SignInDto signInDto =
         SignInDto.builder().username(email).password("invalid password!@#").build();
 
     // when & then
-    this.mockMvc.perform(post("/v1/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(signInDto))
-        )
+    this.mockMvc
+        .perform(
+            post("/v1/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(signInDto)))
         .andExpect(status().isUnauthorized())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(result -> {
-          String token = result.getResponse().getHeader("Authorization");
-          assertNull(token);
-        });
+        .andExpect(
+            result -> {
+              String token = result.getResponse().getHeader("Authorization");
+              assertNull(token);
+            });
   }
 
   private User createUser(String email, String password) {
     String encodedPassword = passwordEncoder.encode(password);
-    return User.builder().id(1L).username("test").email(email).role(Role.USER)
-        .password(encodedPassword).role(Role.USER).build();
+    return User.builder()
+        .id(1L)
+        .username("test")
+        .email(email)
+        .role(Role.USER)
+        .password(encodedPassword)
+        .role(Role.USER)
+        .build();
   }
 }

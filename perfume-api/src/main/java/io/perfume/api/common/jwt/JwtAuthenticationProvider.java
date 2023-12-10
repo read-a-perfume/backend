@@ -23,9 +23,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   public static final Authentication ANONYMOUS =
       new AnonymousAuthenticationToken(
-          "anonymous",
-          "anonymous",
-          Set.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
+          "anonymous", "anonymous", Set.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
 
   private final JsonWebTokenGenerator jsonWebTokenGenerator;
 

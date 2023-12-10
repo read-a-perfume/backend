@@ -27,50 +27,53 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({ReviewCommentQueryPersistenceAdapter.class, TestQueryDSLConfiguration.class,
-    ReviewCommentMapper.class, ReviewMapper.class})
+@Import({
+  ReviewCommentQueryPersistenceAdapter.class,
+  TestQueryDSLConfiguration.class,
+  ReviewCommentMapper.class,
+  ReviewMapper.class
+})
 @DataJpaTest
 @EnableJpaAuditing
 class ReviewCommentQueryPersistenceAdapterTest {
 
-  @Autowired
-  private ReviewCommentQueryPersistenceAdapter repository;
+  @Autowired private ReviewCommentQueryPersistenceAdapter repository;
 
-  @Autowired
-  private ReviewMapper reviewMapper;
+  @Autowired private ReviewMapper reviewMapper;
 
-  @Autowired
-  private ReviewCommentMapper reviewCommentMapper;
+  @Autowired private ReviewCommentMapper reviewCommentMapper;
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
   @Test
   @DisplayName("전방 커서를 이용하여 리뷰 댓글을 조회한다.")
   void 전방_리뷰_댓글_조회() {
     // given
     final var now = LocalDateTime.now();
-    ReviewEntity review = reviewMapper.toEntity(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.SPRING,
-        now
-    ));
+    ReviewEntity review =
+        reviewMapper.toEntity(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                1L,
+                Season.SPRING,
+                now));
     entityManager.persist(review);
 
-    final var comments = Stream.of(
-        ReviewComment.create(review.getId(), 1L, "test1", now),
-        ReviewComment.create(review.getId(), 1L, "test2", now),
-        ReviewComment.create(review.getId(), 1L, "test3", now),
-        ReviewComment.create(review.getId(), 1L, "test4", now),
-        ReviewComment.create(review.getId(), 1L, "test5", now),
-        ReviewComment.create(review.getId(), 1L, "test6", now)
-    ).map(reviewCommentMapper::toEntity).toList();
+    final var comments =
+        Stream.of(
+                ReviewComment.create(review.getId(), 1L, "test1", now),
+                ReviewComment.create(review.getId(), 1L, "test2", now),
+                ReviewComment.create(review.getId(), 1L, "test3", now),
+                ReviewComment.create(review.getId(), 1L, "test4", now),
+                ReviewComment.create(review.getId(), 1L, "test5", now),
+                ReviewComment.create(review.getId(), 1L, "test6", now))
+            .map(reviewCommentMapper::toEntity)
+            .toList();
     comments.forEach(entityManager::persist);
     entityManager.flush();
 
@@ -90,27 +93,30 @@ class ReviewCommentQueryPersistenceAdapterTest {
   void 후방_리뷰_댓글_조회() {
     // given
     final var now = LocalDateTime.now();
-    ReviewEntity review = reviewMapper.toEntity(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.SPRING,
-        now
-    ));
+    ReviewEntity review =
+        reviewMapper.toEntity(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                1L,
+                Season.SPRING,
+                now));
     entityManager.persist(review);
 
-    final var comments = Stream.of(
-        ReviewComment.create(review.getId(), 1L, "test1", now),
-        ReviewComment.create(review.getId(), 1L, "test2", now),
-        ReviewComment.create(review.getId(), 1L, "test3", now),
-        ReviewComment.create(review.getId(), 1L, "test4", now),
-        ReviewComment.create(review.getId(), 1L, "test5", now),
-        ReviewComment.create(review.getId(), 1L, "test6", now)
-    ).map(reviewCommentMapper::toEntity).toList();
+    final var comments =
+        Stream.of(
+                ReviewComment.create(review.getId(), 1L, "test1", now),
+                ReviewComment.create(review.getId(), 1L, "test2", now),
+                ReviewComment.create(review.getId(), 1L, "test3", now),
+                ReviewComment.create(review.getId(), 1L, "test4", now),
+                ReviewComment.create(review.getId(), 1L, "test5", now),
+                ReviewComment.create(review.getId(), 1L, "test6", now))
+            .map(reviewCommentMapper::toEntity)
+            .toList();
     comments.forEach(entityManager::persist);
     entityManager.flush();
 
@@ -132,27 +138,30 @@ class ReviewCommentQueryPersistenceAdapterTest {
   void testCountCommentByReviewId() {
     // given
     final var now = LocalDateTime.now();
-    ReviewEntity review = reviewMapper.toEntity(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.TOO_SHORT,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.SPRING,
-        now
-    ));
+    ReviewEntity review =
+        reviewMapper.toEntity(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                1L,
+                Season.SPRING,
+                now));
     entityManager.persist(review);
 
-    final var comments = Stream.of(
-        ReviewComment.create(review.getId(), 1L, "test1", now),
-        ReviewComment.create(review.getId(), 1L, "test2", now),
-        ReviewComment.create(review.getId(), 1L, "test3", now),
-        ReviewComment.create(review.getId(), 1L, "test4", now),
-        ReviewComment.create(review.getId(), 1L, "test5", now),
-        ReviewComment.create(review.getId(), 1L, "test6", now)
-    ).map(reviewCommentMapper::toEntity).toList();
+    final var comments =
+        Stream.of(
+                ReviewComment.create(review.getId(), 1L, "test1", now),
+                ReviewComment.create(review.getId(), 1L, "test2", now),
+                ReviewComment.create(review.getId(), 1L, "test3", now),
+                ReviewComment.create(review.getId(), 1L, "test4", now),
+                ReviewComment.create(review.getId(), 1L, "test5", now),
+                ReviewComment.create(review.getId(), 1L, "test6", now))
+            .map(reviewCommentMapper::toEntity)
+            .toList();
     comments.forEach(entityManager::persist);
     entityManager.flush();
 
@@ -169,11 +178,13 @@ class ReviewCommentQueryPersistenceAdapterTest {
     // given
     final LocalDateTime now = LocalDateTime.now();
     final long reviewId = 1L;
-    final List<ReviewCommentEntity> comments = Stream.of(
-            ReviewComment.create(reviewId, 1L, "test1", now),
-            ReviewComment.create(reviewId, 1L, "test2", now),
-            ReviewComment.create(reviewId, 1L, "test3", now)
-    ).map(reviewCommentMapper::toEntity).toList();
+    final List<ReviewCommentEntity> comments =
+        Stream.of(
+                ReviewComment.create(reviewId, 1L, "test1", now),
+                ReviewComment.create(reviewId, 1L, "test2", now),
+                ReviewComment.create(reviewId, 1L, "test3", now))
+            .map(reviewCommentMapper::toEntity)
+            .toList();
     comments.forEach(entityManager::persist);
     entityManager.flush();
 

@@ -24,10 +24,12 @@ public class FollowQueryPersistenceAdapter implements FollowQueryRepository {
 
   @Override
   public Optional<Follow> findByFollowerId(Long followerId) {
-    FollowJpaEntity entity = jpaQueryFactory.selectFrom(followJpaEntity)
-        .where(followJpaEntity.followerId.eq(followerId)
-            .and(followJpaEntity.deletedAt.isNull()))
-        .fetchOne();
+    FollowJpaEntity entity =
+        jpaQueryFactory
+            .selectFrom(followJpaEntity)
+            .where(
+                followJpaEntity.followerId.eq(followerId).and(followJpaEntity.deletedAt.isNull()))
+            .fetchOne();
 
     if (Objects.isNull(entity)) {
       return Optional.empty();
@@ -38,11 +40,16 @@ public class FollowQueryPersistenceAdapter implements FollowQueryRepository {
 
   @Override
   public Optional<Follow> findByFollowerIdAndFollowingId(Long followerId, Long followingId) {
-    FollowJpaEntity entity = jpaQueryFactory.selectFrom(followJpaEntity)
-        .where(followJpaEntity.followerId.eq(followerId)
-            .and(followJpaEntity.followingId.eq(followingId))
-            .and(followJpaEntity.deletedAt.isNull()))
-        .fetchOne();
+    FollowJpaEntity entity =
+        jpaQueryFactory
+            .selectFrom(followJpaEntity)
+            .where(
+                followJpaEntity
+                    .followerId
+                    .eq(followerId)
+                    .and(followJpaEntity.followingId.eq(followingId))
+                    .and(followJpaEntity.deletedAt.isNull()))
+            .fetchOne();
 
     if (Objects.isNull(entity)) {
       return Optional.empty();
@@ -53,19 +60,19 @@ public class FollowQueryPersistenceAdapter implements FollowQueryRepository {
 
   @Override
   public Long findFollowingCountByFollowerId(Long followerId) {
-    return jpaQueryFactory.select(followJpaEntity.count())
+    return jpaQueryFactory
+        .select(followJpaEntity.count())
         .from(followJpaEntity)
-        .where(followJpaEntity.followerId.eq(followerId)
-            .and(followJpaEntity.deletedAt.isNull()))
+        .where(followJpaEntity.followerId.eq(followerId).and(followJpaEntity.deletedAt.isNull()))
         .fetchOne();
   }
 
   @Override
   public Long findFollowerCountByFollowingId(Long followingId) {
-    return jpaQueryFactory.select(followJpaEntity.count())
+    return jpaQueryFactory
+        .select(followJpaEntity.count())
         .from(followJpaEntity)
-        .where(followJpaEntity.followingId.eq(followingId)
-            .and(followJpaEntity.deletedAt.isNull()))
+        .where(followJpaEntity.followingId.eq(followingId).and(followJpaEntity.deletedAt.isNull()))
         .fetchOne();
   }
 }

@@ -9,7 +9,6 @@ import io.perfume.api.review.domain.ReviewLike;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,35 +19,30 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @Import({
-    ReviewLikeQueryPersistenceAdapter.class,
-    TestQueryDSLConfiguration.class,
-    ReviewLikeMapper.class,
-    ReviewMapper.class
+  ReviewLikeQueryPersistenceAdapter.class,
+  TestQueryDSLConfiguration.class,
+  ReviewLikeMapper.class,
+  ReviewMapper.class
 })
 @DataJpaTest
 @EnableJpaAuditing
 class ReviewLikeQueryPersistenceAdapterTest {
 
-  @Autowired
-  private ReviewLikeQueryPersistenceAdapter repository;
+  @Autowired private ReviewLikeQueryPersistenceAdapter repository;
 
-  @Autowired
-  private ReviewLikeMapper reviewLikeMapper;
+  @Autowired private ReviewLikeMapper reviewLikeMapper;
 
-  @Autowired
-  private ReviewMapper reviewMapper;
+  @Autowired private ReviewMapper reviewMapper;
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
   @Test
   @DisplayName("리뷰를 조회한다.")
   void testFindById() {
     // given
     final var now = LocalDateTime.now();
-    ReviewLike reviewLike = reviewLikeMapper.toDomain(
-        new ReviewLikeEntity(null, 1L, 1L, now, now, null)
-    );
+    ReviewLike reviewLike =
+        reviewLikeMapper.toDomain(new ReviewLikeEntity(null, 1L, 1L, now, now, null));
     entityManager.persist(reviewLikeMapper.toEntity(reviewLike));
 
     // when
@@ -63,9 +57,8 @@ class ReviewLikeQueryPersistenceAdapterTest {
   void testFindEmptyReviewLike() {
     // given
     final var now = LocalDateTime.now();
-    ReviewLike reviewLike = reviewLikeMapper.toDomain(
-        new ReviewLikeEntity(null, 1L, 1L, now, now, null)
-    );
+    ReviewLike reviewLike =
+        reviewLikeMapper.toDomain(new ReviewLikeEntity(null, 1L, 1L, now, now, null));
     entityManager.persist(reviewLikeMapper.toEntity(reviewLike));
 
     // when
@@ -80,9 +73,8 @@ class ReviewLikeQueryPersistenceAdapterTest {
   void testCountByReviewId() {
     // given
     final var now = LocalDateTime.now();
-    ReviewLike reviewLike = reviewLikeMapper.toDomain(
-        new ReviewLikeEntity(null, 1L, 1L, now, now, null)
-    );
+    ReviewLike reviewLike =
+        reviewLikeMapper.toDomain(new ReviewLikeEntity(null, 1L, 1L, now, now, null));
     entityManager.persist(reviewLikeMapper.toEntity(reviewLike));
 
     // when
@@ -97,9 +89,8 @@ class ReviewLikeQueryPersistenceAdapterTest {
   void testCountByReviewIds() {
     // given
     final var now = LocalDateTime.now();
-    ReviewLike reviewLike = reviewLikeMapper.toDomain(
-            new ReviewLikeEntity(null, 1L, 1L, now, now, null)
-    );
+    ReviewLike reviewLike =
+        reviewLikeMapper.toDomain(new ReviewLikeEntity(null, 1L, 1L, now, now, null));
     entityManager.persist(reviewLikeMapper.toEntity(reviewLike));
 
     // when

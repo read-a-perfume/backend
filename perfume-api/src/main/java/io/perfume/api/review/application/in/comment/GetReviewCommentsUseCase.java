@@ -7,5 +7,5 @@ import io.perfume.api.review.application.facade.dto.ReviewCommentDetailResult;
 public interface GetReviewCommentsUseCase {
 
   CursorPagination<ReviewCommentDetailResult> getReviewComments(
-          final ReviewCommentDetailCommand command);
+      final ReviewCommentDetailCommand command);
 }

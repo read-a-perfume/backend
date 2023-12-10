@@ -23,17 +23,21 @@ public class UpdateAccountService implements UpdateAccountUseCase {
     if (updateEmailCommand.verified().equals(Boolean.FALSE)) {
       throw new FailedToUpdateEmailException(updateEmailCommand.userId());
     }
-    User user = userQueryRepository.loadUser(updateEmailCommand.userId())
-        .orElseThrow(() -> new UserNotFoundException(updateEmailCommand.userId()));
+    User user =
+        userQueryRepository
+            .loadUser(updateEmailCommand.userId())
+            .orElseThrow(() -> new UserNotFoundException(updateEmailCommand.userId()));
     user.updateEmail(updateEmailCommand.email());
     userRepository.save(user);
   }
 
   public void updateUserPassword(UpdatePasswordCommand updatePasswordCommand) {
-    User user = userQueryRepository.loadUser(updatePasswordCommand.userId())
-        .orElseThrow(() -> new UserNotFoundException(updatePasswordCommand.userId()));
-    user.updatePassword(passwordEncoder, updatePasswordCommand.oldPassword(),
-        updatePasswordCommand.newPassword());
+    User user =
+        userQueryRepository
+            .loadUser(updatePasswordCommand.userId())
+            .orElseThrow(() -> new UserNotFoundException(updatePasswordCommand.userId()));
+    user.updatePassword(
+        passwordEncoder, updatePasswordCommand.oldPassword(), updatePasswordCommand.newPassword());
     userRepository.save(user);
   }
 }

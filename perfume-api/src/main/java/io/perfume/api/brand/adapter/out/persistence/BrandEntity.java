@@ -27,18 +27,21 @@ public class BrandEntity extends BaseTimeEntity {
   @ToString.Include
   private Long id;
 
-  @NotBlank
-  private String name;
+  @NotBlank private String name;
 
-  @NotBlank
-  private String story;
+  @NotBlank private String story;
 
   private Long thumbnailId;
 
   @Builder
-  public BrandEntity(Long id, String name, String story, Long thumbnailId,
-                     LocalDateTime createdAt, LocalDateTime updatedAt,
-                     LocalDateTime deletedAt) {
+  public BrandEntity(
+      Long id,
+      String name,
+      String story,
+      Long thumbnailId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;

@@ -15,10 +15,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "user_follow", indexes = {
-    @Index(name = "idx_follower_id", columnList = "followerId"),
-    @Index(name = "idx_following_id", columnList = "followingId")
-})
+@Table(
+    name = "user_follow",
+    indexes = {
+      @Index(name = "idx_follower_id", columnList = "followerId"),
+      @Index(name = "idx_following_id", columnList = "followingId")
+    })
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Getter
 public class FollowJpaEntity extends BaseTimeEntity {
@@ -33,8 +35,13 @@ public class FollowJpaEntity extends BaseTimeEntity {
   @Column(nullable = false)
   private Long followingId;
 
-  public FollowJpaEntity(Long id, Long followerId, Long followingId,
-      LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public FollowJpaEntity(
+      Long id,
+      Long followerId,
+      Long followingId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.followerId = followerId;
@@ -49,12 +56,14 @@ public class FollowJpaEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
@@ -64,8 +73,8 @@ public class FollowJpaEntity extends BaseTimeEntity {
 
   @Override
   public final int hashCode() {
-    return this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-        getClass().hashCode();
+    return this instanceof HibernateProxy
+        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+        : getClass().hashCode();
   }
 }

@@ -6,7 +6,10 @@ import org.springframework.http.HttpStatus;
 
 public class UserNotFoundException extends CustomHttpException {
   public UserNotFoundException(Long userId) {
-    super(HttpStatus.NOT_FOUND, "cannot find user.", "cannot find user. userId : " + userId,
+    super(
+        HttpStatus.NOT_FOUND,
+        "cannot find user.",
+        "cannot find user. userId : " + userId,
         LogLevel.WARN);
   }
 }

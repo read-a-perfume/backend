@@ -1,6 +1,5 @@
 package io.perfume.api.note.application.service;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
@@ -18,10 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class FindNoteServiceTest {
 
-  @InjectMocks
-  private FindNoteService findNoteService;
-  @Mock
-  private NoteQueryPersistenceAdapter noteQueryPersistenceAdapter;
+  @InjectMocks private FindNoteService findNoteService;
+  @Mock private NoteQueryPersistenceAdapter noteQueryPersistenceAdapter;
 
   @Test
   void findNoteById() {

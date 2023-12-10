@@ -19,9 +19,8 @@ import lombok.ToString;
 @Entity(name = "note")
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(name = "uni_note_name", columnNames = "name"),
-    }
-)
+      @UniqueConstraint(name = "uni_note_name", columnNames = "name"),
+    })
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
@@ -42,8 +41,14 @@ public class NoteJpaEntity extends BaseTimeEntity {
   private Long thumbnailId;
 
   @Builder
-  public NoteJpaEntity(Long id, String name, String description, Long thumbnailId,
-                       LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public NoteJpaEntity(
+      Long id,
+      String name,
+      String description,
+      Long thumbnailId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;

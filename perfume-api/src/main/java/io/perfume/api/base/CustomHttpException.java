@@ -10,8 +10,8 @@ public class CustomHttpException extends RuntimeException {
 
   private final String logMessage;
 
-  public CustomHttpException(HttpStatus httpStatus, String message, String logMessage,
-                             LogLevel logLevel) {
+  public CustomHttpException(
+      HttpStatus httpStatus, String message, String logMessage, LogLevel logLevel) {
     super(message);
     this.httpStatus = httpStatus;
     this.logLevel = logLevel;

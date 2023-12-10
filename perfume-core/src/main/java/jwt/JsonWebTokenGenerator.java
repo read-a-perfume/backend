@@ -25,15 +25,14 @@ public class JsonWebTokenGenerator {
     this.secret = Keys.hmacShaKeyFor(secret.getBytes());
   }
 
-  public String create(String subject, Map<String, Object> claims, int expirationSeconds,
-                       LocalDateTime now) {
+  public String create(
+      String subject, Map<String, Object> claims, int expirationSeconds, LocalDateTime now) {
     assert subject != null;
     assert !subject.isEmpty();
     assert expirationSeconds > 0;
     assert claims != null;
 
-    return Jwts
-        .builder()
+    return Jwts.builder()
         .signWith(secret)
         .claims(claims)
         .subject(subject)
@@ -46,8 +45,7 @@ public class JsonWebTokenGenerator {
     assert jwt != null;
     assert !jwt.isEmpty();
 
-    return Jwts
-        .parser()
+    return Jwts.parser()
         .verifyWith((SecretKey) secret)
         .build()
         .parseSignedClaims(jwt)
@@ -59,8 +57,11 @@ public class JsonWebTokenGenerator {
   public String getTokenFromCookie(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     if (cookies != null && cookies.length > 0) {
-      return Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("X-Access-Token"))
-          .findFirst().get().getValue();
+      return Arrays.stream(cookies)
+          .filter(cookie -> cookie.getName().equals("X-Access-Token"))
+          .findFirst()
+          .get()
+          .getValue();
     }
     return null;
   }
@@ -69,8 +70,7 @@ public class JsonWebTokenGenerator {
     assert jwt != null;
     assert !jwt.isEmpty();
 
-    return Jwts
-        .parser()
+    return Jwts.parser()
         .verifyWith((SecretKey) secret)
         .build()
         .parseSignedClaims(jwt)
@@ -84,8 +84,7 @@ public class JsonWebTokenGenerator {
     assert key != null;
     assert !key.isEmpty();
 
-    return Jwts
-        .parser()
+    return Jwts.parser()
         .verifyWith((SecretKey) secret)
         .build()
         .parseSignedClaims(jwt)
@@ -98,11 +97,7 @@ public class JsonWebTokenGenerator {
     assert !jwt.isEmpty();
 
     try {
-      Jwts
-          .parser()
-          .verifyWith((SecretKey) secret)
-          .build()
-          .parseSignedClaims(jwt);
+      Jwts.parser().verifyWith((SecretKey) secret).build().parseSignedClaims(jwt);
       return !this.isExpired(jwt, now);
     } catch (Exception e) {
       return false;

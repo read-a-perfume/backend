@@ -18,16 +18,14 @@ import org.hibernate.proxy.HibernateProxy;
 @NoArgsConstructor(access = PROTECTED)
 public class ReviewThumbnailEntity extends BaseTimeEntity {
 
-  @EmbeddedId
-  private ReviewThumbnailId id;
+  @EmbeddedId private ReviewThumbnailId id;
 
   public ReviewThumbnailEntity(
       final Long reviewId,
       final Long thumbnailId,
       final LocalDateTime createdAt,
       final LocalDateTime updatedAt,
-      final LocalDateTime deletedAt
-  ) {
+      final LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = new ReviewThumbnailId(reviewId, thumbnailId);
   }
@@ -40,12 +38,14 @@ public class ReviewThumbnailEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }

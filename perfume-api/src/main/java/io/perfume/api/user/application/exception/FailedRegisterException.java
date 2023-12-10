@@ -7,6 +7,10 @@ import org.springframework.http.HttpStatus;
 public class FailedRegisterException extends CustomHttpException {
 
   public FailedRegisterException() {
-    super(HttpStatus.INTERNAL_SERVER_ERROR, "회원 데이터 저장 실패로 인해 회원가입이 불가능합니다.", "failed to signup because of failure of saving user entity", LogLevel.WARN);
+    super(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "회원 데이터 저장 실패로 인해 회원가입이 불가능합니다.",
+        "failed to signup because of failure of saving user entity",
+        LogLevel.WARN);
   }
 }

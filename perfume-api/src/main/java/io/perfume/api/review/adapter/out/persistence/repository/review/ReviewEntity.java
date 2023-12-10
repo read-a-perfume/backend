@@ -55,13 +55,21 @@ public class ReviewEntity extends BaseTimeEntity {
   @Column(nullable = false)
   private Long userId;
 
-  protected ReviewEntity() {
-  }
+  protected ReviewEntity() {}
 
-  public ReviewEntity(Long id, String fullReview, String shortReview, Strength strength, Duration duration,
-                      DayType dayType, Long perfumeId, Long userId, Season season,
-                      LocalDateTime createdAt,
-                      LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public ReviewEntity(
+      Long id,
+      String fullReview,
+      String shortReview,
+      Strength strength,
+      Duration duration,
+      DayType dayType,
+      Long perfumeId,
+      Long userId,
+      Season season,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.fullReview = fullReview;
@@ -82,12 +90,14 @@ public class ReviewEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
@@ -97,14 +107,13 @@ public class ReviewEntity extends BaseTimeEntity {
 
   @Override
   public final int hashCode() {
-    return this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-        getClass().hashCode();
+    return this instanceof HibernateProxy
+        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+        : getClass().hashCode();
   }
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "(" +
-        "id = " + id + ")";
+    return getClass().getSimpleName() + "(" + "id = " + id + ")";
   }
 }

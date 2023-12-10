@@ -5,8 +5,7 @@ import io.perfume.api.review.domain.ReviewThumbnail;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StubReviewThumbnailRepository
-    implements ReviewThumbnailRepository {
+public class StubReviewThumbnailRepository implements ReviewThumbnailRepository {
 
   private final List<ReviewThumbnail> reviewLikes = new ArrayList<>();
 

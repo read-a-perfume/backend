@@ -1,6 +1,3 @@
 package io.perfume.api.review.adapter.in.http.dto;
 
-public record CreateReviewCommentResponseDto(
-    Long id
-) {
-}
+public record CreateReviewCommentResponseDto(Long id) {}

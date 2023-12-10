@@ -18,12 +18,10 @@ import org.springframework.context.annotation.Configuration;
 public class SentrySpanAspect {
 
   @Pointcut("within(@org.springframework.stereotype.Repository *)")
-  public void repositoryBeanMethods() {
-  }
+  public void repositoryBeanMethods() {}
 
   @Pointcut("within(@org.springframework.stereotype.Service *)")
-  public void serviceBeanMethods() {
-  }
+  public void serviceBeanMethods() {}
 
   @Before("repositoryBeanMethods() || serviceBeanMethods()")
   public void beforeMethodExecution(JoinPoint joinPoint) {

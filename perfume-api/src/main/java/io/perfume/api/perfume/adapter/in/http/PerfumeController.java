@@ -63,7 +63,8 @@ public class PerfumeController {
 
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/favorite/{id}")
-  public ResponseEntity<FavoritePerfumeResponseDto> favoritePerfume(@AuthenticationPrincipal User user, @PathVariable("id") Long perfumeId) {
+  public ResponseEntity<FavoritePerfumeResponseDto> favoritePerfume(
+      @AuthenticationPrincipal User user, @PathVariable("id") Long perfumeId) {
     var userId = Long.parseLong(user.getUsername());
     userFavoritePerfumeUseCase.addAndDeleteFavoritePerfume(userId, perfumeId);
     return ResponseEntity.status(HttpStatus.OK)
@@ -71,17 +72,21 @@ public class PerfumeController {
   }
 
   @GetMapping("/category/{id}")
-  public CustomPage<SimplePerfumeResponseDto> getPerfumesByCategory(@PathVariable Long id, Pageable pageable) {
-    CustomPage<SimplePerfumeResult> perfumesByCategory = findPerfumeUseCase.findPerfumesByCategory(id, pageable);
-    List<SimplePerfumeResponseDto> list = perfumesByCategory.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
+  public CustomPage<SimplePerfumeResponseDto> getPerfumesByCategory(
+      @PathVariable Long id, Pageable pageable) {
+    CustomPage<SimplePerfumeResult> perfumesByCategory =
+        findPerfumeUseCase.findPerfumesByCategory(id, pageable);
+    List<SimplePerfumeResponseDto> list =
+        perfumesByCategory.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
     return new CustomPage<>(list, perfumesByCategory);
   }
 
   @GetMapping
-  public CustomSlice<SimplePerfumeResponseDto> getPerfumesByCursorPaging(@RequestParam String sort,
-                                                                         @RequestParam @Nullable Long lastPerfumeId,
-                                                                         @RequestParam int pageSize,
-                                                                         @RequestParam @Nullable Long brandId) {
+  public CustomSlice<SimplePerfumeResponseDto> getPerfumesByCursorPaging(
+      @RequestParam String sort,
+      @RequestParam @Nullable Long lastPerfumeId,
+      @RequestParam int pageSize,
+      @RequestParam @Nullable Long brandId) {
     PerfumeSort perfumeSort = PerfumeSort.fromString(sort);
     if (perfumeSort == PerfumeSort.BRAND) {
       if (brandId == null) {
@@ -95,24 +100,30 @@ public class PerfumeController {
     throw new IllegalArgumentException("정렬 기준으로는 brand, farovite만 가능합니다.");
   }
 
-  private CustomSlice<SimplePerfumeResponseDto> getPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
-    CustomSlice<SimplePerfumeResult> perfumesByBrand = findPerfumeUseCase.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
-    List<SimplePerfumeResponseDto> list = perfumesByBrand.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
+  private CustomSlice<SimplePerfumeResponseDto> getPerfumesByBrand(
+      Long brandId, Long lastPerfumeId, int pageSize) {
+    CustomSlice<SimplePerfumeResult> perfumesByBrand =
+        findPerfumeUseCase.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
+    List<SimplePerfumeResponseDto> list =
+        perfumesByBrand.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
     return new CustomSlice<>(list, perfumesByBrand.isHasNext());
   }
 
-  private CustomSlice<SimplePerfumeResponseDto> getPerfumesByFavorite(Long lastPerfumeId, int pageSize) {
-    CustomSlice<SimplePerfumeResult> perfumesByFavorite = findPerfumeUseCase.findPerfumesByFavorite(lastPerfumeId, pageSize);
-    List<SimplePerfumeResponseDto> list = perfumesByFavorite.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
+  private CustomSlice<SimplePerfumeResponseDto> getPerfumesByFavorite(
+      Long lastPerfumeId, int pageSize) {
+    CustomSlice<SimplePerfumeResult> perfumesByFavorite =
+        findPerfumeUseCase.findPerfumesByFavorite(lastPerfumeId, pageSize);
+    List<SimplePerfumeResponseDto> list =
+        perfumesByFavorite.getContent().stream().map(SimplePerfumeResponseDto::of).toList();
     return new CustomSlice<>(list, perfumesByFavorite.isHasNext());
   }
-  
+
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/favorites")
   public List<PerfumeFavoriteResponseDto> getFavoritePerfumes(@AuthenticationPrincipal User user) {
     var userId = Long.parseLong(user.getUsername());
-    List<PerfumeFavoriteResult> favoritePerfumes = getFavoritePerfumesUseCase
-        .getFavoritePerfumes(userId);
+    List<PerfumeFavoriteResult> favoritePerfumes =
+        getFavoritePerfumesUseCase.getFavoritePerfumes(userId);
 
     return PerfumeFavoriteResponseDto.from(favoritePerfumes);
   }

@@ -13,12 +13,15 @@ public class ReviewTagMapper {
         entity.getId().getTagId(),
         entity.getCreatedAt(),
         entity.getUpdatedAt(),
-        entity.getDeletedAt()
-    );
+        entity.getDeletedAt());
   }
 
   public ReviewTagEntity toEntity(@NotNull ReviewTag domain) {
-    return new ReviewTagEntity(domain.getReviewId(), domain.getTagId(), domain.getCreatedAt(),
-        domain.getUpdatedAt(), null);
+    return new ReviewTagEntity(
+        domain.getReviewId(),
+        domain.getTagId(),
+        domain.getCreatedAt(),
+        domain.getUpdatedAt(),
+        null);
   }
 }

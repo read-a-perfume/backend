@@ -15,11 +15,9 @@ import org.springframework.test.context.ActiveProfiles;
 @DataJpaTest
 class ReviewLikePersistenceAdapterTest {
 
-  @Autowired
-  private ReviewLikePersistenceAdapter repository;
+  @Autowired private ReviewLikePersistenceAdapter repository;
 
-  @Autowired
-  private ReviewLikeMapper mapper;
+  @Autowired private ReviewLikeMapper mapper;
 
   @Test
   @DisplayName("리뷰 좋아요 데이터 저장")

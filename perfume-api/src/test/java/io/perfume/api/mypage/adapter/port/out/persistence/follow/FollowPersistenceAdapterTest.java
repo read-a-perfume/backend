@@ -16,8 +16,7 @@ import org.springframework.context.annotation.Import;
 @DataJpaTest
 class FollowPersistenceAdapterTest {
 
-  @Autowired
-  FollowRepository followRepository;
+  @Autowired FollowRepository followRepository;
 
   @Test
   @DisplayName("팔로우를 저장한다.")
@@ -26,11 +25,7 @@ class FollowPersistenceAdapterTest {
     var followerId = 0L;
     var followingId = 1L;
     var now = LocalDateTime.now();
-    var follow = Follow.create(
-        followerId,
-        followingId,
-        now
-    );
+    var follow = Follow.create(followerId, followingId, now);
 
     // when
     var saved = followRepository.save(follow);

@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SampleJPACommandRepository
-    extends JpaRepository<Sample, Long>, SampleCommandRepository {
-}
+    extends JpaRepository<Sample, Long>, SampleCommandRepository {}

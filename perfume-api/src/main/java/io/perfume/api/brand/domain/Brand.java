@@ -14,8 +14,14 @@ public class Brand extends BaseTimeDomain {
   private Long thumbnailId;
 
   @Builder
-  public Brand(@NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt,
-               LocalDateTime deletedAt, Long id, String name, String story, Long thumbnailId) {
+  public Brand(
+      @NotNull LocalDateTime createdAt,
+      @NotNull LocalDateTime updatedAt,
+      LocalDateTime deletedAt,
+      Long id,
+      String name,
+      String story,
+      Long thumbnailId) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;

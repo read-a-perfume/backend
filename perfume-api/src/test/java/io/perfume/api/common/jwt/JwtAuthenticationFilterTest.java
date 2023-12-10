@@ -44,49 +44,54 @@ import org.springframework.web.context.WebApplicationContext;
 class JwtAuthenticationFilterTest {
 
   private MockMvc mockMvc;
-  @Autowired
-  private JsonWebTokenGenerator jsonWebTokenGenerator;
-  @Autowired
-  private ObjectMapper objectMapper;
-  @Autowired
-  private AuthenticationManager authenticationManager;
-  @MockBean
-  private FindUserUseCase findUserUseCase;
+  @Autowired private JsonWebTokenGenerator jsonWebTokenGenerator;
+  @Autowired private ObjectMapper objectMapper;
+  @Autowired private AuthenticationManager authenticationManager;
+  @MockBean private FindUserUseCase findUserUseCase;
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
     JwtAuthenticationFilter jwtAuthenticationFilter =
         new JwtAuthenticationFilter(authenticationManager, objectMapper);
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .addFilter(jwtAuthenticationFilter)
-        .build();
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .addFilter(jwtAuthenticationFilter)
+            .build();
   }
 
   @Test
   void FailToAuthenticateWithExpiredToken() throws Exception {
-    String jwt = jsonWebTokenGenerator.create("access_token", Map.of("userId", 1L, "roles", List.of("ROLE_USER")), 1, LocalDateTime.now());
+    String jwt =
+        jsonWebTokenGenerator.create(
+            "access_token",
+            Map.of("userId", 1L, "roles", List.of("ROLE_USER")),
+            1,
+            LocalDateTime.now());
     Long userId = 1L;
-    UserProfileResult userProfileResult = new UserProfileResult(userId, "username", "thumbnail.com");
+    UserProfileResult userProfileResult =
+        new UserProfileResult(userId, "username", "thumbnail.com");
     given(findUserUseCase.findUserProfileById(anyLong())).willReturn(userProfileResult);
 
     Thread.sleep(1000);
 
-    mockMvc.perform(RestDocumentationRequestBuilders.get("/v1/me")
-            .cookie(new Cookie("X-Access-Token", jwt)))
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/me")
+                .cookie(new Cookie("X-Access-Token", jwt)))
         .andExpect(status().isUnauthorized())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.status").value("Unauthorized"))
         .andExpect(jsonPath("$.statusCode").value("401"))
         .andExpect(jsonPath("$.message").value("Access Token Expired."))
         .andDo(
-            document("token-expired",
+            document(
+                "token-expired",
                 responseFields(
                     fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("응답 코드"),
-                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
-                )
-            ));
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지"))));
   }
 }

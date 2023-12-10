@@ -47,87 +47,78 @@ class MypageControllerTest {
 
   private MockMvc mockMvc;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-  @Autowired
-  private FollowUserUseCase followUserUseCase;
+  @Autowired private FollowUserUseCase followUserUseCase;
 
-  @Autowired
-  private ReviewRepository reviewRepository;
+  @Autowired private ReviewRepository reviewRepository;
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
+  void setUp(
+      WebApplicationContext webApplicationContext,
       RestDocumentationContextProvider restDocumentation) {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .build();
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .build();
   }
 
   @Test
   @WithMockUser(username = "100", roles = "USER")
   void testFollowUser() throws Exception {
     // given
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.post("/v1/mypage/{id}/follow", user.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(Map.of("id", user.getId())))
-        )
+        .perform(
+            RestDocumentationRequestBuilders.post("/v1/mypage/{id}/follow", user.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of("id", user.getId()))))
         .andDo(print())
         .andExpect(status().isCreated())
         .andDo(
-            document("follow-user",
-                pathParameters(
-                    parameterWithName("id").description("유저 ID")
-                ),
+            document(
+                "follow-user",
+                pathParameters(parameterWithName("id").description("유저 ID")),
                 requestFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("유저 ID")
-                ))
-        );
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("유저 ID"))));
   }
+
   @Test
   @WithMockUser(username = "100", roles = "USER")
   void testGetFollowCount() throws Exception {
     // given
-    var user = userRepository.save(User.generalUserJoin(
-        "test",
-        "test@mail.com",
-        "test",
-        false,
-        false
-    )).orElseThrow();
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
 
     followUserUseCase.followAndUnFollow(2L, user.getId());
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/mypage/follows")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/mypage/follows")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("get-follows",
+            document(
+                "get-follows",
                 responseFields(
                     fieldWithPath("followerCount").type(JsonFieldType.NUMBER).description("팔로워 수"),
-                    fieldWithPath("followingCount").type(JsonFieldType.NUMBER).description("팔로잉 수")
-                )
-            ));
+                    fieldWithPath("followingCount")
+                        .type(JsonFieldType.NUMBER)
+                        .description("팔로잉 수"))));
   }
 
   @Test
@@ -135,44 +126,45 @@ class MypageControllerTest {
   void testMyPageReviewCount() throws Exception {
     // given
     var now = LocalDateTime.now();
-    var review = reviewRepository.save(Review.create(
-        "test",
-        "test description",
-        Strength.LIGHT,
-        Duration.LONG,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.SPRING,
-        now
-    ));
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.LONG,
+                DayType.DAILY,
+                1L,
+                1L,
+                Season.SPRING,
+                now));
 
-    var review2 = reviewRepository.save(Review.create(
-        "test2",
-        "test2 description",
-        Strength.HEAVY,
-        Duration.LONG,
-        DayType.DAILY,
-        1L,
-        1L,
-        Season.FALL,
-        now
-    ));
+    var review2 =
+        reviewRepository.save(
+            Review.create(
+                "test2",
+                "test2 description",
+                Strength.HEAVY,
+                Duration.LONG,
+                DayType.DAILY,
+                1L,
+                1L,
+                Season.FALL,
+                now));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/mypage/reviews")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/mypage/reviews")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
-            document("get-mypage-reviews",
+            document(
+                "get-mypage-reviews",
                 responseFields(
-                    fieldWithPath("reviewCount").type(JsonFieldType.NUMBER).description("리뷰 수")
-                )
-            ));
+                    fieldWithPath("reviewCount").type(JsonFieldType.NUMBER).description("리뷰 수"))));
   }
 }

@@ -16,12 +16,13 @@ import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(name = "business")
-@Table(name = "business",
+@Table(
+    name = "business",
     uniqueConstraints = {
-        @UniqueConstraint(name = "uni_business_1", columnNames = "registrationNumber"),
+      @UniqueConstraint(name = "uni_business_1", columnNames = "registrationNumber"),
     },
     indexes = {
-        @Index(name = "idx_business_1", columnList = "companyLogoId"),
+      @Index(name = "idx_business_1", columnList = "companyLogoId"),
     })
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)

@@ -15,21 +15,19 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @Import({
-    ReviewThumbnailPersistenceAdapter.class,
-    ReviewThumbnailMapper.class,
-    ReviewThumbnailFixture.class,
-    TestQueryDSLConfiguration.class
+  ReviewThumbnailPersistenceAdapter.class,
+  ReviewThumbnailMapper.class,
+  ReviewThumbnailFixture.class,
+  TestQueryDSLConfiguration.class
 })
 @DataJpaTest
 @EnableJpaAuditing
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewThumbnailPersistenceAdapterTest {
 
-  @Autowired
-  private ReviewThumbnailPersistenceAdapter repository;
+  @Autowired private ReviewThumbnailPersistenceAdapter repository;
 
-  @Autowired
-  private ReviewThumbnailFixture fixture;
+  @Autowired private ReviewThumbnailFixture fixture;
 
   @Test
   void 리뷰_썸네일_저장() {

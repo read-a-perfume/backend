@@ -37,15 +37,16 @@ public class TokenHandlingControllerTest {
 
   MockMvc mockMvc;
 
-  @MockBean
-  private MakeNewTokenUseCase makeNewTokenUseCase;
+  @MockBean private MakeNewTokenUseCase makeNewTokenUseCase;
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .build();
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .build();
   }
 
   @BeforeEach
@@ -63,29 +64,31 @@ public class TokenHandlingControllerTest {
         new ReissuedTokenResult(newAccessToken, refreshTokenString);
 
     given(
-        makeNewTokenUseCase.reissueAccessToken(anyString(), anyString(), any(LocalDateTime.class)))
+            makeNewTokenUseCase.reissueAccessToken(
+                anyString(), anyString(), any(LocalDateTime.class)))
         .willReturn(reissuedTokenResult);
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/v1/reissue")
-            .cookie(new Cookie("X-Access-Token", accessToken))
-            .cookie(new Cookie("X-Refresh-Token", refreshTokenString)))
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/v1/reissue")
+                .cookie(new Cookie("X-Access-Token", accessToken))
+                .cookie(new Cookie("X-Refresh-Token", refreshTokenString)))
         .andDo(print())
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.cookie()
-            .value("X-Access-Token", reissuedTokenResult.accessToken()))
-        .andExpect(MockMvcResultMatchers.cookie()
-            .value("X-Refresh-Token", reissuedTokenResult.refreshToken()))
+        .andExpect(
+            MockMvcResultMatchers.cookie()
+                .value("X-Access-Token", reissuedTokenResult.accessToken()))
+        .andExpect(
+            MockMvcResultMatchers.cookie()
+                .value("X-Refresh-Token", reissuedTokenResult.refreshToken()))
         .andDo(
-            document("reissue-access-token",
+            document(
+                "reissue-access-token",
                 requestCookies(
                     cookieWithName("X-Access-Token").description("만료된 Access Token"),
-                    cookieWithName("X-Refresh-Token").description("재발급을 위한 Refresh Token")
-                ),
+                    cookieWithName("X-Refresh-Token").description("재발급을 위한 Refresh Token")),
                 responseCookies(
                     cookieWithName("X-Access-Token").description("재발급된 Access Token"),
-                    cookieWithName("X-Refresh-Token").description("재발급된 Refresh Token")
-                )
-            )
-        );
+                    cookieWithName("X-Refresh-Token").description("재발급된 Refresh Token"))));
   }
 }

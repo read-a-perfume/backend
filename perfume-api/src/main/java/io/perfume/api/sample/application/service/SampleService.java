@@ -17,8 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class SampleService implements CreateSampleUseCase, DeleteSampleUseCase,
-    GetSamplesUseCase, GetSampleUseCase, UpdateSampleUseCase {
+public class SampleService
+    implements CreateSampleUseCase,
+        DeleteSampleUseCase,
+        GetSamplesUseCase,
+        GetSampleUseCase,
+        UpdateSampleUseCase {
 
   private final SampleCommandRepository sampleRepository;
   private final SampleQueryRepository sampleQueryRepository;

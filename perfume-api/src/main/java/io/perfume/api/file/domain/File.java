@@ -15,8 +15,13 @@ public class File extends BaseTimeDomain {
   private final Long userId;
 
   @Builder
-  private File(Long id, String url, Long userId,
-               LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  private File(
+      Long id,
+      String url,
+      Long userId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.id = id;
@@ -33,6 +38,4 @@ public class File extends BaseTimeDomain {
         .deletedAt(null)
         .build();
   }
-
-
 }

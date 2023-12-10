@@ -12,7 +12,8 @@ public class StubAuthenticationKeyQueryRepository implements AuthenticationKeyQu
 
   @Override
   public Optional<AuthenticationKey> findByKey(String key) {
-    return store.stream().filter(authenticationKey -> authenticationKey.getKey().equals(key))
+    return store.stream()
+        .filter(authenticationKey -> authenticationKey.getKey().equals(key))
         .findFirst();
   }
 

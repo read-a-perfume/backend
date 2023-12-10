@@ -14,17 +14,17 @@ class ReviewTest {
   void testIsOwner() {
     // given
     var userId = 1L;
-    var review = Review.create(
-        "shortReview",
-        "shortReview",
-        Strength.LIGHT,
-        null,
-        null,
-        null,
-        userId,
-        Season.SPRING,
-        null
-    );
+    var review =
+        Review.create(
+            "shortReview",
+            "shortReview",
+            Strength.LIGHT,
+            null,
+            null,
+            null,
+            userId,
+            Season.SPRING,
+            null);
 
     // when
     var result = review.isOwner(userId);
@@ -38,17 +38,17 @@ class ReviewTest {
   void testIsNotOwner() {
     // given
     var userId = 1L;
-    var review = Review.create(
-        "shortReview",
-        "shortReview",
-        Strength.LIGHT,
-        null,
-        null,
-        null,
-        userId,
-        Season.SPRING,
-        null
-    );
+    var review =
+        Review.create(
+            "shortReview",
+            "shortReview",
+            Strength.LIGHT,
+            null,
+            null,
+            null,
+            userId,
+            Season.SPRING,
+            null);
 
     // when
     var result = review.isOwner(userId + 1);

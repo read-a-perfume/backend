@@ -49,8 +49,7 @@ public class FileMapper {
               .createdAt(fileJpaEntity.getCreatedAt())
               .updatedAt(fileJpaEntity.getUpdatedAt())
               .deletedAt(fileJpaEntity.getDeletedAt())
-              .build()
-      );
+              .build());
     }
 
     return files;
@@ -69,8 +68,7 @@ public class FileMapper {
               file.getUserId(),
               file.getCreatedAt(),
               file.getUpdatedAt(),
-              file.getDeletedAt())
-      );
+              file.getDeletedAt()));
     }
     return fileJpaEntities;
   }

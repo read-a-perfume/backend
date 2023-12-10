@@ -37,40 +37,42 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({PerfumeQueryPersistenceAdapter.class, PerfumeMapper.class, TestQueryDSLConfiguration.class})
+@Import({
+  PerfumeQueryPersistenceAdapter.class,
+  PerfumeMapper.class,
+  TestQueryDSLConfiguration.class
+})
 @DataJpaTest
 @EnableJpaAuditing
 class PerfumeQueryPersistenceAdapterTest {
-  @Autowired
-  private EntityManager entityManager;
-  @Autowired
-  private PerfumeQueryPersistenceAdapter perfumeQueryPersistenceAdapter;
-  @Autowired
-  private PerfumeJpaRepository perfumeJpaRepository;
-  @Autowired
-  private NoteJpaRepository noteJpaRepository;
-  @Autowired
-  private PerfumeMapper perfumeMapper;
+  @Autowired private EntityManager entityManager;
+  @Autowired private PerfumeQueryPersistenceAdapter perfumeQueryPersistenceAdapter;
+  @Autowired private PerfumeJpaRepository perfumeJpaRepository;
+  @Autowired private NoteJpaRepository noteJpaRepository;
+  @Autowired private PerfumeMapper perfumeMapper;
 
   @Test
   void findPerfumeById() {
     // given
-    Perfume perfume = Perfume.builder()
-        .name("테싯 오 드 퍼퓸")
-        .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
-        .concentration(Concentration.EAU_DE_PARFUM)
-        .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-        .brandId(1L)
-        .categoryId(1L)
-        .thumbnailId(1L)
-        .build();
+    Perfume perfume =
+        Perfume.builder()
+            .name("테싯 오 드 퍼퓸")
+            .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
+            .concentration(Concentration.EAU_DE_PARFUM)
+            .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+            .brandId(1L)
+            .categoryId(1L)
+            .thumbnailId(1L)
+            .build();
 
-    PerfumeJpaEntity perfumeJpaEntity = perfumeJpaRepository.save(perfumeMapper.toPerfumeJpaEntity(perfume));
+    PerfumeJpaEntity perfumeJpaEntity =
+        perfumeJpaRepository.save(perfumeMapper.toPerfumeJpaEntity(perfume));
     entityManager.flush();
     entityManager.clear();
 
     // when
-    Optional<Perfume> optionalPerfume = perfumeQueryPersistenceAdapter.findPerfumeById(perfumeJpaEntity.getId());
+    Optional<Perfume> optionalPerfume =
+        perfumeQueryPersistenceAdapter.findPerfumeById(perfumeJpaEntity.getId());
     Perfume resultPerfume = optionalPerfume.get();
 
     // then
@@ -86,33 +88,41 @@ class PerfumeQueryPersistenceAdapterTest {
   @Test
   void getNotePyramidIdsByPerfume() {
     // given
-    Perfume perfume = Perfume.builder()
-        .name("테싯 오 드 퍼퓸")
-        .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
-        .concentration(Concentration.EAU_DE_PARFUM)
-        .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-        .brandId(1L)
-        .categoryId(1L)
-        .thumbnailId(1L)
-        .build();
+    Perfume perfume =
+        Perfume.builder()
+            .name("테싯 오 드 퍼퓸")
+            .story("마음을 차분하게 가라앉혀주고 우리 몸의 감각을 일깨워주는 흙내음과 시트러스 노트의 따뜻하고 생기 넘치는 블렌드")
+            .concentration(Concentration.EAU_DE_PARFUM)
+            .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+            .brandId(1L)
+            .categoryId(1L)
+            .thumbnailId(1L)
+            .build();
 
     PerfumeJpaEntity perfumeJpaEntity = perfumeMapper.toPerfumeJpaEntity(perfume);
     entityManager.persist(perfumeJpaEntity);
 
-    NoteJpaEntity noteJpaEntity1 = NoteJpaEntity.builder().name("핑크 페퍼").description("핑크페퍼 향").thumbnailId(1L).build();
-    NoteJpaEntity noteJpaEntity2 = NoteJpaEntity.builder().name("머스크").description("머스크 향").thumbnailId(2L).build();
-    Iterable<NoteJpaEntity> noteJpaEntities = noteJpaRepository.saveAll(List.of(noteJpaEntity1, noteJpaEntity2));
+    NoteJpaEntity noteJpaEntity1 =
+        NoteJpaEntity.builder().name("핑크 페퍼").description("핑크페퍼 향").thumbnailId(1L).build();
+    NoteJpaEntity noteJpaEntity2 =
+        NoteJpaEntity.builder().name("머스크").description("머스크 향").thumbnailId(2L).build();
+    Iterable<NoteJpaEntity> noteJpaEntities =
+        noteJpaRepository.saveAll(List.of(noteJpaEntity1, noteJpaEntity2));
 
-    noteJpaEntities.forEach(entity -> entityManager.persist(PerfumeNoteEntity.builder()
-        .perfumeId(perfumeJpaEntity.getId())
-        .noteId(entity.getId())
-        .noteLevel(NoteLevel.TOP)
-        .build()));
+    noteJpaEntities.forEach(
+        entity ->
+            entityManager.persist(
+                PerfumeNoteEntity.builder()
+                    .perfumeId(perfumeJpaEntity.getId())
+                    .noteId(entity.getId())
+                    .noteLevel(NoteLevel.TOP)
+                    .build()));
     entityManager.flush();
     entityManager.clear();
 
     // when
-    NotePyramid notePyramidIdsByPerfume = perfumeQueryPersistenceAdapter.getNotePyramidByPerfume(1L);
+    NotePyramid notePyramidIdsByPerfume =
+        perfumeQueryPersistenceAdapter.getNotePyramidByPerfume(1L);
     // then
     assertNotNull(notePyramidIdsByPerfume);
   }
@@ -125,14 +135,16 @@ class PerfumeQueryPersistenceAdapterTest {
     entityManager.persist(brandEntity);
 
     for (int i = 0; i < 5; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-          .brandId(brandEntity.getId())
-          .categoryId(1L)
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(brandEntity.getId())
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
     }
@@ -141,7 +153,8 @@ class PerfumeQueryPersistenceAdapterTest {
 
     // when
     int pageSize = 3;
-    CustomSlice<SimplePerfumeResult> perfumesByBrand = perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
+    CustomSlice<SimplePerfumeResult> perfumesByBrand =
+        perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
     // then
     assertEquals(pageSize, perfumesByBrand.getContent().size());
     assertTrue(perfumesByBrand.isHasNext());
@@ -156,14 +169,16 @@ class PerfumeQueryPersistenceAdapterTest {
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
     for (int i = 0; i < 5; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-          .brandId(brandEntity.getId())
-          .categoryId(1L)
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(brandEntity.getId())
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
@@ -174,10 +189,14 @@ class PerfumeQueryPersistenceAdapterTest {
     // when
     int pageSize = 3;
     // 첫 3개 조회
-    CustomSlice<SimplePerfumeResult> perfumesByBrandFirst = perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
+    CustomSlice<SimplePerfumeResult> perfumesByBrandFirst =
+        perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), null, pageSize);
     // 위에서 구한 마지막 향수 아이디를 넣어 나머지 2개 조회
     CustomSlice<SimplePerfumeResult> perfumesByBrandLast =
-        perfumeQueryPersistenceAdapter.findPerfumesByBrand(brandEntity.getId(), perfumesByBrandFirst.getContent().get(pageSize - 1).id(), pageSize);
+        perfumeQueryPersistenceAdapter.findPerfumesByBrand(
+            brandEntity.getId(),
+            perfumesByBrandFirst.getContent().get(pageSize - 1).id(),
+            pageSize);
 
     // then
     assertEquals(pageSize, perfumesByBrandFirst.getContent().size());
@@ -190,20 +209,28 @@ class PerfumeQueryPersistenceAdapterTest {
   void findPerfumesByCategory() {
     // given
     CategoryJpaEntity categoryJpaEntity =
-        CategoryJpaEntity.builder().name("플로럴").description("꽃 향기를 가득 담아 사랑스러운 느낌을 줍니다.").tags("#우아한 #사랑스러운 #꽃향기").thumbnailId(1L).createdAt(LocalDateTime.now()).build();
+        CategoryJpaEntity.builder()
+            .name("플로럴")
+            .description("꽃 향기를 가득 담아 사랑스러운 느낌을 줍니다.")
+            .tags("#우아한 #사랑스러운 #꽃향기")
+            .thumbnailId(1L)
+            .createdAt(LocalDateTime.now())
+            .build();
 
     entityManager.persist(categoryJpaEntity);
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
     for (int i = 0; i < 5; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-          .brandId(1L)
-          .categoryId(categoryJpaEntity.getId())
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(1L)
+              .categoryId(categoryJpaEntity.getId())
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
@@ -214,7 +241,8 @@ class PerfumeQueryPersistenceAdapterTest {
     // when
     int pageSize = 3;
     CustomPage<SimplePerfumeResult> perfumesByCategory =
-        perfumeQueryPersistenceAdapter.findPerfumesByCategory(categoryJpaEntity.getId(), PageRequest.of(0, 3));
+        perfumeQueryPersistenceAdapter.findPerfumesByCategory(
+            categoryJpaEntity.getId(), PageRequest.of(0, 3));
 
     // then
     assertEquals(pageSize, perfumesByCategory.getSize());
@@ -227,21 +255,24 @@ class PerfumeQueryPersistenceAdapterTest {
   void findPerfumesByFavorite() {
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
     for (int i = 1; i < 6; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.perfume.com/kr/p/fragrance/" + i)
-          .brandId(1L)
-          .categoryId(1L)
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.perfume.com/kr/p/fragrance/" + i)
+              .brandId(1L)
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
 
-      for(int j=1; j <= i; j++) {
+      for (int j = 1; j <= i; j++) {
         PerfumeFavoriteJpaEntity perfumeFavoriteJpaEntity =
-            new PerfumeFavoriteJpaEntity((long) j, perfumeJpaEntity.getId(), LocalDateTime.now(), LocalDateTime.now(), null);
+            new PerfumeFavoriteJpaEntity(
+                (long) j, perfumeJpaEntity.getId(), LocalDateTime.now(), LocalDateTime.now(), null);
         entityManager.persist(perfumeFavoriteJpaEntity);
       }
     }
@@ -251,18 +282,24 @@ class PerfumeQueryPersistenceAdapterTest {
     // when
     int pageSize = 3;
     // 첫 3개 조회
-    CustomSlice<SimplePerfumeResult> perfumesByBrandFirst = perfumeQueryPersistenceAdapter.findPerfumesByFavorite(null, pageSize);
+    CustomSlice<SimplePerfumeResult> perfumesByBrandFirst =
+        perfumeQueryPersistenceAdapter.findPerfumesByFavorite(null, pageSize);
     // 위에서 구한 마지막 향수 아이디를 넣어 나머지 2개 조회
     CustomSlice<SimplePerfumeResult> perfumesByBrandLast =
-        perfumeQueryPersistenceAdapter.findPerfumesByFavorite(perfumesByBrandFirst.getContent().get(pageSize - 1).id(), pageSize);
+        perfumeQueryPersistenceAdapter.findPerfumesByFavorite(
+            perfumesByBrandFirst.getContent().get(pageSize - 1).id(), pageSize);
 
     // then
     assertEquals(pageSize, perfumesByBrandFirst.getContent().size());
-    assertEquals(perfumesByBrandFirst.getContent().get(0).id(), perfumeJpaEntities.get(4).getId()); // 가장 마지막 향수가 가장 즐겨찾기가 많은 향수
+    assertEquals(
+        perfumesByBrandFirst.getContent().get(0).id(),
+        perfumeJpaEntities.get(4).getId()); // 가장 마지막 향수가 가장 즐겨찾기가 많은 향수
     assertTrue(perfumesByBrandFirst.isHasNext());
 
     assertEquals(perfumeJpaEntities.size() - pageSize, perfumesByBrandLast.getContent().size());
-    assertEquals(perfumesByBrandLast.getContent().get(1).id(), perfumeJpaEntities.get(0).getId()); // 가장 첫번째 향수가 가장 즐겨찾기가 적은 향수
+    assertEquals(
+        perfumesByBrandLast.getContent().get(1).id(),
+        perfumeJpaEntities.get(0).getId()); // 가장 첫번째 향수가 가장 즐겨찾기가 적은 향수
     assertFalse(perfumesByBrandLast.isHasNext());
   }
 
@@ -275,14 +312,16 @@ class PerfumeQueryPersistenceAdapterTest {
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-          .brandId(brandEntity.getId())
-          .categoryId(1L)
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(brandEntity.getId())
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
@@ -292,14 +331,16 @@ class PerfumeQueryPersistenceAdapterTest {
     entityManager.persist(brandEntity2);
 
     for (int i = 10; i < 20; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-          .brandId(brandEntity2.getId())
-          .categoryId(1L)
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(brandEntity2.getId())
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
     }
@@ -307,7 +348,8 @@ class PerfumeQueryPersistenceAdapterTest {
     entityManager.clear();
 
     // when
-    List<PerfumeNameResult> perfumeNameResults = perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝");
+    List<PerfumeNameResult> perfumeNameResults =
+        perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝");
 
     // then
     assertEquals(10, perfumeNameResults.size());
@@ -326,14 +368,16 @@ class PerfumeQueryPersistenceAdapterTest {
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-          .brandId(brandEntity.getId())
-          .categoryId(1L)
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(brandEntity.getId())
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
@@ -342,7 +386,8 @@ class PerfumeQueryPersistenceAdapterTest {
     entityManager.clear();
 
     // when
-    List<PerfumeNameResult> perfumeNameResults = perfumeQueryPersistenceAdapter.searchPerfumeByQuery("perfume1");
+    List<PerfumeNameResult> perfumeNameResults =
+        perfumeQueryPersistenceAdapter.searchPerfumeByQuery("perfume1");
 
     // then
     assertEquals(10, perfumeNameResults.size());
@@ -361,14 +406,16 @@ class PerfumeQueryPersistenceAdapterTest {
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-          .brandId(brandEntity.getId())
-          .categoryId(1L)
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(brandEntity.getId())
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
@@ -377,7 +424,8 @@ class PerfumeQueryPersistenceAdapterTest {
     entityManager.clear();
 
     // when
-    List<PerfumeNameResult> perfumeNameResults = perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝 perfume1");
+    List<PerfumeNameResult> perfumeNameResults =
+        perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝 perfume1");
 
     // then
     assertEquals(10, perfumeNameResults.size());
@@ -396,14 +444,16 @@ class PerfumeQueryPersistenceAdapterTest {
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
-      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
-          .story("story" + i)
-          .concentration(Concentration.EAU_DE_PARFUM)
-          .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
-          .brandId(brandEntity.getId())
-          .categoryId(1L)
-          .thumbnailId(1L)
-          .build();
+      PerfumeJpaEntity perfumeJpaEntity =
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(brandEntity.getId())
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build();
 
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
@@ -412,7 +462,8 @@ class PerfumeQueryPersistenceAdapterTest {
     entityManager.clear();
 
     // when
-    List<PerfumeNameResult> perfumeNameResults = perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝 perfume999");
+    List<PerfumeNameResult> perfumeNameResults =
+        perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝 perfume999");
 
     // then
     assertEquals(0, perfumeNameResults.size());

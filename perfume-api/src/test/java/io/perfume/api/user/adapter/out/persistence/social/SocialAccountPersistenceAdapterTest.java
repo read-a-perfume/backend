@@ -20,18 +20,15 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class SocialAccountPersistenceAdapterTest {
 
-  @Autowired
-  private SocialAccountPersistenceAdapter oauthRepository;
+  @Autowired private SocialAccountPersistenceAdapter oauthRepository;
 
   @Test
   @DisplayName("소셜 계정 정보를 저장한다.")
   void save() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    SocialAccount socialAccount =
-        SocialAccount.createGoogleSocialAccount("test", now);
-    User user = User.generalUserJoin(
-        "test", "test@mail.com", "test", false, false);
+    SocialAccount socialAccount = SocialAccount.createGoogleSocialAccount("test", now);
+    User user = User.generalUserJoin("test", "test@mail.com", "test", false, false);
     socialAccount.connect(user);
 
     // when

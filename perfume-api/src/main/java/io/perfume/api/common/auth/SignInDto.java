@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class SignInDto {
-  @NotBlank
-  private String username;
+  @NotBlank private String username;
 
-  @NotBlank
-  private String password;
+  @NotBlank private String password;
 
   @Builder
   private SignInDto(String username, String password) {

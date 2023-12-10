@@ -4,6 +4,7 @@ import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 
 public record UserProfileDto(Long userId, String username, String thumbnail) {
   public static UserProfileDto of(UserProfileResult userProfileResult) {
-    return new UserProfileDto(userProfileResult.userId(), userProfileResult.username(), userProfileResult.thumbnail());
+    return new UserProfileDto(
+        userProfileResult.userId(), userProfileResult.username(), userProfileResult.thumbnail());
   }
 }

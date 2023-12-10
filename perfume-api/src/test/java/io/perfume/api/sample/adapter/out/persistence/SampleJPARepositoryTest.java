@@ -16,8 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class SampleJPARepositoryTest {
 
-  @Autowired
-  private SampleCommandRepository sampleRepository;
+  @Autowired private SampleCommandRepository sampleRepository;
 
   @Test
   @DisplayName("Sample entity 를 영속화한다.")

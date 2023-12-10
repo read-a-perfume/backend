@@ -30,9 +30,19 @@ public class Review extends BaseTimeDomain {
 
   private final Long userId;
 
-  public Review(Long id, String fullReview, String shortReview, Strength strength, Duration duration,
-                DayType dayType, Long perfumeId, Long userId, Season season, LocalDateTime createdAt,
-                LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public Review(
+      Long id,
+      String fullReview,
+      String shortReview,
+      Strength strength,
+      Duration duration,
+      DayType dayType,
+      Long perfumeId,
+      Long userId,
+      Season season,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.fullReview = fullReview;
@@ -45,12 +55,29 @@ public class Review extends BaseTimeDomain {
     this.season = season;
   }
 
-  public static Review create(String shortReview, String fullReview, Strength strength, Duration duration,
-                              DayType dayType, Long perfumeId, Long userId, Season season,
-                              LocalDateTime now) {
-    return new Review(null, shortReview, fullReview, strength, duration, dayType, perfumeId, userId,
+  public static Review create(
+      String shortReview,
+      String fullReview,
+      Strength strength,
+      Duration duration,
+      DayType dayType,
+      Long perfumeId,
+      Long userId,
+      Season season,
+      LocalDateTime now) {
+    return new Review(
+        null,
+        shortReview,
+        fullReview,
+        strength,
+        duration,
+        dayType,
+        perfumeId,
+        userId,
         season,
-        now, now, null);
+        now,
+        now,
+        null);
   }
 
   public boolean isOwner(Long userId) {

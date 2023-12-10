@@ -20,8 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class FilePersistenceAdapterTest {
 
-  @Autowired
-  private FilePersistenceAdapter fileRepository;
+  @Autowired private FilePersistenceAdapter fileRepository;
 
   @Test
   @DisplayName("파일을 저장한다.")
