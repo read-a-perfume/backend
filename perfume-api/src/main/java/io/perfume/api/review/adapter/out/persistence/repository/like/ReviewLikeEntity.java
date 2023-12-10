@@ -1,19 +1,18 @@
 package io.perfume.api.review.adapter.out.persistence.repository.like;
 
 import io.perfume.api.base.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Getter;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "review_like")
+@Table(name = "review_like", indexes = {
+    @Index(name = "idx_review_like_1", columnList = "reviewId"),
+    @Index(name = "idx_review_like_2", columnList = "userId")
+})
 @Getter
 public class ReviewLikeEntity extends BaseTimeEntity {
 
