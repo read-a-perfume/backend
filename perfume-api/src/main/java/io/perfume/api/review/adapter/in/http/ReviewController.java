@@ -16,12 +16,12 @@ import io.perfume.api.review.adapter.in.http.dto.GetReviewsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.ReviewLikeResponseDto;
 import io.perfume.api.review.application.facade.ReviewDetailFacadeService;
-import io.perfume.api.review.application.in.CreateReviewCommentUseCase;
-import io.perfume.api.review.application.in.CreateReviewUseCase;
-import io.perfume.api.review.application.in.DeleteReviewCommentUseCase;
-import io.perfume.api.review.application.in.DeleteReviewUseCase;
-import io.perfume.api.review.application.in.LikeReviewUseCase;
-import io.perfume.api.review.application.in.UpdateReviewCommentUseCase;
+import io.perfume.api.review.application.in.comment.CreateReviewCommentUseCase;
+import io.perfume.api.review.application.in.review.CreateReviewUseCase;
+import io.perfume.api.review.application.in.comment.DeleteReviewCommentUseCase;
+import io.perfume.api.review.application.in.review.DeleteReviewUseCase;
+import io.perfume.api.review.application.in.like.ReviewLikeUseCase;
+import io.perfume.api.review.application.in.comment.UpdateReviewCommentUseCase;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class ReviewController {
   private final CreateReviewCommentUseCase createReviewCommentUseCase;
   private final DeleteReviewCommentUseCase deleteReviewCommentUseCase;
   private final UpdateReviewCommentUseCase updateReviewCommentUseCase;
-  private final LikeReviewUseCase likeReviewUseCase;
+  private final ReviewLikeUseCase reviewLikeUseCase;
 
   @GetMapping("/{id}")
   public GetReviewDetailResponseDto getReview(
@@ -167,7 +167,7 @@ public class ReviewController {
   ) {
     final var userId = Long.parseLong(user.getUsername());
     final var now = LocalDateTime.now();
-    likeReviewUseCase.toggleLikeReview(userId, id, now);
+    reviewLikeUseCase.toggleLikeReview(userId, id, now);
 
     return ResponseEntity.status(HttpStatus.OK).body(new ReviewLikeResponseDto(id));
   }

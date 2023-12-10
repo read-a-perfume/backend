@@ -35,10 +35,6 @@ public class CommentService implements
 
     @Override
     public ReviewCommentResult createComment(CreateReviewCommentCommand command, LocalDateTime now) {
-        reviewCommentQueryRepository
-                .findById(command.reviewId())
-                .orElseThrow(() -> new NotFoundReviewException(command.reviewId()));
-
         final var createdReviewComment = reviewCommentRepository.save(
                 ReviewComment.create(command.reviewId(), command.userId(), command.content(), now));
         return ReviewCommentResult.from(createdReviewComment);

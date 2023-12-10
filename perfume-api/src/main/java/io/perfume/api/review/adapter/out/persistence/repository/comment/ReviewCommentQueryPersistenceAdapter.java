@@ -1,6 +1,5 @@
 package io.perfume.api.review.adapter.out.persistence.repository.comment;
 
-import static io.perfume.api.review.adapter.out.persistence.entity.QReviewCommentEntity.reviewCommentEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dto.repository.CursorDirection;
@@ -12,6 +11,8 @@ import io.perfume.api.review.domain.ReviewComment;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+
+import static io.perfume.api.review.adapter.out.persistence.repository.comment.QReviewCommentEntity.reviewCommentEntity;
 
 @PersistenceAdapter
 @RequiredArgsConstructor

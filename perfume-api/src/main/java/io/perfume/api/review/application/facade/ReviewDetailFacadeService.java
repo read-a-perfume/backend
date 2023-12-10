@@ -7,9 +7,11 @@ import io.perfume.api.review.application.facade.dto.ReviewCommentDetailCommand;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailResult;
 import io.perfume.api.review.application.facade.dto.ReviewDetailResult;
 import io.perfume.api.review.application.facade.dto.ReviewViewDetailResult;
-import io.perfume.api.review.application.in.GetReviewCommentsUseCase;
-import io.perfume.api.review.application.in.GetReviewTagUseCase;
-import io.perfume.api.review.application.in.GetReviewsUseCase;
+import io.perfume.api.review.application.in.comment.GetReviewCommentsUseCase;
+import io.perfume.api.review.application.in.dto.CreateReviewCommand;
+import io.perfume.api.review.application.in.review.CreateReviewUseCase;
+import io.perfume.api.review.application.in.tag.GetReviewTagUseCase;
+import io.perfume.api.review.application.in.review.GetReviewsUseCase;
 import io.perfume.api.review.application.in.dto.GetReviewCommentsCommand;
 import io.perfume.api.review.application.in.dto.ReviewResult;
 import io.perfume.api.review.application.in.dto.ReviewTagResult;
@@ -33,6 +35,17 @@ public class ReviewDetailFacadeService {
   private final FindFileUseCase findFileUseCase;
   private final GetReviewTagUseCase getReviewTagUseCase;
   private final GetReviewCommentsUseCase getReviewCommentsUseCase;
+  private final CreateReviewUseCase createReviewUseCase;
+
+  public ReviewDetailResult createReview(Long authorId, CreateReviewCommand command) {
+    final var review = createReviewUseCase.create(authorId, command);
+    final var author = findUserUseCase.findUserById(review.authorId()).orElse(UserResult.EMPTY);
+    final var tags = getReviewTagUseCase.getReviewTags(review.id()).stream()
+        .map(ReviewTagResult::name)
+        .toList();
+
+    return ReviewDetailResult.from(review, author, tags);
+  }
 
   public ReviewViewDetailResult getReviewDetail(long reviewId) {
     final var review = getReviewsUseCase

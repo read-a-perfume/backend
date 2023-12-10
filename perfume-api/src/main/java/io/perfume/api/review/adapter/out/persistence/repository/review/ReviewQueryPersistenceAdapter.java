@@ -1,7 +1,7 @@
 package io.perfume.api.review.adapter.out.persistence.repository.review;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
-import static io.perfume.api.review.adapter.out.persistence.entity.QReviewEntity.reviewEntity;
+import static io.perfume.api.review.adapter.out.persistence.repository.review.QReviewEntity.reviewEntity;
 import static io.perfume.api.user.adapter.out.persistence.user.QUserEntity.userEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;

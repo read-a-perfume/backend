@@ -6,7 +6,7 @@ import io.perfume.api.mypage.application.port.in.FollowUserUseCase;
 import io.perfume.api.mypage.application.port.in.GetFollowCountUseCase;
 import io.perfume.api.note.application.port.in.FindCategoryUseCase;
 import io.perfume.api.note.application.port.in.dto.CategoryResult;
-import io.perfume.api.review.application.in.GetReviewCountUseCase;
+import io.perfume.api.review.application.in.review.GetReviewCountUseCase;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
