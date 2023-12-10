@@ -18,21 +18,21 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@Import({TestQueryDSLConfiguration.class, SocialAccountQueryPersistenceAdapter.class,
-    SocialAccountMapper.class,
-    UserMapper.class})
+@Import({
+  TestQueryDSLConfiguration.class,
+  SocialAccountQueryPersistenceAdapter.class,
+  SocialAccountMapper.class,
+  UserMapper.class
+})
 @DataJpaTest
 @EnableJpaAuditing
 class SocialAccountQueryPersistenceAdapterTest {
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private SocialAccountQueryPersistenceAdapter oauthQueryPersistenceAdapter;
+  @Autowired private SocialAccountQueryPersistenceAdapter oauthQueryPersistenceAdapter;
 
-  @Autowired
-  private SocialAccountMapper oauthMapper;
+  @Autowired private SocialAccountMapper oauthMapper;
 
   @DisplayName("identifier로 SocialAccount 조회")
   @Test
@@ -40,18 +40,15 @@ class SocialAccountQueryPersistenceAdapterTest {
     // given
     String identifier = "testsocialidentifier";
     LocalDateTime now = LocalDateTime.now();
-    SocialAccount socialAccount =
-        SocialAccount.createGoogleSocialAccount(identifier, now);
-    User user = User.generalUserJoin(
-        "test", "test@mail.com", "test", false, false);
+    SocialAccount socialAccount = SocialAccount.createGoogleSocialAccount(identifier, now);
+    User user = User.generalUserJoin("test", "test@mail.com", "test", false, false);
     socialAccount.connect(user);
     SocialAccountEntity entity = oauthMapper.toEntity(socialAccount);
     entityManager.persist(entity.user);
     entityManager.persist(entity);
 
     // when
-    SocialAccount result =
-        oauthQueryPersistenceAdapter.findOneBySocialId(identifier).orElseThrow();
+    SocialAccount result = oauthQueryPersistenceAdapter.findOneBySocialId(identifier).orElseThrow();
 
     // then
     assertThat(result.getIdentifier()).isEqualTo(identifier);
@@ -65,8 +62,7 @@ class SocialAccountQueryPersistenceAdapterTest {
     String identifier = "testsocialidentifier";
 
     // when
-    Optional<SocialAccount> result =
-        oauthQueryPersistenceAdapter.findOneBySocialId(identifier);
+    Optional<SocialAccount> result = oauthQueryPersistenceAdapter.findOneBySocialId(identifier);
 
     // then
     assertThat(result).isEmpty();

@@ -37,31 +37,35 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 class NoteControllerTest {
   private MockMvc mockMvc;
-  @Autowired
-  private ObjectMapper objectMapper;
-  @Autowired
-  private NoteRepository noteRepository;
+  @Autowired private ObjectMapper objectMapper;
+  @Autowired private NoteRepository noteRepository;
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .build();
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .build();
   }
 
   @Test
   @WithMockUser(username = "1", roles = "USER")
   void findNoteById() throws Exception {
     Note note =
-        noteRepository.save(Note.create("white musk", "A light, white floral note with a fresh green scent and aquatic undertones.", 1L));
+        noteRepository.save(
+            Note.create(
+                "white musk",
+                "A light, white floral note with a fresh green scent and aquatic undertones.",
+                1L));
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/notes/{id}", note.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/notes/{id}", note.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").value(note.getId()))
@@ -69,38 +73,40 @@ class NoteControllerTest {
         .andExpect(jsonPath("$.description").value(note.getDescription()))
         .andExpect(jsonPath("$.thumbnail").value(""))
         .andDo(
-            document("get-note-by-id",
-                pathParameters(
-                    parameterWithName("id").description("노트 ID")
-                ),
+            document(
+                "get-note-by-id",
+                pathParameters(parameterWithName("id").description("노트 ID")),
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("노트 ID"),
                     fieldWithPath("name").type(JsonFieldType.STRING).description("노트 이름"),
                     fieldWithPath("description").type(JsonFieldType.STRING).description("노트 설명"),
-                    fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("노트 이미지")
-                )));
+                    fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("노트 이미지"))));
   }
 
   @Test
   void createNote() throws Exception {
     CreateNoteRequestDto dto =
-        new CreateNoteRequestDto("white musk", "A light, white floral note with a fresh green scent and aquatic undertones.", 1L);
+        new CreateNoteRequestDto(
+            "white musk",
+            "A light, white floral note with a fresh green scent and aquatic undertones.",
+            1L);
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.post("/v1/notes")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsBytes(dto))
-        )
+        .perform(
+            RestDocumentationRequestBuilders.post("/v1/notes")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
         .andExpect(status().isCreated())
         .andDo(
-            document("create-note",
+            document(
+                "create-note",
                 requestFields(
                     fieldWithPath("name").type(JsonFieldType.STRING).description("노트 이름"),
                     fieldWithPath("description").type(JsonFieldType.STRING).description("노트 설명"),
-                    fieldWithPath("thumbnailId").type(JsonFieldType.NUMBER).description("노트 썸네일 ID(PK)")
-                )
-            ));
+                    fieldWithPath("thumbnailId")
+                        .type(JsonFieldType.NUMBER)
+                        .description("노트 썸네일 ID(PK)"))));
   }
 }

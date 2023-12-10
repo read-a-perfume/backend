@@ -36,17 +36,15 @@ public class CustomOAuth2LoginConfigurer
   @Override
   public void customize(OAuth2LoginConfigurer<HttpSecurity> httpSecurityOAuth2LoginConfigurer) {
     httpSecurityOAuth2LoginConfigurer
-        .authorizationEndpoint(authorizationEndpointConfig ->
-            authorizationEndpointConfig
-                .baseUri("/oauth2/authorize")
-                .authorizationRequestRepository(authorizationRequestRepository))
-        .redirectionEndpoint(redirectionEndpointConfig ->
-            redirectionEndpointConfig
-                .baseUri("/login/oauth2/code/**"))
-        .userInfoEndpoint(userInfoEndpointConfig ->
-            userInfoEndpointConfig
-                .userService(oauth2UserService)
-        )
+        .authorizationEndpoint(
+            authorizationEndpointConfig ->
+                authorizationEndpointConfig
+                    .baseUri("/oauth2/authorize")
+                    .authorizationRequestRepository(authorizationRequestRepository))
+        .redirectionEndpoint(
+            redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/login/oauth2/code/**"))
+        .userInfoEndpoint(
+            userInfoEndpointConfig -> userInfoEndpointConfig.userService(oauth2UserService))
         .successHandler(authenticationSuccessHandler)
         .failureHandler(authenticationFailureHandler);
   }

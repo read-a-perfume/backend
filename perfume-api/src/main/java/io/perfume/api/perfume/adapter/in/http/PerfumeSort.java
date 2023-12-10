@@ -19,6 +19,6 @@ public enum PerfumeSort {
 
   @JsonValue
   public String getName() {
-      return name().toLowerCase();
+    return name().toLowerCase();
   }
 }

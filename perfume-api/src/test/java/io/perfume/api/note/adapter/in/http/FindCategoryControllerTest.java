@@ -37,20 +37,22 @@ class FindCategoryControllerTest {
 
   private MockMvc mockMvc;
 
-  @Autowired
-  private CategoryRepository categoryRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
   private static final String categoryName = "프루티";
   private static final String categoryDesc = "달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.";
   private static final String categoryTags = "#달달한 #과즙미";
-  private static final Category sampleCategory = Category.create(categoryName, categoryDesc, categoryTags, 1L, LocalDateTime.now());
+  private static final Category sampleCategory =
+      Category.create(categoryName, categoryDesc, categoryTags, 1L, LocalDateTime.now());
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .build();
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .build();
   }
 
   @Test
@@ -60,10 +62,10 @@ class FindCategoryControllerTest {
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/v1/categories")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            MockMvcRequestBuilders.get("/v1/categories")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("[0].id").value(resultCategory.getId()))
@@ -72,14 +74,18 @@ class FindCategoryControllerTest {
         .andExpect(jsonPath("[0].tags").value(categoryTags))
         .andExpect(jsonPath("[0].thumbnail").value(""))
         .andDo(
-            document("get-categories",
+            document(
+                "get-categories",
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
-                    fieldWithPath("[].description").type(JsonFieldType.STRING).description("카테고리 설명"),
+                    fieldWithPath("[].description")
+                        .type(JsonFieldType.STRING)
+                        .description("카테고리 설명"),
                     fieldWithPath("[].tags").type(JsonFieldType.STRING).description("카테고리 태그"),
-                    fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("카테고리 이미지 URL")
-                )));
+                    fieldWithPath("[].thumbnail")
+                        .type(JsonFieldType.STRING)
+                        .description("카테고리 이미지 URL"))));
   }
 
   @Test
@@ -89,10 +95,10 @@ class FindCategoryControllerTest {
 
     // when & then
     mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/v1/categories/{id}", resultCategory.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/categories/{id}", resultCategory.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").value(resultCategory.getId()))
@@ -101,16 +107,16 @@ class FindCategoryControllerTest {
         .andExpect(jsonPath("$.tags").value(categoryTags))
         .andExpect(jsonPath("$.thumbnail").value(""))
         .andDo(
-            document("get-category-by-id",
-                pathParameters(
-                    parameterWithName("id").description("카테고리 ID")
-                ),
+            document(
+                "get-category-by-id",
+                pathParameters(parameterWithName("id").description("카테고리 ID")),
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("name").type(JsonFieldType.STRING).description("카테고리 이름"),
                     fieldWithPath("description").type(JsonFieldType.STRING).description("카테고리 설명"),
                     fieldWithPath("tags").type(JsonFieldType.STRING).description("카테고리 태그"),
-                    fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("카테고리 URL")
-                )));
+                    fieldWithPath("thumbnail")
+                        .type(JsonFieldType.STRING)
+                        .description("카테고리 URL"))));
   }
 }

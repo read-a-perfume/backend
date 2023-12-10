@@ -17,9 +17,8 @@ public class UserTasteService implements CreateUserTasteUseCase, FindUserTasteUs
 
   private final CreateCategoryUseCase createCategoryUseCase;
 
-
-  public UserTasteService(FindCategoryUseCase findCategoryUseCase,
-                          CreateCategoryUseCase createCategoryUseCase) {
+  public UserTasteService(
+      FindCategoryUseCase findCategoryUseCase, CreateCategoryUseCase createCategoryUseCase) {
     this.findCategoryUseCase = findCategoryUseCase;
     this.createCategoryUseCase = createCategoryUseCase;
   }
@@ -33,7 +32,8 @@ public class UserTasteService implements CreateUserTasteUseCase, FindUserTasteUs
 
   @Override
   public List<UserTasteResult> getUserTastes(Long userId) {
-    return findCategoryUseCase.findTasteByUserId(userId).stream().map(UserTasteResult::from)
+    return findCategoryUseCase.findTasteByUserId(userId).stream()
+        .map(UserTasteResult::from)
         .toList();
   }
 }

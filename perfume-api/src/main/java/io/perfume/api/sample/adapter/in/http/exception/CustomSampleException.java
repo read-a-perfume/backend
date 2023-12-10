@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 public class CustomSampleException extends CustomHttpException {
 
   public CustomSampleException() {
-    super(HttpStatus.I_AM_A_TEAPOT, "I AM A TEAPOT", "Sample exception log message",
-        LogLevel.ERROR);
+    super(
+        HttpStatus.I_AM_A_TEAPOT, "I AM A TEAPOT", "Sample exception log message", LogLevel.ERROR);
   }
 }

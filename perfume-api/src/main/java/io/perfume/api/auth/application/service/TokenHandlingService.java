@@ -20,8 +20,8 @@ public class TokenHandlingService implements MakeNewTokenUseCase {
   private final AuthenticationTokenService authenticationTokenService;
 
   @Override
-  public ReissuedTokenResult reissueAccessToken(String accessToken, String refreshToken,
-                                                LocalDateTime now) {
+  public ReissuedTokenResult reissueAccessToken(
+      String accessToken, String refreshToken, LocalDateTime now) {
     boolean isValidTokens = authenticationTokenService.isValid(refreshToken, now);
     if (isValidTokens) {
       throw new IllegalArgumentException("Invalid tokens");
@@ -35,14 +35,12 @@ public class TokenHandlingService implements MakeNewTokenUseCase {
   }
 
   @NotNull
-  private ReissuedTokenResult getReissuedTokenResult(String accessToken,
-                                                     RefreshToken newRefreshToken,
-                                                     LocalDateTime now) {
+  private ReissuedTokenResult getReissuedTokenResult(
+      String accessToken, RefreshToken newRefreshToken, LocalDateTime now) {
     String accessTokenResult = authenticationTokenService.reissueAccessToken(accessToken, now);
-    String refreshTokenResult = authenticationTokenService.createRefreshToken(
-        newRefreshToken.getTokenId(),
-        newRefreshToken.getUserId(),
-        LocalDateTime.now());
+    String refreshTokenResult =
+        authenticationTokenService.createRefreshToken(
+            newRefreshToken.getTokenId(), newRefreshToken.getUserId(), LocalDateTime.now());
 
     return new ReissuedTokenResult(accessTokenResult, refreshTokenResult);
   }
@@ -63,14 +61,15 @@ public class TokenHandlingService implements MakeNewTokenUseCase {
   @Override
   public String createRefreshToken(Long userId, LocalDateTime now) {
     RefreshToken refreshToken = rememberMeRepository.saveRefreshToken(new RefreshToken(userId));
-    return authenticationTokenService.createRefreshToken(refreshToken.getTokenId(),
-        refreshToken.getUserId(), now);
+    return authenticationTokenService.createRefreshToken(
+        refreshToken.getTokenId(), refreshToken.getUserId(), now);
   }
 
   private void verifyTokenMatch(RefreshToken refreshToken) {
-    RefreshToken refreshTokenFromRedis = rememberMeQueryRepository
-        .getRefreshTokenById(refreshToken.getTokenId())
-        .orElseThrow(NotFoundRefreshTokenException::new);
+    RefreshToken refreshTokenFromRedis =
+        rememberMeQueryRepository
+            .getRefreshTokenById(refreshToken.getTokenId())
+            .orElseThrow(NotFoundRefreshTokenException::new);
 
     if (!refreshTokenFromRedis.equals(refreshToken)) {
       throw new FailedMakeNewAccessTokenException();

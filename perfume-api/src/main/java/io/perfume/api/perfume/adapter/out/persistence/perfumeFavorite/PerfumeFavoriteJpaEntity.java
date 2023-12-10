@@ -17,11 +17,14 @@ import org.hibernate.proxy.HibernateProxy;
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class PerfumeFavoriteJpaEntity extends BaseTimeEntity {
 
-  @EmbeddedId
-  private PerfumeFavoriteId id;
+  @EmbeddedId private PerfumeFavoriteId id;
 
-  public PerfumeFavoriteJpaEntity(Long userId, Long perfumeId,
-      LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public PerfumeFavoriteJpaEntity(
+      Long userId,
+      Long perfumeId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = new PerfumeFavoriteId(userId, perfumeId);
   }
@@ -34,12 +37,14 @@ public class PerfumeFavoriteJpaEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }

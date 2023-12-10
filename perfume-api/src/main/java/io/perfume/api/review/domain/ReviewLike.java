@@ -13,8 +13,13 @@ public class ReviewLike extends BaseTimeDomain {
 
   private final long reviewId;
 
-  public ReviewLike(Long id, long userId, long reviewId, LocalDateTime createdAt, LocalDateTime updatedAt,
-                    LocalDateTime deletedAt) {
+  public ReviewLike(
+      Long id,
+      long userId,
+      long reviewId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.userId = userId;

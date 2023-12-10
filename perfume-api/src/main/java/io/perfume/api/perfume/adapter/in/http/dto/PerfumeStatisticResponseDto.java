@@ -8,10 +8,18 @@ import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.adapter.out.persistence.user.Sex;
 import java.util.Map;
 
-public record PerfumeStatisticResponseDto(Map<Strength, Long> strength, Map<Duration, Long> duration,
-                                         Map<Season, Long> season, Map<DayType, Long> dayType,
-                                         Map<Sex, Long> sex) {
+public record PerfumeStatisticResponseDto(
+    Map<Strength, Long> strength,
+    Map<Duration, Long> duration,
+    Map<Season, Long> season,
+    Map<DayType, Long> dayType,
+    Map<Sex, Long> sex) {
   public static PerfumeStatisticResponseDto from(ReviewStatisticResult result) {
-    return new PerfumeStatisticResponseDto(result.strengthMap(), result.durationMap(), result.seasonMap(), result.dayTypeMap(), result.sexMap());
+    return new PerfumeStatisticResponseDto(
+        result.strengthMap(),
+        result.durationMap(),
+        result.seasonMap(),
+        result.dayTypeMap(),
+        result.sexMap());
   }
 }

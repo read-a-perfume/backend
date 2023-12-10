@@ -1,6 +1,5 @@
 package io.perfume.api.review.adapter.out.persistence.repository.thumbnail;
 
-
 import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
@@ -35,19 +34,22 @@ public class ReviewThumbnailId implements Serializable {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
     ReviewThumbnailId that = (ReviewThumbnailId) o;
-    return getReviewId() != null && Objects.equals(getReviewId(), that.getReviewId())
-        && getThumbnailId() != null &&
-        Objects.equals(getThumbnailId(), that.getThumbnailId());
+    return getReviewId() != null
+        && Objects.equals(getReviewId(), that.getReviewId())
+        && getThumbnailId() != null
+        && Objects.equals(getThumbnailId(), that.getThumbnailId());
   }
 
   @Override

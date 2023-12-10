@@ -16,7 +16,10 @@ public class FindNoteService implements FindNoteUseCase {
 
   @Override
   public NoteResult findNoteById(Long noteId) {
-    Note note = noteQueryPersistenceAdapter.findById(noteId).orElseThrow(() -> new NotFoundNoteException(noteId));
+    Note note =
+        noteQueryPersistenceAdapter
+            .findById(noteId)
+            .orElseThrow(() -> new NotFoundNoteException(noteId));
     return NoteResult.from(note);
   }
 }

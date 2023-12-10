@@ -17,15 +17,14 @@ import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.ReviewLikeResponseDto;
 import io.perfume.api.review.application.facade.ReviewDetailFacadeService;
 import io.perfume.api.review.application.in.comment.CreateReviewCommentUseCase;
-import io.perfume.api.review.application.in.review.CreateReviewUseCase;
 import io.perfume.api.review.application.in.comment.DeleteReviewCommentUseCase;
-import io.perfume.api.review.application.in.review.DeleteReviewUseCase;
-import io.perfume.api.review.application.in.like.ReviewLikeUseCase;
 import io.perfume.api.review.application.in.comment.UpdateReviewCommentUseCase;
+import io.perfume.api.review.application.in.like.ReviewLikeUseCase;
+import io.perfume.api.review.application.in.review.CreateReviewUseCase;
+import io.perfume.api.review.application.in.review.DeleteReviewUseCase;
+import io.perfume.api.review.application.in.review.GetReviewInViewUseCase;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import io.perfume.api.review.application.in.review.GetReviewInViewUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,18 +55,14 @@ public class ReviewController {
   private final ReviewLikeUseCase reviewLikeUseCase;
 
   @GetMapping("/{id}")
-  public GetReviewDetailResponseDto getReview(
-      @PathVariable Long id
-  ) {
+  public GetReviewDetailResponseDto getReview(@PathVariable Long id) {
     final var result = getReviewInViewUseCase.getReviewDetail(id);
 
     return GetReviewDetailResponseDto.from(result);
   }
 
   @GetMapping
-  public List<GetReviewsResponseDto> getReviews(
-      GetReviewsRequestDto dto
-  ) {
+  public List<GetReviewsResponseDto> getReviews(GetReviewsRequestDto dto) {
     final var results = reviewDetailFacadeService.getPaginatedReviews(dto.offset(), dto.limit());
 
     return GetReviewsResponseDto.from(results);
@@ -77,8 +72,7 @@ public class ReviewController {
   @PostMapping
   public CreateReviewResponseDto createReview(
       @AuthenticationPrincipal final User user,
-      @RequestBody final CreateReviewRequestDto requestDto
-  ) {
+      @RequestBody final CreateReviewRequestDto requestDto) {
     final var userId = Long.parseLong(user.getUsername());
     final var now = LocalDateTime.now();
     var response = createReviewUseCase.create(userId, requestDto.toCommand(now));
@@ -89,9 +83,7 @@ public class ReviewController {
   @PreAuthorize("isAuthenticated()")
   @DeleteMapping("/{id}")
   public ResponseEntity<DeleteReviewResponseDto> deleteReview(
-      @AuthenticationPrincipal User user,
-      @PathVariable Long id
-  ) {
+      @AuthenticationPrincipal User user, @PathVariable Long id) {
     var now = LocalDateTime.now();
     var userId = Long.parseLong(user.getUsername());
     deleteReviewUseCase.delete(userId, id, now);
@@ -104,8 +96,7 @@ public class ReviewController {
   public ResponseEntity<CreateReviewCommentResponseDto> createReviewComment(
       @AuthenticationPrincipal User user,
       @PathVariable Long id,
-      @RequestBody CreateReviewCommentRequestDto requestDto
-  ) {
+      @RequestBody CreateReviewCommentRequestDto requestDto) {
     final var now = LocalDateTime.now();
     final var userId = Long.parseLong(user.getUsername());
     final var response =
@@ -117,35 +108,29 @@ public class ReviewController {
 
   @GetMapping("/{id}/comments")
   public ResponseEntity<CursorResponse<GetReviewCommentsResponseDto, Long>> getReviewComments(
-      @PathVariable Long id,
-      GetReviewCommentsRequestDto dto
-  ) {
+      @PathVariable Long id, GetReviewCommentsRequestDto dto) {
     final var comments = reviewDetailFacadeService.getReviewComments(dto.toCommand(id));
     final var responseItems =
         comments.getItems().stream().map(GetReviewCommentsResponseDto::from).toList();
 
-    return ResponseEntity.ok(CursorResponse.of(
-        responseItems,
-        comments.hasNext(),
-        comments.hasPrevious(),
-        comments.getFirstCursor().id(),
-        comments.getLastCursor().id()
-    ));
+    return ResponseEntity.ok(
+        CursorResponse.of(
+            responseItems,
+            comments.hasNext(),
+            comments.hasPrevious(),
+            comments.getFirstCursor().id(),
+            comments.getLastCursor().id()));
   }
 
   @PreAuthorize("isAuthenticated()")
   @DeleteMapping("/{id}/comments/{commentId}")
   public ResponseEntity<DeleteReviewCommentResponseDto> deleteReviewComment(
-      @AuthenticationPrincipal User user,
-      @PathVariable Long id,
-      @PathVariable Long commentId
-  ) {
+      @AuthenticationPrincipal User user, @PathVariable Long id, @PathVariable Long commentId) {
     final var now = LocalDateTime.now();
     final var userId = Long.parseLong(user.getUsername());
     deleteReviewCommentUseCase.deleteComment(commentId, userId, now);
 
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(new DeleteReviewCommentResponseDto(commentId));
+    return ResponseEntity.status(HttpStatus.OK).body(new DeleteReviewCommentResponseDto(commentId));
   }
 
   @PreAuthorize("isAuthenticated()")
@@ -154,8 +139,7 @@ public class ReviewController {
       @AuthenticationPrincipal User user,
       @PathVariable Long id,
       @PathVariable Long commentId,
-      @RequestBody String comment
-  ) {
+      @RequestBody String comment) {
     final var userId = Long.parseLong(user.getUsername());
     updateReviewCommentUseCase.updateReviewComment(userId, commentId, comment);
 
@@ -165,9 +149,7 @@ public class ReviewController {
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/{id}/like")
   public ResponseEntity<ReviewLikeResponseDto> likeReview(
-      @AuthenticationPrincipal User user,
-      @PathVariable Long id
-  ) {
+      @AuthenticationPrincipal User user, @PathVariable Long id) {
     final var userId = Long.parseLong(user.getUsername());
     final var now = LocalDateTime.now();
     reviewLikeUseCase.toggleLikeReview(userId, id, now);

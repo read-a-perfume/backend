@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/brands")
 public class CreateBrandController {
 
-    private final CreateBrandUseCase createBrandUseCase;
+  private final CreateBrandUseCase createBrandUseCase;
 
-    public CreateBrandController(CreateBrandUseCase createBrandUseCase) {
-        this.createBrandUseCase = createBrandUseCase;
-    }
+  public CreateBrandController(CreateBrandUseCase createBrandUseCase) {
+    this.createBrandUseCase = createBrandUseCase;
+  }
 
-    /*
-        TODO : 브랜드를 추가할 수 있는 권한 체크
-     */
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreateBrandResponseDto createBrand(@RequestBody CreateBrandRequestDto requestDto) {
-        BrandResult response = createBrandUseCase.create(requestDto.toCommand());
-        return new CreateBrandResponseDto(response.name());
-    }
+  /*
+  TODO : 브랜드를 추가할 수 있는 권한 체크
+  */
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public CreateBrandResponseDto createBrand(@RequestBody CreateBrandRequestDto requestDto) {
+    BrandResult response = createBrandUseCase.create(requestDto.toCommand());
+    return new CreateBrandResponseDto(response.name());
+  }
 }

@@ -21,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,9 +29,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final ObjectMapper objectMapper;
 
   @Override
-  protected void doFilterInternal(@NotNull HttpServletRequest request,
-                                  @NotNull HttpServletResponse response,
-                                  @NotNull FilterChain filterChain)
+  protected void doFilterInternal(
+      @NotNull HttpServletRequest request,
+      @NotNull HttpServletResponse response,
+      @NotNull FilterChain filterChain)
       throws ServletException, IOException {
     var cookies = request.getCookies();
 
@@ -41,14 +41,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           .filter(cookie -> cookie.getName().equalsIgnoreCase(Constants.ACCESS_TOKEN_KEY))
           .findFirst()
           .map(Cookie::getValue)
-          .ifPresent(value -> {
-            try {
-              var authentication = authenticationManager.authenticate(new JwtAuthenticationToken(value));
-              SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (AuthenticationException e) {
-              unsuccessfulAuthentication(response, e);
-            }
-          });
+          .ifPresent(
+              value -> {
+                try {
+                  var authentication =
+                      authenticationManager.authenticate(new JwtAuthenticationToken(value));
+                  SecurityContextHolder.getContext().setAuthentication(authentication);
+                } catch (AuthenticationException e) {
+                  unsuccessfulAuthentication(response, e);
+                }
+              });
       if (SecurityContextHolder.getContext().getAuthentication() != null) {
         filterChain.doFilter(request, response);
       }
@@ -57,12 +59,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
   }
 
-  private void unsuccessfulAuthentication(@NotNull HttpServletResponse response, AuthenticationException ae) {
+  private void unsuccessfulAuthentication(
+      @NotNull HttpServletResponse response, AuthenticationException ae) {
     try {
-      ErrorResponse errorResponse = ErrorResponse.builder()
-          .statusCode(HttpStatus.UNAUTHORIZED.value())
-          .status(HttpStatus.UNAUTHORIZED.getReasonPhrase())
-          .message(ae.getMessage()).build();
+      ErrorResponse errorResponse =
+          ErrorResponse.builder()
+              .statusCode(HttpStatus.UNAUTHORIZED.value())
+              .status(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+              .message(ae.getMessage())
+              .build();
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
       response.getWriter().write(objectMapper.writeValueAsString(errorResponse));

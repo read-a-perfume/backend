@@ -13,8 +13,13 @@ public class Follow extends BaseTimeDomain {
 
   private final Long followingId;
 
-  public Follow(Long id, Long followerId, Long followingId,
-      LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public Follow(
+      Long id,
+      Long followerId,
+      Long followingId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.followerId = followerId;
@@ -25,4 +30,3 @@ public class Follow extends BaseTimeDomain {
     return new Follow(null, followerId, followingId, now, now, null);
   }
 }
-

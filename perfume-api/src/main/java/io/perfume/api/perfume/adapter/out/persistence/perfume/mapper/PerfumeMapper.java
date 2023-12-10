@@ -36,7 +36,8 @@ public class PerfumeMapper {
         .build();
   }
 
-  public Perfume toPerfume(PerfumeJpaEntity perfumeJpaEntity, List<PerfumeNoteEntity> perfumeNoteEntities) {
+  public Perfume toPerfume(
+      PerfumeJpaEntity perfumeJpaEntity, List<PerfumeNoteEntity> perfumeNoteEntities) {
     return Perfume.builder()
         .id(perfumeJpaEntity.getId())
         .name(perfumeJpaEntity.getName())
@@ -70,8 +71,7 @@ public class PerfumeMapper {
             case BASE:
               baseNoteIds.add(e.getNoteId());
           }
-        }
-    );
+        });
 
     return NotePyramidIds.builder()
         .topNoteIds(topNoteIds)
@@ -98,14 +98,16 @@ public class PerfumeMapper {
               basePerfumeNotes.add(toPerfumeNote(tuple));
               break;
           }
-        }
-    );
+        });
     return new NotePyramid(topPerfumeNotes, middlePerfumeNotes, basePerfumeNotes);
   }
 
   private PerfumeNote toPerfumeNote(Tuple tuple) {
-    return new PerfumeNote(tuple.get(perfumeNoteEntity.noteId), tuple.get(noteJpaEntity.name),
-        tuple.get(noteJpaEntity.thumbnailId), tuple.get(perfumeNoteEntity.noteLevel));
+    return new PerfumeNote(
+        tuple.get(perfumeNoteEntity.noteId),
+        tuple.get(noteJpaEntity.name),
+        tuple.get(noteJpaEntity.thumbnailId),
+        tuple.get(perfumeNoteEntity.noteLevel));
   }
 
   public PerfumeJpaEntity toPerfumeJpaEntity(Perfume perfume) {
@@ -121,30 +123,28 @@ public class PerfumeMapper {
         .build();
   }
 
-  public List<PerfumeNoteEntity> toPerfumeNoteEntities(Long perfumeId,
-                                                       NotePyramidIds notePyramidIds) {
+  public List<PerfumeNoteEntity> toPerfumeNoteEntities(
+      Long perfumeId, NotePyramidIds notePyramidIds) {
     return Stream.of(
             toPerfumeNoteEntities(notePyramidIds.getTopNoteIds(), perfumeId, NoteLevel.TOP),
             toPerfumeNoteEntities(notePyramidIds.getMiddleNoteIds(), perfumeId, NoteLevel.MIDDLE),
-            toPerfumeNoteEntities(notePyramidIds.getBaseNoteIds(), perfumeId, NoteLevel.BASE)
-        )
+            toPerfumeNoteEntities(notePyramidIds.getBaseNoteIds(), perfumeId, NoteLevel.BASE))
         .flatMap(List::stream)
         .toList();
   }
 
-  private List<PerfumeNoteEntity> toPerfumeNoteEntities(List<Long> noteIds, Long perfumeId,
-                                                        NoteLevel noteLevel) {
-    return noteIds.stream()
-        .map(toPerfumeNoteEntity(perfumeId, noteLevel))
-        .toList();
+  private List<PerfumeNoteEntity> toPerfumeNoteEntities(
+      List<Long> noteIds, Long perfumeId, NoteLevel noteLevel) {
+    return noteIds.stream().map(toPerfumeNoteEntity(perfumeId, noteLevel)).toList();
   }
 
-  private Function<Long, PerfumeNoteEntity> toPerfumeNoteEntity(Long perfumeId,
-                                                                NoteLevel noteLevel) {
-    return noteId -> PerfumeNoteEntity.builder()
-        .perfumeId(perfumeId)
-        .noteId(noteId)
-        .noteLevel(noteLevel)
-        .build();
+  private Function<Long, PerfumeNoteEntity> toPerfumeNoteEntity(
+      Long perfumeId, NoteLevel noteLevel) {
+    return noteId ->
+        PerfumeNoteEntity.builder()
+            .perfumeId(perfumeId)
+            .noteId(noteId)
+            .noteLevel(noteLevel)
+            .build();
   }
 }

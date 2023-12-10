@@ -20,14 +20,19 @@ public class FindBrandService implements FindBrandUseCase {
 
   @Override
   public BrandResult findBrandById(Long id) {
-    Brand brand = brandQueryRepository.findBrandById(id).orElseThrow(() -> new BrandNotFoundException(id));
-    File file = findFileUseCase.findFileById(brand.getThumbnailId()).orElseThrow(() -> new FileNotFoundException(id));
+    Brand brand =
+        brandQueryRepository.findBrandById(id).orElseThrow(() -> new BrandNotFoundException(id));
+    File file =
+        findFileUseCase
+            .findFileById(brand.getThumbnailId())
+            .orElseThrow(() -> new FileNotFoundException(id));
     return BrandResult.of(brand, file);
   }
 
   @Override
   public BrandForPerfumeResult findBrandForPerfume(Long id) {
-    Brand brand = brandQueryRepository.findBrandById(id).orElseThrow(() -> new BrandNotFoundException(id));
+    Brand brand =
+        brandQueryRepository.findBrandById(id).orElseThrow(() -> new BrandNotFoundException(id));
     return BrandForPerfumeResult.of(brand);
   }
 }

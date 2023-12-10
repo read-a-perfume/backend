@@ -18,14 +18,14 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class CategoryPersistenceAdapterTest {
 
-  @Autowired
-  private CategoryPersistenceAdapter categoryPersistenceAdapter;
+  @Autowired private CategoryPersistenceAdapter categoryPersistenceAdapter;
 
   @Test
   void testCreateCategory() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    Category category = Category.create("프루티", "달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.", "#달달한 #과즙미", 1L, now);
+    Category category =
+        Category.create("프루티", "달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.", "#달달한 #과즙미", 1L, now);
 
     // when
     Category createdCategory = categoryPersistenceAdapter.save(category);

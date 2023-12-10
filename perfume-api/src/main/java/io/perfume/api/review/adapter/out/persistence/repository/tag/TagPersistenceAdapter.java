@@ -13,8 +13,8 @@ public class TagPersistenceAdapter implements TagRepository {
 
   private final ReviewTagMapper reviewTagMapper;
 
-  public TagPersistenceAdapter(ReviewTagJpaRepository reviewTagRepository,
-                               ReviewTagMapper reviewTagMapper) {
+  public TagPersistenceAdapter(
+      ReviewTagJpaRepository reviewTagRepository, ReviewTagMapper reviewTagMapper) {
     this.reviewTagRepository = reviewTagRepository;
     this.reviewTagMapper = reviewTagMapper;
   }
@@ -31,8 +31,7 @@ public class TagPersistenceAdapter implements TagRepository {
     var entities = tags.stream().map(reviewTagMapper::toEntity).toList();
     var createdReviewTags = reviewTagRepository.saveAll(entities);
 
-    return StreamSupport
-        .stream(createdReviewTags.spliterator(), true)
+    return StreamSupport.stream(createdReviewTags.spliterator(), true)
         .map(reviewTagMapper::toDomain)
         .toList();
   }

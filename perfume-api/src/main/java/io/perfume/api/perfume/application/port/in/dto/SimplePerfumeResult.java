@@ -4,5 +4,5 @@ import io.perfume.api.perfume.domain.Concentration;
 import lombok.Builder;
 
 @Builder
-public record SimplePerfumeResult(Long id, String name, Concentration concentration, String brandName, String thumbnail) {
-}
+public record SimplePerfumeResult(
+    Long id, String name, Concentration concentration, String brandName, String thumbnail) {}

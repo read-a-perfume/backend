@@ -29,9 +29,8 @@ import org.hibernate.proxy.HibernateProxy;
 @Table(
     name = "social_account",
     uniqueConstraints = {
-        @UniqueConstraint(name = "uni_social_account_1", columnNames = "identifier")
-    }
-)
+      @UniqueConstraint(name = "uni_social_account_1", columnNames = "identifier")
+    })
 @ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class SocialAccountEntity extends BaseTimeEntity {
@@ -56,11 +55,14 @@ public class SocialAccountEntity extends BaseTimeEntity {
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
   UserEntity user;
 
-  public SocialAccountEntity(Long id, String identifier,
-                             SocialProvider socialProvider,
-                             UserEntity user, LocalDateTime createdAt,
-                             LocalDateTime updatedAt,
-                             LocalDateTime deletedAt) {
+  public SocialAccountEntity(
+      Long id,
+      String identifier,
+      SocialProvider socialProvider,
+      UserEntity user,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.id = id;
@@ -77,12 +79,14 @@ public class SocialAccountEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
@@ -92,8 +96,8 @@ public class SocialAccountEntity extends BaseTimeEntity {
 
   @Override
   public final int hashCode() {
-    return this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-        getClass().hashCode();
+    return this instanceof HibernateProxy
+        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+        : getClass().hashCode();
   }
 }

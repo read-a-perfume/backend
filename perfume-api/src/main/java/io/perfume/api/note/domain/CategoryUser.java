@@ -13,9 +13,13 @@ public class CategoryUser extends BaseTimeDomain {
 
   private final Category category;
 
-  public CategoryUser(Long id, Long userId, Category category, LocalDateTime createdAt,
-                      LocalDateTime updatedAt,
-                      LocalDateTime deletedAt) {
+  public CategoryUser(
+      Long id,
+      Long userId,
+      Category category,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.userId = userId;

@@ -2,17 +2,18 @@ package io.perfume.api.review.adapter.out.persistence.repository.like;
 
 import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Getter;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "review_like", indexes = {
-    @Index(name = "idx_review_like_1", columnList = "reviewId"),
-    @Index(name = "idx_review_like_2", columnList = "userId")
-})
+@Table(
+    name = "review_like",
+    indexes = {
+      @Index(name = "idx_review_like_1", columnList = "reviewId"),
+      @Index(name = "idx_review_like_2", columnList = "userId")
+    })
 @Getter
 public class ReviewLikeEntity extends BaseTimeEntity {
 
@@ -27,11 +28,15 @@ public class ReviewLikeEntity extends BaseTimeEntity {
   @Column(nullable = false)
   private long reviewId;
 
-  protected ReviewLikeEntity() {
-  }
+  protected ReviewLikeEntity() {}
 
-  public ReviewLikeEntity(Long id, long userId, long reviewId, LocalDateTime createdAt,
-                          LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public ReviewLikeEntity(
+      Long id,
+      long userId,
+      long reviewId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.userId = userId;
@@ -46,12 +51,14 @@ public class ReviewLikeEntity extends BaseTimeEntity {
     if (o == null) {
       return false;
     }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-        ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-        o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer()
-            .getPersistentClass() : this.getClass();
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+            : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
@@ -61,8 +68,8 @@ public class ReviewLikeEntity extends BaseTimeEntity {
 
   @Override
   public final int hashCode() {
-    return this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-        getClass().hashCode();
+    return this instanceof HibernateProxy
+        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+        : getClass().hashCode();
   }
 }

@@ -20,11 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class FindFileServiceTest {
 
-  @InjectMocks
-  private FindFileService findFileService;
+  @InjectMocks private FindFileService findFileService;
 
-  @Mock
-  private FileQueryPersistenceAdapter fileQueryPersistenceAdapter;
+  @Mock private FileQueryPersistenceAdapter fileQueryPersistenceAdapter;
 
   @Test
   void findFileById() {

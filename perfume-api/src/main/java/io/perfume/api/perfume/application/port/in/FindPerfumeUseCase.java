@@ -13,7 +13,8 @@ public interface FindPerfumeUseCase {
 
   PerfumeResult findPerfumeById(Long id);
 
-  CustomSlice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize);
+  CustomSlice<SimplePerfumeResult> findPerfumesByBrand(
+      Long brandId, Long lastPerfumeId, int pageSize);
 
   CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable);
 

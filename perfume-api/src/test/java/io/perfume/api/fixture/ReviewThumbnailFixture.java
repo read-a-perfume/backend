@@ -15,8 +15,8 @@ public class ReviewThumbnailFixture {
     this.mapper = mapper;
   }
 
-  public ReviewThumbnail createReviewThumbnail(final long reviewId, final long thumbnailId,
-                                               final LocalDateTime now) {
+  public ReviewThumbnail createReviewThumbnail(
+      final long reviewId, final long thumbnailId, final LocalDateTime now) {
     final ReviewThumbnailEntity entity =
         new ReviewThumbnailEntity(reviewId, thumbnailId, now, now, null);
     return mapper.toDomain(entity);

@@ -1,6 +1,5 @@
 package io.perfume.api.brand.adapter.out.persistence;
 
-
 import io.perfume.api.brand.domain.Brand;
 import org.springframework.stereotype.Component;
 

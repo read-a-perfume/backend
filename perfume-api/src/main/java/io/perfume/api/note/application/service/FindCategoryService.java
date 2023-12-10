@@ -23,13 +23,16 @@ public class FindCategoryService implements FindCategoryUseCase {
 
   @Override
   public CategoryResult findCategoryById(Long id) {
-    return categoryQueryRepository.findById(id).map(CategoryResult::from)
+    return categoryQueryRepository
+        .findById(id)
+        .map(CategoryResult::from)
         .orElseThrow(() -> new NotFoundNoteException(id));
   }
 
   @Override
   public List<CategoryResult> findTasteByUserId(Long id) {
-    return categoryQueryRepository.findCategoryUserByUserId(id).stream().map(CategoryResult::from)
+    return categoryQueryRepository.findCategoryUserByUserId(id).stream()
+        .map(CategoryResult::from)
         .toList();
   }
 }

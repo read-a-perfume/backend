@@ -18,8 +18,7 @@ public class AuthenticationKeyMapper {
         authenticationKeyJpaEntity.getVerifiedAt(),
         authenticationKeyJpaEntity.getCreatedAt(),
         authenticationKeyJpaEntity.getUpdatedAt(),
-        authenticationKeyJpaEntity.getDeletedAt()
-    );
+        authenticationKeyJpaEntity.getDeletedAt());
   }
 
   AuthenticationKeyJpaEntity toEntity(AuthenticationKey authenticationKey) {
@@ -34,7 +33,6 @@ public class AuthenticationKeyMapper {
         authenticationKey.getVerifiedAt(),
         authenticationKey.getCreatedAt(),
         authenticationKey.getUpdatedAt(),
-        authenticationKey.getDeletedAt()
-    );
+        authenticationKey.getDeletedAt());
   }
 }

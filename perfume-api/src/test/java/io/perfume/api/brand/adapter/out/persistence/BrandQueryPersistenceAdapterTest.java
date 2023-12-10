@@ -23,10 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 @DataJpaTest
 public class BrandQueryPersistenceAdapterTest {
 
-  @Autowired
-  private EntityManager em;
-  @Autowired
-  private BrandQueryRepository brandQueryRepository;
+  @Autowired private EntityManager em;
+  @Autowired private BrandQueryRepository brandQueryRepository;
 
   @Test
   @DisplayName("Brand 1건을 조회한다.")
@@ -37,11 +35,8 @@ public class BrandQueryPersistenceAdapterTest {
     String brandStory = "story1";
     Long thumbnailId = 1L;
 
-    BrandEntity brandEntity = BrandEntity.builder()
-        .name(brandName)
-        .story(brandStory)
-        .thumbnailId(thumbnailId)
-        .build();
+    BrandEntity brandEntity =
+        BrandEntity.builder().name(brandName).story(brandStory).thumbnailId(thumbnailId).build();
     em.persist(brandEntity);
     em.flush();
     em.clear();
@@ -52,7 +47,8 @@ public class BrandQueryPersistenceAdapterTest {
 
     // then
     assertNotNull(brand);
-    assertThat(brand).extracting("id", "name", "story", "thumbnailId")
+    assertThat(brand)
+        .extracting("id", "name", "story", "thumbnailId")
         .containsExactly(brandEntity.getId(), brandName, brandStory, thumbnailId);
   }
 
@@ -65,12 +61,13 @@ public class BrandQueryPersistenceAdapterTest {
     String brandStory = "story1";
     Long thumbnailId = 1L;
 
-    BrandEntity brandEntity = BrandEntity.builder()
-        .name(brandName)
-        .story(brandStory)
-        .thumbnailId(thumbnailId)
-        .deletedAt(LocalDateTime.now())
-        .build();
+    BrandEntity brandEntity =
+        BrandEntity.builder()
+            .name(brandName)
+            .story(brandStory)
+            .thumbnailId(thumbnailId)
+            .deletedAt(LocalDateTime.now())
+            .build();
     em.persist(brandEntity);
     em.flush();
     em.clear();

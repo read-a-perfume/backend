@@ -12,8 +12,7 @@ public class TagMapper {
         entity.getName(),
         entity.getCreatedAt(),
         entity.getUpdatedAt(),
-        entity.getDeletedAt()
-    );
+        entity.getDeletedAt());
   }
 
   public TagEntity toEntity(Tag domain) {
@@ -22,7 +21,6 @@ public class TagMapper {
         domain.getName(),
         domain.getCreatedAt(),
         domain.getUpdatedAt(),
-        domain.getDeletedAt()
-    );
+        domain.getDeletedAt());
   }
 }

@@ -16,8 +16,8 @@ public class CreateCategoryService implements CreateCategoryUseCase {
 
   private final CategoryQueryRepository categoryQueryRepository;
 
-  public CreateCategoryService(CategoryRepository categoryRepository,
-                               CategoryQueryRepository categoryQueryRepository) {
+  public CreateCategoryService(
+      CategoryRepository categoryRepository, CategoryQueryRepository categoryQueryRepository) {
     this.categoryRepository = categoryRepository;
     this.categoryQueryRepository = categoryQueryRepository;
   }

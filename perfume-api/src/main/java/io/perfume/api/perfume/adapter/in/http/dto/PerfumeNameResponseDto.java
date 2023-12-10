@@ -5,8 +5,6 @@ import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 public record PerfumeNameResponseDto(String perfumeNameWithBrand, Long perfumeId) {
   public static PerfumeNameResponseDto of(PerfumeNameResult perfumeNameResult) {
     return new PerfumeNameResponseDto(
-        perfumeNameResult.perfumeNameWithBrand(),
-        perfumeNameResult.perfumeId()
-    );
+        perfumeNameResult.perfumeNameWithBrand(), perfumeNameResult.perfumeId());
   }
 }

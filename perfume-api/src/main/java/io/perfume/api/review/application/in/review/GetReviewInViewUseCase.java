@@ -4,5 +4,5 @@ import io.perfume.api.review.application.facade.dto.ReviewViewDetailResult;
 
 public interface GetReviewInViewUseCase {
 
-    ReviewViewDetailResult getReviewDetail(long reviewId);
+  ReviewViewDetailResult getReviewDetail(long reviewId);
 }

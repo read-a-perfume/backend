@@ -37,9 +37,14 @@ public class AuthenticationKeyJpaEntity extends BaseTimeEntity {
 
   private LocalDateTime verifiedAt;
 
-  public AuthenticationKeyJpaEntity(Long id, @NotNull String code, @NotNull String key,
-                                    LocalDateTime verifiedAt, @NotNull LocalDateTime createdAt,
-                                    @NotNull LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public AuthenticationKeyJpaEntity(
+      Long id,
+      @NotNull String code,
+      @NotNull String key,
+      LocalDateTime verifiedAt,
+      @NotNull LocalDateTime createdAt,
+      @NotNull LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.code = code;

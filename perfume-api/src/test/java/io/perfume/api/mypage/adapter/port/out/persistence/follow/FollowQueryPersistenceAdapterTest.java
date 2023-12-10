@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,14 +19,11 @@ import org.springframework.test.context.ActiveProfiles;
 @DataJpaTest
 class FollowQueryPersistenceAdapterTest {
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private FollowQueryPersistenceAdapter queryRepository;
+  @Autowired private FollowQueryPersistenceAdapter queryRepository;
 
-  @Autowired
-  private FollowMapper followMapper;
+  @Autowired private FollowMapper followMapper;
 
   @Test
   void testFindByFollowerId() {
@@ -36,11 +31,7 @@ class FollowQueryPersistenceAdapterTest {
     var followerId = 1L;
     var followingId = 2L;
     var now = LocalDateTime.now();
-    var follow = Follow.create(
-        followerId,
-        followingId,
-        now
-    );
+    var follow = Follow.create(followerId, followingId, now);
 
     var entity = followMapper.toEntity(follow);
     entityManager.persist(entity);
@@ -63,11 +54,7 @@ class FollowQueryPersistenceAdapterTest {
     var followerId = 1L;
     var followingId = 2L;
     var now = LocalDateTime.now();
-    var follow = Follow.create(
-        followerId,
-        followingId,
-        now
-    );
+    var follow = Follow.create(followerId, followingId, now);
 
     var entity = followMapper.toEntity(follow);
     entityManager.persist(entity);
@@ -75,8 +62,8 @@ class FollowQueryPersistenceAdapterTest {
     entityManager.clear();
 
     // when
-    var find = queryRepository
-        .findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow();
+    var find =
+        queryRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow();
 
     // then
     assertThat(find.getId()).isEqualTo(2L);
@@ -91,11 +78,7 @@ class FollowQueryPersistenceAdapterTest {
     var followerId = 1L;
     var followingId = 2L;
     var now = LocalDateTime.now();
-    var follow = Follow.create(
-        followerId,
-        followingId,
-        now
-    );
+    var follow = Follow.create(followerId, followingId, now);
 
     var entity = followMapper.toEntity(follow);
     entityManager.persist(entity);
@@ -119,11 +102,7 @@ class FollowQueryPersistenceAdapterTest {
     var followerId = 1L;
     var followingId = 2L;
     var now = LocalDateTime.now();
-    var follow = Follow.create(
-        followerId,
-        followingId,
-        now
-    );
+    var follow = Follow.create(followerId, followingId, now);
 
     var entity = followMapper.toEntity(follow);
     entityManager.persist(entity);

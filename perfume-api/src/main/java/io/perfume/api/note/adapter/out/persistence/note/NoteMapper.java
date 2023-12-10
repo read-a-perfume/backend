@@ -14,8 +14,7 @@ public class NoteMapper {
         entity.getThumbnailId(),
         entity.getCreatedAt(),
         entity.getUpdatedAt(),
-        entity.getDeletedAt()
-    );
+        entity.getDeletedAt());
   }
 
   public NoteJpaEntity toEntity(Note domain) {
@@ -26,7 +25,6 @@ public class NoteMapper {
         domain.getThumbnailId(),
         domain.getCreatedAt(),
         domain.getUpdatedAt(),
-        domain.getDeletedAt()
-    );
+        domain.getDeletedAt());
   }
 }

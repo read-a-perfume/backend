@@ -16,7 +16,8 @@ public class GetFavoritePerfumesService implements GetFavoritePerfumesUseCase {
 
   private final PerfumeQueryRepository perfumeQueryRepository;
 
-  public GetFavoritePerfumesService(PerfumeFavoriteQueryRepository perfumeFavoriteQueryRepository,
+  public GetFavoritePerfumesService(
+      PerfumeFavoriteQueryRepository perfumeFavoriteQueryRepository,
       PerfumeQueryRepository perfumeQueryRepository) {
     this.perfumeFavoriteQueryRepository = perfumeFavoriteQueryRepository;
     this.perfumeQueryRepository = perfumeQueryRepository;
@@ -24,13 +25,13 @@ public class GetFavoritePerfumesService implements GetFavoritePerfumesUseCase {
 
   @Override
   public List<PerfumeFavoriteResult> getFavoritePerfumes(Long authorId) {
-    System.out.println(perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(authorId).size());
-    List<PerfumeFavorite> find = perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(
-        authorId);
+    System.out.println(
+        perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(authorId).size());
+    List<PerfumeFavorite> find =
+        perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(authorId);
 
-    List<Long> perfume_id = find.stream()
-        .map(perfumeFavorite -> perfumeFavorite.getPerfumeId())
-        .toList();
+    List<Long> perfume_id =
+        find.stream().map(perfumeFavorite -> perfumeFavorite.getPerfumeId()).toList();
 
     for (Long id : perfume_id) {
       System.out.println(id);
@@ -40,23 +41,22 @@ public class GetFavoritePerfumesService implements GetFavoritePerfumesUseCase {
     System.out.println(perfumeQueryRepository.findPerfumeById(2L).get().getName());
     System.out.println(perfumeQueryRepository.findPerfumeById(3L).get().getName());
 
-    List<Perfume> perfumes = perfume_id.stream()
-        .map(id -> perfumeQueryRepository.findPerfumeById(id)
-            .orElseThrow())
-        .toList();
+    List<Perfume> perfumes =
+        perfume_id.stream()
+            .map(id -> perfumeQueryRepository.findPerfumeById(id).orElseThrow())
+            .toList();
 
     for (Perfume perfume : perfumes) {
       System.out.println(perfume.getName());
     }
 
-    return perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(authorId)
-        .stream()
+    return perfumeFavoriteQueryRepository.findFavoritePerfumesByUserId(authorId).stream()
         .map(
-            perfumeFavorite
-                -> perfumeQueryRepository.findPerfumeById(
-                    perfumeFavorite.getPerfumeId())
-                .orElseThrow()
-                .getName())
+            perfumeFavorite ->
+                perfumeQueryRepository
+                    .findPerfumeById(perfumeFavorite.getPerfumeId())
+                    .orElseThrow()
+                    .getName())
         .map(PerfumeFavoriteResult::new)
         .toList();
   }

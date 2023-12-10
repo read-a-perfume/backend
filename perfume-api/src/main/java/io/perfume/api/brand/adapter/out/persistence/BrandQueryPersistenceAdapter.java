@@ -18,10 +18,11 @@ public class BrandQueryPersistenceAdapter implements BrandQueryRepository {
 
   @Override
   public Optional<Brand> findBrandById(Long id) {
-    BrandEntity result = jpaQueryFactory.selectFrom(brandEntity)
-        .where(brandEntity.id.eq(id)
-            .and(brandEntity.deletedAt.isNull()))
-        .fetchOne();
+    BrandEntity result =
+        jpaQueryFactory
+            .selectFrom(brandEntity)
+            .where(brandEntity.id.eq(id).and(brandEntity.deletedAt.isNull()))
+            .fetchOne();
 
     return Optional.ofNullable(brandMapper.toDomain(result));
   }

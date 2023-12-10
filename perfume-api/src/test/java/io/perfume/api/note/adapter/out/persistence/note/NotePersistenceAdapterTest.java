@@ -18,8 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class NotePersistenceAdapterTest {
 
-  @Autowired
-  private NoteRepository noteRepository;
+  @Autowired private NoteRepository noteRepository;
 
   @Test
   @DisplayName("노트를 저장한다.")

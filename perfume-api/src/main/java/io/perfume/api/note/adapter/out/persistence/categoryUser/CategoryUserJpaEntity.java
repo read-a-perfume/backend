@@ -22,9 +22,10 @@ import lombok.ToString;
 @Entity(name = "category_user")
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(name = "uni_user_id_note_id", columnNames = {"userId", "category_id"}),
-    }
-)
+      @UniqueConstraint(
+          name = "uni_user_id_note_id",
+          columnNames = {"userId", "category_id"}),
+    })
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
@@ -44,9 +45,13 @@ public class CategoryUserJpaEntity extends BaseTimeEntity {
   @Column(nullable = false)
   private Long userId;
 
-  public CategoryUserJpaEntity(Long id, CategoryJpaEntity category, Long userId,
-                               LocalDateTime createdAt,
-                               LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public CategoryUserJpaEntity(
+      Long id,
+      CategoryJpaEntity category,
+      Long userId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.category = category;

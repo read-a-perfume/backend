@@ -16,8 +16,8 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     super.setAuthenticated(false);
   }
 
-  public JwtAuthenticationToken(Object principal, Object credentials,
-                                Collection<? extends GrantedAuthority> authorities) {
+  public JwtAuthenticationToken(
+      Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
     super(authorities);
     this.principal = principal;
     this.credentials = credentials;
@@ -28,8 +28,8 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     return new JwtAuthenticationToken("");
   }
 
-  static JwtAuthenticationToken authorized(Object principal,
-                                           Collection<? extends GrantedAuthority> authorities) {
+  static JwtAuthenticationToken authorized(
+      Object principal, Collection<? extends GrantedAuthority> authorities) {
     return new JwtAuthenticationToken(principal, "", authorities);
   }
 

@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum Season {
-
   SPRING("봄"),
   SUMMER("여름"),
   FALL("가을"),

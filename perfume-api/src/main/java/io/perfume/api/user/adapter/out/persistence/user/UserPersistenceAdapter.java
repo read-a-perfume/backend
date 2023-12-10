@@ -10,7 +10,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @RequiredArgsConstructor
 @PersistenceAdapter
 public class UserPersistenceAdapter implements UserRepository {
@@ -30,10 +29,12 @@ public class UserPersistenceAdapter implements UserRepository {
 
   @Override
   public Boolean existByUsernameOrEmail(String username, String email) {
-    return jpaQueryFactory.selectFrom(userEntity)
-        .where(userEntity.deletedAt.isNull(),
-            userEntity.username.eq(username).or(userEntity.email.eq(email))
-        )
-        .fetchFirst() != null;
+    return jpaQueryFactory
+            .selectFrom(userEntity)
+            .where(
+                userEntity.deletedAt.isNull(),
+                userEntity.username.eq(username).or(userEntity.email.eq(email)))
+            .fetchFirst()
+        != null;
   }
 }

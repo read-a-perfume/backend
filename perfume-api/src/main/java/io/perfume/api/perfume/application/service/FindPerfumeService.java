@@ -16,8 +16,8 @@ import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
-import io.perfume.api.review.application.in.review.ReviewStatisticUseCase;
 import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
+import io.perfume.api.review.application.in.review.ReviewStatisticUseCase;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,10 @@ public class FindPerfumeService implements FindPerfumeUseCase {
 
   @Override
   public PerfumeResult findPerfumeById(Long id) {
-    Perfume perfume = perfumeQueryRepository.findPerfumeById(id).orElseThrow(() -> new PerfumeNotFoundException(id));
+    Perfume perfume =
+        perfumeQueryRepository
+            .findPerfumeById(id)
+            .orElseThrow(() -> new PerfumeNotFoundException(id));
     CategoryResult categoryResult = findCategoryUseCase.findCategoryById(perfume.getCategoryId());
     BrandForPerfumeResult brandResult = findBrandUseCase.findBrandForPerfume(perfume.getBrandId());
     NotePyramid notePyramid = perfumeQueryRepository.getNotePyramidByPerfume(perfume.getId());
@@ -50,12 +53,14 @@ public class FindPerfumeService implements FindPerfumeUseCase {
   }
 
   @Override
-  public CustomSlice<SimplePerfumeResult> findPerfumesByBrand(Long brandId, Long lastPerfumeId, int pageSize) {
+  public CustomSlice<SimplePerfumeResult> findPerfumesByBrand(
+      Long brandId, Long lastPerfumeId, int pageSize) {
     return perfumeQueryRepository.findPerfumesByBrand(brandId, lastPerfumeId, pageSize);
   }
 
   @Override
-  public CustomPage<SimplePerfumeResult> findPerfumesByCategory(Long categoryId, Pageable pageable) {
+  public CustomPage<SimplePerfumeResult> findPerfumesByCategory(
+      Long categoryId, Pageable pageable) {
     return perfumeQueryRepository.findPerfumesByCategory(categoryId, pageable);
   }
 

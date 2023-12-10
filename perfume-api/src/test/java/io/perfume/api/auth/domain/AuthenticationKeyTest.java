@@ -29,8 +29,9 @@ class AuthenticationKeyTest {
   void testIsExpiredIfInvalid() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey("code", "key",
-        now.minusMinutes(AuthenticationKey.EXPIRED_MINUTES));
+    AuthenticationKey authenticationKey =
+        AuthenticationKey.createAuthenticationKey(
+            "code", "key", now.minusMinutes(AuthenticationKey.EXPIRED_MINUTES));
 
     // when
     boolean result = authenticationKey.isExpired(now);
@@ -89,8 +90,9 @@ class AuthenticationKeyTest {
   void testMatchKeyWhenExpiredKey() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    AuthenticationKey authenticationKey = AuthenticationKey.createAuthenticationKey("code", "key",
-        now.minusMinutes(AuthenticationKey.EXPIRED_MINUTES));
+    AuthenticationKey authenticationKey =
+        AuthenticationKey.createAuthenticationKey(
+            "code", "key", now.minusMinutes(AuthenticationKey.EXPIRED_MINUTES));
 
     // when
     boolean result = authenticationKey.matchKey("code", "key", now);
@@ -104,15 +106,8 @@ class AuthenticationKeyTest {
   void testMatchKeyWhenAlreadyVerified() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    AuthenticationKey authenticationKey = new AuthenticationKey(
-        1L,
-        "code",
-        "key",
-        now,
-        now,
-        now,
-        null
-    );
+    AuthenticationKey authenticationKey =
+        new AuthenticationKey(1L, "code", "key", now, now, now, null);
 
     // when
     boolean result = authenticationKey.matchKey("code", "key", now);
@@ -126,15 +121,8 @@ class AuthenticationKeyTest {
   void testIsVerifiedWhenAlreadyVerified() {
     // given
     LocalDateTime now = LocalDateTime.now();
-    AuthenticationKey authenticationKey = new AuthenticationKey(
-        1L,
-        "code",
-        "key",
-        now,
-        now,
-        now,
-        null
-    );
+    AuthenticationKey authenticationKey =
+        new AuthenticationKey(1L, "code", "key", now, now, now, null);
 
     // when
     boolean result = authenticationKey.isVerified();

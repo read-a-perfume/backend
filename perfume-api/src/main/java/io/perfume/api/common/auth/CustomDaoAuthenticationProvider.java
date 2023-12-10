@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Qualifier("daoAuthenticationProvider")
 public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
 
-  public CustomDaoAuthenticationProvider(PasswordEncoder passwordEncoder,
-                                         UserDetailsService userDetailsService) {
+  public CustomDaoAuthenticationProvider(
+      PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
     super(passwordEncoder);
     this.setUserDetailsService(userDetailsService);
   }

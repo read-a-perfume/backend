@@ -10,16 +10,17 @@ public class CursorPagination<T> {
 
   private final boolean hasPrevious;
 
-  private CursorPagination(final List<T> items, final boolean hasNext,
-                           final boolean hasPrevious) {
+  private CursorPagination(final List<T> items, final boolean hasNext, final boolean hasPrevious) {
     this.items = items;
     this.hasNext = hasNext;
     this.hasPrevious = hasPrevious;
   }
 
-  public static <T> CursorPagination<T> of(final List<T> items, final Long size,
-                                           final CursorDirection direction,
-                                           final boolean isSelectCursor) {
+  public static <T> CursorPagination<T> of(
+      final List<T> items,
+      final Long size,
+      final CursorDirection direction,
+      final boolean isSelectCursor) {
     final var hasMoreItem = items.size() > size;
     final var resizedItems = hasMoreItem ? items.subList(0, size.intValue()) : items;
 
@@ -29,7 +30,8 @@ public class CursorPagination<T> {
     return new CursorPagination<>(resizedItems, isSelectCursor, hasMoreItem);
   }
 
-  public static <T> CursorPagination<T> of(final List<T> items, final boolean hasNext, final boolean hasPrevious) {
+  public static <T> CursorPagination<T> of(
+      final List<T> items, final boolean hasNext, final boolean hasPrevious) {
     return new CursorPagination<>(items, hasNext, hasPrevious);
   }
 
