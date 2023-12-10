@@ -2,6 +2,7 @@ package io.perfume.api.review.stub;
 
 import io.perfume.api.review.application.out.like.ReviewLikeQueryRepository;
 import io.perfume.api.review.application.out.like.ReviewLikeRepository;
+import io.perfume.api.review.application.out.like.dto.ReviewLikeCount;
 import io.perfume.api.review.domain.ReviewLike;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,13 @@ public class StubReviewLikeRepository implements ReviewLikeRepository, ReviewLik
 
   public void addReviewLike(ReviewLike reviewLike) {
     reviewLikes.add(reviewLike);
+  }
+
+  @Override
+  public List<ReviewLikeCount> countByReviewIds(List<Long> reviewIds) {
+    return reviewLikes.stream()
+        .map(reviewLike -> new ReviewLikeCount(reviewLike.getReviewId(), 1))
+        .toList();
   }
 
   public void clear() {

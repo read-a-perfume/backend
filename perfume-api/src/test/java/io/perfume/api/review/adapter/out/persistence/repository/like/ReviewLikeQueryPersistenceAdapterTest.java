@@ -4,9 +4,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewMapper;
+import io.perfume.api.review.application.out.like.dto.ReviewLikeCount;
 import io.perfume.api.review.domain.ReviewLike;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,5 +90,24 @@ class ReviewLikeQueryPersistenceAdapterTest {
 
     // then
     assertThat(result).isEqualTo(1L);
+  }
+
+  @Test
+  @DisplayName("여러 리뷰 좋아요 수를 조회한다.")
+  void testCountByReviewIds() {
+    // given
+    final var now = LocalDateTime.now();
+    ReviewLike reviewLike = reviewLikeMapper.toDomain(
+            new ReviewLikeEntity(null, 1L, 1L, now, now, null)
+    );
+    entityManager.persist(reviewLikeMapper.toEntity(reviewLike));
+
+    // when
+    final List<ReviewLikeCount> result = repository.countByReviewIds(List.of(1L));
+
+    // then
+    assertThat(result.size()).isEqualTo(1L);
+    assertThat(result.get(0).reviewId()).isEqualTo(reviewLike.getReviewId());
+    assertThat(result.get(0).count()).isEqualTo(1L);
   }
 }
