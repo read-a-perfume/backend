@@ -14,4 +14,6 @@ public interface ReviewQueryRepository {
   ReviewFeatureCount getReviewFeatureCount(Long perfumeId);
 
   Long findReviewCountByUserId(Long userId);
+
+  boolean existsReviewById(Long reviewId);
 }

@@ -14,6 +14,7 @@ import io.perfume.api.review.application.in.dto.GetReviewCommentsCommand;
 import io.perfume.api.review.application.in.dto.ReviewCommentResult;
 import io.perfume.api.review.application.out.comment.ReviewCommentQueryRepository;
 import io.perfume.api.review.application.out.comment.ReviewCommentRepository;
+import io.perfume.api.review.application.out.review.ReviewQueryRepository;
 import io.perfume.api.review.domain.ReviewComment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +33,14 @@ public class CommentService implements
 
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewCommentQueryRepository reviewCommentQueryRepository;
+    private final ReviewQueryRepository reviewQueryRepository;
 
     @Override
     public ReviewCommentResult createComment(CreateReviewCommentCommand command, LocalDateTime now) {
+        if(!reviewQueryRepository.existsReviewById(command.reviewId())) {
+            throw new NotFoundReviewException(command.reviewId());
+        }
+
         final var createdReviewComment = reviewCommentRepository.save(
                 ReviewComment.create(command.reviewId(), command.userId(), command.content(), now));
         return ReviewCommentResult.from(createdReviewComment);

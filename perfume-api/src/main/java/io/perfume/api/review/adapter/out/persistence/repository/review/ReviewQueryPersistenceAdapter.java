@@ -116,4 +116,12 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
             .and(reviewEntity.deletedAt.isNull()))
         .fetchOne();
   }
+
+  @Override
+  public boolean existsReviewById(Long reviewId) {
+    return jpaQueryFactory.from(reviewEntity)
+        .where(reviewEntity.id.eq(reviewId),
+            reviewEntity.deletedAt.isNull())
+        .fetchFirst() != null;
+  }
 }
