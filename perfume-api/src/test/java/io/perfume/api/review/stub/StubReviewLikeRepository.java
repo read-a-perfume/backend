@@ -1,7 +1,7 @@
 package io.perfume.api.review.stub;
 
-import io.perfume.api.review.application.out.ReviewLikeQueryRepository;
-import io.perfume.api.review.application.out.ReviewLikeRepository;
+import io.perfume.api.review.application.out.like.ReviewLikeQueryRepository;
+import io.perfume.api.review.application.out.like.ReviewLikeRepository;
 import io.perfume.api.review.domain.ReviewLike;
 import java.util.ArrayList;
 import java.util.List;

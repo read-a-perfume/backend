@@ -1,7 +1,9 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.review;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewPersistenceAdapter;
 import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.DayType;

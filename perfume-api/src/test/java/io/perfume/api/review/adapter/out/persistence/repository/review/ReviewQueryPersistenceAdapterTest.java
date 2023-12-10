@@ -1,13 +1,16 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.review;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.domain.Concentration;
+import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewPersistenceAdapter;
+import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewQueryPersistenceAdapter;
 import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
-import io.perfume.api.review.application.out.ReviewQueryRepository;
-import io.perfume.api.review.application.out.ReviewRepository;
+import io.perfume.api.review.application.out.review.ReviewQueryRepository;
+import io.perfume.api.review.application.out.review.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewFeatureCount;
 import io.perfume.api.review.domain.type.DayType;
@@ -21,7 +24,6 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

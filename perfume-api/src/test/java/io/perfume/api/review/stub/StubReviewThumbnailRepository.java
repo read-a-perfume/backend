@@ -1,6 +1,6 @@
 package io.perfume.api.review.stub;
 
-import io.perfume.api.review.application.out.ReviewThumbnailRepository;
+import io.perfume.api.review.application.out.thumbnail.ReviewThumbnailRepository;
 import io.perfume.api.review.domain.ReviewThumbnail;
 import java.util.ArrayList;
 import java.util.List;

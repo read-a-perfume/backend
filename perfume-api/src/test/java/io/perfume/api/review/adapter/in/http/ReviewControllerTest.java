@@ -16,8 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewCommentRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewRequestDto;
-import io.perfume.api.review.application.out.ReviewCommentRepository;
-import io.perfume.api.review.application.out.ReviewRepository;
+import io.perfume.api.review.application.out.comment.ReviewCommentRepository;
+import io.perfume.api.review.application.out.review.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
 import io.perfume.api.review.domain.type.DayType;
