@@ -4,6 +4,7 @@ import dto.repository.CursorPageable;
 import dto.repository.CursorPagination;
 import io.perfume.api.review.application.exception.NotFoundReviewCommentException;
 import io.perfume.api.review.application.exception.UpdateReviewCommentPermissionDeniedException;
+import io.perfume.api.review.application.facade.dto.ReviewCommentDetailCommand;
 import io.perfume.api.review.application.in.comment.CreateReviewCommentUseCase;
 import io.perfume.api.review.application.in.comment.DeleteReviewCommentUseCase;
 import io.perfume.api.review.application.in.comment.GetReviewCommentsUseCase;
@@ -13,6 +14,7 @@ import io.perfume.api.review.application.in.dto.GetReviewCommentsCommand;
 import io.perfume.api.review.application.in.dto.ReviewCommentResult;
 import io.perfume.api.review.application.out.comment.ReviewCommentQueryRepository;
 import io.perfume.api.review.application.out.comment.ReviewCommentRepository;
+import io.perfume.api.review.application.out.comment.dto.ReviewCommentCount;
 import io.perfume.api.review.application.out.review.ReviewQueryRepository;
 import io.perfume.api.review.domain.ReviewComment;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,5 +66,9 @@ public class ReviewCommentService {
 
         comment.updateComment(newComment);
         reviewCommentRepository.save(comment);
+    }
+
+    public List<ReviewCommentCount> getReviewCommentCount(List<Long> reviewIds) {
+        return reviewCommentQueryRepository.countByReviewIds(reviewIds);
     }
 }

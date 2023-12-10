@@ -4,4 +4,6 @@ public record ReviewLikeCount(
     long reviewId,
     long count
 ) {
+
+    public static final ReviewLikeCount ZERO = new ReviewLikeCount(0, 0);
 }

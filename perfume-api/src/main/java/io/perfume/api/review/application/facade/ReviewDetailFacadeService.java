@@ -13,8 +13,11 @@ import io.perfume.api.review.application.in.comment.UpdateReviewCommentUseCase;
 import io.perfume.api.review.application.in.dto.*;
 import io.perfume.api.review.application.in.like.ReviewLikeUseCase;
 import io.perfume.api.review.application.in.review.*;
+import io.perfume.api.review.application.out.comment.dto.ReviewCommentCount;
+import io.perfume.api.review.application.out.like.dto.ReviewLikeCount;
 import io.perfume.api.review.application.service.*;
 import io.perfume.api.review.domain.ReviewComment;
+import io.perfume.api.review.domain.ReviewLike;
 import io.perfume.api.user.application.port.in.dto.UserResult;
 import io.perfume.api.user.application.service.FindUserService;
 import lombok.RequiredArgsConstructor;
@@ -52,19 +55,27 @@ public class ReviewDetailFacadeService implements
 
     @Override
     public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
-        final var reviews =
+        final List<ReviewResult> reviews =
                 reviewService
                         .getPaginatedReviews(page, size)
                         .stream()
                         .toList();
 
-        final var authorIds = reviews.stream().map(ReviewResult::authorId).toList();
-        final var authors = getAuthorsMap(authorIds);
+        final List<Long> authorIds = reviews.stream().map(ReviewResult::authorId).toList();
+        final Map<Long, UserResult> authors = getAuthorsMap(authorIds);
 
-        final var reviewIds = reviews.stream().map(ReviewResult::id).toList();
-        final var tags = getReviewTagsMap(reviewIds);
+        final List<Long> reviewIds = reviews.stream().map(ReviewResult::id).toList();
+        final Map<Long, List<ReviewTagResult>> tags = getReviewTagsMap(reviewIds);
 
-        return reviews.stream().map(mapReviewDetailResult(authors, tags)).toList();
+        final List<ReviewCommentCount> commentCounts = reviewCommentService.getReviewCommentCount(reviewIds);
+        final Map<Long, ReviewCommentCount> commentCountsMap = commentCounts.stream()
+                .collect(Collectors.toMap(ReviewCommentCount::reviewId, Function.identity()));
+
+        final List<ReviewLikeCount> likeCounts = reviewLikeService.getReviewLikeCount(reviewIds);
+        final Map<Long, ReviewLikeCount> likeCountsMap = likeCounts.stream()
+                .collect(Collectors.toMap(ReviewLikeCount::reviewId, Function.identity()));
+
+        return reviews.stream().map(mapReviewDetailResult(authors, tags, commentCountsMap, likeCountsMap)).toList();
     }
 
     private Map<Long, UserResult> getAuthorsMap(List<Long> authorIds) {
@@ -82,7 +93,9 @@ public class ReviewDetailFacadeService implements
 
     private Function<ReviewResult, ReviewDetailResult> mapReviewDetailResult(
             Map<Long, UserResult> usersMap,
-            Map<Long, List<ReviewTagResult>> tagsMap) {
+            Map<Long, List<ReviewTagResult>> tagsMap,
+            Map<Long, ReviewCommentCount> commentCountsMap,
+            Map<Long, ReviewLikeCount> likeCountsMap) {
         return review -> {
             final var author = usersMap.getOrDefault(review.authorId(), UserResult.EMPTY);
             final var tags =
@@ -91,8 +104,10 @@ public class ReviewDetailFacadeService implements
                             .stream()
                             .map(ReviewTagResult::name)
                             .toList();
+            final var commentCount = commentCountsMap.getOrDefault(review.id(), ReviewCommentCount.ZERO).count();
+            final var likeCount = likeCountsMap.getOrDefault(review.id(), ReviewLikeCount.ZERO).count();
 
-            return ReviewDetailResult.from(review, author, tags);
+            return ReviewDetailResult.from(review, author, tags, likeCount, commentCount);
         };
     }
 
