@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = 'dockerhub'
         DOCKER_REPOSITORY_NAME = 'webdev0594'
+        MANIFEST_REPOSITORY_PATH = 'github.com/read-a-perfume/gitops.git'
     }
 
     stages {
@@ -44,6 +45,25 @@ pipeline {
                         customImage.push("${env.GIT_COMMIT_HASH}")
                         customImage.push("latest")
                     }
+                }
+            }
+        }
+
+        stage('Edit manifest image version') {
+            steps {
+                withCredentials([string(credentialsId: 'github', variable: 'TOKEN')]) {
+                    sh("""
+                        rm -rf manifest
+                        git clone https://dygma0:$TOKEN@$MANIFEST_REPOSITORY_PATH manifest
+                        cd manifest
+                        sed -i 's/perfume-backend:.*/perfume-backend:${env.GIT_COMMIT_HASH}/g' perfume-backend.yaml
+                        git config --global user.email "404err@naver.com"
+                        git config --global user.name "dygma0"
+                        git add .
+                        git status
+                        git commit -m "Update image version to ${env.GIT_COMMIT_HASH}"
+                        git push origin HEAD:main
+                    """)
                 }
             }
         }
