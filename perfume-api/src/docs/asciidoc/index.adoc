@@ -150,6 +150,22 @@ include::{snippets}/create-perfume/request-fields.adoc[]
 === 응답
 include::{snippets}/create-perfume/http-response.adoc[]
 
+== 향수 즐겨찾기
+=== 요청
+include::{snippets}/favorite-perfume/http-request.adoc[]
+
+=== 응답
+include::{snippets}/favorite-perfume/http-response.adoc[]
+include::{snippets}/favorite-perfume/response-fields.adoc[]
+
+== 향수 즐겨찾기 조회
+=== 요청
+include::{snippets}/get-favorites/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-favorites/http-response.adoc[]
+include::{snippets}/get-favorites/response-fields.adoc[]
+
 == 브랜드 별 향수 조회
 === 요청
 include::{snippets}/get-perfume-by-brand/http-request.adoc[]
@@ -272,7 +288,7 @@ include::{snippets}/follow-user/http-request.adoc[]
 
 === 응답
 include::{snippets}/follow-user/http-response.adoc[]
-include::{snippets}/follow-user/request-fields.adoc[]
+include::{snippets}/follow-user/response-fields.adoc[]
 
 == 팔로우/팔로워 수 조회
 === 요청
