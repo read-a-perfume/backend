@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.review;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static io.perfume.api.review.adapter.out.persistence.entity.QReviewEntity.reviewEntity;
@@ -6,7 +6,7 @@ import static io.perfume.api.user.adapter.out.persistence.user.QUserEntity.userE
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.application.out.ReviewQueryRepository;
+import io.perfume.api.review.application.out.review.ReviewQueryRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewFeatureCount;
 import io.perfume.api.review.domain.type.DayType;

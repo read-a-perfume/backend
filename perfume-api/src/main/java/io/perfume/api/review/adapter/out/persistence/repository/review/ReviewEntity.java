@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.entity;
+package io.perfume.api.review.adapter.out.persistence.repository.review;
 
 import io.perfume.api.base.BaseTimeEntity;
 import io.perfume.api.review.domain.type.DayType;

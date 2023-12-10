@@ -1,7 +1,7 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.review;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.application.out.ReviewRepository;
+import io.perfume.api.review.application.out.review.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 
 @PersistenceAdapter

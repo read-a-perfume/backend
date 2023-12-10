@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.entity;
+package io.perfume.api.review.adapter.out.persistence.repository.thumbnail;
 
 
 import static lombok.AccessLevel.PROTECTED;

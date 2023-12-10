@@ -1,6 +1,5 @@
 package io.perfume.api.review.adapter.out.persistence.repository.comment;
 
-import io.perfume.api.review.adapter.out.persistence.entity.ReviewCommentEntity;
 import io.perfume.api.review.domain.ReviewComment;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;

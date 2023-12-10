@@ -1,6 +1,5 @@
-package io.perfume.api.review.adapter.out.persistence.repository;
+package io.perfume.api.review.adapter.out.persistence.repository.review;
 
-import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
 import io.perfume.api.review.domain.Review;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;

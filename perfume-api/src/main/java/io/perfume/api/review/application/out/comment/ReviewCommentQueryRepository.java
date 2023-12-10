@@ -1,4 +1,4 @@
-package io.perfume.api.review.application.out;
+package io.perfume.api.review.application.out.comment;
 
 import dto.repository.CursorPageable;
 import dto.repository.CursorPagination;

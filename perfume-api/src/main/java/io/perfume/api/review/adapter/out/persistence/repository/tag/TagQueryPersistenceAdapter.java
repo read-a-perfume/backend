@@ -5,7 +5,7 @@ import static io.perfume.api.review.adapter.out.persistence.entity.QTagEntity.ta
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.application.out.TagQueryRepository;
+import io.perfume.api.review.application.out.tag.TagQueryRepository;
 import io.perfume.api.review.domain.ReviewTag;
 import io.perfume.api.review.domain.Tag;
 import java.util.List;

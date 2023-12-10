@@ -1,7 +1,7 @@
 package io.perfume.api.review.adapter.out.persistence.repository.tag;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.application.out.TagRepository;
+import io.perfume.api.review.application.out.tag.TagRepository;
 import io.perfume.api.review.domain.ReviewTag;
 import java.util.List;
 import java.util.stream.StreamSupport;

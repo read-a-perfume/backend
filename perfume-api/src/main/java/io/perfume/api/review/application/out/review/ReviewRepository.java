@@ -1,4 +1,4 @@
-package io.perfume.api.review.application.out;
+package io.perfume.api.review.application.out.review;
 
 import io.perfume.api.review.domain.Review;
 

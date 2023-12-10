@@ -2,7 +2,7 @@ package io.perfume.api.review.adapter.out.persistence.repository.like;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.review.adapter.out.persistence.entity.QReviewLikeEntity;
-import io.perfume.api.review.application.out.ReviewLikeQueryRepository;
+import io.perfume.api.review.application.out.like.ReviewLikeQueryRepository;
 import io.perfume.api.review.domain.ReviewLike;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;

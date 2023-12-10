@@ -1,7 +1,6 @@
-package io.perfume.api.review.adapter.out.persistence.entity;
+package io.perfume.api.review.adapter.out.persistence.repository.tag;
 
 import io.perfume.api.base.BaseTimeEntity;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,33 +9,35 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Getter;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "review_like")
+@Table(name = "tag")
+@NaturalIdCache
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
-public class ReviewLikeEntity extends BaseTimeEntity {
+public class TagEntity extends BaseTimeEntity {
 
+  @Getter
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
   private Long id;
 
-  @Column(nullable = false)
-  private long userId;
+  @NaturalId
+  private String name;
 
-  @Column(nullable = false)
-  private long reviewId;
-
-  protected ReviewLikeEntity() {
+  protected TagEntity() {
   }
 
-  public ReviewLikeEntity(Long id, long userId, long reviewId, LocalDateTime createdAt,
-                          LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public TagEntity(Long id, String name, LocalDateTime createdAt, LocalDateTime updatedAt,
+                   LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
-    this.userId = userId;
-    this.reviewId = reviewId;
+    this.name = name;
   }
 
   @Override
@@ -56,14 +57,12 @@ public class ReviewLikeEntity extends BaseTimeEntity {
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
-    ReviewLikeEntity that = (ReviewLikeEntity) o;
-    return getId() != null && Objects.equals(getId(), that.getId());
+    TagEntity tagEntity = (TagEntity) o;
+    return name != null && Objects.equals(name, tagEntity.name);
   }
 
   @Override
   public final int hashCode() {
-    return this instanceof HibernateProxy ?
-        ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-        getClass().hashCode();
+    return Objects.hash(name);
   }
 }
