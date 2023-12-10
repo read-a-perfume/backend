@@ -132,13 +132,15 @@ include::{snippets}/get-perfume/http-request.adoc[]
 include::{snippets}/get-perfume/http-response.adoc[]
 include::{snippets}/get-perfume/response-fields.adoc[]
 
-== 향수 조회
+== 향수 검색
 === 요청
-include::{snippets}/get-perfume/http-request.adoc[]
+include::{snippets}/search-perfume/http-request.adoc[]
+- 한글이라 query parameter가 깨져보이는데, "딥티크" 라고 입력해둔 것입니다. 🥲
+include::{snippets}/search-perfume/query-parameters.adoc[]
 
 === 응답
-include::{snippets}/get-perfume/http-response.adoc[]
-include::{snippets}/get-perfume/response-fields.adoc[]
+include::{snippets}/search-perfume/http-response.adoc[]
+include::{snippets}/search-perfume/response-fields.adoc[]
 
 == 향수 생성
 === 요청
@@ -169,6 +171,16 @@ include::{snippets}/get-perfume-by-category/query-parameters.adoc[]
 === 응답
 include::{snippets}/get-perfume-by-category/http-response.adoc[]
 include::{snippets}/get-perfume-by-category/response-fields.adoc[]
+
+== 즐겨찾기 순 향수 조회
+=== 요청
+include::{snippets}/get-perfume-by-favorite/http-request.adoc[]
+==== Query Parameters
+include::{snippets}/get-perfume-by-favorite/query-parameters.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume-by-favorite/http-response.adoc[]
+include::{snippets}/get-perfume-by-favorite/response-fields.adoc[]
 
 == 향수 통계 데이터 조회
 === 요청

@@ -364,12 +364,12 @@ class PerfumeControllerTest {
         List.of(new PerfumeNameResult("딥티크 롬브로단로 오 드 뚜왈렛", 1L),
             new PerfumeNameResult("딥티크 롬브로단로 오 드 퍼퓸", 2L));
 
-    given(findPerfumeUseCase.searchPerfumeByQuery("딥티크 롬브로")).willReturn(perfumeNameResults);
+    given(findPerfumeUseCase.searchPerfumeByQuery("딥티크")).willReturn(perfumeNameResults);
     // when
     // then
     mockMvc
         .perform(RestDocumentationRequestBuilders.get("/v1/perfumes/search")
-            .queryParam("query", "딥티크 롬브로")
+            .queryParam("query", "딥티크")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
         )
