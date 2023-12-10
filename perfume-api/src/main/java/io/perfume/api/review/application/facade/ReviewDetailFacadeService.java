@@ -17,9 +17,8 @@ import io.perfume.api.review.application.out.comment.dto.ReviewCommentCount;
 import io.perfume.api.review.application.out.like.dto.ReviewLikeCount;
 import io.perfume.api.review.application.service.*;
 import io.perfume.api.review.domain.ReviewComment;
-import io.perfume.api.review.domain.ReviewLike;
+import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.UserResult;
-import io.perfume.api.user.application.service.FindUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,14 +43,15 @@ public class ReviewDetailFacadeService implements
         DeleteReviewUseCase,
         GetReviewsUseCase,
         GetReviewInViewUseCase,
-        ReviewStatisticUseCase {
+        ReviewStatisticUseCase,
+        GetReviewCountUseCase {
 
     private final ReviewService reviewService;
     private final ReviewLikeService reviewLikeService;
     private final ReviewCommentService reviewCommentService;
     private final ReviewTagService reviewTagService;
     private final ReviewThumbnailService reviewThumbnailService;
-    private final FindUserService findUserUseCase;
+    private final FindUserUseCase findUserUseCase;
 
     @Override
     public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
@@ -191,5 +191,10 @@ public class ReviewDetailFacadeService implements
     @Override
     public ReviewStatisticResult getStatisticByPerfume(Long perfumeId) {
         return reviewService.getStatisticByPerfume(perfumeId);
+    }
+
+    @Override
+    public Long getReviewCountByUserId(Long userId) {
+        return reviewService.getReviewCountByUserId(userId);
     }
 }
