@@ -3,8 +3,8 @@ package io.perfume.api.review.application.service;
 import dto.repository.CursorPageable;
 import dto.repository.CursorPagination;
 import io.perfume.api.review.application.exception.NotFoundReviewCommentException;
-import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.exception.UpdateReviewCommentPermissionDeniedException;
+import io.perfume.api.review.application.facade.dto.ReviewCommentDetailCommand;
 import io.perfume.api.review.application.in.comment.CreateReviewCommentUseCase;
 import io.perfume.api.review.application.in.comment.DeleteReviewCommentUseCase;
 import io.perfume.api.review.application.in.comment.GetReviewCommentsUseCase;
@@ -14,6 +14,7 @@ import io.perfume.api.review.application.in.dto.GetReviewCommentsCommand;
 import io.perfume.api.review.application.in.dto.ReviewCommentResult;
 import io.perfume.api.review.application.out.comment.ReviewCommentQueryRepository;
 import io.perfume.api.review.application.out.comment.ReviewCommentRepository;
+import io.perfume.api.review.application.out.comment.dto.ReviewCommentCount;
 import io.perfume.api.review.application.out.review.ReviewQueryRepository;
 import io.perfume.api.review.domain.ReviewComment;
 import lombok.RequiredArgsConstructor;
@@ -21,33 +22,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CommentService implements
-        CreateReviewCommentUseCase,
-        DeleteReviewCommentUseCase,
-        GetReviewCommentsUseCase,
-        UpdateReviewCommentUseCase {
+public class ReviewCommentService {
 
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewCommentQueryRepository reviewCommentQueryRepository;
-    private final ReviewQueryRepository reviewQueryRepository;
 
-    @Override
     public ReviewCommentResult createComment(CreateReviewCommentCommand command, LocalDateTime now) {
-        if(!reviewQueryRepository.existsReviewById(command.reviewId())) {
-            throw new NotFoundReviewException(command.reviewId());
-        }
-
         final var createdReviewComment = reviewCommentRepository.save(
                 ReviewComment.create(command.reviewId(), command.userId(), command.content(), now));
         return ReviewCommentResult.from(createdReviewComment);
     }
 
-    @Override
-    public void delete(long id, long userId, LocalDateTime now) {
+    public void deleteComment(long id, long userId, LocalDateTime now) {
         final var reviewComment =
                 reviewCommentQueryRepository
                         .findById(id)
@@ -58,14 +49,12 @@ public class CommentService implements
         reviewCommentRepository.save(reviewComment);
     }
 
-    @Override
     public CursorPagination<ReviewComment> getReviewComments(GetReviewCommentsCommand command) {
         final var pageable =
                 new CursorPageable<>(command.size(), command.getDirection(), command.getCursor());
         return reviewCommentQueryRepository.findByReviewId(pageable, command.reviewId());
     }
 
-    @Override
     public void updateReviewComment(Long userId, Long commentId, String newComment) {
         final var comment =
                 reviewCommentQueryRepository.findById(commentId)
@@ -77,5 +66,9 @@ public class CommentService implements
 
         comment.updateComment(newComment);
         reviewCommentRepository.save(comment);
+    }
+
+    public List<ReviewCommentCount> getReviewCommentCount(List<Long> reviewIds) {
+        return reviewCommentQueryRepository.countByReviewIds(reviewIds);
     }
 }

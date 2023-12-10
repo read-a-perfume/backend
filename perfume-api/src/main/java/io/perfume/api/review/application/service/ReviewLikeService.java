@@ -5,6 +5,7 @@ import io.perfume.api.review.application.exception.NotPermittedLikeReviewExcepti
 import io.perfume.api.review.application.in.like.ReviewLikeUseCase;
 import io.perfume.api.review.application.out.like.ReviewLikeQueryRepository;
 import io.perfume.api.review.application.out.like.ReviewLikeRepository;
+import io.perfume.api.review.application.out.like.dto.ReviewLikeCount;
 import io.perfume.api.review.application.out.review.ReviewQueryRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewLike;
@@ -13,18 +14,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ReviewLikeService implements ReviewLikeUseCase {
+public class ReviewLikeService {
 
     private final ReviewLikeQueryRepository reviewLikeQueryRepository;
     private final ReviewLikeRepository reviewLikeRepository;
     private final ReviewQueryRepository reviewQueryRepository;
 
-    @Override
     public long toggleLikeReview(long userId, long reviewId, LocalDateTime now) {
         Review review = findReviewById(reviewId);
         verifyReviewOwnership(userId, review);
@@ -56,5 +57,9 @@ public class ReviewLikeService implements ReviewLikeUseCase {
     private void addReviewLike(long userId, long reviewId, LocalDateTime now) {
         ReviewLike newReviewLike = ReviewLike.create(userId, reviewId, now);
         reviewLikeRepository.save(newReviewLike);
+    }
+
+    public List<ReviewLikeCount> getReviewLikeCount(List<Long> reviewIds) {
+        return reviewLikeQueryRepository.countByReviewIds(reviewIds);
     }
 }

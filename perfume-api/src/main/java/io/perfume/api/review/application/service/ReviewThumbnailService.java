@@ -13,11 +13,10 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ReviewThumbnailService implements AddReviewThumbnailUseCase {
+public class ReviewThumbnailService {
 
     private final ReviewThumbnailRepository reviewThumbnailRepository;
 
-    @Override
     public List<ReviewThumbnail> addThumbnails(Long reviewId, List<Long> thumbnailIds, LocalDateTime now) {
         if (thumbnailIds.isEmpty()) {
             return List.of();

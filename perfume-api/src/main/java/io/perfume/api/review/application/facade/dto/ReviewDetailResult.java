@@ -8,13 +8,14 @@ public record ReviewDetailResult(
     Long id,
     String shortReview,
     ReviewDetailUserResult user,
-    List<String> tags
+    List<String> tags,
+    long likeCount,
+    long commentCount
 ) {
 
-  public static ReviewDetailResult from(ReviewResult review, UserResult user,
-                                        List<String> tags) {
+  public static ReviewDetailResult from(ReviewResult review, UserResult user, List<String> tags, long likeCount, long commentCount) {
     final var reviewDetailUserResult = ReviewDetailUserResult.from(user);
 
-    return new ReviewDetailResult(review.id(), review.shortReview(), reviewDetailUserResult, tags);
+    return new ReviewDetailResult(review.id(), review.shortReview(), reviewDetailUserResult, tags, likeCount, commentCount);
   }
 }

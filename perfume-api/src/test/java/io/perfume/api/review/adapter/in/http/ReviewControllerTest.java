@@ -253,7 +253,10 @@ class ReviewControllerTest {
                         .description("리뷰 작성자 이름"),
                     fieldWithPath("[].user.thumbnail").type(JsonFieldType.STRING)
                         .description("리뷰 작성자 프로필 이미지"),
-                    fieldWithPath("[].keywords").type(JsonFieldType.ARRAY).description("리뷰 태그")
+                    fieldWithPath("[].thumbnails").type(JsonFieldType.ARRAY).description("리뷰 썸네일"),
+                    fieldWithPath("[].keywords").type(JsonFieldType.ARRAY).description("리뷰 태그"),
+                    fieldWithPath("[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                    fieldWithPath("[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수")
                 )
             ));
   }
