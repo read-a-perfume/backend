@@ -28,10 +28,7 @@ public class TokenHandlingController {
     var reissuedTokenResult =
         makeNewTokenUseCase.reissueAccessToken(accessToken, refreshToken, LocalDateTime.now());
 
-    return ResponseEntity
-        .ok()
-        .headers(createAuthenticationCookie(reissuedTokenResult))
-        .build();
+    return ResponseEntity.ok().headers(createAuthenticationCookie(reissuedTokenResult)).build();
   }
 
   private HttpHeaders createAuthenticationCookie(ReissuedTokenResult reissuedTokenResult) {
@@ -40,17 +37,14 @@ public class TokenHandlingController {
     headers.addAll(
         HttpHeaders.SET_COOKIE,
         List.of(
-            ResponseCookie
-                .from(Constants.ACCESS_TOKEN_KEY, reissuedTokenResult.accessToken())
+            ResponseCookie.from(Constants.ACCESS_TOKEN_KEY, reissuedTokenResult.accessToken())
                 .httpOnly(true)
                 .build()
                 .toString(),
-            ResponseCookie
-                .from(Constants.REFRESH_TOKEN_KEY, reissuedTokenResult.refreshToken())
+            ResponseCookie.from(Constants.REFRESH_TOKEN_KEY, reissuedTokenResult.refreshToken())
                 .httpOnly(true)
                 .build()
-                .toString())
-    );
+                .toString()));
 
     return headers;
   }

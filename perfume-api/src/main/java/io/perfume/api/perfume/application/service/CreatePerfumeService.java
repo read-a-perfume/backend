@@ -16,21 +16,23 @@ public class CreatePerfumeService implements CreatePerfumeUseCase {
 
   @Override
   public void createPerfume(CreatePerfumeCommand createPerfumeCommand) {
-    NotePyramidIds notePyramidIds = NotePyramidIds.builder()
-        .topNoteIds(createPerfumeCommand.topNoteIds())
-        .middleNoteIds(createPerfumeCommand.middleNoteIds())
-        .baseNoteIds(createPerfumeCommand.baseNoteIds())
-        .build();
+    NotePyramidIds notePyramidIds =
+        NotePyramidIds.builder()
+            .topNoteIds(createPerfumeCommand.topNoteIds())
+            .middleNoteIds(createPerfumeCommand.middleNoteIds())
+            .baseNoteIds(createPerfumeCommand.baseNoteIds())
+            .build();
 
-    Perfume perfume = Perfume.builder()
-        .name(createPerfumeCommand.name())
-        .story(createPerfumeCommand.story())
-        .concentration(createPerfumeCommand.concentration())
-        .brandId(createPerfumeCommand.brandId())
-        .categoryId(createPerfumeCommand.categoryId())
-        .thumbnailId(createPerfumeCommand.thumbnailId())
-        .notePyramidIds(notePyramidIds)
-        .build();
+    Perfume perfume =
+        Perfume.builder()
+            .name(createPerfumeCommand.name())
+            .story(createPerfumeCommand.story())
+            .concentration(createPerfumeCommand.concentration())
+            .brandId(createPerfumeCommand.brandId())
+            .categoryId(createPerfumeCommand.categoryId())
+            .thumbnailId(createPerfumeCommand.thumbnailId())
+            .notePyramidIds(notePyramidIds)
+            .build();
 
     perfumePersistenceAdapter.save(perfume);
   }

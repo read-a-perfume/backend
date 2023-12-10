@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
   @Override
-  public void commence(HttpServletRequest request,
-                       HttpServletResponse response,
-                       AuthenticationException authException) throws IOException {
+  public void commence(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      AuthenticationException authException)
+      throws IOException {
 
     // http 401 : 인증되지 않은 사용자
     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());

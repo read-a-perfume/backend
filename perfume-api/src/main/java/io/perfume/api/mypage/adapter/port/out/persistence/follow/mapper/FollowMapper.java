@@ -24,7 +24,6 @@ public class FollowMapper {
         follow.getFollowingId(),
         follow.getCreatedAt(),
         follow.getUpdatedAt(),
-        follow.getDeletedAt()
-    );
+        follow.getDeletedAt());
   }
 }

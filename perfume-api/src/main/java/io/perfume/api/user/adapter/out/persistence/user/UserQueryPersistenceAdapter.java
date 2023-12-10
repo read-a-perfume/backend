@@ -20,57 +20,74 @@ public class UserQueryPersistenceAdapter implements UserQueryRepository {
 
   @Override
   public Optional<User> findOneByEmail(String email) {
-    UserEntity entity = jpaQueryFactory.selectFrom(QUserEntity.userEntity)
-        .where(
-            QUserEntity.userEntity.email.eq(email)
-                .and(QUserEntity.userEntity.deletedAt.isNull()))
-        .fetchOne();
+    UserEntity entity =
+        jpaQueryFactory
+            .selectFrom(QUserEntity.userEntity)
+            .where(
+                QUserEntity.userEntity
+                    .email
+                    .eq(email)
+                    .and(QUserEntity.userEntity.deletedAt.isNull()))
+            .fetchOne();
 
     return Optional.ofNullable(userMapper.toUser(entity));
   }
 
   @Override
   public Optional<User> loadUser(long userId) {
-    UserEntity entity = jpaQueryFactory.selectFrom(QUserEntity.userEntity)
-        .where(
-            QUserEntity.userEntity.id.eq(userId)
-                .and(QUserEntity.userEntity.deletedAt.isNull()))
-        .fetchOne();
+    UserEntity entity =
+        jpaQueryFactory
+            .selectFrom(QUserEntity.userEntity)
+            .where(
+                QUserEntity.userEntity.id.eq(userId).and(QUserEntity.userEntity.deletedAt.isNull()))
+            .fetchOne();
 
     return Optional.ofNullable(userMapper.toUser(entity));
   }
 
   @Override
   public Optional<User> findByUsername(String username) {
-    UserEntity entity = jpaQueryFactory.selectFrom(QUserEntity.userEntity)
-        .where(
-            QUserEntity.userEntity.username.eq(username)
-                .and(QUserEntity.userEntity.deletedAt.isNull()))
-        .fetchOne();
+    UserEntity entity =
+        jpaQueryFactory
+            .selectFrom(QUserEntity.userEntity)
+            .where(
+                QUserEntity.userEntity
+                    .username
+                    .eq(username)
+                    .and(QUserEntity.userEntity.deletedAt.isNull()))
+            .fetchOne();
 
     return Optional.ofNullable(userMapper.toUser(entity));
   }
 
   @Override
   public Optional<User> findOneByEmailAndUsername(String email, String username) {
-    UserEntity entity = jpaQueryFactory.selectFrom(QUserEntity.userEntity)
-        .where(
-            QUserEntity.userEntity.username.eq(username)
-                .and(QUserEntity.userEntity.email.eq(email))
-                .and(QUserEntity.userEntity.deletedAt.isNull()))
-        .fetchOne();
+    UserEntity entity =
+        jpaQueryFactory
+            .selectFrom(QUserEntity.userEntity)
+            .where(
+                QUserEntity.userEntity
+                    .username
+                    .eq(username)
+                    .and(QUserEntity.userEntity.email.eq(email))
+                    .and(QUserEntity.userEntity.deletedAt.isNull()))
+            .fetchOne();
 
     return Optional.ofNullable(userMapper.toUser(entity));
   }
 
   @Override
   public Optional<User> findOneByEmailOrUsername(String emailOrUsername) {
-    UserEntity entity = jpaQueryFactory.selectFrom(QUserEntity.userEntity)
-        .where(
-            QUserEntity.userEntity.username.eq(emailOrUsername)
-                .or(QUserEntity.userEntity.email.eq(emailOrUsername))
-                .and(QUserEntity.userEntity.deletedAt.isNull()))
-        .fetchOne();
+    UserEntity entity =
+        jpaQueryFactory
+            .selectFrom(QUserEntity.userEntity)
+            .where(
+                QUserEntity.userEntity
+                    .username
+                    .eq(emailOrUsername)
+                    .or(QUserEntity.userEntity.email.eq(emailOrUsername))
+                    .and(QUserEntity.userEntity.deletedAt.isNull()))
+            .fetchOne();
 
     return Optional.ofNullable(userMapper.toUser(entity));
   }
@@ -79,9 +96,7 @@ public class UserQueryPersistenceAdapter implements UserQueryRepository {
   public List<User> findUsersByIds(List<Long> userIds) {
     return jpaQueryFactory
         .selectFrom(userEntity)
-        .where(
-            userEntity.id.in(userIds)
-                .and(userEntity.deletedAt.isNull()))
+        .where(userEntity.id.in(userIds).and(userEntity.deletedAt.isNull()))
         .fetch()
         .stream()
         .map(userMapper::toUser)
@@ -90,12 +105,11 @@ public class UserQueryPersistenceAdapter implements UserQueryRepository {
 
   @Override
   public Optional<User> findUserById(long userId) {
-    return Optional.ofNullable(jpaQueryFactory
-            .selectFrom(userEntity)
-            .where(
-                userEntity.id.eq(userId)
-                    .and(userEntity.deletedAt.isNull()))
-            .fetchOne())
+    return Optional.ofNullable(
+            jpaQueryFactory
+                .selectFrom(userEntity)
+                .where(userEntity.id.eq(userId).and(userEntity.deletedAt.isNull()))
+                .fetchOne())
         .map(userMapper::toUser);
   }
 }

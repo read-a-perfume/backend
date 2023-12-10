@@ -25,8 +25,7 @@ public class SocialAccountMapper {
         user,
         socialAccount.getCreatedAt(),
         socialAccount.getUpdatedAt(),
-        socialAccount.getDeletedAt()
-    );
+        socialAccount.getDeletedAt());
   }
 
   public SocialAccountEntity toEntity(SocialAccount socialAccount) {
@@ -39,7 +38,6 @@ public class SocialAccountMapper {
         userEntity,
         socialAccount.getCreatedAt(),
         socialAccount.getUpdatedAt(),
-        socialAccount.getDeletedAt()
-    );
+        socialAccount.getDeletedAt());
   }
 }

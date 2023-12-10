@@ -38,18 +38,18 @@ class SampleControllerTest {
 
   private MockMvc mockMvc;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
-  @MockBean
-  private SampleService sampleService;
+  @MockBean private SampleService sampleService;
 
   @BeforeEach
-  void setUp(WebApplicationContext webApplicationContext,
-             RestDocumentationContextProvider restDocumentation) {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-        .apply(documentationConfiguration(restDocumentation))
-        .build();
+  void setUp(
+      WebApplicationContext webApplicationContext,
+      RestDocumentationContextProvider restDocumentation) {
+    this.mockMvc =
+        MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation))
+            .build();
   }
 
   @Test
@@ -61,10 +61,10 @@ class SampleControllerTest {
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/v1/samples")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            MockMvcRequestBuilders.get("/v1/samples")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("[0].id").value("1"))
@@ -81,11 +81,11 @@ class SampleControllerTest {
 
     // when & then
     this.mockMvc
-        .perform(MockMvcRequestBuilders.post("/v1/samples")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(createSampleRequestDto))
-        )
+        .perform(
+            MockMvcRequestBuilders.post("/v1/samples")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createSampleRequestDto)))
         .andExpect(status().isCreated())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").value("1"))
@@ -103,11 +103,11 @@ class SampleControllerTest {
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.patch("/v1/samples/1")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(updateSampleRequestDto))
-        )
+        .perform(
+            MockMvcRequestBuilders.patch("/v1/samples/1")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateSampleRequestDto)))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").value("1"))
@@ -123,10 +123,10 @@ class SampleControllerTest {
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/v1/samples/1")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            MockMvcRequestBuilders.get("/v1/samples/1")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").value("1"))
@@ -143,10 +143,10 @@ class SampleControllerTest {
 
     // when & then
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/v1/samples/exception/teapot")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
+        .perform(
+            MockMvcRequestBuilders.get("/v1/samples/exception/teapot")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isIAmATeapot())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.status").value("I'm a teapot"))

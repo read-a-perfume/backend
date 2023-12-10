@@ -11,8 +11,12 @@ public class ReviewThumbnail extends BaseTimeDomain {
 
   private final Long thumbnailId;
 
-  public ReviewThumbnail(Long reviewId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
-                         LocalDateTime deletedAt) {
+  public ReviewThumbnail(
+      Long reviewId,
+      Long thumbnailId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.reviewId = reviewId;

@@ -66,8 +66,7 @@ public class MypageController {
     var userId = Long.parseLong(user.getUsername());
     var reviewCount = getReviewCountUseCase.getReviewCountByUserId(userId);
 
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(new ReviewCountResponseDto(reviewCount));
+    return ResponseEntity.status(HttpStatus.OK).body(new ReviewCountResponseDto(reviewCount));
   }
 
   // TODO : 컨트롤러 test
@@ -75,7 +74,6 @@ public class MypageController {
   public ResponseEntity<List<CategoryResult>> getCategories(@AuthenticationPrincipal User user) {
     var userId = Long.parseLong(user.getUsername());
 
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(findCategoryUseCase.findTasteByUserId(userId));
+    return ResponseEntity.status(HttpStatus.OK).body(findCategoryUseCase.findTasteByUserId(userId));
   }
 }

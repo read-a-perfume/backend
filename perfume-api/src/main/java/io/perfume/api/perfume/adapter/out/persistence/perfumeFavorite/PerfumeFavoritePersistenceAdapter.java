@@ -11,7 +11,8 @@ public class PerfumeFavoritePersistenceAdapter implements PerfumeFavoriteReposit
   private final PerfumeFavoriteJpaRepository perfumeFollowJpaRepository;
   private final PerfumeFavoriteMapper perfumeFollowMapper;
 
-  public PerfumeFavoritePersistenceAdapter(PerfumeFavoriteJpaRepository perfumeFollowJpaRepository,
+  public PerfumeFavoritePersistenceAdapter(
+      PerfumeFavoriteJpaRepository perfumeFollowJpaRepository,
       PerfumeFavoriteMapper perfumeFollowMapper) {
     this.perfumeFollowJpaRepository = perfumeFollowJpaRepository;
     this.perfumeFollowMapper = perfumeFollowMapper;

@@ -4,7 +4,6 @@ import io.perfume.api.note.adapter.in.http.dto.CreateNoteRequestDto;
 import io.perfume.api.note.adapter.in.http.dto.NoteResponse;
 import io.perfume.api.note.application.port.in.CreateNoteUseCase;
 import io.perfume.api.note.application.port.in.FindNoteUseCase;
-import io.perfume.api.note.application.port.in.dto.CreateNoteCommand;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

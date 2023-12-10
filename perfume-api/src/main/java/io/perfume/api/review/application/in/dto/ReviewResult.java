@@ -15,8 +15,7 @@ public record ReviewResult(
     Season season,
     Duration duration,
     Long perfumeId,
-    Long authorId
-) {
+    Long authorId) {
 
   public static ReviewResult from(Review review) {
     return new ReviewResult(

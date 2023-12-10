@@ -18,9 +18,14 @@ public class AuthenticationKey extends BaseTimeDomain {
 
   private LocalDateTime verifiedAt;
 
-  public AuthenticationKey(Long id, String code, String key, LocalDateTime verifiedAt,
-                           LocalDateTime createdAt, LocalDateTime updatedAt,
-                           LocalDateTime deletedAt) {
+  public AuthenticationKey(
+      Long id,
+      String code,
+      String key,
+      LocalDateTime verifiedAt,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.id = id;
@@ -29,17 +34,9 @@ public class AuthenticationKey extends BaseTimeDomain {
     this.verifiedAt = verifiedAt;
   }
 
-  public static AuthenticationKey createAuthenticationKey(@NotNull String code, @NotNull String key,
-                                                          @NotNull LocalDateTime now) {
-    return new AuthenticationKey(
-        null,
-        code,
-        key,
-        null,
-        now,
-        now,
-        null
-    );
+  public static AuthenticationKey createAuthenticationKey(
+      @NotNull String code, @NotNull String key, @NotNull LocalDateTime now) {
+    return new AuthenticationKey(null, code, key, null, now, now, null);
   }
 
   public boolean isExpired(LocalDateTime now) {

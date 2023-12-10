@@ -23,9 +23,7 @@ public class SetUserProfileController {
 
   @PutMapping("/test-setPicture-endpoint")
   public ResponseEntity<Object> setProfilePicture(
-      @AuthenticationPrincipal User user,
-      @RequestPart MultipartFile image
-  ) {
+      @AuthenticationPrincipal User user, @RequestPart MultipartFile image) {
     LocalDateTime now = LocalDateTime.now();
     setUserProfileUseCase.setUserProfilePicture(user.getUsername(), image, now);
     return ResponseEntity.ok().build();

@@ -12,8 +12,7 @@ public class ReviewThumbnailMapper {
         entity.getId().getThumbnailId(),
         entity.getCreatedAt(),
         entity.getUpdatedAt(),
-        entity.getDeletedAt()
-    );
+        entity.getDeletedAt());
   }
 
   public ReviewThumbnailEntity toEntity(ReviewThumbnail domain) {
@@ -22,7 +21,6 @@ public class ReviewThumbnailMapper {
         domain.getThumbnailId(),
         domain.getCreatedAt(),
         domain.getUpdatedAt(),
-        domain.getDeletedAt()
-    );
+        domain.getDeletedAt());
   }
 }

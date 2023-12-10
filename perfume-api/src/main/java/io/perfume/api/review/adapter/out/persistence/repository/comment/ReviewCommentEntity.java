@@ -14,10 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "review_comment", indexes = {
-    @Index(name = "idx_review_comment_1", columnList = "reviewId"),
-    @Index(name = "idx_review_comment_2", columnList = "userId")
-})
+@Table(
+    name = "review_comment",
+    indexes = {
+      @Index(name = "idx_review_comment_1", columnList = "reviewId"),
+      @Index(name = "idx_review_comment_2", columnList = "userId")
+    })
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Getter
 public class ReviewCommentEntity extends BaseTimeEntity {
@@ -36,9 +38,14 @@ public class ReviewCommentEntity extends BaseTimeEntity {
   private String content;
 
   @Builder
-  public ReviewCommentEntity(LocalDateTime createdAt, LocalDateTime updatedAt,
-                             LocalDateTime deletedAt, Long id, Long reviewId, Long userId,
-                             String content) {
+  public ReviewCommentEntity(
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt,
+      Long id,
+      Long reviewId,
+      Long userId,
+      String content) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.reviewId = reviewId;

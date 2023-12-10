@@ -5,7 +5,10 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-public record NotePyramidResult(List<PerfumeNoteResult> topNotes, List<PerfumeNoteResult> middleNotes, List<PerfumeNoteResult> baseNotes) {
+public record NotePyramidResult(
+    List<PerfumeNoteResult> topNotes,
+    List<PerfumeNoteResult> middleNotes,
+    List<PerfumeNoteResult> baseNotes) {
   public static NotePyramidResult from(NotePyramid notePyramid) {
     return NotePyramidResult.builder()
         .topNotes(PerfumeNoteResult.from(notePyramid.topNotes()))

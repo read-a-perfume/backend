@@ -38,8 +38,8 @@ public class SaveFileService implements SaveFileUseCase {
   }
 
   @Override
-  public MultiFileResponseDto multiFileUpload(User user, List<MultipartFile> files,
-                                              LocalDateTime now) {
+  public MultiFileResponseDto multiFileUpload(
+      User user, List<MultipartFile> files, LocalDateTime now) {
     List<File> saveFiles = new ArrayList<>();
     if (files != null && !files.isEmpty()) {
       for (MultipartFile file : files) {
@@ -55,9 +55,7 @@ public class SaveFileService implements SaveFileUseCase {
   private MultiFileResponseDto toDto(List<File> saveFiles, LocalDateTime now) {
     List<SaveFileResult> results = new ArrayList<>();
     for (File file : saveFiles) {
-      results.add(
-          new SaveFileResult(file.getUrl(), file.getUserId(), file.getId(), now)
-      );
+      results.add(new SaveFileResult(file.getUrl(), file.getUserId(), file.getId(), now));
     }
     return new MultiFileResponseDto(results);
   }

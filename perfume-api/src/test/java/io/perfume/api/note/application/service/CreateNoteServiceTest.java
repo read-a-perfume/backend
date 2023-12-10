@@ -1,6 +1,5 @@
 package io.perfume.api.note.application.service;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.note.application.port.in.CreateNoteUseCase;

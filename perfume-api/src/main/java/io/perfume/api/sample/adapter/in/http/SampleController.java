@@ -1,6 +1,5 @@
 package io.perfume.api.sample.adapter.in.http;
 
-
 import io.perfume.api.sample.adapter.in.http.dto.CreateSampleRequestDto;
 import io.perfume.api.sample.adapter.in.http.dto.SampleResponseDto;
 import io.perfume.api.sample.adapter.in.http.dto.UpdateSampleRequestDto;
@@ -47,9 +46,8 @@ public class SampleController {
   }
 
   @PatchMapping("/{id}")
-  public ResponseEntity<SampleResponseDto> updateSample(@PathVariable("id") @Min(1) Long id,
-                                                        @RequestBody @Valid
-                                                        UpdateSampleRequestDto dto) {
+  public ResponseEntity<SampleResponseDto> updateSample(
+      @PathVariable("id") @Min(1) Long id, @RequestBody @Valid UpdateSampleRequestDto dto) {
     SampleResult result = sampleService.updateSample(id, dto.name());
 
     return ResponseEntity.ok(toDto(result));

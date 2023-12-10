@@ -22,17 +22,19 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleCustomException(CustomHttpException exception) {
     printLog(exception.getMessage(), exception.getLogLevel());
 
-    ErrorResponse errorResponse = ErrorResponse.builder()
-        .status(exception.getHttpStatus().getReasonPhrase())
-        .statusCode(exception.getHttpStatus().value())
-        .message(exception.getMessage())
-        .build();
+    ErrorResponse errorResponse =
+        ErrorResponse.builder()
+            .status(exception.getHttpStatus().getReasonPhrase())
+            .statusCode(exception.getHttpStatus().value())
+            .message(exception.getMessage())
+            .build();
 
     return ResponseEntity.status(exception.getHttpStatus()).body(errorResponse);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  ResponseEntity<ErrorResponse> handleMethodArgumentValidException(MethodArgumentNotValidException exception) {
+  ResponseEntity<ErrorResponse> handleMethodArgumentValidException(
+      MethodArgumentNotValidException exception) {
     BindingResult bindingResult = exception.getBindingResult();
     StringBuilder stringBuilder = new StringBuilder();
     for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -41,33 +43,37 @@ public class GlobalExceptionHandler {
       stringBuilder.append(". \n");
     }
 
-    ErrorResponse errorResponse = ErrorResponse.builder()
-        .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-        .statusCode(HttpStatus.BAD_REQUEST.value())
-        .message(stringBuilder.toString())
-        .build();
+    ErrorResponse errorResponse =
+        ErrorResponse.builder()
+            .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .message(stringBuilder.toString())
+            .build();
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
   ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException exception) {
-    ErrorResponse errorResponse = ErrorResponse.builder()
-        .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-        .statusCode(HttpStatus.BAD_REQUEST.value())
-        .message(exception.getMessage())
-        .build();
+    ErrorResponse errorResponse =
+        ErrorResponse.builder()
+            .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .message(exception.getMessage())
+            .build();
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
-    ErrorResponse errorResponse = ErrorResponse.builder()
-        .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-        .statusCode(HttpStatus.BAD_REQUEST.value())
-        .message(exception.getMessage())
-        .build();
+  ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
+      HttpMessageNotReadableException exception) {
+    ErrorResponse errorResponse =
+        ErrorResponse.builder()
+            .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .message(exception.getMessage())
+            .build();
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }

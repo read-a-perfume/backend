@@ -28,16 +28,17 @@ public class FileJpaEntity extends BaseTimeEntity {
   @ToString.Include
   private Long id;
 
-  @NotNull
-  private String url;
+  @NotNull private String url;
 
-  @NotNull
-  private Long userId;
+  @NotNull private Long userId;
 
-  public FileJpaEntity(Long id, String url, Long userId,
-                       LocalDateTime createdAt,
-                       LocalDateTime updatedAt,
-                       LocalDateTime deletedAt) {
+  public FileJpaEntity(
+      Long id,
+      String url,
+      Long userId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
+      LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
 
     this.id = id;

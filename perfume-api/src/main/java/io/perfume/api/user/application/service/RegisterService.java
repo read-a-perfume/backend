@@ -46,16 +46,18 @@ public class RegisterService implements CreateUserUseCase {
 
   @Override
   public UserResult signUpGeneralUserByEmail(SignUpGeneralUserCommand command) {
-    if (Boolean.TRUE.equals(userRepository.existByUsernameOrEmail(command.username(), command.email()))) {
+    if (Boolean.TRUE.equals(
+        userRepository.existByUsernameOrEmail(command.username(), command.email()))) {
       throw new UserConflictException(command.username(), command.email());
     }
 
-    User user = User.generalUserJoin(
-        command.username(),
-        command.email(),
-        passwordEncoder.encode(command.password()),
-        command.marketingConsent(),
-        command.promotionConsent());
+    User user =
+        User.generalUserJoin(
+            command.username(),
+            command.email(),
+            passwordEncoder.encode(command.password()),
+            command.marketingConsent(),
+            command.promotionConsent());
 
     return toDto(userRepository.save(user).orElseThrow(FailedRegisterException::new));
   }
@@ -68,7 +70,8 @@ public class RegisterService implements CreateUserUseCase {
     User user = getUserByEmailOrCreateNew(command, now);
     socialAccount.connect(user);
 
-    return oauthRepository.save(socialAccount)
+    return oauthRepository
+        .save(socialAccount)
         .map(this::toSocialAccountDto)
         .orElseThrow(FailedRegisterException::new);
   }
@@ -103,8 +106,12 @@ public class RegisterService implements CreateUserUseCase {
 
     LocalDateTime sentAt = mailSender.send(command.email(), "이메일 인증을 완료해주세요.", result.code());
 
-    logger.info("sendEmailVerifyCode email = {}, code = {}, key = {}, now = {}", command.email(),
-        result.code(), result.signKey(), sentAt);
+    logger.info(
+        "sendEmailVerifyCode email = {}, code = {}, key = {}, now = {}",
+        command.email(),
+        result.code(),
+        result.signKey(),
+        sentAt);
 
     return new SendVerificationCodeResult(result.signKey(), sentAt);
   }
@@ -112,15 +119,14 @@ public class RegisterService implements CreateUserUseCase {
   private User getUserByEmailOrCreateNew(SignUpSocialUserCommand command, LocalDateTime now) {
     return userQueryRepository
         .findOneByEmail(command.email())
-        .orElseGet(() -> {
-          User user = User.createSocialUser(
-              command.username(),
-              command.email(),
-              command.password(),
-              now);
+        .orElseGet(
+            () -> {
+              User user =
+                  User.createSocialUser(
+                      command.username(), command.email(), command.password(), now);
 
-          return userRepository.save(user).orElseThrow();
-        });
+              return userRepository.save(user).orElseThrow();
+            });
   }
 
   private UserResult toDto(User user) {

@@ -8,12 +8,23 @@ import io.perfume.api.perfume.domain.Perfume;
 import lombok.Builder;
 
 @Builder
-public record PerfumeResult(String name, String story, Concentration concentration, String perfumeShopUrl,
-                            String brandName, String categoryName, String categoryTags, String thumbnail,
-                            NotePyramidResult notePyramidResult) {
+public record PerfumeResult(
+    String name,
+    String story,
+    Concentration concentration,
+    String perfumeShopUrl,
+    String brandName,
+    String categoryName,
+    String categoryTags,
+    String thumbnail,
+    NotePyramidResult notePyramidResult) {
 
-  public static PerfumeResult from(Perfume perfume, CategoryResult categoryResult, BrandForPerfumeResult brandResult, String thumbnail,
-                                   NotePyramid notePyramid) {
+  public static PerfumeResult from(
+      Perfume perfume,
+      CategoryResult categoryResult,
+      BrandForPerfumeResult brandResult,
+      String thumbnail,
+      NotePyramid notePyramid) {
     return PerfumeResult.builder()
         .name(perfume.getName())
         .story(perfume.getStory())

@@ -50,11 +50,15 @@ public class SecurityConfiguration {
   public SecurityFilterChain filterChain(
       HttpSecurity httpSecurity,
       Customizer<OAuth2LoginConfigurer<HttpSecurity>> oauth2LoginConfigurer,
-      Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> authorizeHttpRequestsConfigurerCustomizer,
+      Customizer<
+              AuthorizeHttpRequestsConfigurer<HttpSecurity>
+                  .AuthorizationManagerRequestMatcherRegistry>
+          authorizeHttpRequestsConfigurerCustomizer,
       Customizer<CorsConfigurer<HttpSecurity>> corsConfigurerCustomizer,
       Customizer<ExceptionHandlingConfigurer<HttpSecurity>> exceptionHandlingConfigurerCustomizer,
       SignInAuthenticationFilter signInAuthenticationFilter,
-      JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+      JwtAuthenticationFilter jwtAuthenticationFilter)
+      throws Exception {
     httpSecurity
         .authorizeHttpRequests(authorizeHttpRequestsConfigurerCustomizer)
         .httpBasic(AbstractHttpConfigurer::disable)
@@ -72,7 +76,8 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
+  public AuthorizationRequestRepository<OAuth2AuthorizationRequest>
+      authorizationRequestRepository() {
     return new HttpSessionOAuth2AuthorizationRequestRepository();
   }
 
@@ -87,12 +92,10 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(HttpSecurity http,
-                                                     @Qualifier("JwtAuthenticationProvider")
-                                                     AuthenticationProvider jwtAuthenticationProvider,
-                                                     @Qualifier("daoAuthenticationProvider")
-                                                     AuthenticationProvider daoAuthenticationProvider
-  ) {
+  public AuthenticationManager authenticationManager(
+      HttpSecurity http,
+      @Qualifier("JwtAuthenticationProvider") AuthenticationProvider jwtAuthenticationProvider,
+      @Qualifier("daoAuthenticationProvider") AuthenticationProvider daoAuthenticationProvider) {
     AuthenticationManagerBuilder authenticationManagerBuilder =
         http.getSharedObject(AuthenticationManagerBuilder.class);
 
@@ -105,7 +108,9 @@ public class SecurityConfiguration {
   @Bean
   public ObjectMapper objectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    objectMapper
+        .registerModule(new JavaTimeModule())
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     return objectMapper;
   }
 }

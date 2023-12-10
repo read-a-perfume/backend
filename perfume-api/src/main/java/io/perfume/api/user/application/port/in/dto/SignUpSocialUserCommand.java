@@ -11,13 +11,12 @@ public record SignUpSocialUserCommand(
     String username,
     String password,
     String name,
-    SocialProvider socialProvider
-) {
+    SocialProvider socialProvider) {
 
-  public static SignUpSocialUserCommand byGoogle(String identifier, String email,
-                                                 String password, String name) {
-    return new SignUpSocialUserCommand(identifier, email, generateRandomUsername(email), password,
-        name, SocialProvider.GOOGLE);
+  public static SignUpSocialUserCommand byGoogle(
+      String identifier, String email, String password, String name) {
+    return new SignUpSocialUserCommand(
+        identifier, email, generateRandomUsername(email), password, name, SocialProvider.GOOGLE);
   }
 
   @NotNull

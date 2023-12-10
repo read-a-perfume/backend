@@ -19,22 +19,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class FindUserServiceTest {
-  @InjectMocks
-  private FindUserService findUserService;
-  @Mock
-  private UserQueryRepository userQueryRepository;
-  @Mock
-  private FindFileUseCase findFileUseCase;
+  @InjectMocks private FindUserService findUserService;
+  @Mock private UserQueryRepository userQueryRepository;
+  @Mock private FindFileUseCase findFileUseCase;
 
   @Test
   @DisplayName("유저 아이디로 이름, 프로필 사진을 조회할 수 있다.")
   void findUserProfileById() {
     // given
     Long userId = 1L;
-    User user = User.builder()
-        .id(userId)
-        .username("username")
-        .thumbnailId(1L).build();
+    User user = User.builder().id(userId).username("username").thumbnailId(1L).build();
     File file = File.builder().id(1L).url("thumbnail.com").userId(userId).build();
 
     given(userQueryRepository.findUserById(anyLong())).willReturn(Optional.ofNullable(user));

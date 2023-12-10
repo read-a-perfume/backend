@@ -1,6 +1,5 @@
 package io.perfume.api.note.adapter.out.persistence.note;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
@@ -22,14 +21,11 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class NoteQueryPersistenceAdapterTest {
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private NoteQueryPersistenceAdapter noteQueryRepository;
+  @Autowired private NoteQueryPersistenceAdapter noteQueryRepository;
 
-  @Autowired
-  private NoteMapper noteMapper;
+  @Autowired private NoteMapper noteMapper;
 
   @Test
   @DisplayName("전체 Note 조회")

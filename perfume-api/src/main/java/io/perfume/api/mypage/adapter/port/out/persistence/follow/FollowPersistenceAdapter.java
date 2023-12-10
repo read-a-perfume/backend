@@ -12,8 +12,8 @@ public class FollowPersistenceAdapter implements FollowRepository {
 
   private final FollowMapper followMapper;
 
-  public FollowPersistenceAdapter(FollowJpaRepository followJpaRepository,
-      FollowMapper followMapper) {
+  public FollowPersistenceAdapter(
+      FollowJpaRepository followJpaRepository, FollowMapper followMapper) {
     this.followJpaRepository = followJpaRepository;
     this.followMapper = followMapper;
   }

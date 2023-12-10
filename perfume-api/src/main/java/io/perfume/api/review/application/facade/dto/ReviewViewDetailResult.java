@@ -21,12 +21,15 @@ public record ReviewViewDetailResult(
     Long perfumeId,
     ReviewDetailUserResult author,
     long likeCount,
-    long commentCount
-) {
+    long commentCount) {
 
-  public static ReviewViewDetailResult from(ReviewResult review, UserResult user,
-                                            List<String> tags, List<String> images, long likeCount,
-                                            long commentCount) {
+  public static ReviewViewDetailResult from(
+      ReviewResult review,
+      UserResult user,
+      List<String> tags,
+      List<String> images,
+      long likeCount,
+      long commentCount) {
     final var reviewDetailUserResult = ReviewDetailUserResult.from(user);
 
     return new ReviewViewDetailResult(

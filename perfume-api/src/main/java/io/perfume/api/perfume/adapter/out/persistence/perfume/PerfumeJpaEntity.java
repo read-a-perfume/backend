@@ -29,27 +29,31 @@ public class PerfumeJpaEntity extends BaseTimeEntity {
   @ToString.Include
   private Long id;
 
-  @NotNull
-  private String name;
+  @NotNull private String name;
 
-  @NotNull
-  private String story;
+  @NotNull private String story;
 
   @Enumerated(EnumType.STRING)
   private Concentration concentration;
 
   private String perfumeShopUrl;
-  @NotNull
-  private Long brandId;
-  @NotNull
-  private Long categoryId;
+  @NotNull private Long brandId;
+  @NotNull private Long categoryId;
 
   private Long thumbnailId;
 
   @Builder
   public PerfumeJpaEntity(
-      Long id, String name, String story, Concentration concentration, String perfumeShopUrl,
-      Long brandId, Long categoryId, Long thumbnailId, LocalDateTime createdAt, LocalDateTime updatedAt,
+      Long id,
+      String name,
+      String story,
+      Concentration concentration,
+      String perfumeShopUrl,
+      Long brandId,
+      Long categoryId,
+      Long thumbnailId,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt,
       LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;

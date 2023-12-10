@@ -21,8 +21,8 @@ public class ReviewThumbnailPersistenceAdapter implements ReviewThumbnailReposit
 
   @Override
   public List<ReviewThumbnail> saveAll(List<ReviewThumbnail> thumbnails) {
-    final List<ReviewThumbnailEntity> entities = thumbnails.stream().map(reviewTagMapper::toEntity)
-        .toList();
+    final List<ReviewThumbnailEntity> entities =
+        thumbnails.stream().map(reviewTagMapper::toEntity).toList();
 
     return StreamSupport.stream(reviewTagRepository.saveAll(entities).spliterator(), true)
         .map(reviewTagMapper::toDomain)

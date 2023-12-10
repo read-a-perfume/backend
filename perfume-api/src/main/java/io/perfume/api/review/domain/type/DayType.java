@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum DayType {
-
   DAILY("데일리"),
   SPECIAL("특별한 날"),
   REST("휴식 시간"),

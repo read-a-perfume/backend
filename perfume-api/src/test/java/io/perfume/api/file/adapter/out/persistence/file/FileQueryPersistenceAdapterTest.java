@@ -23,19 +23,16 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class FileQueryPersistenceAdapterTest {
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private FileQueryPersistenceAdapter fileQueryRepository;
+  @Autowired private FileQueryPersistenceAdapter fileQueryRepository;
 
-  @Autowired
-  private FileMapper fileMapper;
+  @Autowired private FileMapper fileMapper;
 
   @Test
   @DisplayName("특정 Id File 조회")
   void testFindById() {
-    //given
+    // given
     String url = "testUrl.com";
     LocalDateTime now = LocalDateTime.now();
     File file = File.createFile(url, 1L, now);

@@ -16,9 +16,6 @@ public class AuthenticationKeyRepositoryImpl implements AuthenticationKeyReposit
   @Override
   public AuthenticationKey save(AuthenticationKey authenticationKey) {
     return authenticationKeyMapper.toDomain(
-        authenticationKeyJpaRepository.save(
-            authenticationKeyMapper.toEntity(authenticationKey)
-        )
-    );
+        authenticationKeyJpaRepository.save(authenticationKeyMapper.toEntity(authenticationKey)));
   }
 }

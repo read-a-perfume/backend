@@ -16,8 +16,8 @@ public class SocialAccountQueryPersistenceAdapter implements SocialAccountQueryR
 
   private final SocialAccountMapper oauthMapper;
 
-  public SocialAccountQueryPersistenceAdapter(JPAQueryFactory jpaQueryFactory,
-                                              SocialAccountMapper oauthMapper) {
+  public SocialAccountQueryPersistenceAdapter(
+      JPAQueryFactory jpaQueryFactory, SocialAccountMapper oauthMapper) {
     this.jpaQueryFactory = jpaQueryFactory;
     this.oauthMapper = oauthMapper;
   }
@@ -25,9 +25,12 @@ public class SocialAccountQueryPersistenceAdapter implements SocialAccountQueryR
   @Override
   public Optional<SocialAccount> findOneBySocialId(String socialId) {
     SocialAccountEntity entity =
-        jpaQueryFactory.selectFrom(socialAccountEntity)
+        jpaQueryFactory
+            .selectFrom(socialAccountEntity)
             .where(
-                socialAccountEntity.identifier.eq(socialId)
+                socialAccountEntity
+                    .identifier
+                    .eq(socialId)
                     .and(socialAccountEntity.deletedAt.isNull()))
             .fetchOne();
 

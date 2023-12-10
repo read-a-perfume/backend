@@ -17,6 +17,4 @@ public record CreateReviewCommand(
     String situation,
     List<Long> thumbnailIds,
     List<Long> keywords,
-    LocalDateTime now
-) {
-}
+    LocalDateTime now) {}

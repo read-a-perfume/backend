@@ -7,6 +7,9 @@ import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.adapter.out.persistence.user.Sex;
 import java.util.Map;
 
-public record ReviewStatisticResult(Map<Strength, Long> strengthMap, Map<Duration, Long> durationMap, Map<Season, Long> seasonMap,
-                                    Map<DayType, Long> dayTypeMap, Map<Sex, Long> sexMap) {
-}
+public record ReviewStatisticResult(
+    Map<Strength, Long> strengthMap,
+    Map<Duration, Long> durationMap,
+    Map<Season, Long> seasonMap,
+    Map<DayType, Long> dayTypeMap,
+    Map<Sex, Long> sexMap) {}

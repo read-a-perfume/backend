@@ -20,11 +20,9 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableJpaAuditing
 class AuthenticationKeyQueryRepositoryImplTest {
 
-  @Autowired
-  private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-  @Autowired
-  private AuthenticationKeyQueryRepositoryImpl authenticationKeyQueryRepository;
+  @Autowired private AuthenticationKeyQueryRepositoryImpl authenticationKeyQueryRepository;
 
   @Test
   void findByKey() {

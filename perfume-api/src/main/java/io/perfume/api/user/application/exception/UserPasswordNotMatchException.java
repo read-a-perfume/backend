@@ -6,7 +6,10 @@ import org.springframework.http.HttpStatus;
 
 public class UserPasswordNotMatchException extends CustomHttpException {
   public UserPasswordNotMatchException(Long userId) {
-    super(HttpStatus.UNAUTHORIZED, "user password not match from storage",
-        "user password not match from storage. UserId: " + userId, LogLevel.WARN);
+    super(
+        HttpStatus.UNAUTHORIZED,
+        "user password not match from storage",
+        "user password not match from storage. UserId: " + userId,
+        LogLevel.WARN);
   }
 }

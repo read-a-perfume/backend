@@ -23,8 +23,10 @@ public class FollowUserService implements FollowUserUseCase {
 
   private final UserQueryRepository userQueryRepository;
 
-  public FollowUserService(FollowRepository followRepository,
-      FollowQueryRepository followQueryRepository, UserQueryRepository userQueryRepository) {
+  public FollowUserService(
+      FollowRepository followRepository,
+      FollowQueryRepository followQueryRepository,
+      UserQueryRepository userQueryRepository) {
     this.followRepository = followRepository;
     this.followQueryRepository = followQueryRepository;
     this.userQueryRepository = userQueryRepository;
@@ -32,8 +34,10 @@ public class FollowUserService implements FollowUserUseCase {
 
   @Override
   public void followAndUnFollow(Long followerId, Long followingId) {
-    User follwingUser = userQueryRepository.loadUser(followingId)
-        .orElseThrow(() -> new UserNotFoundException(followingId));
+    User follwingUser =
+        userQueryRepository
+            .loadUser(followingId)
+            .orElseThrow(() -> new UserNotFoundException(followingId));
 
     Optional<Follow> follow =
         followQueryRepository.findByFollowerIdAndFollowingId(followerId, follwingUser.getId());
@@ -57,8 +61,10 @@ public class FollowUserService implements FollowUserUseCase {
   }
 
   private void unFollow(Long followerId, Long followingId) {
-    Follow follow = followQueryRepository.findByFollowerIdAndFollowingId(followerId, followingId)
-        .orElseThrow(FollowNotFoundException::new);
+    Follow follow =
+        followQueryRepository
+            .findByFollowerIdAndFollowingId(followerId, followingId)
+            .orElseThrow(FollowNotFoundException::new);
 
     LocalDateTime now = LocalDateTime.now();
     follow.markDelete(now);

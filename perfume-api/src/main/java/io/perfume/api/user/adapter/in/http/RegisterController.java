@@ -1,6 +1,5 @@
 package io.perfume.api.user.adapter.in.http;
 
-
 import io.perfume.api.user.adapter.in.http.dto.CheckUsernameRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.EmailSignUpResponseDto;
 import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmRequestDto;
@@ -34,19 +33,16 @@ public class RegisterController {
   @PostMapping("/email")
   @ResponseStatus(HttpStatus.CREATED)
   public EmailSignUpResponseDto signUpByEmail(@RequestBody @Valid RegisterDto registerDto) {
-    SignUpGeneralUserCommand command = new SignUpGeneralUserCommand(
-        registerDto.username(),
-        registerDto.password(),
-        registerDto.email(),
-        registerDto.marketingConsent(),
-        registerDto.promotionConsent()
-    );
+    SignUpGeneralUserCommand command =
+        new SignUpGeneralUserCommand(
+            registerDto.username(),
+            registerDto.password(),
+            registerDto.email(),
+            registerDto.marketingConsent(),
+            registerDto.promotionConsent());
     UserResult result = createUserUseCase.signUpGeneralUserByEmail(command);
 
-    return new EmailSignUpResponseDto(
-        result.username(),
-        result.email()
-    );
+    return new EmailSignUpResponseDto(result.username(), result.email());
   }
 
   @PostMapping("/check-username")
@@ -76,7 +72,6 @@ public class RegisterController {
     SendVerificationCodeCommand command = new SendVerificationCodeCommand(dto.email(), now);
     SendVerificationCodeResult result = createUserUseCase.sendEmailVerifyCode(command);
 
-    return ResponseEntity
-        .ok(new SendEmailVerifyCodeResponseDto(result.key(), result.sentAt()));
+    return ResponseEntity.ok(new SendEmailVerifyCodeResponseDto(result.key(), result.sentAt()));
   }
 }

@@ -15,8 +15,7 @@ public class CategoryMapper {
         entity.getThumbnailId(),
         entity.getCreatedAt(),
         entity.getUpdatedAt(),
-        entity.getDeletedAt()
-    );
+        entity.getDeletedAt());
   }
 
   public CategoryJpaEntity toEntity(Category domain) {
@@ -28,7 +27,6 @@ public class CategoryMapper {
         domain.getThumbnailId(),
         domain.getCreatedAt(),
         domain.getUpdatedAt(),
-        domain.getDeletedAt()
-    );
+        domain.getDeletedAt());
   }
 }
