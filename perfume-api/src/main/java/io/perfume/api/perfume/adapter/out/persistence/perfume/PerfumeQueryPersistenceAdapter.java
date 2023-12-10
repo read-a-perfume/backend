@@ -164,7 +164,9 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
             Projections.constructor(PerfumeNameResult.class, brandEntity.name, perfumeJpaEntity.name, perfumeJpaEntity.id))
         .from(perfumeJpaEntity)
         .leftJoin(brandEntity).on(perfumeJpaEntity.brandId.eq(brandEntity.id)).fetchJoin()
-        .where(brandEntity.name.append(" ").append(perfumeJpaEntity.name).contains(query))
+        .where(
+            perfumeJpaEntity.deletedAt.isNull(),
+            brandEntity.name.append(" ").append(perfumeJpaEntity.name).contains(query))
         .limit(10L)
         .fetch();
   }
