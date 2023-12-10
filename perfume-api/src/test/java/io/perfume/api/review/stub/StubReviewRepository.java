@@ -39,6 +39,11 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
     return (long) reviews.size();
   }
 
+  @Override
+  public boolean existsReviewById(Long reviewId) {
+    return true;
+  }
+
   public Review addReview(Review review) {
     reviews.add(review);
     return review;
