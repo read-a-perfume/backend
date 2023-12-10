@@ -28,13 +28,8 @@ public class ReviewCommentService {
 
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewCommentQueryRepository reviewCommentQueryRepository;
-    private final ReviewQueryRepository reviewQueryRepository;
 
     public ReviewCommentResult createComment(CreateReviewCommentCommand command, LocalDateTime now) {
-        if(!reviewQueryRepository.existsReviewById(command.reviewId())) {
-            throw new NotFoundReviewException(command.reviewId());
-        }
-
         final var createdReviewComment = reviewCommentRepository.save(
                 ReviewComment.create(command.reviewId(), command.userId(), command.content(), now));
         return ReviewCommentResult.from(createdReviewComment);
