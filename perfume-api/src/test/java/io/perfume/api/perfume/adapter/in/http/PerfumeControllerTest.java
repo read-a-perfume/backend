@@ -245,6 +245,7 @@ class PerfumeControllerTest {
     // when & then
     mockMvc
         .perform(RestDocumentationRequestBuilders.get("/v1/perfumes")
+            .queryParam("sort", "brand")
             .queryParam("brandId", "1")
             .queryParam("lastPerfumeId", "")
             .queryParam("pageSize", "3")
@@ -255,7 +256,47 @@ class PerfumeControllerTest {
         .andDo(
             document("get-perfume-by-brand",
                 queryParameters(
+                    parameterWithName("sort").description("정렬 기준. \"brand\"를 입력한다."),
                     parameterWithName("brandId").description("브랜드 ID"),
+                    parameterWithName("lastPerfumeId").description("앞서 조회한 향수 중 마지막 향수 ID. 첫 조회 시 `lastPerfumeId=` 와 같이 비워둔다."),
+                    parameterWithName("pageSize").description("페이지에 존재하는 향수 개수")
+                ),
+                responseFields(
+                    fieldWithPath("content[].id").type(JsonFieldType.NUMBER).description("향수 ID"),
+                    fieldWithPath("content[].name").type(JsonFieldType.STRING).description("향수 이름"),
+                    fieldWithPath("content[].thumbnail").type(JsonFieldType.STRING).description("향수 썸네일 사진 주소"),
+                    fieldWithPath("content[].brandName").type(JsonFieldType.STRING).description("향수 브랜드 이름"),
+                    fieldWithPath("content[].strength").type(JsonFieldType.STRING).description("향수 강도"),
+                    fieldWithPath("content[].duration").type(JsonFieldType.STRING).description("향수 지속 시간"),
+                    fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 존재하는지 여부")
+                )
+            ));
+  }
+
+  @Test
+  @DisplayName("향수의 즐겨찾기 개수 순으로 향수 목록을 조회할 수 있다.")
+  void getPerfumesByFavorite() throws Exception {
+    // given
+    List<SimplePerfumeResult> perfumeResults = new ArrayList<>();
+    for(int i=0;i<3;i++) {
+      perfumeResults.add(new SimplePerfumeResult((long) i, "perfume"+i, Concentration.EAU_DE_PARFUM, "brand"+i, "http://thumbnail.url"));
+    }
+    given(findPerfumeUseCase.findPerfumesByFavorite(any(), anyInt())).willReturn(new CustomSlice<>(perfumeResults, true));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/perfumes")
+            .queryParam("sort", "favorite")
+            .queryParam("lastPerfumeId", "")
+            .queryParam("pageSize", "3")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andDo(
+            document("get-perfume-by-favorite",
+                queryParameters(
+                    parameterWithName("sort").description("정렬 기준. \"favorite\"를 입력한다."),
                     parameterWithName("lastPerfumeId").description("앞서 조회한 향수 중 마지막 향수 ID. 첫 조회 시 `lastPerfumeId=` 와 같이 비워둔다."),
                     parameterWithName("pageSize").description("페이지에 존재하는 향수 개수")
                 ),
@@ -339,7 +380,7 @@ class PerfumeControllerTest {
         .andExpect(jsonPath("$[1].perfumeNameWithBrand").value(perfumeNameResults.get(1).perfumeNameWithBrand()))
         .andExpect(jsonPath("$[1].perfumeId").value(perfumeNameResults.get(1).perfumeId()))
         .andDo(
-            document("get-perfume",
+            document("search-perfume",
                 queryParameters(
                     parameterWithName("query").description("검색어 (브랜드 이름 / 향수 이름 / 브랜드 이름 + 향수 이름)만 입력 가능")
                 ),

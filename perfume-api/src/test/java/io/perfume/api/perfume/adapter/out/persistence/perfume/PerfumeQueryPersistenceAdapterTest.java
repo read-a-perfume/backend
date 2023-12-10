@@ -14,6 +14,7 @@ import io.perfume.api.note.adapter.out.persistence.category.CategoryJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaRepository;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
+import io.perfume.api.perfume.adapter.out.persistence.perfumeFavorite.PerfumeFavoriteJpaEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
@@ -65,7 +66,9 @@ class PerfumeQueryPersistenceAdapterTest {
         .build();
 
     PerfumeJpaEntity perfumeJpaEntity = perfumeJpaRepository.save(perfumeMapper.toPerfumeJpaEntity(perfume));
+    entityManager.flush();
     entityManager.clear();
+
     // when
     Optional<Perfume> optionalPerfume = perfumeQueryPersistenceAdapter.findPerfumeById(perfumeJpaEntity.getId());
     Perfume resultPerfume = optionalPerfume.get();
@@ -105,8 +108,9 @@ class PerfumeQueryPersistenceAdapterTest {
         .noteId(entity.getId())
         .noteLevel(NoteLevel.TOP)
         .build()));
-
+    entityManager.flush();
     entityManager.clear();
+
     // when
     NotePyramid notePyramidIdsByPerfume = perfumeQueryPersistenceAdapter.getNotePyramidByPerfume(1L);
     // then
@@ -132,6 +136,8 @@ class PerfumeQueryPersistenceAdapterTest {
 
       entityManager.persist(perfumeJpaEntity);
     }
+    entityManager.flush();
+    entityManager.clear();
 
     // when
     int pageSize = 3;
@@ -162,6 +168,8 @@ class PerfumeQueryPersistenceAdapterTest {
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
     }
+    entityManager.flush();
+    entityManager.clear();
 
     // when
     int pageSize = 3;
@@ -200,6 +208,8 @@ class PerfumeQueryPersistenceAdapterTest {
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
     }
+    entityManager.flush();
+    entityManager.clear();
 
     // when
     int pageSize = 3;
@@ -210,6 +220,50 @@ class PerfumeQueryPersistenceAdapterTest {
     assertEquals(pageSize, perfumesByCategory.getSize());
     assertEquals(5, perfumesByCategory.getTotalElements());
     assertTrue(perfumesByCategory.isHasNext());
+  }
+
+  @Test
+  @DisplayName("향수 즐겨찾기 개수가 많은 순서대로 향수 목록을 조회한다.")
+  void findPerfumesByFavorite() {
+    List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
+    for (int i = 1; i < 6; i++) {
+      PerfumeJpaEntity perfumeJpaEntity = PerfumeJpaEntity.builder().name("perfume" + i)
+          .story("story" + i)
+          .concentration(Concentration.EAU_DE_PARFUM)
+          .perfumeShopUrl("https://www.perfume.com/kr/p/fragrance/" + i)
+          .brandId(1L)
+          .categoryId(1L)
+          .thumbnailId(1L)
+          .build();
+
+      entityManager.persist(perfumeJpaEntity);
+      perfumeJpaEntities.add(perfumeJpaEntity);
+
+      for(int j=1; j <= i; j++) {
+        PerfumeFavoriteJpaEntity perfumeFavoriteJpaEntity =
+            new PerfumeFavoriteJpaEntity((long) j, perfumeJpaEntity.getId(), LocalDateTime.now(), LocalDateTime.now(), null);
+        entityManager.persist(perfumeFavoriteJpaEntity);
+      }
+    }
+    entityManager.flush();
+    entityManager.clear();
+
+    // when
+    int pageSize = 3;
+    // 첫 3개 조회
+    CustomSlice<SimplePerfumeResult> perfumesByBrandFirst = perfumeQueryPersistenceAdapter.findPerfumesByFavorite(null, pageSize);
+    // 위에서 구한 마지막 향수 아이디를 넣어 나머지 2개 조회
+    CustomSlice<SimplePerfumeResult> perfumesByBrandLast =
+        perfumeQueryPersistenceAdapter.findPerfumesByFavorite(perfumesByBrandFirst.getContent().get(pageSize - 1).id(), pageSize);
+
+    // then
+    assertEquals(pageSize, perfumesByBrandFirst.getContent().size());
+    assertEquals(perfumesByBrandFirst.getContent().get(0).id(), perfumeJpaEntities.get(4).getId()); // 가장 마지막 향수가 가장 즐겨찾기가 많은 향수
+    assertTrue(perfumesByBrandFirst.isHasNext());
+
+    assertEquals(perfumeJpaEntities.size() - pageSize, perfumesByBrandLast.getContent().size());
+    assertEquals(perfumesByBrandLast.getContent().get(1).id(), perfumeJpaEntities.get(0).getId()); // 가장 첫번째 향수가 가장 즐겨찾기가 적은 향수
+    assertFalse(perfumesByBrandLast.isHasNext());
   }
 
   @Test
@@ -249,6 +303,8 @@ class PerfumeQueryPersistenceAdapterTest {
 
       entityManager.persist(perfumeJpaEntity);
     }
+    entityManager.flush();
+    entityManager.clear();
 
     // when
     List<PerfumeNameResult> perfumeNameResults = perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝");
@@ -282,6 +338,8 @@ class PerfumeQueryPersistenceAdapterTest {
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
     }
+    entityManager.flush();
+    entityManager.clear();
 
     // when
     List<PerfumeNameResult> perfumeNameResults = perfumeQueryPersistenceAdapter.searchPerfumeByQuery("perfume1");
@@ -315,6 +373,8 @@ class PerfumeQueryPersistenceAdapterTest {
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
     }
+    entityManager.flush();
+    entityManager.clear();
 
     // when
     List<PerfumeNameResult> perfumeNameResults = perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝 perfume1");
@@ -348,6 +408,8 @@ class PerfumeQueryPersistenceAdapterTest {
       entityManager.persist(perfumeJpaEntity);
       perfumeJpaEntities.add(perfumeJpaEntity);
     }
+    entityManager.flush();
+    entityManager.clear();
 
     // when
     List<PerfumeNameResult> perfumeNameResults = perfumeQueryPersistenceAdapter.searchPerfumeByQuery("이솝 perfume999");
