@@ -1,8 +1,8 @@
-package io.perfume.api.review.application.in;
+package io.perfume.api.review.application.in.like;
 
 import java.time.LocalDateTime;
 
-public interface LikeReviewUseCase {
+public interface ReviewLikeUseCase {
 
   long toggleLikeReview(long userId, long reviewId, LocalDateTime now);
 }

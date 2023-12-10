@@ -1,4 +1,4 @@
-package io.perfume.api.review.application.in;
+package io.perfume.api.review.application.in.tag;
 
 import io.perfume.api.review.domain.Tag;
 import java.util.List;

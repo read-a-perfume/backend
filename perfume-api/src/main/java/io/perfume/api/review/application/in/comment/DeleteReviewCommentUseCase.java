@@ -1,4 +1,4 @@
-package io.perfume.api.review.application.in;
+package io.perfume.api.review.application.in.comment;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package io.perfume.api.review.application.in;
+package io.perfume.api.review.application.in.comment;
 
 import io.perfume.api.review.application.in.dto.CreateReviewCommentCommand;
 import io.perfume.api.review.application.in.dto.ReviewCommentResult;

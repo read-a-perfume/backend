@@ -1,4 +1,4 @@
-package io.perfume.api.review.application.in;
+package io.perfume.api.review.application.in.review;
 
 import io.perfume.api.review.application.in.dto.ReviewResult;
 import java.util.List;
