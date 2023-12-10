@@ -30,20 +30,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ReviewService implements
-        GetReviewsUseCase,
-        CreateReviewUseCase,
-        DeleteReviewUseCase,
-        GetReviewCountUseCase,
-        ReviewStatisticUseCase
-{
+public class ReviewService {
 
     private final ReviewQueryRepository reviewQueryRepository;
     private final ReviewLikeQueryRepository reviewLikeQueryRepository;
     private final ReviewCommentQueryRepository reviewCommentQueryRepository;
     private final ReviewRepository reviewRepository;
 
-    @Override
     public ReviewResult create(Long authorId, CreateReviewCommand command) {
         Review createdReview = reviewRepository.save(createReview(authorId, command));
         return ReviewResult.from(createdReview);
@@ -63,7 +56,6 @@ public class ReviewService implements
         );
     }
 
-    @Override
     @Transactional
     public void delete(Long userId, Long reviewId, LocalDateTime now) {
         deleteReview(userId, reviewId, now);
@@ -83,7 +75,6 @@ public class ReviewService implements
         reviewRepository.save(review);
     }
 
-    @Override
     public Long getReviewCountByUserId(Long userId) {
         return reviewQueryRepository.findReviewCountByUserId(userId);
     }
@@ -96,7 +87,6 @@ public class ReviewService implements
         return map;
     }
 
-    @Override
     public List<ReviewResult> getPaginatedReviews(long page, long size) {
         return reviewQueryRepository
                 .findByPage(page, size)
@@ -105,22 +95,18 @@ public class ReviewService implements
                 .toList();
     }
 
-    @Override
     public Optional<ReviewResult> getReview(long reviewId) {
         return reviewQueryRepository.findById(reviewId).map(ReviewResult::from);
     }
 
-    @Override
     public long getLikeCount(long reviewId) {
         return reviewLikeQueryRepository.countByReviewId(reviewId);
     }
 
-    @Override
     public long getCommentCount(long reviewId) {
         return reviewCommentQueryRepository.countByReviewId(reviewId);
     }
 
-    @Override
     public ReviewStatisticResult getStatisticByPerfume(Long perfumeId) {
         ReviewFeatureCount reviewFeatureCount = reviewQueryRepository.getReviewFeatureCount(perfumeId);
 

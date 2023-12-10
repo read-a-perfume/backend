@@ -18,13 +18,12 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ReviewLikeService implements ReviewLikeUseCase {
+public class ReviewLikeService {
 
     private final ReviewLikeQueryRepository reviewLikeQueryRepository;
     private final ReviewLikeRepository reviewLikeRepository;
     private final ReviewQueryRepository reviewQueryRepository;
 
-    @Override
     public long toggleLikeReview(long userId, long reviewId, LocalDateTime now) {
         Review review = findReviewById(reviewId);
         verifyReviewOwnership(userId, review);

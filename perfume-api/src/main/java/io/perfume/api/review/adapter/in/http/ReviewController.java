@@ -24,6 +24,8 @@ import io.perfume.api.review.application.in.like.ReviewLikeUseCase;
 import io.perfume.api.review.application.in.comment.UpdateReviewCommentUseCase;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import io.perfume.api.review.application.in.review.GetReviewInViewUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,13 +52,14 @@ public class ReviewController {
   private final CreateReviewCommentUseCase createReviewCommentUseCase;
   private final DeleteReviewCommentUseCase deleteReviewCommentUseCase;
   private final UpdateReviewCommentUseCase updateReviewCommentUseCase;
+  private final GetReviewInViewUseCase getReviewInViewUseCase;
   private final ReviewLikeUseCase reviewLikeUseCase;
 
   @GetMapping("/{id}")
   public GetReviewDetailResponseDto getReview(
       @PathVariable Long id
   ) {
-    final var result = reviewDetailFacadeService.getReviewDetail(id);
+    final var result = getReviewInViewUseCase.getReviewDetail(id);
 
     return GetReviewDetailResponseDto.from(result);
   }
@@ -139,7 +142,7 @@ public class ReviewController {
   ) {
     final var now = LocalDateTime.now();
     final var userId = Long.parseLong(user.getUsername());
-    deleteReviewCommentUseCase.delete(commentId, userId, now);
+    deleteReviewCommentUseCase.deleteComment(commentId, userId, now);
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(new DeleteReviewCommentResponseDto(commentId));

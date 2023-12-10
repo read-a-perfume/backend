@@ -1,133 +1,180 @@
 package io.perfume.api.review.application.facade;
 
 import dto.repository.CursorPagination;
-import io.perfume.api.file.application.port.in.FindFileUseCase;
 import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailCommand;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailResult;
 import io.perfume.api.review.application.facade.dto.ReviewDetailResult;
 import io.perfume.api.review.application.facade.dto.ReviewViewDetailResult;
+import io.perfume.api.review.application.in.comment.CreateReviewCommentUseCase;
+import io.perfume.api.review.application.in.comment.DeleteReviewCommentUseCase;
 import io.perfume.api.review.application.in.comment.GetReviewCommentsUseCase;
-import io.perfume.api.review.application.in.dto.CreateReviewCommand;
-import io.perfume.api.review.application.in.review.CreateReviewUseCase;
-import io.perfume.api.review.application.in.tag.GetReviewTagUseCase;
-import io.perfume.api.review.application.in.review.GetReviewsUseCase;
-import io.perfume.api.review.application.in.dto.GetReviewCommentsCommand;
-import io.perfume.api.review.application.in.dto.ReviewResult;
-import io.perfume.api.review.application.in.dto.ReviewTagResult;
+import io.perfume.api.review.application.in.comment.UpdateReviewCommentUseCase;
+import io.perfume.api.review.application.in.dto.*;
+import io.perfume.api.review.application.in.like.ReviewLikeUseCase;
+import io.perfume.api.review.application.in.review.*;
+import io.perfume.api.review.application.service.*;
 import io.perfume.api.review.domain.ReviewComment;
-import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.UserResult;
+import io.perfume.api.user.application.service.FindUserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewDetailFacadeService {
+@Slf4j
+public class ReviewDetailFacadeService implements
+        CreateReviewCommentUseCase,
+        DeleteReviewCommentUseCase,
+        GetReviewCommentsUseCase,
+        UpdateReviewCommentUseCase,
+        ReviewLikeUseCase,
+        CreateReviewUseCase,
+        DeleteReviewUseCase,
+        GetReviewsUseCase,
+        GetReviewInViewUseCase,
+        ReviewStatisticUseCase {
 
-  private final GetReviewsUseCase getReviewsUseCase;
-  private final FindUserUseCase findUserUseCase;
-  private final FindFileUseCase findFileUseCase;
-  private final GetReviewTagUseCase getReviewTagUseCase;
-  private final GetReviewCommentsUseCase getReviewCommentsUseCase;
-  private final CreateReviewUseCase createReviewUseCase;
+    private final ReviewService reviewService;
+    private final ReviewLikeService reviewLikeService;
+    private final ReviewCommentService reviewCommentService;
+    private final ReviewTagService reviewTagService;
+    private final ReviewThumbnailService reviewThumbnailService;
+    private final FindUserService findUserUseCase;
 
-  public ReviewDetailResult createReview(Long authorId, CreateReviewCommand command) {
-    final var review = createReviewUseCase.create(authorId, command);
-    final var author = findUserUseCase.findUserById(review.authorId()).orElse(UserResult.EMPTY);
-    final var tags = getReviewTagUseCase.getReviewTags(review.id()).stream()
-        .map(ReviewTagResult::name)
-        .toList();
+    @Override
+    public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
+        final var reviews =
+                reviewService
+                        .getPaginatedReviews(page, size)
+                        .stream()
+                        .toList();
 
-    return ReviewDetailResult.from(review, author, tags);
-  }
+        final var authorIds = reviews.stream().map(ReviewResult::authorId).toList();
+        final var authors = getAuthorsMap(authorIds);
 
-  public ReviewViewDetailResult getReviewDetail(long reviewId) {
-    final var review = getReviewsUseCase
-        .getReview(reviewId)
-        .orElseThrow(() -> new NotFoundReviewException(reviewId));
-    final var author = findUserUseCase.findUserById(review.authorId()).orElse(UserResult.EMPTY);
-    final var tags = getReviewTagUseCase.getReviewTags(reviewId).stream()
-        .map(ReviewTagResult::name)
-        .toList();
-    final var likeCount = getReviewsUseCase.getLikeCount(reviewId);
-    final var commentCount = getReviewsUseCase.getCommentCount(reviewId);
+        final var reviewIds = reviews.stream().map(ReviewResult::id).toList();
+        final var tags = getReviewTagsMap(reviewIds);
 
-    return ReviewViewDetailResult.from(review, author, tags, Collections.emptyList(), likeCount,
-        commentCount);
-  }
+        return reviews.stream().map(mapReviewDetailResult(authors, tags)).toList();
+    }
 
-  public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
-    final var reviews =
-        getReviewsUseCase
-            .getPaginatedReviews(page, size)
-            .stream()
-            .toList();
+    private Map<Long, UserResult> getAuthorsMap(List<Long> authorIds) {
+        return findUserUseCase
+                .findUsersByIds(authorIds)
+                .stream()
+                .map(user -> Map.entry(user.id(), user))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 
-    final var authorIds = reviews.stream().map(ReviewResult::authorId).toList();
-    final var authors = getAuthorsMap(authorIds);
+    private Map<Long, List<ReviewTagResult>> getReviewTagsMap(final List<Long> reviewIds) {
+        return reviewTagService.getReviewsTags(reviewIds).stream()
+                .collect(Collectors.groupingBy(ReviewTagResult::reviewId));
+    }
 
-    final var reviewIds = reviews.stream().map(ReviewResult::id).toList();
-    final var tags = getReviewTagsMap(reviewIds);
+    private Function<ReviewResult, ReviewDetailResult> mapReviewDetailResult(
+            Map<Long, UserResult> usersMap,
+            Map<Long, List<ReviewTagResult>> tagsMap) {
+        return review -> {
+            final var author = usersMap.getOrDefault(review.authorId(), UserResult.EMPTY);
+            final var tags =
+                    tagsMap
+                            .getOrDefault(review.id(), Collections.emptyList())
+                            .stream()
+                            .map(ReviewTagResult::name)
+                            .toList();
 
-    return reviews.stream().map(mapReviewDetailResult(authors, tags)).toList();
-  }
+            return ReviewDetailResult.from(review, author, tags);
+        };
+    }
 
-  public CursorPagination<ReviewCommentDetailResult> getReviewComments(
-      final ReviewCommentDetailCommand command) {
-    final var comments = getReviewCommentsUseCase.getReviewComments(
-        new GetReviewCommentsCommand(command.size(), command.before(), command.after(),
-            command.reviewId()));
+    @Override
+    public ReviewViewDetailResult getReviewDetail(long reviewId) {
+        final var review = reviewService
+                .getReview(reviewId)
+                .orElseThrow(() -> new NotFoundReviewException(reviewId));
+        final var author = findUserUseCase.findUserById(review.authorId()).orElse(UserResult.EMPTY);
+        final var tags = reviewTagService.getReviewTags(reviewId).stream()
+                .map(ReviewTagResult::name)
+                .toList();
+        final var likeCount = reviewService.getLikeCount(reviewId);
+        final var commentCount = reviewService.getCommentCount(reviewId);
 
-    final var userIds = comments.getItems().stream().map(ReviewComment::getUserId).toList();
-    final var authorsMap = getAuthorsMap(userIds);
+        return ReviewViewDetailResult.from(review, author, tags, Collections.emptyList(), likeCount,
+                commentCount);
+    }
 
-    final var result = comments.getItems().stream()
-        .map(mapReviewCommentDetailResult(authorsMap))
-        .toList();
+    @Override
+    public ReviewCommentResult createComment(CreateReviewCommentCommand command, LocalDateTime now) {
+        reviewService.getReview(command.reviewId())
+                .orElseThrow(() -> new NotFoundReviewException(command.reviewId()));
 
-    return CursorPagination.of(result, comments.hasNext(), comments.hasPrevious());
-  }
+        return reviewCommentService.createComment(command, now);
+    }
 
-  private Map<Long, UserResult> getAuthorsMap(List<Long> authorIds) {
-    return findUserUseCase
-        .findUsersByIds(authorIds)
-        .stream()
-        .map(user -> Map.entry(user.id(), user))
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-  }
+    @Override
+    public void deleteComment(long id, long userId, LocalDateTime now) {
+        reviewCommentService.deleteComment(id, userId, now);
+    }
 
-  private Map<Long, List<ReviewTagResult>> getReviewTagsMap(final List<Long> reviewIds) {
-    return getReviewTagUseCase.getReviewsTags(reviewIds).stream()
-        .collect(Collectors.groupingBy(ReviewTagResult::reviewId));
-  }
+    @Override
+    public CursorPagination<ReviewCommentDetailResult> getReviewComments(
+            final ReviewCommentDetailCommand command) {
+        final var comments = reviewCommentService.getReviewComments(
+                new GetReviewCommentsCommand(command.size(), command.before(), command.after(),
+                        command.reviewId()));
 
-  private Function<ReviewResult, ReviewDetailResult> mapReviewDetailResult(
-      Map<Long, UserResult> usersMap,
-      Map<Long, List<ReviewTagResult>> tagsMap) {
-    return review -> {
-      final var author = usersMap.getOrDefault(review.authorId(), UserResult.EMPTY);
-      final var tags =
-          tagsMap
-              .getOrDefault(review.id(), Collections.emptyList())
-              .stream()
-              .map(ReviewTagResult::name)
-              .toList();
+        final var userIds = comments.getItems().stream().map(ReviewComment::getUserId).toList();
+        final var authorsMap = getAuthorsMap(userIds);
 
-      return ReviewDetailResult.from(review, author, tags);
-    };
-  }
+        final var result = comments.getItems().stream()
+                .map(mapReviewCommentDetailResult(authorsMap))
+                .toList();
 
-  private Function<ReviewComment, ReviewCommentDetailResult> mapReviewCommentDetailResult(
-      Map<Long, UserResult> usersMap) {
-    return comment -> {
-      final var author = usersMap.getOrDefault(comment.getUserId(), UserResult.EMPTY);
-      return ReviewCommentDetailResult.from(comment, author);
-    };
-  }
+        return CursorPagination.of(result, comments.hasNext(), comments.hasPrevious());
+    }
+
+    private Function<ReviewComment, ReviewCommentDetailResult> mapReviewCommentDetailResult(
+            Map<Long, UserResult> usersMap) {
+        return comment -> {
+            final var author = usersMap.getOrDefault(comment.getUserId(), UserResult.EMPTY);
+            return ReviewCommentDetailResult.from(comment, author);
+        };
+    }
+
+    @Override
+    public void updateReviewComment(Long userId, Long commentId, String newComment) {
+        reviewCommentService.updateReviewComment(userId, commentId, newComment);
+    }
+
+    @Override
+    public long toggleLikeReview(long userId, long reviewId, LocalDateTime now) {
+        return reviewLikeService.toggleLikeReview(userId, reviewId, now);
+    }
+
+    @Override
+    public ReviewResult create(Long authorId, CreateReviewCommand command) {
+        final ReviewResult reviewDetailResult = reviewService.create(authorId, command);
+        reviewTagService.addTags(reviewDetailResult.id(), command.keywords());
+        reviewThumbnailService.addThumbnails(reviewDetailResult.id(), command.thumbnailIds(), command.now());
+        return reviewDetailResult;
+    }
+
+    @Override
+    public void delete(Long userId, Long reviewId, LocalDateTime now) {
+        reviewService.delete(userId, reviewId, now);
+    }
+
+    @Override
+    public ReviewStatisticResult getStatisticByPerfume(Long perfumeId) {
+        return reviewService.getStatisticByPerfume(perfumeId);
+    }
 }

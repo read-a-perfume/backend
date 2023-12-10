@@ -3,7 +3,6 @@ package io.perfume.api.review.application.service;
 import dto.repository.CursorPageable;
 import dto.repository.CursorPagination;
 import io.perfume.api.review.application.exception.NotFoundReviewCommentException;
-import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.exception.UpdateReviewCommentPermissionDeniedException;
 import io.perfume.api.review.application.in.comment.CreateReviewCommentUseCase;
 import io.perfume.api.review.application.in.comment.DeleteReviewCommentUseCase;
@@ -25,17 +24,12 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CommentService implements
-        CreateReviewCommentUseCase,
-        DeleteReviewCommentUseCase,
-        GetReviewCommentsUseCase,
-        UpdateReviewCommentUseCase {
+public class ReviewCommentService {
 
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewCommentQueryRepository reviewCommentQueryRepository;
     private final ReviewQueryRepository reviewQueryRepository;
 
-    @Override
     public ReviewCommentResult createComment(CreateReviewCommentCommand command, LocalDateTime now) {
         if(!reviewQueryRepository.existsReviewById(command.reviewId())) {
             throw new NotFoundReviewException(command.reviewId());
@@ -46,8 +40,7 @@ public class CommentService implements
         return ReviewCommentResult.from(createdReviewComment);
     }
 
-    @Override
-    public void delete(long id, long userId, LocalDateTime now) {
+    public void deleteComment(long id, long userId, LocalDateTime now) {
         final var reviewComment =
                 reviewCommentQueryRepository
                         .findById(id)
@@ -58,14 +51,12 @@ public class CommentService implements
         reviewCommentRepository.save(reviewComment);
     }
 
-    @Override
     public CursorPagination<ReviewComment> getReviewComments(GetReviewCommentsCommand command) {
         final var pageable =
                 new CursorPageable<>(command.size(), command.getDirection(), command.getCursor());
         return reviewCommentQueryRepository.findByReviewId(pageable, command.reviewId());
     }
 
-    @Override
     public void updateReviewComment(Long userId, Long commentId, String newComment) {
         final var comment =
                 reviewCommentQueryRepository.findById(commentId)

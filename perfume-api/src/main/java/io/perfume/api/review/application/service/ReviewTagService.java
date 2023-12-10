@@ -1,9 +1,6 @@
 package io.perfume.api.review.application.service;
 
 import io.perfume.api.review.application.in.dto.ReviewTagResult;
-import io.perfume.api.review.application.in.tag.AddReviewTagUseCase;
-import io.perfume.api.review.application.in.tag.DeleteReviewTagUseCase;
-import io.perfume.api.review.application.in.tag.GetReviewTagUseCase;
 import io.perfume.api.review.application.out.tag.TagQueryRepository;
 import io.perfume.api.review.application.out.tag.TagRepository;
 import io.perfume.api.review.domain.ReviewTag;
@@ -22,15 +19,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReviewTagService implements
-        AddReviewTagUseCase,
-        DeleteReviewTagUseCase,
-        GetReviewTagUseCase
-{
+public class ReviewTagService {
     private final TagQueryRepository tagQueryRepository;
     private final TagRepository tagRepository;
 
-    @Override
     public List<Tag> addTags(Long reviewId, List<Long> tagIds) {
         var now = LocalDateTime.now();
         var tags = tagQueryRepository.findByIds(tagIds);
@@ -41,7 +33,6 @@ public class ReviewTagService implements
         return tags;
     }
 
-    @Override
     public void deleteReviewTag(Long reviewId, LocalDateTime now) {
         var reviewTags =
                 tagQueryRepository
@@ -52,7 +43,6 @@ public class ReviewTagService implements
         tagRepository.saveAll(reviewTags);
     }
 
-    @Override
     public List<ReviewTagResult> getReviewTags(Long reviewId) {
         final var reviewTags =
                 tagQueryRepository.findReviewTags(reviewId)
@@ -66,7 +56,6 @@ public class ReviewTagService implements
                 .toList();
     }
 
-    @Override
     public List<ReviewTagResult> getReviewsTags(List<Long> reviewIds) {
         final var reviewTags =
                 tagQueryRepository.findReviewsTags(reviewIds)
