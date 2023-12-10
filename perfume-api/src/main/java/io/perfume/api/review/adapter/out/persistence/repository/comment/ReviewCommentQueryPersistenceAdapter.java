@@ -7,8 +7,11 @@ import dto.repository.CursorPageable;
 import dto.repository.CursorPagination;
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.review.application.out.comment.ReviewCommentQueryRepository;
+import io.perfume.api.review.application.out.comment.dto.ReviewCommentCount;
 import io.perfume.api.review.domain.ReviewComment;
 import jakarta.persistence.EntityManager;
+
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
@@ -68,5 +71,18 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
 
     return CursorPagination.of(comments, pageable.getSize(), pageable.getDirection(),
         pageable.getCursor() != null);
+  }
+
+  @Override
+  public List<ReviewCommentCount> countByReviewIds(List<Long> reviewIds) {
+    return jpaQueryFactory.select(reviewCommentEntity.reviewId, reviewCommentEntity.count())
+        .from(reviewCommentEntity)
+        .where(reviewCommentEntity.reviewId.in(reviewIds))
+        .groupBy(reviewCommentEntity.reviewId)
+        .fetch()
+        .stream()
+        .map(tuple -> new ReviewCommentCount(tuple.get(reviewCommentEntity.reviewId),
+            tuple.get(reviewCommentEntity.count())))
+        .toList();
   }
 }

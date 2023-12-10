@@ -7,6 +7,7 @@ import dto.repository.CursorPageable;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewEntity;
 import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewMapper;
+import io.perfume.api.review.application.out.comment.dto.ReviewCommentCount;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewComment;
 import io.perfume.api.review.domain.type.DayType;
@@ -15,6 +16,7 @@ import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -159,5 +161,28 @@ class ReviewCommentQueryPersistenceAdapterTest {
 
     // then
     assertThat(result).isEqualTo(6);
+  }
+
+  @Test
+  @DisplayName("여러 리뷰 댓글 개수를 조회한다.")
+  void testCountCommentByReviewIds() {
+    // given
+    final LocalDateTime now = LocalDateTime.now();
+    final long reviewId = 1L;
+    final List<ReviewCommentEntity> comments = Stream.of(
+            ReviewComment.create(reviewId, 1L, "test1", now),
+            ReviewComment.create(reviewId, 1L, "test2", now),
+            ReviewComment.create(reviewId, 1L, "test3", now)
+    ).map(reviewCommentMapper::toEntity).toList();
+    comments.forEach(entityManager::persist);
+    entityManager.flush();
+
+    // when
+    final List<ReviewCommentCount> result = repository.countByReviewIds(List.of(reviewId));
+
+    // then
+    assertThat(result).hasSize(1);
+    assertThat(result.get(0).reviewId()).isEqualTo(reviewId);
+    assertThat(result.get(0).count()).isEqualTo(3);
   }
 }
