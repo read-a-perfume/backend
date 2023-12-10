@@ -44,11 +44,7 @@ public class ReviewComment extends BaseTimeDomain {
         .build();
   }
 
-  public void markDelete(final long userId, final LocalDateTime now) {
-    if (this.userId != userId) {
-      return;
-    }
-
+  public void markDelete(final LocalDateTime now) {
     this.markDelete(now);
   }
 

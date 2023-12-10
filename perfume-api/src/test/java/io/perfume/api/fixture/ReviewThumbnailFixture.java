@@ -1,6 +1,6 @@
 package io.perfume.api.fixture;
 
-import io.perfume.api.review.adapter.out.persistence.entity.ReviewThumbnailEntity;
+import io.perfume.api.review.adapter.out.persistence.repository.thumbnail.ReviewThumbnailEntity;
 import io.perfume.api.review.adapter.out.persistence.repository.thumbnail.ReviewThumbnailMapper;
 import io.perfume.api.review.domain.ReviewThumbnail;
 import java.time.LocalDateTime;

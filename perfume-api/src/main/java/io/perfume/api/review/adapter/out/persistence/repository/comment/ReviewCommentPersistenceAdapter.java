@@ -1,7 +1,7 @@
 package io.perfume.api.review.adapter.out.persistence.repository.comment;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.application.out.ReviewCommentRepository;
+import io.perfume.api.review.application.out.comment.ReviewCommentRepository;
 import io.perfume.api.review.domain.ReviewComment;
 
 @PersistenceAdapter

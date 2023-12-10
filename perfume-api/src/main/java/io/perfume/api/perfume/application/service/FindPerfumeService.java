@@ -16,7 +16,7 @@ import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
-import io.perfume.api.review.application.in.ReviewStatisticUseCase;
+import io.perfume.api.review.application.in.review.ReviewStatisticUseCase;
 import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
 import java.util.List;
 import java.util.Optional;

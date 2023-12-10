@@ -1,6 +1,5 @@
 package io.perfume.api.review.adapter.out.persistence.repository.tag;
 
-import io.perfume.api.review.adapter.out.persistence.entity.ReviewTagEntity;
 import io.perfume.api.review.domain.ReviewTag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;

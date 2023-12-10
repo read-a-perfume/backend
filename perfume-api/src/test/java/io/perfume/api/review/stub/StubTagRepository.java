@@ -1,7 +1,7 @@
 package io.perfume.api.review.stub;
 
-import io.perfume.api.review.application.out.TagQueryRepository;
-import io.perfume.api.review.application.out.TagRepository;
+import io.perfume.api.review.application.out.tag.TagQueryRepository;
+import io.perfume.api.review.application.out.tag.TagRepository;
 import io.perfume.api.review.domain.ReviewTag;
 import io.perfume.api.review.domain.Tag;
 import java.util.ArrayList;

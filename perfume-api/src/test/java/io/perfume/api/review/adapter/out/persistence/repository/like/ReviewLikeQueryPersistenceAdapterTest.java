@@ -3,14 +3,8 @@ package io.perfume.api.review.adapter.out.persistence.repository.like;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
-import io.perfume.api.review.adapter.out.persistence.entity.ReviewEntity;
-import io.perfume.api.review.adapter.out.persistence.entity.ReviewLikeEntity;
-import io.perfume.api.review.adapter.out.persistence.repository.ReviewMapper;
-import io.perfume.api.review.domain.Review;
+import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewMapper;
 import io.perfume.api.review.domain.ReviewLike;
-import io.perfume.api.review.domain.type.DayType;
-import io.perfume.api.review.domain.type.Season;
-import io.perfume.api.review.domain.type.Strength;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;

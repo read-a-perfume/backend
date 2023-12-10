@@ -1,6 +1,6 @@
 package io.perfume.api.review.adapter.out.persistence.repository.like;
 
-import io.perfume.api.review.application.out.ReviewLikeRepository;
+import io.perfume.api.review.application.out.like.ReviewLikeRepository;
 import io.perfume.api.review.domain.ReviewLike;
 import org.springframework.stereotype.Repository;
 

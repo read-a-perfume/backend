@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.mypage.application.port.in.FollowUserUseCase;
-import io.perfume.api.review.application.out.ReviewRepository;
+import io.perfume.api.review.application.out.review.ReviewRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.type.DayType;
 import io.perfume.api.review.domain.type.Duration;
