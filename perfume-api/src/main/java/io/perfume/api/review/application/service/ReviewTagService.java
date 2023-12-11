@@ -44,6 +44,7 @@ public class ReviewTagService {
   public List<ReviewTagResult> getReviewTags(Long reviewId) {
     final var reviewTags =
         tagQueryRepository.findReviewTags(reviewId).stream()
+            .distinct()
             .collect(Collectors.toMap(ReviewTag::getTagId, Function.identity()));
     final var tagIds = reviewTags.keySet().stream().toList();
 
@@ -55,6 +56,7 @@ public class ReviewTagService {
   public List<ReviewTagResult> getReviewsTags(List<Long> reviewIds) {
     final var reviewTags =
         tagQueryRepository.findReviewsTags(reviewIds).stream()
+            .distinct()
             .collect(Collectors.toMap(ReviewTag::getTagId, Function.identity()));
     final var tagIds = reviewTags.keySet().stream().toList();
 
