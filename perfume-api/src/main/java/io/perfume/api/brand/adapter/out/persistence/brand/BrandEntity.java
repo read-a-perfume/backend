@@ -1,4 +1,4 @@
-package io.perfume.api.brand.adapter.out.persistence;
+package io.perfume.api.brand.adapter.out.persistence.brand;
 
 import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.Entity;
@@ -7,12 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity(name = "brand")
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)

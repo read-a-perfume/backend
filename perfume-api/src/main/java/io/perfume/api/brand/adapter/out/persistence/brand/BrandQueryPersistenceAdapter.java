@@ -1,6 +1,6 @@
-package io.perfume.api.brand.adapter.out.persistence;
+package io.perfume.api.brand.adapter.out.persistence.brand;
 
-import static io.perfume.api.brand.adapter.out.persistence.QBrandEntity.brandEntity;
+import static io.perfume.api.brand.adapter.out.persistence.brand.QBrandEntity.brandEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;

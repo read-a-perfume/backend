@@ -1,6 +1,6 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfume;
 
-import static io.perfume.api.brand.adapter.out.persistence.QBrandEntity.brandEntity;
+import static io.perfume.api.brand.adapter.out.persistence.brand.QBrandEntity.brandEntity;
 import static io.perfume.api.file.adapter.out.persistence.file.QFileJpaEntity.fileJpaEntity;
 import static io.perfume.api.note.adapter.out.persistence.note.QNoteJpaEntity.noteJpaEntity;
 import static io.perfume.api.perfume.adapter.out.persistence.perfume.QPerfumeJpaEntity.perfumeJpaEntity;
