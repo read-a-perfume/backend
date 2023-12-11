@@ -5,7 +5,6 @@ import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.in.dto.CreateReviewCommand;
 import io.perfume.api.review.application.in.dto.ReviewResult;
 import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
-import io.perfume.api.review.application.in.review.*;
 import io.perfume.api.review.application.out.comment.ReviewCommentQueryRepository;
 import io.perfume.api.review.application.out.like.ReviewLikeQueryRepository;
 import io.perfume.api.review.application.out.review.ReviewQueryRepository;
@@ -28,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ReviewService {
 
   private final ReviewQueryRepository reviewQueryRepository;
@@ -53,7 +53,6 @@ public class ReviewService {
         command.now());
   }
 
-  @Transactional
   public void delete(Long userId, Long reviewId, LocalDateTime now) {
     deleteReview(userId, reviewId, now);
   }
@@ -72,6 +71,7 @@ public class ReviewService {
     reviewRepository.save(review);
   }
 
+  @Transactional(readOnly = true)
   public Long getReviewCountByUserId(Long userId) {
     return reviewQueryRepository.findReviewCountByUserId(userId);
   }
@@ -82,22 +82,27 @@ public class ReviewService {
     return map;
   }
 
+  @Transactional(readOnly = true)
   public List<ReviewResult> getPaginatedReviews(long page, long size) {
     return reviewQueryRepository.findByPage(page, size).stream().map(ReviewResult::from).toList();
   }
 
+  @Transactional(readOnly = true)
   public Optional<ReviewResult> getReview(long reviewId) {
     return reviewQueryRepository.findById(reviewId).map(ReviewResult::from);
   }
 
+  @Transactional(readOnly = true)
   public long getLikeCount(long reviewId) {
     return reviewLikeQueryRepository.countByReviewId(reviewId);
   }
 
+  @Transactional(readOnly = true)
   public long getCommentCount(long reviewId) {
     return reviewCommentQueryRepository.countByReviewId(reviewId);
   }
 
+  @Transactional(readOnly = true)
   public ReviewStatisticResult getStatisticByPerfume(Long perfumeId) {
     ReviewFeatureCount reviewFeatureCount = reviewQueryRepository.getReviewFeatureCount(perfumeId);
 
