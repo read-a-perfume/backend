@@ -85,8 +85,7 @@ public class ReviewDetailFacadeService
         reviewCommentService.getReviewCommentCount(reviewIds);
 
     return commentCounts.stream()
-        .distinct()
-        .collect(Collectors.toMap(ReviewCommentCount::reviewId, Function.identity()));
+        .collect(Collectors.toMap(ReviewCommentCount::reviewId, Function.identity(), (a, b) -> a));
   }
 
   private Map<Long, ReviewLikeCount> fetchLikesCount(final List<ReviewResult> reviews) {
@@ -94,8 +93,7 @@ public class ReviewDetailFacadeService
     final List<ReviewLikeCount> likeCounts = reviewLikeService.getReviewLikeCount(reviewIds);
 
     return likeCounts.stream()
-        .distinct()
-        .collect(Collectors.toMap(ReviewLikeCount::reviewId, Function.identity()));
+        .collect(Collectors.toMap(ReviewLikeCount::reviewId, Function.identity(), (a, b) -> a));
   }
 
   private List<ReviewDetailResult> mapReviewDetailResults(
@@ -111,8 +109,7 @@ public class ReviewDetailFacadeService
 
   private Map<Long, UserResult> getAuthorsMap(final List<Long> authorIds) {
     return findUserUseCase.findUsersByIds(authorIds).stream()
-        .distinct()
-        .collect(Collectors.toMap(UserResult::id, Function.identity()));
+        .collect(Collectors.toMap(UserResult::id, Function.identity(), (a, b) -> a));
   }
 
   private Map<Long, List<ReviewTagResult>> getReviewTagsMap(final List<Long> reviewIds) {

@@ -1,24 +1,26 @@
 package io.perfume.api.review.application.service;
 
+import io.perfume.api.auth.adapter.out.redis.RedisRepository;
 import io.perfume.api.review.application.in.dto.ReviewTagResult;
 import io.perfume.api.review.application.out.tag.TagQueryRepository;
 import io.perfume.api.review.application.out.tag.TagRepository;
 import io.perfume.api.review.domain.ReviewTag;
 import io.perfume.api.review.domain.Tag;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewTagService {
+  private final RedisRepository redisRepository;
   private final TagQueryRepository tagQueryRepository;
   private final TagRepository tagRepository;
 
@@ -41,32 +43,27 @@ public class ReviewTagService {
     tagRepository.saveAll(reviewTags);
   }
 
-  public List<ReviewTagResult> getReviewTags(Long reviewId) {
-    final var reviewTags =
-        tagQueryRepository.findReviewTags(reviewId).stream()
-            .distinct()
-            .collect(Collectors.toMap(ReviewTag::getTagId, Function.identity()));
-    final var tagIds = reviewTags.keySet().stream().toList();
+  public List<ReviewTagResult> getReviewTags(final Long reviewId) {
+    return getReviewTags(Collections.singletonList(reviewId));
+  }
+
+  public List<ReviewTagResult> getReviewsTags(final List<Long> reviewIds) {
+    return getReviewTags(reviewIds);
+  }
+
+  private List<ReviewTagResult> getReviewTags(final List<Long> reviewIds) {
+    final List<ReviewTag> reviewTags = tagQueryRepository.findReviewsTags(reviewIds);
+    final List<Long> tagIds = reviewTags.stream().map(ReviewTag::getTagId).toList();
+    final Map<Long, ReviewTag> reviewTagMap =
+        reviewTags.stream()
+            .collect(Collectors.toMap(ReviewTag::getTagId, Function.identity(), (a, b) -> a));
 
     return tagQueryRepository.findByIds(tagIds).stream()
-        .map(toReviewTagResult(reviewTags))
+        .map(toReviewTagResult(reviewTagMap))
         .toList();
   }
 
-  public List<ReviewTagResult> getReviewsTags(List<Long> reviewIds) {
-    final var reviewTags =
-        tagQueryRepository.findReviewsTags(reviewIds).stream()
-            .distinct()
-            .collect(Collectors.toMap(ReviewTag::getTagId, Function.identity()));
-    final var tagIds = reviewTags.keySet().stream().toList();
-
-    return tagQueryRepository.findByIds(tagIds).stream()
-        .map(toReviewTagResult(reviewTags))
-        .toList();
-  }
-
-  @NotNull
-  private Function<Tag, ReviewTagResult> toReviewTagResult(Map<Long, ReviewTag> reviewTags) {
+  private Function<Tag, ReviewTagResult> toReviewTagResult(final Map<Long, ReviewTag> reviewTags) {
     return tag -> ReviewTagResult.from(tag, reviewTags.get(tag.getId()));
   }
 }
