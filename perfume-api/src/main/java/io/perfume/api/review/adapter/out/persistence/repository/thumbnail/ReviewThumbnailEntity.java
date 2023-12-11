@@ -5,6 +5,7 @@ import static lombok.AccessLevel.PROTECTED;
 import io.perfume.api.base.BaseTimeEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,7 +14,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "review_thumbnail")
+@Table(
+    name = "review_thumbnail",
+    indexes = {
+      @Index(name = "idx_review_thumbnail_1", columnList = "review_id"),
+      @Index(name = "idx_review_thumbnail_2", columnList = "thumbnail_id")
+    })
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class ReviewThumbnailEntity extends BaseTimeEntity {
