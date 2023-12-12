@@ -314,6 +314,14 @@ include::{snippets}/get-mypage-reviews/http-request.adoc[]
 include::{snippets}/get-mypage-reviews/http-response.adoc[]
 include::{snippets}/get-mypage-reviews/response-fields.adoc[]
 
+== 파일 업로드
+=== 요청
+include::{snippets}/file-upload/http-request.adoc[]
+
+=== 응답
+include::{snippets}/file-upload/http-response.adoc[]
+include::{snippets}/file-upload/response-fields.adoc[]
+
 == 샘플
 === 요청
 include::{snippets}/index/http-request.adoc[]
