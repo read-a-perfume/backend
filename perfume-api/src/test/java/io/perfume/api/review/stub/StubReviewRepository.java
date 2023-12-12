@@ -1,5 +1,6 @@
 package io.perfume.api.review.stub;
 
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.review.application.out.review.ReviewQueryRepository;
 import io.perfume.api.review.application.out.review.ReviewRepository;
 import io.perfume.api.review.domain.Review;
@@ -7,6 +8,7 @@ import io.perfume.api.review.domain.ReviewFeatureCount;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 
 public class StubReviewRepository implements ReviewRepository, ReviewQueryRepository {
 
@@ -40,6 +42,11 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
   @Override
   public boolean existsReviewById(Long reviewId) {
     return true;
+  }
+
+  @Override
+  public CustomPage<Review> findByPerfumeId(long perfumeId, Pageable pageable) {
+    return null;
   }
 
   public Review addReview(Review review) {

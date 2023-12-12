@@ -6,6 +6,7 @@ import static io.perfume.api.user.adapter.out.persistence.user.QUserEntity.userE
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.review.application.out.review.ReviewQueryRepository;
 import io.perfume.api.review.domain.Review;
 import io.perfume.api.review.domain.ReviewFeatureCount;
@@ -14,10 +15,9 @@ import io.perfume.api.review.domain.type.Duration;
 import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.adapter.out.persistence.user.Sex;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 @PersistenceAdapter
 public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
@@ -124,6 +124,7 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
         strengthMap, durationMap, seasonMap, dayTypeMap, sexMap, totalReviews);
   }
 
+  @Override
   public Long findReviewCountByUserId(Long userId) {
     return jpaQueryFactory
         .select(reviewEntity.count())
@@ -139,5 +140,36 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
             .where(reviewEntity.id.eq(reviewId), reviewEntity.deletedAt.isNull())
             .fetchFirst()
         != null;
+  }
+
+  @Override
+  public CustomPage<Review> findByPerfumeId(final long perfumeId, final Pageable pageable) {
+    final List<Review> results = fetchReviewsByPerfumeId(perfumeId, pageable);
+    final long total = countReviewsByPerfumeId(perfumeId);
+
+    return new CustomPage<>(new PageImpl<>(results, pageable, total));
+  }
+
+  private List<Review> fetchReviewsByPerfumeId(final long perfumeId, final Pageable pageable) {
+    return jpaQueryFactory
+        .selectFrom(reviewEntity)
+        .where(reviewEntity.perfumeId.eq(perfumeId), reviewEntity.deletedAt.isNull())
+        .orderBy(reviewEntity.id.desc())
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch()
+        .stream()
+        .map(reviewMapper::toDomain)
+        .toList();
+  }
+
+  private long countReviewsByPerfumeId(final long perfumeId) {
+    return Objects.requireNonNullElseGet(
+        jpaQueryFactory
+            .select(reviewEntity.count())
+            .from(reviewEntity)
+            .where(reviewEntity.perfumeId.eq(perfumeId), reviewEntity.deletedAt.isNull())
+            .fetchOne(),
+        () -> 0L);
   }
 }
