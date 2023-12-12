@@ -1,5 +1,6 @@
 package io.perfume.api.review.application.service;
 
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.review.application.exception.DeleteReviewPermissionDeniedException;
 import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.in.dto.CreateReviewCommand;
@@ -21,6 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -132,5 +134,13 @@ public class ReviewService {
         .collect(
             Collectors.toMap(
                 Map.Entry::getKey, e -> Math.round((double) e.getValue() / totalReviews * 100)));
+  }
+
+  public CustomPage<ReviewResult> getReviewsByPerfumeId(long perfumeId, Pageable pageable) {
+    final CustomPage<Review> reviews = reviewQueryRepository.findByPerfumeId(perfumeId, pageable);
+    final List<ReviewResult> reviewResults =
+        reviews.getContent().stream().map(ReviewResult::from).toList();
+
+    return new CustomPage<>(reviewResults, reviews);
   }
 }

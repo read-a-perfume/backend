@@ -2,6 +2,7 @@ package io.perfume.api.review.adapter.out.persistence.repository.review;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.domain.Concentration;
@@ -20,12 +21,14 @@ import io.perfume.api.user.domain.Role;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -221,5 +224,109 @@ class ReviewQueryPersistenceAdapterTest {
 
     // then
     assertThat(count).isEqualTo(1);
+  }
+
+  @Test
+  @DisplayName("특정 향수에 대한 리뷰를 조회한다.")
+  void testFindByPerfumeId() {
+    // given
+    final LocalDateTime now = LocalDateTime.now();
+    final long perfumeId = 1L;
+    final Review review =
+        Review.create(
+            "test",
+            "test description",
+            Strength.LIGHT,
+            Duration.LONG,
+            DayType.DAILY,
+            perfumeId,
+            1L,
+            Season.SPRING,
+            now);
+    final ReviewEntity createdReview = reviewMapper.toEntity(review);
+    entityManager.persist(createdReview);
+    entityManager.flush();
+    entityManager.clear();
+    final Pageable pageable = Pageable.ofSize(10).withPage(0);
+
+    // when
+    final CustomPage<Review> result = queryRepository.findByPerfumeId(perfumeId, pageable);
+
+    // then
+    assertThat(result.getTotalElements()).isEqualTo(1);
+    final Review actual = result.getContent().get(0);
+    assertThat(actual.getId()).isEqualTo(createdReview.getId());
+  }
+
+  @Test
+  @DisplayName("특정 향수에 대한 페이징 처리된 리뷰를 조회한다.")
+  void testFindByPerfumeIdWithPaging() {
+    // given
+    final LocalDateTime now = LocalDateTime.now();
+    final long perfumeId = 1L;
+    IntStream.range(0, 20)
+        .forEach(
+            i -> {
+              final Review review =
+                  Review.create(
+                      "test",
+                      "test description",
+                      Strength.LIGHT,
+                      Duration.LONG,
+                      DayType.DAILY,
+                      perfumeId,
+                      1L,
+                      Season.SPRING,
+                      now);
+              final ReviewEntity createdReview = reviewMapper.toEntity(review);
+              entityManager.persist(createdReview);
+            });
+    entityManager.flush();
+    entityManager.clear();
+    final Pageable pageable = Pageable.ofSize(10).withPage(0);
+
+    // when
+    final CustomPage<Review> result = queryRepository.findByPerfumeId(perfumeId, pageable);
+
+    // then
+    assertThat(result.getTotalElements()).isEqualTo(20);
+    assertThat(result.getContent().size()).isEqualTo(10);
+    assertThat(result.isHasNext()).isTrue();
+  }
+
+  @Test
+  @DisplayName("특정 향수에 대한 마지막 페이지 리뷰를 조회한다.")
+  void testFindByPerfumeIdWithLastPage() {
+    // given
+    final LocalDateTime now = LocalDateTime.now();
+    final long perfumeId = 1L;
+    IntStream.range(0, 15)
+        .forEach(
+            i -> {
+              final Review review =
+                  Review.create(
+                      "test",
+                      "test description",
+                      Strength.LIGHT,
+                      Duration.LONG,
+                      DayType.DAILY,
+                      perfumeId,
+                      1L,
+                      Season.SPRING,
+                      now);
+              final ReviewEntity createdReview = reviewMapper.toEntity(review);
+              entityManager.persist(createdReview);
+            });
+    entityManager.flush();
+    entityManager.clear();
+    final Pageable pageable = Pageable.ofSize(10).withPage(1);
+
+    // when
+    final CustomPage<Review> result = queryRepository.findByPerfumeId(perfumeId, pageable);
+
+    // then
+    assertThat(result.getTotalElements()).isEqualTo(15);
+    assertThat(result.getContent().size()).isEqualTo(5);
+    assertThat(result.isLast()).isTrue();
   }
 }

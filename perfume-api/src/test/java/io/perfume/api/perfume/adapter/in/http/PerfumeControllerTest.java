@@ -37,6 +37,9 @@ import io.perfume.api.perfume.application.port.out.PerfumeRepository;
 import io.perfume.api.perfume.domain.Concentration;
 import io.perfume.api.perfume.domain.NotePyramidIds;
 import io.perfume.api.perfume.domain.Perfume;
+import io.perfume.api.review.application.facade.ReviewDetailFacadeService;
+import io.perfume.api.review.application.facade.dto.ReviewDetailResult;
+import io.perfume.api.review.application.facade.dto.ReviewDetailUserResult;
 import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
 import io.perfume.api.review.domain.type.DayType;
 import io.perfume.api.review.domain.type.Duration;
@@ -44,11 +47,7 @@ import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.adapter.out.persistence.user.Sex;
 import io.perfume.api.user.application.port.out.UserRepository;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,6 +78,7 @@ class PerfumeControllerTest {
   @MockBean private CreatePerfumeUseCase createPerfumeUseCase;
   @MockBean private GetFavoritePerfumesUseCase getFavoritePerfumesUseCase;
   @MockBean private UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
+  @MockBean private ReviewDetailFacadeService mockReviewFacadeService;
   @Autowired private ObjectMapper objectMapper;
   @Autowired private PerfumeRepository perfumeRepository;
   @Autowired private UserRepository userRepository;
@@ -633,5 +633,85 @@ class PerfumeControllerTest {
                     fieldWithPath("sex.OTHER")
                         .type(JsonFieldType.NUMBER)
                         .description("성별 지정 안 한 사람이 리뷰한 비율"))));
+  }
+
+  @Test
+  @DisplayName("특정 향수에 대한 리뷰를 조회한다.")
+  void testGetReviewsByPerfume() throws Exception {
+    // given
+    final List<ReviewDetailResult> contents =
+        List.of(
+            new ReviewDetailResult(1L, "", new ReviewDetailUserResult(1L, ""), List.of(), 1L, 1L),
+            new ReviewDetailResult(1L, "", new ReviewDetailUserResult(1L, ""), List.of(), 1L, 1L));
+    given(mockReviewFacadeService.getPaginatedPerfumeReviews(anyLong(), anyInt(), anyInt()))
+        .willReturn(new CustomPage<>(new PageImpl<>(contents)));
+
+    // when
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/perfumes/{id}/reviews", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("page", "0")
+                .param("size", "10")
+                .param("sort", "RECENT", "LIKE"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.content[0].id").value(contents.get(0).id()))
+        .andExpect(jsonPath("$.content[0].shortReview").value(contents.get(0).shortReview()))
+        .andExpect(jsonPath("$.content[0].user.id").value(contents.get(0).user().id()))
+        .andExpect(jsonPath("$.content[0].user.username").value(contents.get(0).user().name()))
+        .andExpect(jsonPath("$.content[0].user.thumbnail").value(""))
+        .andExpect(jsonPath("$.content[0].keywords").exists())
+        .andExpect(jsonPath("$.content[0].thumbnails").exists())
+        .andExpect(jsonPath("$.content[0].likeCount").value(contents.get(0).likeCount()))
+        .andExpect(jsonPath("$.content[0].commentCount").value(contents.get(0).commentCount()))
+        .andDo(
+            document(
+                "get-perfume-reviews",
+                pathParameters(parameterWithName("id").description("향수 ID")),
+                queryParameters(
+                    parameterWithName("page").description("페이지 번호 (0부터 시작)"),
+                    parameterWithName("size").description("페이지에 존재하는 리뷰 개수"),
+                    parameterWithName("sort")
+                        .description("정렬 기준. \"RECENT\" 또는 \"LIKE\"를 입력한다. (기본값: RECENT)")),
+                responseFields(
+                    fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("페이지 처음인지 여부"),
+                    fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("페이지 마지막인지 여부"),
+                    fieldWithPath("hasNext")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("다음 페이지 존재하는지 여부"),
+                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수"),
+                    fieldWithPath("totalElements")
+                        .type(JsonFieldType.NUMBER)
+                        .description("총 리뷰 개수"),
+                    fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                    fieldWithPath("size").type(JsonFieldType.NUMBER).description("현재 페이지의 리뷰 개수"),
+                    fieldWithPath("content[].id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
+                    fieldWithPath("content[].shortReview")
+                        .type(JsonFieldType.STRING)
+                        .description("리뷰 짧은 글"),
+                    fieldWithPath("content[].user.id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("리뷰 작성자 ID"),
+                    fieldWithPath("content[].user.username")
+                        .type(JsonFieldType.STRING)
+                        .description("리뷰 작성자 닉네임"),
+                    fieldWithPath("content[].user.thumbnail")
+                        .type(JsonFieldType.STRING)
+                        .description("리뷰 작성자 프로필 이미지"),
+                    fieldWithPath("content[].keywords")
+                        .type(JsonFieldType.ARRAY)
+                        .description("리뷰 태그 목록"),
+                    fieldWithPath("content[].thumbnails")
+                        .type(JsonFieldType.ARRAY)
+                        .description("썸네일 주소"),
+                    fieldWithPath("content[].likeCount")
+                        .type(JsonFieldType.NUMBER)
+                        .description("리뷰 좋아요 개수"),
+                    fieldWithPath("content[].commentCount")
+                        .type(JsonFieldType.NUMBER)
+                        .description("리뷰 댓글 개수"))));
   }
 }

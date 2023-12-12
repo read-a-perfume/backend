@@ -166,6 +166,14 @@ include::{snippets}/get-favorites/http-request.adoc[]
 include::{snippets}/get-favorites/http-response.adoc[]
 include::{snippets}/get-favorites/response-fields.adoc[]
 
+== 향수 리뷰 조회
+=== 요청
+include::{snippets}/get-perfume-reviews/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume-reviews/http-response.adoc[]
+include::{snippets}/get-perfume-reviews/response-fields.adoc[]
+
 == 브랜드 별 향수 조회
 === 요청
 include::{snippets}/get-perfume-by-brand/http-request.adoc[]

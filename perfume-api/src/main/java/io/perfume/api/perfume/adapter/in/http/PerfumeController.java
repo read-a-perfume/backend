@@ -3,13 +3,7 @@ package io.perfume.api.perfume.adapter.in.http;
 import io.micrometer.common.lang.Nullable;
 import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.common.page.CustomSlice;
-import io.perfume.api.perfume.adapter.in.http.dto.CreatePerfumeRequestDto;
-import io.perfume.api.perfume.adapter.in.http.dto.FavoritePerfumeResponseDto;
-import io.perfume.api.perfume.adapter.in.http.dto.PerfumeFavoriteResponseDto;
-import io.perfume.api.perfume.adapter.in.http.dto.PerfumeNameResponseDto;
-import io.perfume.api.perfume.adapter.in.http.dto.PerfumeResponseDto;
-import io.perfume.api.perfume.adapter.in.http.dto.PerfumeStatisticResponseDto;
-import io.perfume.api.perfume.adapter.in.http.dto.SimplePerfumeResponseDto;
+import io.perfume.api.perfume.adapter.in.http.dto.*;
 import io.perfume.api.perfume.application.port.in.CreatePerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.FindPerfumeUseCase;
 import io.perfume.api.perfume.application.port.in.GetFavoritePerfumesUseCase;
@@ -18,6 +12,8 @@ import io.perfume.api.perfume.application.port.in.dto.CreatePerfumeCommand;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeFavoriteResult;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
+import io.perfume.api.review.application.facade.dto.ReviewDetailResult;
+import io.perfume.api.review.application.in.review.GetPerfumeReviewsUseCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +43,8 @@ public class PerfumeController {
   private final UserFavoritePerfumeUseCase userFavoritePerfumeUseCase;
 
   private final GetFavoritePerfumesUseCase getFavoritePerfumesUseCase;
+
+  private final GetPerfumeReviewsUseCase getPerfumeReviewsUseCase;
 
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
@@ -137,5 +135,16 @@ public class PerfumeController {
   @GetMapping("/{id}/statistics")
   public PerfumeStatisticResponseDto getStatistics(@PathVariable Long id) {
     return PerfumeStatisticResponseDto.from(findPerfumeUseCase.getStatistics(id));
+  }
+
+  @GetMapping("/{id}/reviews")
+  public CustomPage<GetPerfumeReviewsResponseDto> getPerfumeReviews(
+      @PathVariable Long id, @RequestParam int page, @RequestParam int size) {
+    final CustomPage<ReviewDetailResult> reviews =
+        getPerfumeReviewsUseCase.getPaginatedPerfumeReviews(id, page, size);
+    final List<GetPerfumeReviewsResponseDto> reviewResults =
+        GetPerfumeReviewsResponseDto.from(reviews.getContent());
+
+    return new CustomPage<>(reviewResults, reviews);
   }
 }
