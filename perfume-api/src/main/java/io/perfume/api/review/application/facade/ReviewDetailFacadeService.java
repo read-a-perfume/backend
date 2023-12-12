@@ -1,6 +1,7 @@
 package io.perfume.api.review.application.facade;
 
 import dto.repository.CursorPagination;
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailCommand;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailResult;
@@ -27,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,7 +45,8 @@ public class ReviewDetailFacadeService
         GetReviewsUseCase,
         GetReviewInViewUseCase,
         ReviewStatisticUseCase,
-        GetReviewCountUseCase {
+        GetReviewCountUseCase,
+        GetPerfumeReviewsUseCase {
 
   private final ReviewService reviewService;
   private final ReviewLikeService reviewLikeService;
@@ -53,113 +56,73 @@ public class ReviewDetailFacadeService
   private final FindUserUseCase findUserUseCase;
 
   @Override
-  public List<ReviewDetailResult> getPaginatedReviews(final long page, final long size) {
-    final List<ReviewResult> reviews = fetchReviews(page, size);
-    final Map<Long, UserResult> authors = fetchAuthors(reviews);
-    final Map<Long, List<ReviewTagResult>> tags = fetchTags(reviews);
-    final Map<Long, ReviewCommentCount> commentCountsMap = fetchCommentsCount(reviews);
-    final Map<Long, ReviewLikeCount> likeCountsMap = fetchLikesCount(reviews);
+  public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
+    final List<ReviewResult> reviews =
+        reviewService.getPaginatedReviews(page, size).stream().toList();
 
-    return mapReviewDetailResults(reviews, authors, tags, commentCountsMap, likeCountsMap);
+    return transformToReviewDetailResults(reviews);
   }
 
-  private List<ReviewResult> fetchReviews(final long page, final long size) {
-    return reviewService.getPaginatedReviews(page, size).stream().toList();
+  private List<ReviewDetailResult> transformToReviewDetailResults(final List<ReviewResult> items) {
+    final Map<Long, UserResult> authors = getReviewAuthorsMap(items);
+    final Map<Long, List<ReviewTagResult>> tags = getReviewTagsMap(items);
+    final Map<Long, ReviewCommentCount> commentCountsMap = getReviewCommentMap(items);
+    final Map<Long, ReviewLikeCount> likeCountsMap = getReviewLikeCountMap(items);
+
+    return items.stream()
+        .map(createReviewDetailResultMapper(authors, tags, commentCountsMap, likeCountsMap))
+        .toList();
   }
 
-  private Map<Long, UserResult> fetchAuthors(final List<ReviewResult> reviews) {
-    final List<Long> authorIds = reviews.stream().map(ReviewResult::authorId).toList();
-
-    return getAuthorsMap(authorIds);
-  }
-
-  private Map<Long, List<ReviewTagResult>> fetchTags(final List<ReviewResult> reviews) {
-    final List<Long> reviewIds = reviews.stream().map(ReviewResult::id).toList();
-
-    return getReviewTagsMap(reviewIds);
-  }
-
-  private Map<Long, ReviewCommentCount> fetchCommentsCount(final List<ReviewResult> reviews) {
-    final List<Long> reviewIds = reviews.stream().map(ReviewResult::id).toList();
-    final List<ReviewCommentCount> commentCounts =
-        reviewCommentService.getReviewCommentCount(reviewIds);
-
-    return commentCounts.stream()
-        .collect(Collectors.toMap(ReviewCommentCount::reviewId, Function.identity(), (a, b) -> a));
-  }
-
-  private Map<Long, ReviewLikeCount> fetchLikesCount(final List<ReviewResult> reviews) {
-    final List<Long> reviewIds = reviews.stream().map(ReviewResult::id).toList();
+  private Map<Long, ReviewLikeCount> getReviewLikeCountMap(final List<ReviewResult> items) {
+    final List<Long> reviewIds = items.stream().map(ReviewResult::id).toList();
     final List<ReviewLikeCount> likeCounts = reviewLikeService.getReviewLikeCount(reviewIds);
-
     return likeCounts.stream()
         .collect(Collectors.toMap(ReviewLikeCount::reviewId, Function.identity(), (a, b) -> a));
   }
 
-  private List<ReviewDetailResult> mapReviewDetailResults(
-      final List<ReviewResult> reviews,
-      final Map<Long, UserResult> authors,
-      final Map<Long, List<ReviewTagResult>> tags,
-      final Map<Long, ReviewCommentCount> commentCountsMap,
-      final Map<Long, ReviewLikeCount> likeCountsMap) {
-    return reviews.stream()
-        .map(mapReviewDetailResult(authors, tags, commentCountsMap, likeCountsMap))
-        .toList();
+  private Map<Long, ReviewCommentCount> getReviewCommentMap(final List<ReviewResult> items) {
+    final List<Long> reviewIds = items.stream().map(ReviewResult::id).toList();
+    final List<ReviewCommentCount> commentCounts =
+        reviewCommentService.getReviewCommentCount(reviewIds);
+    return commentCounts.stream()
+        .collect(Collectors.toMap(ReviewCommentCount::reviewId, Function.identity(), (a, b) -> a));
   }
 
-  private Map<Long, UserResult> getAuthorsMap(final List<Long> authorIds) {
-    return findUserUseCase.findUsersByIds(authorIds).stream()
-        .collect(Collectors.toMap(UserResult::id, Function.identity(), (a, b) -> a));
+  private Map<Long, UserResult> getReviewAuthorsMap(final List<ReviewResult> items) {
+    final List<Long> userIds = items.stream().map(ReviewResult::authorId).toList();
+    return getAuthorsMap(userIds);
   }
 
-  private Map<Long, List<ReviewTagResult>> getReviewTagsMap(final List<Long> reviewIds) {
+  private Map<Long, UserResult> getAuthorsMap(final List<Long> userIds) {
+    return findUserUseCase.findUsersByIds(userIds).stream()
+        .map(user -> Map.entry(user.id(), user))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a));
+  }
+
+  private Map<Long, List<ReviewTagResult>> getReviewTagsMap(final List<ReviewResult> items) {
+    final List<Long> reviewIds = items.stream().map(ReviewResult::id).toList();
     return reviewTagService.getReviewsTags(reviewIds).stream()
         .collect(Collectors.groupingBy(ReviewTagResult::reviewId));
   }
 
-  private Function<ReviewResult, ReviewDetailResult> mapReviewDetailResult(
-      final Map<Long, UserResult> usersMap,
-      final Map<Long, List<ReviewTagResult>> tagsMap,
-      final Map<Long, ReviewCommentCount> commentCountsMap,
-      final Map<Long, ReviewLikeCount> likeCountsMap) {
-    return review ->
-        processReviewResult(review, usersMap, tagsMap, commentCountsMap, likeCountsMap);
-  }
+  private Function<ReviewResult, ReviewDetailResult> createReviewDetailResultMapper(
+      Map<Long, UserResult> usersMap,
+      Map<Long, List<ReviewTagResult>> tagsMap,
+      Map<Long, ReviewCommentCount> commentCountsMap,
+      Map<Long, ReviewLikeCount> likeCountsMap) {
+    return review -> {
+      final var author = usersMap.getOrDefault(review.authorId(), UserResult.EMPTY);
+      final var tags =
+          tagsMap.getOrDefault(review.id(), Collections.emptyList()).stream()
+              .map(ReviewTagResult::name)
+              .toList();
+      final var commentCount =
+          commentCountsMap.getOrDefault(review.id(), ReviewCommentCount.ZERO).count();
+      final var likeCount = likeCountsMap.getOrDefault(review.id(), ReviewLikeCount.ZERO).count();
 
-  private UserResult getReviewUser(
-      final ReviewResult review, final Map<Long, UserResult> usersMap) {
-    return usersMap.getOrDefault(review.authorId(), UserResult.EMPTY);
-  }
-
-  private List<String> getReviewTags(
-      final ReviewResult review, final Map<Long, List<ReviewTagResult>> tagsMap) {
-    return tagsMap.getOrDefault(review.id(), Collections.emptyList()).stream()
-        .map(ReviewTagResult::name)
-        .toList();
-  }
-
-  private long getReviewCommentCount(
-      final ReviewResult review, final Map<Long, ReviewCommentCount> commentCountsMap) {
-    return commentCountsMap.getOrDefault(review.id(), ReviewCommentCount.ZERO).count();
-  }
-
-  private long getReviewLikeCount(
-      final ReviewResult review, final Map<Long, ReviewLikeCount> likeCountsMap) {
-    return likeCountsMap.getOrDefault(review.id(), ReviewLikeCount.ZERO).count();
-  }
-
-  private ReviewDetailResult processReviewResult(
-      final ReviewResult review,
-      final Map<Long, UserResult> usersMap,
-      final Map<Long, List<ReviewTagResult>> tagsMap,
-      final Map<Long, ReviewCommentCount> commentCountsMap,
-      final Map<Long, ReviewLikeCount> likeCountsMap) {
-    final UserResult author = getReviewUser(review, usersMap);
-    final List<String> keywords = getReviewTags(review, tagsMap);
-    final long commentCount = getReviewCommentCount(review, commentCountsMap);
-    final long likeCount = getReviewLikeCount(review, likeCountsMap);
-
-    return ReviewDetailResult.from(review, author, keywords, likeCount, commentCount);
+      return ReviewDetailResult.from(review, author, tags, likeCount, commentCount);
+    };
   }
 
   @Override
@@ -193,21 +156,23 @@ public class ReviewDetailFacadeService
   @Override
   public CursorPagination<ReviewCommentDetailResult> getReviewComments(
       final ReviewCommentDetailCommand command) {
-    final var comments =
-        reviewCommentService.getReviewComments(
-            new GetReviewCommentsCommand(
-                command.size(), command.before(), command.after(), command.reviewId()));
+    final CursorPagination<ReviewComment> reviewComments =
+        reviewCommentService.getReviewComments(command.toGetReviewCommentsCommand());
+    final Map<Long, UserResult> authorsMap = getCommentAuthorsMap(reviewComments.getItems());
+    final List<ReviewCommentDetailResult> result =
+        reviewComments.getItems().stream()
+            .map(createReviewCommentDetailResultMapper(authorsMap))
+            .toList();
 
-    final var userIds = comments.getItems().stream().map(ReviewComment::getUserId).toList();
-    final var authorsMap = getAuthorsMap(userIds);
-
-    final var result =
-        comments.getItems().stream().map(mapReviewCommentDetailResult(authorsMap)).toList();
-
-    return CursorPagination.of(result, comments.hasNext(), comments.hasPrevious());
+    return CursorPagination.of(result, reviewComments.hasNext(), reviewComments.hasPrevious());
   }
 
-  private Function<ReviewComment, ReviewCommentDetailResult> mapReviewCommentDetailResult(
+  private Map<Long, UserResult> getCommentAuthorsMap(final List<ReviewComment> items) {
+    final List<Long> userIds = items.stream().map(ReviewComment::getUserId).toList();
+    return getAuthorsMap(userIds);
+  }
+
+  private Function<ReviewComment, ReviewCommentDetailResult> createReviewCommentDetailResultMapper(
       Map<Long, UserResult> usersMap) {
     return comment -> {
       final var author = usersMap.getOrDefault(comment.getUserId(), UserResult.EMPTY);
@@ -247,5 +212,16 @@ public class ReviewDetailFacadeService
   @Override
   public Long getReviewCountByUserId(Long userId) {
     return reviewService.getReviewCountByUserId(userId);
+  }
+
+  @Override
+  public CustomPage<ReviewDetailResult> getPaginatedPerfumeReviews(
+      long perfumeId, int page, int size) {
+    final Pageable pageable = Pageable.ofSize(size).withPage(page);
+    final CustomPage<ReviewResult> reviews =
+        reviewService.getReviewsByPerfumeId(perfumeId, pageable);
+    final List<ReviewResult> items = reviews.getContent();
+
+    return new CustomPage<>(transformToReviewDetailResults(items), reviews);
   }
 }
