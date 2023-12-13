@@ -476,7 +476,8 @@ class PerfumeControllerTest {
                 pathParameters(parameterWithName("id").description("카테고리 ID")),
                 queryParameters(
                     parameterWithName("page").description("페이지 번호 (0부터 시작)"),
-                    parameterWithName("pageSize").description("페이지에 존재하는 향수 개수")),
+                    parameterWithName("pageSize").description("페이지에 존재하는 향수 개수")
+                ),
                 responseFields(
                     fieldWithPath("content[].id").type(JsonFieldType.NUMBER).description("향수 ID"),
                     fieldWithPath("content[].name").type(JsonFieldType.STRING).description("향수 이름"),
@@ -502,9 +503,10 @@ class PerfumeControllerTest {
                         .type(JsonFieldType.NUMBER)
                         .description("총 향수 개수"),
                     fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
-                    fieldWithPath("pageSize")
-                        .type(JsonFieldType.NUMBER)
-                        .description("현재 페이지의 향수 개수"))));
+//                    fieldWithPath("pageSize")
+//                        .type(JsonFieldType.NUMBER)
+//                        .description("현재 페이지의 향수 개수"),
+                    fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 사이즈"))));
   }
 
   @Test

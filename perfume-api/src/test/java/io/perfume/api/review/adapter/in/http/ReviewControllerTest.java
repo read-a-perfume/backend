@@ -228,7 +228,7 @@ class ReviewControllerTest {
                 now));
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("page", "1");
-    params.add("pageSize", "10");
+    params.add("size", "10");
 
     // when & then
     mockMvc
