@@ -30,9 +30,8 @@ public class BrandQueryPersistenceAdapter implements BrandQueryRepository {
 
   @Override
   public List<Brand> findAll() {
-    List<BrandEntity> result = jpaQueryFactory.selectFrom(brandEntity)
-        .where(brandEntity.deletedAt.isNull())
-        .fetch();
+    List<BrandEntity> result =
+        jpaQueryFactory.selectFrom(brandEntity).where(brandEntity.deletedAt.isNull()).fetch();
 
     return result.stream().map(brandMapper::toDomain).toList();
   }

@@ -3,7 +3,6 @@ package io.perfume.api.mypage.adapter.port.in.http;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -22,7 +21,6 @@ import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import java.time.LocalDateTime;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -85,8 +83,7 @@ class MypageControllerTest {
         .andDo(
             document(
                 "follow-user",
-                pathParameters(parameterWithName("id").description("팔로우 대상 유저 ID"))
-            ));
+                pathParameters(parameterWithName("id").description("팔로우 대상 유저 ID"))));
   }
 
   @Test

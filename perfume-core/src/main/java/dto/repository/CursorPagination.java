@@ -12,7 +12,12 @@ public class CursorPagination<T> {
   private final String nextCursor;
   private final String prevCursor;
 
-  private CursorPagination(final List<T> items, final boolean hasNext, final boolean hasPrevious, final String nextCursor, final String prevCursor) {
+  private CursorPagination(
+      final List<T> items,
+      final boolean hasNext,
+      final boolean hasPrevious,
+      final String nextCursor,
+      final String prevCursor) {
     this.items = items;
     this.hasNext = hasNext;
     this.hasPrevious = hasPrevious;
@@ -20,18 +25,29 @@ public class CursorPagination<T> {
     this.prevCursor = prevCursor;
   }
 
-  public static <T, R> CursorPagination<R> of(final List<R> items, final CursorPagination<T> cursorPagination) {
-    return new CursorPagination<>(items, cursorPagination.hasNext, cursorPagination.hasPrevious, cursorPagination.nextCursor, cursorPagination.prevCursor);
+  public static <T, R> CursorPagination<R> of(
+      final List<R> items, final CursorPagination<T> cursorPagination) {
+    return new CursorPagination<>(
+        items,
+        cursorPagination.hasNext,
+        cursorPagination.hasPrevious,
+        cursorPagination.nextCursor,
+        cursorPagination.prevCursor);
   }
 
-  public static <T> CursorPagination<T> of(final List<T> items, final CursorPageable pageable, final Function<T, String> tokenSelector) {
+  public static <T> CursorPagination<T> of(
+      final List<T> items, final CursorPageable pageable, final Function<T, String> tokenSelector) {
     final long size = pageable.getSize();
     final var hasMoreItem = items.size() > size;
     final var resizedItems = hasMoreItem ? items.subList(0, (int) size) : items;
     final boolean hasCursor = pageable.hasCursor();
 
-    final String nextToken = new String(Base64.getEncoder().encode(tokenSelector.apply(resizedItems.get(resizedItems.size() - 1)).getBytes()));
-    final String prevToken = new String(Base64.getEncoder().encode(tokenSelector.apply(resizedItems.get(0)).getBytes()));
+    final String nextToken =
+        new String(
+            Base64.getEncoder()
+                .encode(tokenSelector.apply(resizedItems.get(resizedItems.size() - 1)).getBytes()));
+    final String prevToken =
+        new String(Base64.getEncoder().encode(tokenSelector.apply(resizedItems.get(0)).getBytes()));
 
     if (pageable.isNext()) {
       return new CursorPagination<>(resizedItems, hasMoreItem, hasCursor, nextToken, prevToken);
