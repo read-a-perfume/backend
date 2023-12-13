@@ -13,9 +13,7 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,16 +55,21 @@ class MagazineQueryPersistenceAdapterTest {
     // given
     final long branId = 1L;
     final LocalDateTime now = LocalDateTime.now();
-    final List<Magazine> magazines = IntStream
-            .range(0, 15)
-            .mapToObj((index) -> Magazine.create("test", "test", "test", 1L, 1L, 1L, branId, now.plusSeconds(1000L * index)))
+    final List<Magazine> magazines =
+        IntStream.range(0, 15)
+            .mapToObj(
+                (index) ->
+                    Magazine.create(
+                        "test", "test", "test", 1L, 1L, 1L, branId, now.plusSeconds(1000L * index)))
             .map(magazineRepository::save)
             .toList();
-    final String cursor = Base64.encodeBase64String(magazines.get(14).getCreatedAt().toString().getBytes());
+    final String cursor =
+        Base64.encodeBase64String(magazines.get(14).getCreatedAt().toString().getBytes());
     final CursorPageable pageable = new CursorPageable(2L, CursorDirection.NEXT, cursor);
 
     // when
-    final CursorPagination<Magazine> result = magazineQueryRepository.findByBrandId(pageable, branId);
+    final CursorPagination<Magazine> result =
+        magazineQueryRepository.findByBrandId(pageable, branId);
 
     // then
     assertThat(result.getItems()).hasSize(2);

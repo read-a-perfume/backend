@@ -7,11 +7,8 @@ import io.perfume.api.brand.application.port.in.GetTagNameUseCase;
 import io.perfume.api.brand.application.port.in.dto.GetMagazineCommand;
 import io.perfume.api.brand.application.port.in.dto.GetMagazineResult;
 import io.perfume.api.brand.application.port.out.MagazineQueryRepository;
-import io.perfume.api.brand.domain.Brand;
 import io.perfume.api.brand.domain.TagName;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 @Service

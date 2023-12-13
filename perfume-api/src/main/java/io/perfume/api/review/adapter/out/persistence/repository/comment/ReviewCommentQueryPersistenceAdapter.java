@@ -3,7 +3,6 @@ package io.perfume.api.review.adapter.out.persistence.repository.comment;
 import static io.perfume.api.review.adapter.out.persistence.repository.comment.QReviewCommentEntity.reviewCommentEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import dto.repository.CursorDirection;
 import dto.repository.CursorPageable;
 import dto.repository.CursorPagination;
 import io.perfume.api.base.PersistenceAdapter;
@@ -71,7 +70,9 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
     }
 
     final var comments =
-        qb.limit(pageable.getFetchSize()).fetch().stream().map(reviewCommentMapper::toDomain).toList();
+        qb.limit(pageable.getFetchSize()).fetch().stream()
+            .map(reviewCommentMapper::toDomain)
+            .toList();
 
     return CursorPagination.of(
         comments, pageable, (reviewComment) -> reviewComment.getId().toString());

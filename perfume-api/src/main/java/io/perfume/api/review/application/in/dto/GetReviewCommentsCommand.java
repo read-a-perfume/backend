@@ -2,7 +2,7 @@ package io.perfume.api.review.application.in.dto;
 
 import dto.repository.CursorDirection;
 
-public record GetReviewCommentsCommand(long size, String  before, String after, Long reviewId) {
+public record GetReviewCommentsCommand(long size, String before, String after, Long reviewId) {
 
   public String getCursor() {
     if (before != null) {

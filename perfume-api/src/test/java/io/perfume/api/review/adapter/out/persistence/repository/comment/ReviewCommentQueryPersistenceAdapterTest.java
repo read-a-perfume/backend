@@ -1,41 +1,41 @@
-//package io.perfume.api.review.adapter.out.persistence.repository.comment;
+// package io.perfume.api.review.adapter.out.persistence.repository.comment;
 //
-//import static org.assertj.core.api.Assertions.assertThat;
+// import static org.assertj.core.api.Assertions.assertThat;
 //
-//import dto.repository.CursorDirection;
-//import dto.repository.CursorPageable;
-//import io.perfume.api.configuration.TestQueryDSLConfiguration;
-//import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewEntity;
-//import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewMapper;
-//import io.perfume.api.review.application.out.comment.dto.ReviewCommentCount;
-//import io.perfume.api.review.domain.Review;
-//import io.perfume.api.review.domain.ReviewComment;
-//import io.perfume.api.review.domain.type.DayType;
-//import io.perfume.api.review.domain.type.Duration;
-//import io.perfume.api.review.domain.type.Season;
-//import io.perfume.api.review.domain.type.Strength;
-//import jakarta.persistence.EntityManager;
-//import java.time.LocalDateTime;
-//import java.util.List;
-//import java.util.stream.Stream;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-//import org.springframework.context.annotation.Import;
-//import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-//import org.springframework.test.context.ActiveProfiles;
+// import dto.repository.CursorDirection;
+// import dto.repository.CursorPageable;
+// import io.perfume.api.configuration.TestQueryDSLConfiguration;
+// import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewEntity;
+// import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewMapper;
+// import io.perfume.api.review.application.out.comment.dto.ReviewCommentCount;
+// import io.perfume.api.review.domain.Review;
+// import io.perfume.api.review.domain.ReviewComment;
+// import io.perfume.api.review.domain.type.DayType;
+// import io.perfume.api.review.domain.type.Duration;
+// import io.perfume.api.review.domain.type.Season;
+// import io.perfume.api.review.domain.type.Strength;
+// import jakarta.persistence.EntityManager;
+// import java.time.LocalDateTime;
+// import java.util.List;
+// import java.util.stream.Stream;
+// import org.junit.jupiter.api.DisplayName;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+// import org.springframework.context.annotation.Import;
+// import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+// import org.springframework.test.context.ActiveProfiles;
 //
-//@ActiveProfiles("test")
-//@Import({
+// @ActiveProfiles("test")
+// @Import({
 //  ReviewCommentQueryPersistenceAdapter.class,
 //  TestQueryDSLConfiguration.class,
 //  ReviewCommentMapper.class,
 //  ReviewMapper.class
-//})
-//@DataJpaTest
-//@EnableJpaAuditing
-//class ReviewCommentQueryPersistenceAdapterTest {
+// })
+// @DataJpaTest
+// @EnableJpaAuditing
+// class ReviewCommentQueryPersistenceAdapterTest {
 //
 //  @Autowired private ReviewCommentQueryPersistenceAdapter repository;
 //
@@ -196,4 +196,4 @@
 //    assertThat(result.get(0).reviewId()).isEqualTo(reviewId);
 //    assertThat(result.get(0).count()).isEqualTo(3);
 //  }
-//}
+// }
