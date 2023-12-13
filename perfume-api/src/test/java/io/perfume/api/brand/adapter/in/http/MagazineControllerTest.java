@@ -55,7 +55,7 @@ class MagazineControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "1", roles = "USER")
+    @WithMockUser(username = "1", roles = "ADMIN")
     void testCreateMagazine() throws Exception {
         // given
         var now = LocalDateTime.now();
