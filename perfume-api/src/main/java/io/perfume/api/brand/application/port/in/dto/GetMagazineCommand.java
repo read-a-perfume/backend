@@ -2,9 +2,9 @@ package io.perfume.api.brand.application.port.in.dto;
 
 import dto.repository.CursorDirection;
 
-public record GetMagazineCommand(Long pageSize, Long before, Long after, Long brandId) {
+public record GetMagazineCommand(Long pageSize, String before, String after, Long brandId) {
 
-  public Long getCursor() {
+  public String getCursor() {
     if (before != null) return before;
     return after;
   }

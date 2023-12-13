@@ -107,7 +107,7 @@ public class ReviewController {
   }
 
   @GetMapping("/{id}/comments")
-  public ResponseEntity<CursorResponse<GetReviewCommentsResponseDto, Long>> getReviewComments(
+  public ResponseEntity<CursorResponse<GetReviewCommentsResponseDto>> getReviewComments(
       @PathVariable Long id, GetReviewCommentsRequestDto dto) {
     final var comments = reviewDetailFacadeService.getReviewComments(dto.toCommand(id));
     final var responseItems =
@@ -118,8 +118,8 @@ public class ReviewController {
             responseItems,
             comments.hasNext(),
             comments.hasPrevious(),
-            comments.getFirstCursor().id(),
-            comments.getLastCursor().id()));
+            comments.getFirstCursor(),
+            comments.getLastCursor()));
   }
 
   @PreAuthorize("isAuthenticated()")

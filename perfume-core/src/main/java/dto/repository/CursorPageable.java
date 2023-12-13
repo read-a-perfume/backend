@@ -1,14 +1,20 @@
 package dto.repository;
 
-public class CursorPageable<T> {
+import java.util.Base64;
+import java.util.Optional;
+import java.util.function.Function;
+
+public class CursorPageable {
 
   private final long size;
 
-  private final T cursor;
+  private final String cursor;
 
   private final CursorDirection direction;
 
-  public CursorPageable(final long size, final CursorDirection direction, final T cursor) {
+  private static final int PADDING_SIZE = 1;
+
+  public CursorPageable(final long size, final CursorDirection direction, final String cursor) {
     this.size = size;
     this.cursor = cursor;
     this.direction = direction;
@@ -18,11 +24,32 @@ public class CursorPageable<T> {
     return size;
   }
 
-  public T getCursor() {
-    return cursor;
+  public long getFetchSize() {
+    return size + PADDING_SIZE;
+  }
+
+  public <T> Optional<T> getCursor(Function<String, T> converter) {
+    try {
+      final String decoded = new String(Base64.getDecoder().decode(cursor));
+      return Optional.ofNullable(converter.apply(decoded));
+    } catch (Exception e) {
+      return Optional.empty();
+    }
   }
 
   public CursorDirection getDirection() {
     return direction;
+  }
+
+  public boolean isNext() {
+    return direction.isNext();
+  }
+
+  public boolean isPrev() {
+    return !isNext();
+  }
+
+  public boolean hasCursor() {
+    return cursor != null;
   }
 }

@@ -12,5 +12,5 @@ public interface MagazineQueryRepository {
 
   List<Magazine> findByMagazines(Long brandId);
 
-  CursorPagination<Magazine> findByBrandId(CursorPageable<Long> pageable, Long brandId);
+  CursorPagination<Magazine> findByBrandId(CursorPageable pageable, Long brandId);
 }

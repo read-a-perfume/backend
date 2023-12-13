@@ -45,7 +45,7 @@ public class ReviewCommentService {
 
   public CursorPagination<ReviewComment> getReviewComments(GetReviewCommentsCommand command) {
     final var pageable =
-        new CursorPageable<>(command.size(), command.getDirection(), command.getCursor());
+        new CursorPageable(command.size(), command.getDirection(), command.getCursor());
     return reviewCommentQueryRepository.findByReviewId(pageable, command.reviewId());
   }
 

@@ -24,10 +24,9 @@ public class MagazineController {
 
   private final GetMagazineUseCase getMagazineUseCase;
 
-  // TODO : Test, restDocs 작성
   @PreAuthorize("isAuthenticated()")
   @GetMapping
-  public ResponseEntity<CursorResponse<GetMagazinesResponseDto, Long>> getMagazines(
+  public ResponseEntity<CursorResponse<GetMagazinesResponseDto>> getMagazines(
       @PathVariable("id") Long brandId, GetMagazineRequestDto request) {
     final var magazines = getMagazineUseCase.getMagazines(request.toCommand(brandId));
     final var responseItems =
@@ -37,8 +36,8 @@ public class MagazineController {
             responseItems,
             magazines.hasNext(),
             magazines.hasPrevious(),
-            magazines.getFirstCursor().id(),
-            magazines.getLastCursor().id()));
+            magazines.getFirstCursor(),
+            magazines.getLastCursor()));
   }
 
   @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")

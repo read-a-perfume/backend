@@ -1,5 +1,6 @@
 package io.perfume.api.brand.adapter.in.http;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -9,10 +10,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.brand.adapter.in.http.dto.CreateMagazineRequestDto;
 import io.perfume.api.brand.application.port.out.BrandRepository;
+import io.perfume.api.brand.application.port.out.MagazineRepository;
 import io.perfume.api.brand.domain.Brand;
+import io.perfume.api.brand.domain.Magazine;
 import io.perfume.api.user.application.port.out.UserRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +50,8 @@ class MagazineControllerTest {
   @Autowired private UserRepository userRepository;
 
   @Autowired private BrandRepository brandRepository;
+
+  @Autowired private MagazineRepository magazineRepository;
 
   @BeforeEach
   void setUp(
@@ -97,21 +107,35 @@ class MagazineControllerTest {
   @Test
   @WithMockUser(username = "1", roles = "ADMIN")
   void testGetMagazines() throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var brand =
+            Brand.builder().id(1L).createdAt(now).updatedAt(now).name("test").story("test").build();
+    brandRepository.save(brand);
+    final List<Magazine> magazines = IntStream
+            .range(0, 15)
+            .mapToObj((index) -> Magazine.create("test", "test", "test", 1L, 1L, 1L, brand.getId(), now.plusSeconds(1000 * index)))
+            .map(magazineRepository::save)
+            .toList();
+    final String cursor = Base64.encodeBase64String(magazines.get(2).getCreatedAt().toString().getBytes());
+
     // when & then
-    //        mockMvc
-    //                .perform(
-    //                        MockMvcRequestBuilders.get("/v1/magazines")
-    //                                .accept(MediaType.APPLICATION_JSON)
-    //                                .contentType(MediaType.APPLICATION_JSON))
-    //                .andExpect(status().isOk())
-    //                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    //                .andDo(
-    //                        document(
-    //                                "get-magazines",
-    //                                responseFields(
-    //
-    // fieldWithPath("id").type(JsonFieldType.NUMBER).description("매거진 ID"))
-    //                        )
-    //                );
+            mockMvc
+                    .perform(
+                            MockMvcRequestBuilders.get("/v1/{id}/magazines", 1L)
+                                    .queryParam("pageSize", "5")
+                                    .queryParam("after", cursor)
+                                    .accept(MediaType.APPLICATION_JSON)
+                                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andDo(
+                            document(
+                                    "get-magazines",
+                                    responseFields(
+
+     fieldWithPath("id").type(JsonFieldType.NUMBER).description("매거진 ID"))
+                            )
+                    );
   }
 }

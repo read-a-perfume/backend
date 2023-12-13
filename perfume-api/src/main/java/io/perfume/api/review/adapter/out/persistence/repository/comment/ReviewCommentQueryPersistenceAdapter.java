@@ -50,7 +50,7 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
 
   @Override
   public CursorPagination<ReviewComment> findByReviewId(
-      CursorPageable<Long> pageable, final long reviewId) {
+      CursorPageable pageable, final long reviewId) {
     final var qb =
         jpaQueryFactory
             .selectFrom(reviewCommentEntity)
@@ -60,19 +60,21 @@ public class ReviewCommentQueryPersistenceAdapter implements ReviewCommentQueryR
                     .eq(reviewId)
                     .and(reviewCommentEntity.deletedAt.isNull()));
 
-    if (pageable.getCursor() != null) {
-      if (pageable.getDirection() == CursorDirection.NEXT) {
-        qb.where(reviewCommentEntity.id.gt(pageable.getCursor()));
+    final Optional<Long> cursor = pageable.getCursor(Long::parseLong);
+    if (cursor.isPresent()) {
+      final long id = cursor.get();
+      if (pageable.isNext()) {
+        qb.where(reviewCommentEntity.id.gt(id));
       } else {
-        qb.where(reviewCommentEntity.id.lt(pageable.getCursor()));
+        qb.where(reviewCommentEntity.id.lt(id));
       }
     }
 
     final var comments =
-        qb.limit(pageable.getSize()).fetch().stream().map(reviewCommentMapper::toDomain).toList();
+        qb.limit(pageable.getFetchSize()).fetch().stream().map(reviewCommentMapper::toDomain).toList();
 
     return CursorPagination.of(
-        comments, pageable.getSize(), pageable.getDirection(), pageable.getCursor() != null);
+        comments, pageable, (reviewComment) -> reviewComment.getId().toString());
   }
 
   @Override
