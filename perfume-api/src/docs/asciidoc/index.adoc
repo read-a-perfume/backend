@@ -327,6 +327,8 @@ include::{snippets}/get-review-options/response-fields.adoc[]
 == 유저 팔로우/언팔로우
 === 요청
 include::{snippets}/follow-user/http-request.adoc[]
+==== Path Variables
+include::{snippets}/follow-user/path-parameters.adoc[]
 
 === 응답
 include::{snippets}/follow-user/http-response.adoc[]

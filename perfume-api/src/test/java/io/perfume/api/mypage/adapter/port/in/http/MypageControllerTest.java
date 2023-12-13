@@ -79,16 +79,14 @@ class MypageControllerTest {
         .perform(
             RestDocumentationRequestBuilders.post("/v1/mypage/{id}/follow", user.getId())
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(Map.of("id", user.getId()))))
+                .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isCreated())
         .andDo(
             document(
                 "follow-user",
-                pathParameters(parameterWithName("id").description("유저 ID")),
-                requestFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("유저 ID"))));
+                pathParameters(parameterWithName("id").description("팔로우 대상 유저 ID"))
+            ));
   }
 
   @Test
