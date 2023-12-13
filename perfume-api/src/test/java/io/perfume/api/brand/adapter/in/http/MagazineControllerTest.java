@@ -63,14 +63,13 @@ class MagazineControllerTest {
                 "content",
                 1L,
                 1L,
-                1L,
                 List.of("태그1", "태그2", "태그3")
         );
 
         // when & then
         mockMvc
                 .perform(
-                        MockMvcRequestBuilders.post("/v1/magazines")
+                        MockMvcRequestBuilders.post("/v1/{id}/magazines", 1L)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
@@ -85,8 +84,27 @@ class MagazineControllerTest {
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("매거진 내용"),
                                         fieldWithPath("coverThumbnailId").type(JsonFieldType.NUMBER).description("커버 사진 ID"),
                                         fieldWithPath("thumbnailId").type(JsonFieldType.NUMBER).description("매거진 썸네일 ID"),
-                                        fieldWithPath("brandId").type(JsonFieldType.NUMBER).description("브랜드 ID"),
                                         fieldWithPath("tags").type(JsonFieldType.ARRAY).description("매거진 태그")),
+                                responseFields(
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("매거진 ID"))
+                        )
+                );
+    }
+
+    @Test
+    @WithMockUser(username = "1", roles = "ADMIN")
+    void testGetMagazines() throws Exception {
+        // when & then
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.get("/v1/magazines")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(
+                        document(
+                                "get-magazines",
                                 responseFields(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("매거진 ID"))
                         )

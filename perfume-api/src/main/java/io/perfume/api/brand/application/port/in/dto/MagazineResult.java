@@ -9,7 +9,8 @@ public record MagazineResult(
     String content,
     Long coverThumbnailId,
     Long thumbnailId,
-    Long brandId) {
+    Long brandId
+) {
 
   public static MagazineResult from(Magazine magazine) {
     return new MagazineResult(

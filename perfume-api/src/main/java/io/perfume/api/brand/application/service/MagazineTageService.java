@@ -1,6 +1,8 @@
 package io.perfume.api.brand.application.service;
 
 import io.perfume.api.brand.application.port.in.AddMagazineTagUseCase;
+import io.perfume.api.brand.application.port.in.GetTagNameUseCase;
+import io.perfume.api.brand.application.port.out.MagazineTagQueryRepository;
 import io.perfume.api.brand.application.port.out.MagazineTagRepository;
 import io.perfume.api.brand.application.port.out.TagNameQueryRepository;
 import io.perfume.api.brand.application.port.out.TagNameRepository;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AddMagazineTageService implements AddMagazineTagUseCase {
+public class MagazineTageService implements AddMagazineTagUseCase, GetTagNameUseCase {
+
+  private final MagazineTagQueryRepository magazineTagQueryRepository;
 
   private final TagNameRepository tagNameRepository;
 
@@ -20,10 +24,12 @@ public class AddMagazineTageService implements AddMagazineTagUseCase {
 
   private final MagazineTagRepository magazineTagRepository;
 
-  public AddMagazineTageService(
-      TagNameRepository tagNameRepository,
-      TagNameQueryRepository tagNameQueryRepository,
-      MagazineTagRepository magazineTagRepository) {
+  public MagazineTageService(
+          MagazineTagQueryRepository magazineTagQueryRepository,
+          TagNameRepository tagNameRepository,
+          TagNameQueryRepository tagNameQueryRepository,
+          MagazineTagRepository magazineTagRepository) {
+    this.magazineTagQueryRepository = magazineTagQueryRepository;
     this.tagNameRepository = tagNameRepository;
     this.tagNameQueryRepository = tagNameQueryRepository;
     this.magazineTagRepository = magazineTagRepository;
@@ -37,11 +43,18 @@ public class AddMagazineTageService implements AddMagazineTagUseCase {
         .map(tagName -> TagName.create(tagName, now))
         .forEach(tagNameRepository::save);
 
-    var tags = tagNameQueryRepository.findByNames(tagNames);
+    var tags = tagNameQueryRepository.findTagsByName(tagNames);
     var magazineTags =
         tags.stream().map(tag -> MagazineTag.create(magazineId, tag.getId(), now)).toList();
 
     magazineTagRepository.saveAll(magazineTags);
     return tags;
+  }
+
+  @Override
+  public List<TagName> getTags(Long magazineId) {
+    var tagIds = magazineTagQueryRepository.findMagazinesTags(magazineId).stream()
+            .map(MagazineTag::getTagId).toList();
+    return tagNameQueryRepository.findTagsByIds(tagIds);
   }
 }

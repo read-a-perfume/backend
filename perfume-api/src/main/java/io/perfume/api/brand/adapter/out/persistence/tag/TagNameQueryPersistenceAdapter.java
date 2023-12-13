@@ -34,7 +34,7 @@ public class TagNameQueryPersistenceAdapter implements TagNameQueryRepository {
   }
 
   @Override
-  public List<TagName> findByNames(List<String> names) {
+  public List<TagName> findTagsByName(List<String> names) {
     return jpaQueryFactory
         .selectFrom(tagNameEntity)
         .where(tagNameEntity.name.in(names))
@@ -42,5 +42,16 @@ public class TagNameQueryPersistenceAdapter implements TagNameQueryRepository {
         .stream()
         .map(tagNameMapper::toDomain)
         .toList();
+  }
+
+  @Override
+  public List<TagName> findTagsByIds(List<Long> tagIds) {
+    return jpaQueryFactory
+            .selectFrom(tagNameEntity)
+            .where(tagNameEntity.id.in(tagIds))
+            .fetch()
+            .stream()
+            .map(tagNameMapper::toDomain)
+            .toList();
   }
 }

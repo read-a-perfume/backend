@@ -8,5 +8,7 @@ public interface TagNameQueryRepository {
 
   Optional<TagName> findByName(String name);
 
-  List<TagName> findByNames(List<String> names);
+  List<TagName> findTagsByName(List<String> names);
+
+  List<TagName> findTagsByIds(List<Long> tagIds);
 }

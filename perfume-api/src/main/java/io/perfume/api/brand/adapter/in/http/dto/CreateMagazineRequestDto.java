@@ -10,10 +10,9 @@ public record CreateMagazineRequestDto(
     String content,
     Long coverThumbnailId,
     Long thumbnailId,
-    Long brandId,
     List<String> tags) {
 
-  public CreateMagazineCommand toCommand(LocalDateTime now) {
+  public CreateMagazineCommand toCommand(Long brandId, LocalDateTime now) {
     return new CreateMagazineCommand(
         title, subTitle, content, coverThumbnailId, thumbnailId, brandId, tags, now);
   }

@@ -27,4 +27,24 @@ public class CursorResponse<T, CURSOR> {
       List<T> items, boolean hasNext, boolean hasPrev, CURSOR nextCursor, CURSOR prevCursor) {
     return new CursorResponse<>(items, hasNext, hasPrev, nextCursor, prevCursor);
   }
+
+  public List<T> getItems() {
+    return items;
+  }
+
+  public boolean isHasNext() {
+    return hasNext;
+  }
+
+  public boolean isHasPrev() {
+    return hasPrev;
+  }
+
+  public CURSOR getNextCursor() {
+    return nextCursor;
+  }
+
+  public CURSOR getPrevCursor() {
+    return prevCursor;
+  }
 }
