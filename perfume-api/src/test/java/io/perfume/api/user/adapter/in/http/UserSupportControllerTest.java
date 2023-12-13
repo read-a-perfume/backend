@@ -1,24 +1,31 @@
 package io.perfume.api.user.adapter.in.http;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
+import io.perfume.api.user.application.port.in.UpdateAccountUseCase;
 import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -39,9 +46,10 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 class UserSupportControllerTest {
   private MockMvc mockMvc;
-
+  @Autowired ObjectMapper objectMapper;
   @MockBean private FindUserUseCase findUserUseCase;
   @MockBean private LeaveUserUseCase leaveUserUseCase;
+  @MockBean private UpdateAccountUseCase updateAccountUseCase;
   @MockBean private FindEncryptedUsernameUseCase findEncryptedUsernameUseCase;
   @MockBean private SendResetPasswordMailUseCase resetPasswordUserCase;
 
@@ -123,5 +131,54 @@ class UserSupportControllerTest {
                 "leave-user",
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("탈퇴한 유저의 아이디"))));
+  }
+
+  @Test
+  @DisplayName("유저의 이메일을 업데이트한다.")
+  @WithMockUser(username = "1")
+  void updateEmail() throws Exception {
+    // given
+    UpdateEmailRequestDto updateEmailRequestDto = new UpdateEmailRequestDto(true, "user@email.com");
+    doNothing().when(updateAccountUseCase).updateUserEmail(any());
+
+    // when
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders.patch("/v1/account/email")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateEmailRequestDto)))
+        .andExpect(status().isOk())
+        .andDo(
+            document(
+                "update-user-email",
+                requestFields(
+                    fieldWithPath("verified").type(JsonFieldType.BOOLEAN).description("이메일 인증 여부"),
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("새로운 이메일"))));
+  }
+
+  @Test
+  @DisplayName("유저의 비밀번호를 업데이트한다.")
+  @WithMockUser(username = "1")
+  void updatePassword() throws Exception {
+    // given
+    UpdatePasswordRequestDto updatePasswordRequestDto =
+        new UpdatePasswordRequestDto("oldpassword", "newpassword");
+    doNothing().when(updateAccountUseCase).updateUserPassword(any());
+
+    // when
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders.patch("/v1/account/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatePasswordRequestDto)))
+        .andExpect(status().isOk())
+        .andDo(
+            document(
+                "update-user-password",
+                requestFields(
+                    fieldWithPath("oldPassword").type(JsonFieldType.STRING).description("현재 비밀번호"),
+                    fieldWithPath("newPassword")
+                        .type(JsonFieldType.STRING)
+                        .description("새로운 비밀번호"))));
   }
 }

@@ -24,6 +24,16 @@ include::{snippets}/send-verify-code/request-fields.adoc[]
 include::{snippets}/send-verify-code/http-response.adoc[]
 include::{snippets}/send-verify-code/response-fields.adoc[]
 
+== 아이디 중복 확인
+=== 요청
+include::{snippets}/check-username/http-request.adoc[]
+include::{snippets}/check-username/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/check-username/http-response.adoc[]
+=== 실패 응답
+include::{snippets}/check-username-failed/http-response.adoc[]
+
 == 회원가입
 === 요청
 include::{snippets}/sign-up-by-email/http-request.adoc[]
@@ -41,6 +51,22 @@ include::{snippets}/login/request-fields.adoc[]
 === 응답
 include::{snippets}/login/http-response.adoc[]
 include::{snippets}/login/response-cookies.adoc[]
+
+== 이메일 업데이트
+=== 요청
+include::{snippets}/update-user-email/http-request.adoc[]
+include::{snippets}/update-user-email/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/update-user-email/http-response.adoc[]
+
+== 비밀번호 업데이트
+=== 요청
+include::{snippets}/update-user-password/http-request.adoc[]
+include::{snippets}/update-user-password/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/update-user-password/http-response.adoc[]
 
 == 로그인 중인 회원 탈퇴
 include::{snippets}/leave-user/http-request.adoc[]
