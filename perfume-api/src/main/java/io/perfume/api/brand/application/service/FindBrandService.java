@@ -40,12 +40,15 @@ public class FindBrandService implements FindBrandUseCase {
   @Override
   public List<BrandResult> findAll() {
     List<Brand> brands = brandQueryRepository.findAll();
-    return brands.stream().map(brand -> {
-        File file =
-            findFileUseCase
-                .findFileById(brand.getThumbnailId())
-                .orElseThrow(() -> new FileNotFoundException(brand.getThumbnailId()));
-        return BrandResult.of(brand, file);
-    }).toList();
+    return brands.stream()
+        .map(
+            brand -> {
+              File file =
+                  findFileUseCase
+                      .findFileById(brand.getThumbnailId())
+                      .orElseThrow(() -> new FileNotFoundException(brand.getThumbnailId()));
+              return BrandResult.of(brand, file);
+            })
+        .toList();
   }
 }
