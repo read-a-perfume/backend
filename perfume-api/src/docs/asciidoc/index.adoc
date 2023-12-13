@@ -304,6 +304,7 @@ include::{snippets}/follow-user/http-request.adoc[]
 
 === 응답
 include::{snippets}/follow-user/http-response.adoc[]
+include::{snippets}/follow-user/response-fields.adoc[]
 
 == 팔로우/팔로워 수 조회
 === 요청
