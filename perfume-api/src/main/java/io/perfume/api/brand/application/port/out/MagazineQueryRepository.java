@@ -2,10 +2,7 @@ package io.perfume.api.brand.application.port.out;
 
 import dto.repository.CursorPageable;
 import dto.repository.CursorPagination;
-import io.perfume.api.brand.application.port.in.dto.GetMagazineResult;
 import io.perfume.api.brand.domain.Magazine;
-import io.perfume.api.common.page.CustomSlice;
-
 import java.util.List;
 import java.util.Optional;
 

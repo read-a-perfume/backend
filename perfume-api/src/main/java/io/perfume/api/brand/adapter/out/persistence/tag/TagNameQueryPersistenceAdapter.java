@@ -47,11 +47,11 @@ public class TagNameQueryPersistenceAdapter implements TagNameQueryRepository {
   @Override
   public List<TagName> findTagsByIds(List<Long> tagIds) {
     return jpaQueryFactory
-            .selectFrom(tagNameEntity)
-            .where(tagNameEntity.id.in(tagIds))
-            .fetch()
-            .stream()
-            .map(tagNameMapper::toDomain)
-            .toList();
+        .selectFrom(tagNameEntity)
+        .where(tagNameEntity.id.in(tagIds))
+        .fetch()
+        .stream()
+        .map(tagNameMapper::toDomain)
+        .toList();
   }
 }

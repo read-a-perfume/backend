@@ -22,9 +22,9 @@ public class CreateMagazineService implements CreateMagazineUseCase {
   private final AddMagazineTagUseCase addMagazineTagUseCase;
 
   public CreateMagazineService(
-          BrandQueryRepository brandRepository,
-          MagazineRepository magazineRepository,
-          AddMagazineTagUseCase addMagazineTagUseCase) {
+      BrandQueryRepository brandRepository,
+      MagazineRepository magazineRepository,
+      AddMagazineTagUseCase addMagazineTagUseCase) {
     this.brandRepository = brandRepository;
     this.magazineRepository = magazineRepository;
     this.addMagazineTagUseCase = addMagazineTagUseCase;
@@ -33,7 +33,9 @@ public class CreateMagazineService implements CreateMagazineUseCase {
   @Override
   @Transactional
   public MagazineResult create(long userId, CreateMagazineCommand command) {
-    Brand brand = brandRepository.findBrandById(command.brandId())
+    Brand brand =
+        brandRepository
+            .findBrandById(command.brandId())
             .orElseThrow(() -> new BrandNotFoundException(command.brandId()));
 
     Magazine magazine =

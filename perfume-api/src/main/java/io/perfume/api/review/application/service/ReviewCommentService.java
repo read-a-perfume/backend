@@ -5,8 +5,7 @@ import dto.repository.CursorPagination;
 import io.perfume.api.review.application.exception.NotFoundReviewCommentException;
 import io.perfume.api.review.application.exception.UpdateReviewCommentPermissionDeniedException;
 import io.perfume.api.review.application.in.dto.CreateReviewCommentCommand;
-import io.perfume.api.review.application.in.dto.
-        GetReviewCommentsCommand;
+import io.perfume.api.review.application.in.dto.GetReviewCommentsCommand;
 import io.perfume.api.review.application.in.dto.ReviewCommentResult;
 import io.perfume.api.review.application.out.comment.ReviewCommentQueryRepository;
 import io.perfume.api.review.application.out.comment.ReviewCommentRepository;

@@ -1,5 +1,7 @@
 package io.perfume.api.brand.adapter.out.persistence.magazine;
 
+import static io.perfume.api.brand.adapter.out.persistence.magazine.QMagazineEntity.magazineEntity;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dto.repository.CursorDirection;
 import dto.repository.CursorPageable;
@@ -7,12 +9,9 @@ import dto.repository.CursorPagination;
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.brand.application.port.out.MagazineQueryRepository;
 import io.perfume.api.brand.domain.Magazine;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.Optional;
-
-import static io.perfume.api.brand.adapter.out.persistence.magazine.QMagazineEntity.magazineEntity;
+import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -40,24 +39,21 @@ public class MagazineQueryPersistenceAdapter implements MagazineQueryRepository 
   @Override
   public List<Magazine> findByMagazines(Long brandId) {
     return jpaQueryFactory
-            .selectFrom(magazineEntity)
-            .where(
-                    magazineEntity.brandId.eq(brandId),
-                    magazineEntity.deletedAt.isNull())
-            .orderBy(magazineEntity.id.desc())
-            .fetch()
-            .stream()
-            .map(magazineMapper::toDomain)
-            .toList();
+        .selectFrom(magazineEntity)
+        .where(magazineEntity.brandId.eq(brandId), magazineEntity.deletedAt.isNull())
+        .orderBy(magazineEntity.id.desc())
+        .fetch()
+        .stream()
+        .map(magazineMapper::toDomain)
+        .toList();
   }
 
   @Override
   public CursorPagination<Magazine> findByBrandId(CursorPageable<Long> pageable, Long brandId) {
-    var qb = jpaQueryFactory
+    var qb =
+        jpaQueryFactory
             .selectFrom(magazineEntity)
-            .where(
-                    magazineEntity.brandId.eq(brandId)
-                            .and(magazineEntity.deletedAt.isNull()));
+            .where(magazineEntity.brandId.eq(brandId).and(magazineEntity.deletedAt.isNull()));
 
     if (pageable.getCursor() != null) {
       if (pageable.getDirection() == CursorDirection.NEXT) {
@@ -67,9 +63,9 @@ public class MagazineQueryPersistenceAdapter implements MagazineQueryRepository 
       }
     }
 
-    var magazines = qb.limit(pageable.getSize()).fetch().stream().map(magazineMapper::toDomain).toList();
+    var magazines =
+        qb.limit(pageable.getSize()).fetch().stream().map(magazineMapper::toDomain).toList();
     return CursorPagination.of(
-            magazines, pageable.getSize(), pageable.getDirection(), pageable.getCursor() != null
-    );
+        magazines, pageable.getSize(), pageable.getDirection(), pageable.getCursor() != null);
   }
 }

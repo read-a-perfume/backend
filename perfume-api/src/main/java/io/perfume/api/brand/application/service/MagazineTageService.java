@@ -25,10 +25,10 @@ public class MagazineTageService implements AddMagazineTagUseCase, GetTagNameUse
   private final MagazineTagRepository magazineTagRepository;
 
   public MagazineTageService(
-          MagazineTagQueryRepository magazineTagQueryRepository,
-          TagNameRepository tagNameRepository,
-          TagNameQueryRepository tagNameQueryRepository,
-          MagazineTagRepository magazineTagRepository) {
+      MagazineTagQueryRepository magazineTagQueryRepository,
+      TagNameRepository tagNameRepository,
+      TagNameQueryRepository tagNameQueryRepository,
+      MagazineTagRepository magazineTagRepository) {
     this.magazineTagQueryRepository = magazineTagQueryRepository;
     this.tagNameRepository = tagNameRepository;
     this.tagNameQueryRepository = tagNameQueryRepository;
@@ -53,8 +53,10 @@ public class MagazineTageService implements AddMagazineTagUseCase, GetTagNameUse
 
   @Override
   public List<TagName> getTags(Long magazineId) {
-    var tagIds = magazineTagQueryRepository.findMagazinesTags(magazineId).stream()
-            .map(MagazineTag::getTagId).toList();
+    var tagIds =
+        magazineTagQueryRepository.findMagazinesTags(magazineId).stream()
+            .map(MagazineTag::getTagId)
+            .toList();
     return tagNameQueryRepository.findTagsByIds(tagIds);
   }
 }
