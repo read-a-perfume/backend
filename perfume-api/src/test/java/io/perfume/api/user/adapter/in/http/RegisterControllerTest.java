@@ -180,7 +180,14 @@ class RegisterControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(
+            document(
+                "check-username",
+                requestFields(
+                    fieldWithPath("username")
+                        .type(JsonFieldType.STRING)
+                        .description("중복 확인을 요청할 닉네임"))));
   }
 
   @Test
@@ -199,7 +206,8 @@ class RegisterControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
-        .andExpect(status().isConflict());
+        .andExpect(status().isConflict())
+        .andDo(document("check-username-failed"));
   }
 
   @Test
