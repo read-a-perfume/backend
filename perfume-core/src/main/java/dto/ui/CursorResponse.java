@@ -2,7 +2,7 @@ package dto.ui;
 
 import java.util.List;
 
-public class CursorResponse<T, CURSOR> {
+public class CursorResponse<T> {
 
   private final List<T> items;
 
@@ -10,12 +10,12 @@ public class CursorResponse<T, CURSOR> {
 
   private final boolean hasPrev;
 
-  private final CURSOR nextCursor;
+  private final String nextCursor;
 
-  private final CURSOR prevCursor;
+  private final String prevCursor;
 
   private CursorResponse(
-      List<T> items, boolean hasNext, boolean hasPrev, CURSOR nextCursor, CURSOR prevCursor) {
+      List<T> items, boolean hasNext, boolean hasPrev, String nextCursor, String prevCursor) {
     this.items = items;
     this.hasNext = hasNext;
     this.hasPrev = hasPrev;
@@ -23,8 +23,28 @@ public class CursorResponse<T, CURSOR> {
     this.prevCursor = prevCursor;
   }
 
-  public static <T, CURSOR> CursorResponse<T, CURSOR> of(
-      List<T> items, boolean hasNext, boolean hasPrev, CURSOR nextCursor, CURSOR prevCursor) {
+  public static <T> CursorResponse<T> of(
+      List<T> items, boolean hasNext, boolean hasPrev, String nextCursor, String prevCursor) {
     return new CursorResponse<>(items, hasNext, hasPrev, nextCursor, prevCursor);
+  }
+
+  public List<T> getItems() {
+    return items;
+  }
+
+  public boolean isHasNext() {
+    return hasNext;
+  }
+
+  public boolean isHasPrev() {
+    return hasPrev;
+  }
+
+  public String getNextCursor() {
+    return nextCursor;
+  }
+
+  public String getPrevCursor() {
+    return prevCursor;
   }
 }

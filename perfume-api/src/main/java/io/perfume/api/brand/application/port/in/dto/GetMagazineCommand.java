@@ -1,14 +1,11 @@
-package io.perfume.api.review.application.in.dto;
+package io.perfume.api.brand.application.port.in.dto;
 
 import dto.repository.CursorDirection;
 
-public record GetReviewCommentsCommand(long size, String before, String after, Long reviewId) {
+public record GetMagazineCommand(Long pageSize, String before, String after, Long brandId) {
 
   public String getCursor() {
-    if (before != null) {
-      return before;
-    }
-
+    if (before != null) return before;
     return after;
   }
 
@@ -21,10 +18,7 @@ public record GetReviewCommentsCommand(long size, String before, String after, L
   }
 
   public CursorDirection getDirection() {
-    if (before != null) {
-      return CursorDirection.PREVIOUS;
-    }
-
+    if (before != null) return CursorDirection.PREVIOUS;
     return CursorDirection.NEXT;
   }
 }

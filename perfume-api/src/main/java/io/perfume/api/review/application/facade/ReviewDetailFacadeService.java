@@ -164,7 +164,7 @@ public class ReviewDetailFacadeService
             .map(createReviewCommentDetailResultMapper(authorsMap))
             .toList();
 
-    return CursorPagination.of(result, reviewComments.hasNext(), reviewComments.hasPrevious());
+    return CursorPagination.of(result, reviewComments);
   }
 
   private Map<Long, UserResult> getCommentAuthorsMap(final List<ReviewComment> items) {

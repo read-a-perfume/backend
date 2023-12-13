@@ -95,7 +95,7 @@ public class PerfumeController {
     if (perfumeSort == PerfumeSort.FAVORITE) {
       return getPerfumesByFavorite(lastPerfumeId, pageSize);
     }
-    throw new IllegalArgumentException("정렬 기준으로는 brand, farovite만 가능합니다.");
+    throw new IllegalArgumentException("정렬 기준으로는 brand, favorite만 가능합니다.");
   }
 
   private CustomSlice<SimplePerfumeResponseDto> getPerfumesByBrand(

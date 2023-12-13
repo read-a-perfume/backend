@@ -85,6 +85,14 @@ include::{snippets}/get-brand/http-request.adoc[]
 include::{snippets}/get-brand/http-response.adoc[]
 include::{snippets}/get-brand/response-fields.adoc[]
 
+== 브랜드 매거진 생성
+=== 요청
+include::{snippets}/create-magazine/http-request.adoc[]
+
+=== 응답
+include::{snippets}/create-magazine/http-response.adoc[]
+include::{snippets}/create-magazine/response-fields.adoc[]
+
 == 노트 조회
 === 요청
 include::{snippets}/get-note-by-id/http-request.adoc[]
@@ -296,7 +304,6 @@ include::{snippets}/follow-user/http-request.adoc[]
 
 === 응답
 include::{snippets}/follow-user/http-response.adoc[]
-include::{snippets}/follow-user/response-fields.adoc[]
 
 == 팔로우/팔로워 수 조회
 === 요청

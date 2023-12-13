@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.perfume.api.brand.adapter.out.persistence.BrandEntity;
+import io.perfume.api.brand.adapter.out.persistence.brand.BrandEntity;
 import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;

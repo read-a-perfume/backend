@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import io.perfume.api.brand.adapter.out.persistence.brand.BrandEntity;
+import io.perfume.api.brand.adapter.out.persistence.brand.BrandMapper;
+import io.perfume.api.brand.adapter.out.persistence.brand.BrandQueryPersistenceAdapter;
 import io.perfume.api.brand.application.port.out.BrandQueryRepository;
 import io.perfume.api.brand.domain.Brand;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
