@@ -9,6 +9,7 @@ import io.perfume.api.brand.domain.Brand;
 import io.perfume.api.file.application.exception.FileNotFoundException;
 import io.perfume.api.file.application.port.in.FindFileUseCase;
 import io.perfume.api.file.domain.File;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,17 @@ public class FindBrandService implements FindBrandUseCase {
     Brand brand =
         brandQueryRepository.findBrandById(id).orElseThrow(() -> new BrandNotFoundException(id));
     return BrandForPerfumeResult.of(brand);
+  }
+
+  @Override
+  public List<BrandResult> findAll() {
+    List<Brand> brands = brandQueryRepository.findAll();
+    return brands.stream().map(brand -> {
+        File file =
+            findFileUseCase
+                .findFileById(brand.getThumbnailId())
+                .orElseThrow(() -> new FileNotFoundException(brand.getThumbnailId()));
+        return BrandResult.of(brand, file);
+    }).toList();
   }
 }
