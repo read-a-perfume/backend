@@ -183,4 +183,16 @@ public class User extends BaseTimeDomain {
     }
     this.password = passwordEncoder.encode(newPassword);
   }
+
+  public void updateProfile(String bio, LocalDate birthday, Sex sex) {
+    if (bio != null) {
+      this.bio = bio;
+    }
+    if (birthday != null) {
+      this.birthday = birthday;
+    }
+    if (sex != null) {
+      this.sex = sex;
+    }
+  }
 }

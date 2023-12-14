@@ -5,6 +5,7 @@ import io.perfume.api.user.application.exception.UserNotFoundException;
 import io.perfume.api.user.application.port.in.UpdateAccountUseCase;
 import io.perfume.api.user.application.port.in.dto.UpdateEmailCommand;
 import io.perfume.api.user.application.port.in.dto.UpdatePasswordCommand;
+import io.perfume.api.user.application.port.in.dto.UpdateProfileCommand;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
@@ -38,6 +39,18 @@ public class UpdateAccountService implements UpdateAccountUseCase {
             .orElseThrow(() -> new UserNotFoundException(updatePasswordCommand.userId()));
     user.updatePassword(
         passwordEncoder, updatePasswordCommand.oldPassword(), updatePasswordCommand.newPassword());
+    userRepository.save(user);
+  }
+
+  @Override
+  public void updateUserProfile(UpdateProfileCommand updateProfileCommand) {
+    User user =
+        userQueryRepository
+            .loadUser(updateProfileCommand.userId())
+            .orElseThrow(() -> new UserNotFoundException(updateProfileCommand.userId()));
+
+    user.updateProfile(
+        updateProfileCommand.bio(), updateProfileCommand.birthday(), updateProfileCommand.sex());
     userRepository.save(user);
   }
 }
