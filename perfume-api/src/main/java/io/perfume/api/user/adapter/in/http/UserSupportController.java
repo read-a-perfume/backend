@@ -4,6 +4,7 @@ import io.perfume.api.file.application.port.in.FindFileUseCase;
 import io.perfume.api.user.adapter.in.http.dto.LeaveUserDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.UpdateProfileRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UserProfileDto;
 import io.perfume.api.user.adapter.in.http.exception.UserNotAuthenticatedException;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
@@ -13,6 +14,7 @@ import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import io.perfume.api.user.application.port.in.UpdateAccountUseCase;
 import io.perfume.api.user.application.port.in.dto.UpdateEmailCommand;
 import io.perfume.api.user.application.port.in.dto.UpdatePasswordCommand;
+import io.perfume.api.user.application.port.in.dto.UpdateProfileCommand;
 import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -62,9 +64,8 @@ public class UserSupportController {
 
   @GetMapping("/me")
   public UserProfileDto me(@AuthenticationPrincipal User user) {
-    if (user == null) {
-      throw new UserNotAuthenticatedException();
-    }
+    checkAuthenticatedUser(user);
+
     long userId = Long.parseLong(user.getUsername());
     UserProfileResult userProfileResult = findUserUseCase.findUserProfileById(userId);
     return UserProfileDto.of(userProfileResult);
@@ -73,6 +74,8 @@ public class UserSupportController {
   @DeleteMapping("/user")
   @ResponseStatus(HttpStatus.ACCEPTED)
   public LeaveUserDto leaveUser(@AuthenticationPrincipal User user) {
+    checkAuthenticatedUser(user);
+
     long userId = Long.parseLong(user.getUsername());
     leaveUserUseCase.leave(userId);
     return new LeaveUserDto(userId);
@@ -81,9 +84,10 @@ public class UserSupportController {
   @PatchMapping("/account/email")
   public void updateEmailByUser(
       @AuthenticationPrincipal User user, @RequestBody UpdateEmailRequestDto updateEmailDto) {
+    checkAuthenticatedUser(user);
+
     UpdateEmailCommand updateEmailCommand =
-        new UpdateEmailCommand(
-            Long.parseLong(user.getUsername()), updateEmailDto.verified(), updateEmailDto.email());
+        updateEmailDto.toCommand(Long.parseLong(user.getUsername()));
 
     updateAccountUseCase.updateUserEmail(updateEmailCommand);
   }
@@ -92,12 +96,29 @@ public class UserSupportController {
   public void updatePasswordByUser(
       @AuthenticationPrincipal User user,
       @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto) {
+    checkAuthenticatedUser(user);
+
     UpdatePasswordCommand updatePasswordCommand =
-        new UpdatePasswordCommand(
-            Long.parseLong(user.getUsername()),
-            updatePasswordRequestDto.oldPassword(),
-            updatePasswordRequestDto.newPassword());
+        updatePasswordRequestDto.toCommand(Long.parseLong(user.getUsername()));
 
     updateAccountUseCase.updateUserPassword(updatePasswordCommand);
+  }
+
+  @PatchMapping("/user/profile")
+  public void updateProfileByUser(
+      @AuthenticationPrincipal User user,
+      @RequestBody UpdateProfileRequestDto updateProfileRequestDto) {
+    checkAuthenticatedUser(user);
+
+    UpdateProfileCommand updateProfileCommand =
+        updateProfileRequestDto.toCommand(Long.parseLong(user.getUsername()));
+
+    updateAccountUseCase.updateUserProfile(updateProfileCommand);
+  }
+
+  private void checkAuthenticatedUser(User user) {
+    if (user == null || user.getUsername() == null) {
+      throw new UserNotAuthenticatedException();
+    }
   }
 }
