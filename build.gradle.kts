@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -50,6 +51,13 @@ subprojects {
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
         testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
         testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
+    }
+
+    tasks.test {
+        testLogging {
+            events("failed")
+            exceptionFormat = TestExceptionFormat.FULL
+        }
     }
 
     tasks.withType<KotlinCompile> {
