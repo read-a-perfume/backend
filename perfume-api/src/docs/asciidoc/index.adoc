@@ -68,7 +68,18 @@ include::{snippets}/update-user-password/request-fields.adoc[]
 === 응답
 include::{snippets}/update-user-password/http-response.adoc[]
 
+== 프로필 업데이트
+=== 요청
+include::{snippets}/update-user-profile/http-request.adoc[]
+include::{snippets}/update-user-profile/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/update-user-profile/http-response.adoc[]
+=== 실패 응답
+include::{snippets}/update-user-profile-failed/http-response.adoc[]
+
 == 로그인 중인 회원 탈퇴
+=== 요청
 include::{snippets}/leave-user/http-request.adoc[]
 
 === 응답
@@ -77,6 +88,7 @@ include::{snippets}/leave-user/response-fields.adoc[]
 
 
 == 로그인 중인 유저 프로필 조회
+=== 요청
 include::{snippets}/get-me/http-request.adoc[]
 
 === 응답
@@ -88,6 +100,7 @@ include::{snippets}/get-me-failed/http-response.adoc[]
 include::{snippets}/get-me-failed/response-fields.adoc[]
 
 == 액세스 토큰 만료
+=== 요청
 include::{snippets}/token-expired/http-request.adoc[]
 
 === 응답
