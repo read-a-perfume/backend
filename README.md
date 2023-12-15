@@ -1,5 +1,9 @@
 # Read a perfume Backend
 
+## CI/CD
+
+![image](https://github.com/read-a-perfume/backend/assets/72547111/e33f6a85-bfc0-43df-ae67-f4a591be2ff9)
+
 ## 사용 툴
 - Java 17
 - Spring Boot
