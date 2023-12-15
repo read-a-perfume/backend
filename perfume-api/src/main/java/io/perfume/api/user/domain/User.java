@@ -195,4 +195,44 @@ public class User extends BaseTimeDomain {
       this.sex = sex;
     }
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    User user = (User) o;
+    return marketingConsent == user.marketingConsent
+        && promotionConsent == user.promotionConsent
+        && Objects.equals(id, user.id)
+        && Objects.equals(username, user.username)
+        && Objects.equals(email, user.email)
+        && Objects.equals(password, user.password)
+        && role == user.role
+        && Objects.equals(bio, user.bio)
+        && Objects.equals(birthday, user.birthday)
+        && sex == user.sex
+        && Objects.equals(businessId, user.businessId)
+        && Objects.equals(thumbnailId, user.thumbnailId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        id,
+        username,
+        email,
+        password,
+        role,
+        bio,
+        birthday,
+        sex,
+        marketingConsent,
+        promotionConsent,
+        businessId,
+        thumbnailId);
+  }
 }

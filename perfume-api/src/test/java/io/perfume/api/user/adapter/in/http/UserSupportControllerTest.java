@@ -15,12 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.UpdateProfileRequestDto;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import io.perfume.api.user.application.port.in.UpdateAccountUseCase;
 import io.perfume.api.user.application.port.in.dto.UserProfileResult;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -180,5 +182,44 @@ class UserSupportControllerTest {
                     fieldWithPath("newPassword")
                         .type(JsonFieldType.STRING)
                         .description("새로운 비밀번호"))));
+  }
+
+  @Test
+  @DisplayName("유저의 프로필을 업데이트한다.")
+  @WithMockUser(username = "1")
+  void updateProfile() throws Exception {
+    UpdateProfileRequestDto updateProfileRequestDto =
+        new UpdateProfileRequestDto("향수를 좋아하는 사람입니다.", LocalDate.of(2000, 1, 1), "male");
+
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders.patch("/v1/user/profile")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateProfileRequestDto)))
+        .andExpect(status().isOk())
+        .andDo(
+            document(
+                "update-user-profile",
+                requestFields(
+                    fieldWithPath("bio").type(JsonFieldType.STRING).description("자기 소개"),
+                    fieldWithPath("birthday").type(JsonFieldType.STRING).description("생일"),
+                    fieldWithPath("sex")
+                        .type(JsonFieldType.STRING)
+                        .description("성별 (male | female | other)만 입력 가능"))));
+  }
+
+  @Test
+  @DisplayName("로그인 상태가 아니라면 유저의 프로필을 업데이트할 수 없다.")
+  void failToUpdateProfile() throws Exception {
+    UpdateProfileRequestDto updateProfileRequestDto =
+        new UpdateProfileRequestDto("향수를 좋아하는 사람입니다.", LocalDate.of(2000, 1, 1), "male");
+
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders.patch("/v1/user/profile")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateProfileRequestDto)))
+        .andExpect(status().isUnauthorized())
+        .andDo(document("update-user-profile-failed"));
   }
 }
