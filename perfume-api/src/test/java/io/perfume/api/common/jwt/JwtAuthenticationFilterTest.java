@@ -1,7 +1,5 @@
 package io.perfume.api.common.jwt;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -12,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
-import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -64,18 +61,13 @@ class JwtAuthenticationFilterTest {
 
   @Test
   void FailToAuthenticateWithExpiredToken() throws Exception {
-    String jwt =
+    final LocalDateTime now = LocalDateTime.now();
+    final String jwt =
         jsonWebTokenGenerator.create(
             "access_token",
             Map.of("userId", 1L, "roles", List.of("ROLE_USER")),
             1,
-            LocalDateTime.now());
-    Long userId = 1L;
-    UserProfileResult userProfileResult =
-        new UserProfileResult(userId, "username", "thumbnail.com");
-    given(findUserUseCase.findUserProfileById(anyLong())).willReturn(userProfileResult);
-
-    Thread.sleep(1000);
+            now.minusSeconds(1));
 
     mockMvc
         .perform(

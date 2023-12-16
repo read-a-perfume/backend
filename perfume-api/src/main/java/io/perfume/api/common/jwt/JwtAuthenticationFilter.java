@@ -37,8 +37,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NotNull final FilterChain filterChain)
       throws ServletException, IOException {
     final Optional<String> cookies = findAuthenticationCookies(request);
-
-    cookies.ifPresent(value -> tryToAuthenticate(response, new JwtAuthenticationToken(value)));
+    if (cookies.isPresent()) {
+      try {
+        var authentication =
+            authenticationManager.authenticate(new JwtAuthenticationToken(cookies.get()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+      } catch (AuthenticationException e) {
+        handleAuthenticationException(response, e);
+        return;
+      }
+    }
 
     filterChain.doFilter(request, response);
   }
@@ -53,16 +61,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         .filter(cookie -> cookie.getName().equalsIgnoreCase(Constants.ACCESS_TOKEN_KEY))
         .map(Cookie::getValue)
         .findFirst();
-  }
-
-  private void tryToAuthenticate(
-      @NotNull HttpServletResponse response, JwtAuthenticationToken token) {
-    try {
-      var authentication = authenticationManager.authenticate(token);
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-    } catch (AuthenticationException e) {
-      handleAuthenticationException(response, e);
-    }
   }
 
   private void handleAuthenticationException(
