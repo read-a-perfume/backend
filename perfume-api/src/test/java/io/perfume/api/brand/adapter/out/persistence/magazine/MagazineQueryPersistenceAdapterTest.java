@@ -54,7 +54,7 @@ class MagazineQueryPersistenceAdapterTest {
   void testMagazine() {
     // given
     final long branId = 1L;
-    final LocalDateTime now = LocalDateTime.now();
+    final LocalDateTime now = LocalDateTime.of(2021, 1, 1, 0, 0, 0);
     final List<Magazine> magazines =
         IntStream.range(0, 15)
             .mapToObj(
