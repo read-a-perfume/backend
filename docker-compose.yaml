@@ -11,18 +11,25 @@ services:
       MYSQL_USER: test
       MYSQL_PASSWORD: test
       MYSQL_DATABASE: test
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - perfume_network
 
-  api:
-    container_name: perfume_api
-    build:
-      context: .
-      dockerfile: Dockerfile.dev.api
+  redis:
+    image: redis:latest
+    container_name: perfume_redis
     ports:
-      - '8080:8080'
+      - '6379:6379'
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "very-strong-local-redis-password!@#$!%!@#"]
+    volumes:
+      - redis_data:/data
     networks:
       - perfume_network
+
+volumes:
+  mysql_data:
+  redis_data:
 
 networks:
   perfume_network:
