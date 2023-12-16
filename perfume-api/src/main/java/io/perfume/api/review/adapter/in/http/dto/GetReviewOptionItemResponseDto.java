@@ -1,40 +1,41 @@
 package io.perfume.api.review.adapter.in.http.dto;
 
+import io.perfume.api.review.domain.ReviewOption;
+import io.perfume.api.review.domain.type.DayType;
+import io.perfume.api.review.domain.type.Duration;
+import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
-public record GetReviewOptionItemResponseDto(String name, String code) {
+public record GetReviewOptionItemResponseDto(
+    List<ReviewOption> strength,
+    List<ReviewOption> season,
+    List<ReviewOption> duration,
+    List<ReviewOption> dayType) {
 
-  public static List<GetReviewOptionItemResponseDto> getStrength() {
-    return Arrays.stream(Strength.values())
-        .map(
-            strength ->
-                new GetReviewOptionItemResponseDto(strength.getDescription(), strength.name()))
-        .toList();
-  }
+  public static GetReviewOptionItemResponseDto get() {
 
-  public static List<GetReviewOptionItemResponseDto> getSeason() {
-    return Arrays.stream(Strength.values())
-        .map(
-            strength ->
-                new GetReviewOptionItemResponseDto(strength.getDescription(), strength.name()))
-        .toList();
-  }
+    List<ReviewOption> strength =
+        EnumSet.allOf(Strength.class).stream()
+            .map(enumValue -> new ReviewOption(enumValue.name(), enumValue.getDescription()))
+            .toList();
 
-  public static List<GetReviewOptionItemResponseDto> getDuration() {
-    return Arrays.stream(Strength.values())
-        .map(
-            strength ->
-                new GetReviewOptionItemResponseDto(strength.getDescription(), strength.name()))
-        .toList();
-  }
+    List<ReviewOption> season =
+        EnumSet.allOf(Season.class).stream()
+            .map(enumValue -> new ReviewOption(enumValue.name(), enumValue.getDescription()))
+            .toList();
 
-  public static List<GetReviewOptionItemResponseDto> getDayType() {
-    return Arrays.stream(Strength.values())
-        .map(
-            strength ->
-                new GetReviewOptionItemResponseDto(strength.getDescription(), strength.name()))
-        .toList();
+    List<ReviewOption> duration =
+        EnumSet.allOf(Duration.class).stream()
+            .map(enumValue -> new ReviewOption(enumValue.name(), enumValue.getDescription()))
+            .toList();
+
+    List<ReviewOption> dayType =
+        EnumSet.allOf(DayType.class).stream()
+            .map(enumValue -> new ReviewOption(enumValue.name(), enumValue.getDescription()))
+            .toList();
+
+    return new GetReviewOptionItemResponseDto(strength, season, duration, dayType);
   }
 }
