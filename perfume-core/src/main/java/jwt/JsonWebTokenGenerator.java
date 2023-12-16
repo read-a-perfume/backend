@@ -92,7 +92,7 @@ public class JsonWebTokenGenerator {
         .get(key, requiredType);
   }
 
-  public Boolean verify(String jwt, LocalDateTime now) {
+  public boolean verify(String jwt, LocalDateTime now) {
     assert jwt != null;
     assert !jwt.isEmpty();
 
