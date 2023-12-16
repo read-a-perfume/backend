@@ -7,7 +7,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -521,11 +520,12 @@ class ReviewControllerTest {
   }
 
   @Test
-  void 리뷰_항목_조회() throws Exception {
+  @WithMockUser(username = "2", roles = "USER")
+  void 리뷰_옵션_목록_조회() throws Exception {
     // when & then
     mockMvc
         .perform(
-            RestDocumentationRequestBuilders.get("/v1/reviews/options?type=DAY_TYPE")
+            RestDocumentationRequestBuilders.get("/v1/reviews/options")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -533,11 +533,30 @@ class ReviewControllerTest {
         .andDo(
             document(
                 "get-review-options",
-                queryParameters(
-                    parameterWithName("type")
-                        .description("리뷰 항목 타입 (STRENGTH, SEASON, DURATION, DAY_TYPE)")),
                 responseFields(
-                    fieldWithPath("[].code").type(JsonFieldType.STRING).description("리뷰 항목 코드"),
-                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("리뷰 항목 이름"))));
+                    fieldWithPath("strength[].name")
+                        .type(JsonFieldType.STRING)
+                        .description("향수 강도 이름"),
+                    fieldWithPath("strength[].code")
+                        .type(JsonFieldType.STRING)
+                        .description("향수 강도 코드"),
+                    fieldWithPath("season[].name")
+                        .type(JsonFieldType.STRING)
+                        .description("향수 강도 이름"),
+                    fieldWithPath("season[].code")
+                        .type(JsonFieldType.STRING)
+                        .description("향수 강도 코드"),
+                    fieldWithPath("duration[].name")
+                        .type(JsonFieldType.STRING)
+                        .description("향수 지속력 이름"),
+                    fieldWithPath("duration[].code")
+                        .type(JsonFieldType.STRING)
+                        .description("향수 지속력 코드"),
+                    fieldWithPath("dayType[].name")
+                        .type(JsonFieldType.STRING)
+                        .description("어울리는 상황 이름"),
+                    fieldWithPath("dayType[].code")
+                        .type(JsonFieldType.STRING)
+                        .description("어울리는 상황 코드"))));
   }
 }
