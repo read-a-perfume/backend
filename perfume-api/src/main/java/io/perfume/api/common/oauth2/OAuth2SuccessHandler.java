@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -24,31 +25,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
+@RequiredArgsConstructor
 public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequestHandler
     implements AuthenticationSuccessHandler {
 
   private final JwtProperties jwtProperties;
-
   private final FindUserUseCase findUserUseCase;
-
   private final CreateUserUseCase createUserUseCase;
-
   private final MakeNewTokenUseCase makeNewTokenUseCase;
-
   private final Generator generator;
-
-  public OAuth2SuccessHandler(
-      JwtProperties jwtProperties,
-      FindUserUseCase findUserUseCase,
-      CreateUserUseCase createUserUseCase,
-      MakeNewTokenUseCase makeNewTokenUseCase,
-      Generator generator) {
-    this.jwtProperties = jwtProperties;
-    this.findUserUseCase = findUserUseCase;
-    this.createUserUseCase = createUserUseCase;
-    this.makeNewTokenUseCase = makeNewTokenUseCase;
-    this.generator = generator;
-  }
 
   @Override
   public void onAuthenticationSuccess(
@@ -58,59 +43,55 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
       throws IOException {
     OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
     LocalDateTime now = LocalDateTime.now();
-    UserResult userResult = newUserIfNotExists(oauth2User, now);
+    UserResult userResult = handleOAuth2Success(oauth2User, now);
 
-    setResponseToken(response, userResult, now);
+    addTokens(response, userResult, now);
 
-    String targetUrl = getRedirectUri();
-    getRedirectStrategy().sendRedirect(request, response, targetUrl);
+    getRedirectStrategy().sendRedirect(request, response, generateSuccessRedirectUri());
   }
 
-  private void setResponseToken(
-      HttpServletResponse response, UserResult userResult, LocalDateTime now) {
+  private void addTokens(HttpServletResponse response, UserResult userResult, LocalDateTime now) {
     String accessToken = makeNewTokenUseCase.createAccessToken(userResult.id(), now);
-    response.addCookie(createCookie(Constants.ACCESS_TOKEN_KEY, accessToken));
+    response.addCookie(generateCookie(Constants.ACCESS_TOKEN_KEY, accessToken));
 
     String refreshToken = makeNewTokenUseCase.createRefreshToken(userResult.id(), now);
-    response.addCookie(createCookie(Constants.REFRESH_TOKEN_KEY, refreshToken));
+    response.addCookie(generateCookie(Constants.REFRESH_TOKEN_KEY, refreshToken));
   }
 
-  @NotNull
-  private String getRedirectUri() {
+  private String generateSuccessRedirectUri() {
     return UriComponentsBuilder.fromHttpUrl(jwtProperties.redirectUri()).build().toUriString();
   }
 
-  private UserResult newUserIfNotExists(@NotNull OAuth2User oauth2User, LocalDateTime now) {
-    var attributes = oauth2User.getAttributes();
-    String identifier = String.valueOf(getAttribute(attributes, "sub"));
+  private UserResult handleOAuth2Success(@NotNull OAuth2User oauth2User, LocalDateTime now) {
+    final Map<String, Object> attributes = oauth2User.getAttributes();
+    final String IDENTIFIER_ATTRIBUTE_KEY = "sub";
+    final String identifier =
+        String.valueOf(getValueFromAttributes(attributes, IDENTIFIER_ATTRIBUTE_KEY));
 
     return findUserUseCase
         .findOneBySocialId(identifier)
-        .orElseGet(
-            () -> {
-              String randomPassword = generator.generate(30);
-              String email = String.valueOf(getAttribute(attributes, "email"));
-              String name = String.valueOf(getAttribute(attributes, "name"));
-              SignUpSocialUserCommand command =
-                  SignUpSocialUserCommand.byGoogle(identifier, email, randomPassword, name);
-
-              return createUserUseCase.signUpSocialUser(command, now);
-            });
+        .orElseGet(() -> createNewUser(attributes, identifier, now));
   }
 
-  private Cookie createCookie(String cookieName, String cookieValue) {
+  private UserResult createNewUser(
+      Map<String, Object> attributes, String identifier, LocalDateTime now) {
+    String randomPassword = generator.generate(30);
+    String email = String.valueOf(getValueFromAttributes(attributes, "email"));
+    String name = String.valueOf(getValueFromAttributes(attributes, "name"));
+
+    SignUpSocialUserCommand command =
+        SignUpSocialUserCommand.byGoogle(identifier, email, randomPassword, name);
+    return createUserUseCase.signUpSocialUser(command, now);
+  }
+
+  private Cookie generateCookie(String cookieName, String cookieValue) {
     Cookie cookie = new Cookie(cookieName, cookieValue);
     cookie.setHttpOnly(true);
-
     return cookie;
   }
 
-  private Object getAttribute(Map<String, Object> attributes, String key) {
+  private Object getValueFromAttributes(Map<String, Object> attributes, String key) {
     Object value = attributes.get(key);
-    if (Objects.isNull(value)) {
-      throw new RuntimeException(key + " not found from OAuth2 provider");
-    }
-
-    return value;
+    return Objects.requireNonNull(value);
   }
 }

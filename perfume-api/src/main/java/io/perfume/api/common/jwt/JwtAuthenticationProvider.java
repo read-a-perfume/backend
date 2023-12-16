@@ -1,14 +1,10 @@
 package io.perfume.api.common.jwt;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import jwt.JsonWebTokenGenerator;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -21,10 +17,6 @@ import org.springframework.stereotype.Component;
 @Qualifier("JwtAuthenticationProvider")
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-  public static final Authentication ANONYMOUS =
-      new AnonymousAuthenticationToken(
-          "anonymous", "anonymous", Set.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
-
   private final JsonWebTokenGenerator jsonWebTokenGenerator;
 
   public JwtAuthenticationProvider(JsonWebTokenGenerator jsonWebTokenGenerator) {
@@ -33,18 +25,27 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    Object credentials = authentication.getCredentials();
-    if (!(credentials instanceof String)) {
-      return ANONYMOUS;
-    }
+    String token = extractAuthenticateToken(authentication);
+    verifyTokenExpiration(token);
+    return processJwtAuthentication(token);
+  }
 
-    String jwt = Objects.toString(credentials);
+  private void verifyTokenExpiration(String token) {
     LocalDateTime now = LocalDateTime.now();
-    if (Boolean.FALSE.equals(jsonWebTokenGenerator.verify(jwt, now))) {
+    if (!jsonWebTokenGenerator.verify(token, now)) {
       throw new TokenExpiredException();
     }
+  }
 
-    return getAuthentication(jwt);
+  private static String extractAuthenticateToken(Authentication authentication) {
+    if (Objects.isNull(authentication)) {
+      throw new IllegalArgumentException("Authentication cannot be null");
+    }
+    if (!(authentication instanceof JwtAuthenticationToken)) {
+      throw new IllegalArgumentException(
+          "Authentication is not JwtAuthenticationToken, but " + authentication.getClass());
+    }
+    return authentication.getCredentials().toString();
   }
 
   @Override
@@ -52,19 +53,22 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     return JwtAuthenticationToken.class.isAssignableFrom(authentication);
   }
 
-  @NotNull
-  private Authentication getAuthentication(String jwt) {
-    Long userId = jsonWebTokenGenerator.getClaim(jwt, "userId", Long.class);
-    List<? extends GrantedAuthority> roles = getRoles(jwt);
+  private Authentication processJwtAuthentication(String jwt) {
+    final Long userId = getUserIdFromToken(jwt);
+    List<? extends GrantedAuthority> roles = getAuthoritiesFromToken(jwt);
 
     return JwtAuthenticationToken.authorized(new User(userId.toString(), "", roles), roles);
   }
 
-  @NotNull
-  private List<SimpleGrantedAuthority> getRoles(String authenticationToken) {
-    ArrayList<?> roles =
-        jsonWebTokenGenerator.getClaim(authenticationToken, "roles", ArrayList.class);
+  private Long getUserIdFromToken(String jwt) {
+    String USER_IDENTITY_CLAIM_NAME = "userId";
+    return jsonWebTokenGenerator.getClaim(jwt, USER_IDENTITY_CLAIM_NAME, Long.class);
+  }
 
-    return roles.stream().map(String::valueOf).map(SimpleGrantedAuthority::new).toList();
+  private List<SimpleGrantedAuthority> getAuthoritiesFromToken(String authenticationToken) {
+    final String ROLES_CLAIM_NAME = "roles";
+    final List<String> roles =
+        jsonWebTokenGenerator.getClaim(authenticationToken, ROLES_CLAIM_NAME, List.class);
+    return roles.stream().map(SimpleGrantedAuthority::new).toList();
   }
 }
