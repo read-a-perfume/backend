@@ -1,6 +1,7 @@
 package io.perfume.api.notification.adapter.port.in;
 
 import io.perfume.api.notification.application.facade.NotificationFacadeService;
+import io.perfume.api.notification.application.port.in.DeleteNotificationUseCase;
 import io.perfume.api.notification.application.port.in.ReadNotificationUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,9 +22,12 @@ public class NotificationController {
 
   private final ReadNotificationUseCase readNotificationUseCase;
 
-  public NotificationController(NotificationFacadeService notificationService, ReadNotificationUseCase readNotificationUseCase) {
+  private final DeleteNotificationUseCase deleteNotificationUseCase;
+
+  public NotificationController(NotificationFacadeService notificationService, ReadNotificationUseCase readNotificationUseCase, DeleteNotificationUseCase deleteNotificationUseCase) {
     this.notificationService = notificationService;
     this.readNotificationUseCase = readNotificationUseCase;
+    this.deleteNotificationUseCase = deleteNotificationUseCase;
   }
 
   // TODO : 알림 조회 pagination
@@ -46,5 +50,14 @@ public class NotificationController {
     var now = LocalDateTime.now();
     var userId = Long.parseLong(user.getUsername());
     readNotificationUseCase.read(userId, notificationId, now);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @DeleteMapping("/{notificationId}")
+  public void deleteNotification(
+          @AuthenticationPrincipal User user, @PathVariable Long notificationId) {
+    var now = LocalDateTime.now();
+    var userId = Long.parseLong(user.getUsername());
+    deleteNotificationUseCase.delete(userId, notificationId, now);
   }
 }
