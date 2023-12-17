@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1/files")
+@RequestMapping("/v1/files")
 @PreAuthorize("isAuthenticated()")
 @RequiredArgsConstructor
 public class FileController {

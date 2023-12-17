@@ -57,7 +57,7 @@ class FileControllerTest {
     // when & then
     mockMvc
         .perform(
-            multipart("/api/v1/files")
+            multipart("/v1/files")
                 .file(file)
                 .characterEncoding("UTF-8")
                 .contentType("multipart/form-data"))
