@@ -1,6 +1,7 @@
 package io.perfume.api.notification.adapter.port.in;
 
 import io.perfume.api.notification.application.facade.NotificationFacadeService;
+import io.perfume.api.notification.application.port.in.ReadNotificationUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,11 @@ public class NotificationController {
 
   private final NotificationFacadeService notificationService;
 
-  public NotificationController(NotificationFacadeService notificationService) {
+  private final ReadNotificationUseCase readNotificationUseCase;
+
+  public NotificationController(NotificationFacadeService notificationService, ReadNotificationUseCase readNotificationUseCase) {
     this.notificationService = notificationService;
+    this.readNotificationUseCase = readNotificationUseCase;
   }
 
   // TODO : 알림 조회 pagination
@@ -33,5 +37,14 @@ public class NotificationController {
     var userId = Long.parseLong(user.getUsername());
     var resEmitter = notificationService.subscribe(userId, lastEventId);
     return ResponseEntity.status(HttpStatus.OK).body(resEmitter);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @PatchMapping("/{notificationId}")
+  public void readNotification(
+          @AuthenticationPrincipal User user, @PathVariable Long notificationId) {
+    var now = LocalDateTime.now();
+    var userId = Long.parseLong(user.getUsername());
+    readNotificationUseCase.read(userId, notificationId, now);
   }
 }
