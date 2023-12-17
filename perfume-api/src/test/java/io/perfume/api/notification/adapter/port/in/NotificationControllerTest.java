@@ -1,5 +1,11 @@
 package io.perfume.api.notification.adapter.port.in;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.user.application.port.out.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +25,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
@@ -61,11 +61,11 @@ class NotificationControllerTest {
                 .header("Last-Event-Id", ""))
         .andExpect(status().isOk())
         .andExpect(status().isOk())
-        .andDo(document("connect-sse",
+        .andDo(
+            document(
+                "connect-sse",
                 requestHeaders(
-                        headerWithName(HttpHeaders.ACCEPT).description("요청 헤더 : text/event-stream)"),
-                        headerWithName("Last-Event-Id").description("마지막 이벤트 ID")
-                )
-        ));
+                    headerWithName(HttpHeaders.ACCEPT).description("요청 헤더 : text/event-stream)"),
+                    headerWithName("Last-Event-Id").description("마지막 이벤트 ID"))));
   }
 }

@@ -3,6 +3,7 @@ package io.perfume.api.notification.adapter.port.in;
 import io.perfume.api.notification.application.facade.NotificationFacadeService;
 import io.perfume.api.notification.application.port.in.DeleteNotificationUseCase;
 import io.perfume.api.notification.application.port.in.ReadNotificationUseCase;
+import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +12,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/v1/notification")
@@ -24,7 +23,10 @@ public class NotificationController {
 
   private final DeleteNotificationUseCase deleteNotificationUseCase;
 
-  public NotificationController(NotificationFacadeService notificationService, ReadNotificationUseCase readNotificationUseCase, DeleteNotificationUseCase deleteNotificationUseCase) {
+  public NotificationController(
+      NotificationFacadeService notificationService,
+      ReadNotificationUseCase readNotificationUseCase,
+      DeleteNotificationUseCase deleteNotificationUseCase) {
     this.notificationService = notificationService;
     this.readNotificationUseCase = readNotificationUseCase;
     this.deleteNotificationUseCase = deleteNotificationUseCase;
@@ -46,7 +48,7 @@ public class NotificationController {
   @PreAuthorize("isAuthenticated()")
   @PatchMapping("/{notificationId}")
   public void readNotification(
-          @AuthenticationPrincipal User user, @PathVariable Long notificationId) {
+      @AuthenticationPrincipal User user, @PathVariable Long notificationId) {
     var now = LocalDateTime.now();
     var userId = Long.parseLong(user.getUsername());
     readNotificationUseCase.read(userId, notificationId, now);
@@ -55,7 +57,7 @@ public class NotificationController {
   @PreAuthorize("isAuthenticated()")
   @DeleteMapping("/{notificationId}")
   public void deleteNotification(
-          @AuthenticationPrincipal User user, @PathVariable Long notificationId) {
+      @AuthenticationPrincipal User user, @PathVariable Long notificationId) {
     var now = LocalDateTime.now();
     var userId = Long.parseLong(user.getUsername());
     deleteNotificationUseCase.delete(userId, notificationId, now);

@@ -1,8 +1,7 @@
 package io.perfume.api.notification.application.port.out.emitter;
 
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.util.Map;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface EmitterRepository {
 
