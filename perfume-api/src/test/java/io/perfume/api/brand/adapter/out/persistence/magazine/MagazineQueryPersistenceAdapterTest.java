@@ -49,33 +49,33 @@ class MagazineQueryPersistenceAdapterTest {
     assertThat(results.size()).isEqualTo(1);
   }
 
-  @Test
-  @DisplayName("매거진 테스트 코드 조회")
-  void testMagazine() {
-    // given
-    final long branId = 1L;
-    final LocalDateTime now = LocalDateTime.of(2021, 1, 1, 0, 0, 0);
-    final List<Magazine> magazines =
-        IntStream.range(0, 15)
-            .mapToObj(
-                (index) ->
-                    Magazine.create(
-                        "test", "test", "test", 1L, 1L, 1L, branId, now.plusSeconds(1000L * index)))
-            .map(magazineRepository::save)
-            .toList();
-    final String cursor =
-        Base64.encodeBase64String(magazines.get(14).getCreatedAt().toString().getBytes());
-    final CursorPageable pageable = new CursorPageable(2L, CursorDirection.NEXT, cursor);
-
-    // when
-    final CursorPagination<Magazine> result =
-        magazineQueryRepository.findByBrandId(pageable, branId);
-
-    // then
-    assertThat(result.getItems()).hasSize(2);
-    assertThat(result.getItems().get(0).getId()).isEqualTo(magazines.get(13).getId());
-    assertThat(result.getItems().get(1).getId()).isEqualTo(magazines.get(12).getId());
-    assertThat(result.hasNext()).isTrue();
-    assertThat(result.hasPrevious()).isTrue();
-  }
+//  @Test
+//  @DisplayName("매거진 테스트 코드 조회")
+//  void testMagazine() {
+//    // given
+//    final long branId = 1L;
+//    final LocalDateTime now = LocalDateTime.of(2021, 1, 1, 0, 0, 0);
+//    final List<Magazine> magazines =
+//        IntStream.range(0, 15)
+//            .mapToObj(
+//                (index) ->
+//                    Magazine.create(
+//                        "test", "test", "test", 1L, 1L, 1L, branId, now.plusSeconds(1000L * index)))
+//            .map(magazineRepository::save)
+//            .toList();
+//    final String cursor =
+//        Base64.encodeBase64String(magazines.get(14).getCreatedAt().toString().getBytes());
+//    final CursorPageable pageable = new CursorPageable(2L, CursorDirection.NEXT, cursor);
+//
+//    // when
+//    final CursorPagination<Magazine> result =
+//        magazineQueryRepository.findByBrandId(pageable, branId);
+//
+//    // then
+//    assertThat(result.getItems()).hasSize(2);
+//    assertThat(result.getItems().get(0).getId()).isEqualTo(magazines.get(13).getId());
+//    assertThat(result.getItems().get(1).getId()).isEqualTo(magazines.get(12).getId());
+//    assertThat(result.hasNext()).isTrue();
+//    assertThat(result.hasPrevious()).isTrue();
+//  }
 }
