@@ -2,11 +2,8 @@ package jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import javax.crypto.SecretKey;
@@ -52,18 +49,6 @@ public class JsonWebTokenGenerator {
         .getPayload()
         .getExpiration()
         .before(toDate(now));
-  }
-
-  public String getTokenFromCookie(HttpServletRequest request) {
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null && cookies.length > 0) {
-      return Arrays.stream(cookies)
-          .filter(cookie -> cookie.getName().equals("X-Access-Token"))
-          .findFirst()
-          .get()
-          .getValue();
-    }
-    return null;
   }
 
   public String getSubject(String jwt) {
