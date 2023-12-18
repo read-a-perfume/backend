@@ -3,8 +3,11 @@ package io.perfume.api.common.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.perfume.api.common.auth.Constants;
 import io.perfume.api.common.auth.SignInAuthenticationFilter;
 import io.perfume.api.common.jwt.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,8 +38,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfiguration {
@@ -65,7 +70,14 @@ public class SecurityConfiguration {
         .csrf(CsrfConfigurer::disable)
         .cors(corsConfigurerCustomizer)
         .formLogin(AbstractHttpConfigurer::disable)
-        .logout(AbstractHttpConfigurer::disable)
+        .logout(
+            httpSecurityLogoutConfigurer ->
+                httpSecurityLogoutConfigurer
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/v1/logout", "POST"))
+                    .deleteCookies(Constants.ACCESS_TOKEN_KEY, Constants.REFRESH_TOKEN_KEY)
+                    .logoutSuccessHandler(
+                        (request, response, authentication) ->
+                            response.setStatus(HttpServletResponse.SC_OK)))
         .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .oauth2Login(oauth2LoginConfigurer)
         .exceptionHandling(exceptionHandlingConfigurerCustomizer)
