@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
@@ -22,7 +21,6 @@ public class NotificationFacadeService {
   private final SubscribeService subScribeService;
   private final SendNotificationService sendNotificationService;
 
-  @Transactional
   public SseEmitter subscribe(long userId, String lastEventId) {
     String emitterId = createNotificationService.makeTimeIncludeId(userId);
     SseEmitter emitter = subScribeService.subscribe(emitterId, lastEventId);
