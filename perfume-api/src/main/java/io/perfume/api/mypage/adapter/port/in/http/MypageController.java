@@ -51,9 +51,8 @@ public class MypageController {
     followUserUseCase.followAndUnFollow(userId, followingId);
   }
 
-  @GetMapping("/follows")
-  public ResponseEntity<FollowCountResponseDto> getFollowCount(@AuthenticationPrincipal User user) {
-    var userId = Long.parseLong(user.getUsername());
+  @GetMapping("/{id}/follows")
+  public ResponseEntity<FollowCountResponseDto> getFollowCount(@PathVariable("id") Long userId) {
     var followerCount = getFollowCountUseCase.getFollowerCountByUserId(userId);
     var followingCount = getFollowCountUseCase.getFollowingCountByUserId(userId);
 
@@ -61,9 +60,8 @@ public class MypageController {
         .body(new FollowCountResponseDto(followerCount, followingCount));
   }
 
-  @GetMapping("/reviews")
-  public ResponseEntity<ReviewCountResponseDto> getReviewCount(@AuthenticationPrincipal User user) {
-    var userId = Long.parseLong(user.getUsername());
+  @GetMapping("/{id}/reviews")
+  public ResponseEntity<ReviewCountResponseDto> getReviewCount(@PathVariable("id") Long userId) {
     var reviewCount = getReviewCountUseCase.getReviewCountByUserId(userId);
 
     return ResponseEntity.status(HttpStatus.OK).body(new ReviewCountResponseDto(reviewCount));

@@ -2,8 +2,7 @@ package io.perfume.api.mypage.adapter.port.in.http;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -100,7 +99,7 @@ class MypageControllerTest {
     // when & then
     mockMvc
         .perform(
-            RestDocumentationRequestBuilders.get("/v1/mypage/follows")
+            RestDocumentationRequestBuilders.get("/v1/mypage/{id}/follows", 100L)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -109,6 +108,7 @@ class MypageControllerTest {
         .andDo(
             document(
                 "get-follows",
+                pathParameters(parameterWithName("id").description("유저 ID")),
                 responseFields(
                     fieldWithPath("followerCount").type(JsonFieldType.NUMBER).description("팔로워 수"),
                     fieldWithPath("followingCount")
@@ -150,7 +150,7 @@ class MypageControllerTest {
     // when & then
     mockMvc
         .perform(
-            RestDocumentationRequestBuilders.get("/v1/mypage/reviews")
+            RestDocumentationRequestBuilders.get("/v1/mypage/{id}/reviews", 100L)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -159,6 +159,7 @@ class MypageControllerTest {
         .andDo(
             document(
                 "get-mypage-reviews",
+                pathParameters(parameterWithName("id").description("유저 ID")),
                 responseFields(
                     fieldWithPath("reviewCount").type(JsonFieldType.NUMBER).description("리뷰 수"))));
   }
