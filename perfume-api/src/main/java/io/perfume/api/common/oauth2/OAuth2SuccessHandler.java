@@ -80,8 +80,8 @@ public class OAuth2SuccessHandler extends AbstractAuthenticationTargetUrlRequest
     String name = String.valueOf(getValueFromAttributes(attributes, "name"));
 
     SignUpSocialUserCommand command =
-        SignUpSocialUserCommand.byGoogle(identifier, email, randomPassword, name);
-    return createUserUseCase.signUpSocialUser(command, now);
+        SignUpSocialUserCommand.byGoogle(identifier, email, randomPassword, name, now);
+    return createUserUseCase.createSocialUser(command);
   }
 
   private Cookie generateCookie(String cookieName, String cookieValue) {

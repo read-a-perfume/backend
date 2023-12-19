@@ -19,13 +19,13 @@ public class StubUserRepository implements UserRepository, UserQueryRepository {
   }
 
   @Override
-  public Optional<User> save(User user) {
-    return Optional.of(user);
+  public User save(User user) {
+    return user;
   }
 
   @Override
-  public Boolean existByUsernameOrEmail(String username, String email) {
-    return null;
+  public boolean existByUsernameOrEmail(String username, String email) {
+    return false;
   }
 
   @Override

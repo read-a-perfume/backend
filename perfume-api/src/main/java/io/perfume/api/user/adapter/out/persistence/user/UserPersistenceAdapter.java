@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +20,14 @@ public class UserPersistenceAdapter implements UserRepository {
 
   @Override
   @Transactional
-  public Optional<User> save(User user) {
+  public User save(User user) {
     UserEntity userEntity = userMapper.toUserJpaEntity(user);
     userJpaRepository.save(userEntity);
-    return Optional.ofNullable(userMapper.toUser(userEntity));
+    return userMapper.toUser(userEntity);
   }
 
   @Override
-  public Boolean existByUsernameOrEmail(String username, String email) {
+  public boolean existByUsernameOrEmail(String username, String email) {
     return jpaQueryFactory
             .selectFrom(userEntity)
             .where(

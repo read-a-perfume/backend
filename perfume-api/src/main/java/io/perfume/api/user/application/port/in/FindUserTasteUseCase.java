@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface FindUserTasteUseCase {
 
-  List<UserTasteResult> getUserTastes(Long userId);
+  List<UserTasteResult> getUserTastes(long userId);
 }

@@ -190,8 +190,6 @@ class ReviewControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testDeleteNotExistsReview() throws Exception {
     // given
-    var now = LocalDateTime.now();
-    var userId = 1L;
 
     // when & then
     mockMvc
@@ -208,12 +206,11 @@ class ReviewControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testGetReviews() throws Exception {
     // given
-    var now = LocalDateTime.now();
-    var user =
+    final LocalDateTime now = LocalDateTime.now();
+    final User user =
         userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
-    var review =
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false));
+    final Review review =
         reviewRepository.save(
             Review.create(
                 "test",
@@ -265,12 +262,11 @@ class ReviewControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testCreateReviewComment() throws Exception {
     // given
-    var now = LocalDateTime.now();
-    var user =
+    final LocalDateTime now = LocalDateTime.now();
+    final User user =
         userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
-    var review =
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false));
+    final Review review =
         reviewRepository.save(
             Review.create(
                 "test",
@@ -310,11 +306,6 @@ class ReviewControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testCreateReviewCommentIfNotExists() throws Exception {
     // given
-    var now = LocalDateTime.now();
-    var user =
-        userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
     var dto = new CreateReviewCommentRequestDto("test");
 
     // when & then
@@ -347,8 +338,7 @@ class ReviewControllerTest {
     var now = LocalDateTime.now();
     var user =
         userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false));
     var review =
         reviewRepository.save(
             Review.create(
@@ -392,8 +382,7 @@ class ReviewControllerTest {
     var now = LocalDateTime.now();
     var user =
         userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false));
     var review =
         reviewRepository.save(
             Review.create(
@@ -436,8 +425,7 @@ class ReviewControllerTest {
     var now = LocalDateTime.now();
     var user =
         userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false));
     var review =
         reviewRepository.save(
             Review.create(
@@ -474,8 +462,7 @@ class ReviewControllerTest {
     var now = LocalDateTime.now();
     var user =
         userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false));
     var review =
         reviewRepository.save(
             Review.create(

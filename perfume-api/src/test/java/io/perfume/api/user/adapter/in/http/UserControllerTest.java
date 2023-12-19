@@ -18,9 +18,9 @@ import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdateProfileRequestDto;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
-import io.perfume.api.user.application.port.in.LeaveUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
 import io.perfume.api.user.application.port.in.UpdateAccountUseCase;
+import io.perfume.api.user.application.port.in.WithdrawUserUseCase;
 import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,11 +46,11 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-class UserSupportControllerTest {
+class UserControllerTest {
   private MockMvc mockMvc;
   @Autowired ObjectMapper objectMapper;
   @MockBean private FindUserUseCase findUserUseCase;
-  @MockBean private LeaveUserUseCase leaveUserUseCase;
+  @MockBean private WithdrawUserUseCase withdrawUserUseCase;
   @MockBean private UpdateAccountUseCase updateAccountUseCase;
   @MockBean private FindEncryptedUsernameUseCase findEncryptedUsernameUseCase;
   @MockBean private SendResetPasswordMailUseCase resetPasswordUserCase;
@@ -119,7 +119,7 @@ class UserSupportControllerTest {
   @WithMockUser(username = "1")
   void leave() throws Exception {
     // given
-    doNothing().when(leaveUserUseCase).leave(anyLong());
+    doNothing().when(withdrawUserUseCase).withdraw(anyLong(), any());
 
     // when
     mockMvc

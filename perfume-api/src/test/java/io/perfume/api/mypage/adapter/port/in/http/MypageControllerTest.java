@@ -67,10 +67,9 @@ class MypageControllerTest {
   @WithMockUser(username = "100", roles = "USER")
   void testFollowUser() throws Exception {
     // given
-    var user =
+    final User user =
         userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false));
 
     // when & then
     mockMvc
@@ -90,10 +89,9 @@ class MypageControllerTest {
   @WithMockUser(username = "100", roles = "USER")
   void testGetFollowCount() throws Exception {
     // given
-    var user =
+    final User user =
         userRepository
-            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
-            .orElseThrow();
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false));
 
     followUserUseCase.followAndUnFollow(2L, user.getId());
 

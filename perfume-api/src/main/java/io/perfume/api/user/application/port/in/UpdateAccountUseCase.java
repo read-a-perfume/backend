@@ -5,9 +5,9 @@ import io.perfume.api.user.application.port.in.dto.UpdatePasswordCommand;
 import io.perfume.api.user.application.port.in.dto.UpdateProfileCommand;
 
 public interface UpdateAccountUseCase {
-  void updateUserEmail(UpdateEmailCommand updateEmailCommand);
+  long updateUserEmail(UpdateEmailCommand updateEmailCommand);
 
-  void updateUserPassword(UpdatePasswordCommand updatePasswordCommand);
+  long updateUserPassword(UpdatePasswordCommand updatePasswordCommand);
 
-  void updateUserProfile(UpdateProfileCommand updateProfileCommand);
+  long updateUserProfile(UpdateProfileCommand updateProfileCommand);
 }

@@ -29,7 +29,7 @@ public class FileController {
     try {
       final LocalDateTime now = LocalDateTime.now();
       final long userId = Long.parseLong(user.getUsername());
-      final FileResult result = fileService.uploadFile(file.getBytes(), userId, now);
+      final FileResult result = fileService.uploadFile(userId, file.getBytes(), now);
 
       return ResponseEntity.ok(new UpdateFileResponseDto(result.id(), result.url()));
     } catch (IOException e) {
