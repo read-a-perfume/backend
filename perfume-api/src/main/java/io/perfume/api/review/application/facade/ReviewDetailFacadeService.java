@@ -1,10 +1,12 @@
 package io.perfume.api.review.application.facade;
 
 import dto.repository.CursorPagination;
+import io.perfume.api.common.notify.EventPublisher;
 import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailCommand;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailResult;
+import io.perfume.api.review.application.facade.dto.ReviewCommentEvent;
 import io.perfume.api.review.application.facade.dto.ReviewDetailResult;
 import io.perfume.api.review.application.facade.dto.ReviewViewDetailResult;
 import io.perfume.api.review.application.in.comment.CreateReviewCommentUseCase;
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +57,7 @@ public class ReviewDetailFacadeService
   private final ReviewTagService reviewTagService;
   private final ReviewThumbnailService reviewThumbnailService;
   private final FindUserUseCase findUserUseCase;
+  private final EventPublisher eventPublisher;
 
   @Override
   public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
@@ -140,12 +144,15 @@ public class ReviewDetailFacadeService
   }
 
   @Override
+  @Transactional
   public ReviewCommentResult createComment(CreateReviewCommentCommand command, LocalDateTime now) {
     reviewService
         .getReview(command.reviewId())
         .orElseThrow(() -> new NotFoundReviewException(command.reviewId()));
-
-    return reviewCommentService.createComment(command, now);
+    ReviewCommentResult comment = reviewCommentService.createComment(command, now);
+    ReviewCommentEvent reviewCommentEvent = new ReviewCommentEvent(comment.reviewId(), 103L);
+    eventPublisher.publishEvent(reviewCommentEvent);
+    return comment;
   }
 
   @Override

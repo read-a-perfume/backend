@@ -1,6 +1,7 @@
-package io.perfume.api.notification.application.event;
+package io.perfume.api.notification.application.listener;
 
 import io.perfume.api.notification.application.facade.NotificationFacadeService;
+import io.perfume.api.review.application.facade.dto.ReviewCommentEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -16,7 +17,7 @@ public class NotificationListener {
 
   @TransactionalEventListener
   @Async
-  public <T> void notificationHandler(T item) {
-    notificationFacadeService.notifyOnEvent(item);
+  public void reviewCommentNotificationHandler(ReviewCommentEvent event) {
+    notificationFacadeService.reviewCommentNotifyOnEvent(event);
   }
 }

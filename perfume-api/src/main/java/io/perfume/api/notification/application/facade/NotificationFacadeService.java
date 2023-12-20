@@ -1,14 +1,12 @@
 package io.perfume.api.notification.application.facade;
 
-import io.perfume.api.notification.application.exception.NotFoundNotificationTypeException;
 import io.perfume.api.notification.application.port.in.dto.CreateNotificationCommand;
 import io.perfume.api.notification.application.service.CreateNotificationService;
 import io.perfume.api.notification.application.service.SendNotificationService;
 import io.perfume.api.notification.application.service.SubscribeService;
 import io.perfume.api.notification.domain.NotificationType;
-import io.perfume.api.review.domain.ReviewComment;
+import io.perfume.api.review.application.facade.dto.ReviewCommentEvent;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -29,21 +27,17 @@ public class NotificationFacadeService {
     return emitter;
   }
 
-  public <T> void notifyOnEvent(T item) {
-    var command = create(item).orElseThrow(NotFoundNotificationTypeException::new);
+  public void reviewCommentNotifyOnEvent(ReviewCommentEvent event) {
+    var command = createReviewCommandNotification(event);
     var notificationResult = createNotificationService.create(command);
     sendNotificationService.send(notificationResult);
   }
 
-  private <T> Optional<CreateNotificationCommand> create(T item) {
+  private CreateNotificationCommand createReviewCommandNotification(ReviewCommentEvent event) {
     var now = LocalDateTime.now();
-    if (item instanceof ReviewComment comment) {
-      var content = comment.getId() + "번 리뷰의 답글이 추가되었습니다.";
-      var type = NotificationType.COMMENT;
+    var content = event.reviewId() + "번 리뷰에 답글이 추가되었습니다.";
+    var type = NotificationType.COMMENT;
 
-      return Optional.of(
-          CreateNotificationCommand.create(content, null, comment.getUserId(), type, now));
-    }
-    return Optional.empty();
+    return CreateNotificationCommand.create(content, null, event.receiveUserId(), type, now);
   }
 }

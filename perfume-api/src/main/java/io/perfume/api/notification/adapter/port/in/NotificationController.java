@@ -1,5 +1,6 @@
 package io.perfume.api.notification.adapter.port.in;
 
+import io.perfume.api.notification.adapter.port.in.dto.DeleteNotificationResponseDto;
 import io.perfume.api.notification.application.facade.NotificationFacadeService;
 import io.perfume.api.notification.application.port.in.DeleteNotificationUseCase;
 import io.perfume.api.notification.application.port.in.ReadNotificationUseCase;
