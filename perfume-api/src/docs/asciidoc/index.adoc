@@ -388,6 +388,21 @@ include::{snippets}/connect-sse/http-request.adoc[]
 === 응답
 include::{snippets}/connect-sse/http-response.adoc[]
 
+== 알림 확인
+=== 요청
+include::{snippets}/read-notification/http-request.adoc[]
+
+=== 응답
+include::{snippets}/read-notification/http-response.adoc[]
+
+== 알림 삭제
+=== 요청
+include::{snippets}/delete-notification/http-request.adoc[]
+
+=== 응답
+include::{snippets}/delete-notification/response-body.adoc[]
+include::{snippets}/delete-notification/response-fields.adoc[]
+
 == 샘플
 === 요청
 include::{snippets}/index/http-request.adoc[]

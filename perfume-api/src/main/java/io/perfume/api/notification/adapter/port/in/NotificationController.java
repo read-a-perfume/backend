@@ -46,20 +46,23 @@ public class NotificationController {
   }
 
   @PreAuthorize("isAuthenticated()")
-  @PatchMapping("/{notificationId}")
-  public void readNotification(
-      @AuthenticationPrincipal User user, @PathVariable Long notificationId) {
+  @PatchMapping("/{id}")
+  public ResponseEntity<Void> readNotification(
+      @AuthenticationPrincipal User user, @PathVariable("id") Long notificationId) {
     var now = LocalDateTime.now();
     var userId = Long.parseLong(user.getUsername());
     readNotificationUseCase.read(userId, notificationId, now);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 
   @PreAuthorize("isAuthenticated()")
-  @DeleteMapping("/{notificationId}")
-  public void deleteNotification(
-      @AuthenticationPrincipal User user, @PathVariable Long notificationId) {
+  @DeleteMapping("/{id}")
+  public ResponseEntity<DeleteNotificationResponseDto> deleteNotification(
+      @AuthenticationPrincipal User user, @PathVariable("id") Long notificationId) {
     var now = LocalDateTime.now();
     var userId = Long.parseLong(user.getUsername());
     deleteNotificationUseCase.delete(userId, notificationId, now);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(new DeleteNotificationResponseDto(notificationId));
   }
 }
