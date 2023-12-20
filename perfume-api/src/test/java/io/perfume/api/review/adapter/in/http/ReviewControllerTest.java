@@ -82,7 +82,7 @@ class ReviewControllerTest {
     // given
     var dto =
         new CreateReviewRequestDto(
-            1L,
+            new CreateReviewRequestDto.Perfume(1L, "test"),
             DayType.DAILY,
             Strength.LIGHT,
             Season.SPRING,
@@ -105,7 +105,8 @@ class ReviewControllerTest {
             document(
                 "create-review",
                 requestFields(
-                    fieldWithPath("perfumeId").type(JsonFieldType.NUMBER).description("향수 ID"),
+                    fieldWithPath("perfume.id").type(JsonFieldType.NUMBER).description("향수 ID"),
+                    fieldWithPath("perfume.name").type(JsonFieldType.STRING).description("향수 이름"),
                     fieldWithPath("season").type(JsonFieldType.STRING).description("어울리는 계절"),
                     fieldWithPath("dayType").type(JsonFieldType.STRING).description("어울리는 날"),
                     fieldWithPath("strength").type(JsonFieldType.STRING).description("향수 강도"),
