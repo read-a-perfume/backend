@@ -4,6 +4,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
   security:
     oauth2:
       client:
