@@ -3,10 +3,10 @@ package io.perfume.api.common.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.perfume.api.common.auth.Constants;
 import io.perfume.api.common.auth.SignInAuthenticationFilter;
 import io.perfume.api.common.jwt.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -74,7 +74,18 @@ public class SecurityConfiguration {
             httpSecurityLogoutConfigurer ->
                 httpSecurityLogoutConfigurer
                     .logoutRequestMatcher(new AntPathRequestMatcher("/v1/logout", "POST"))
-                    .deleteCookies(Constants.ACCESS_TOKEN_KEY, Constants.REFRESH_TOKEN_KEY)
+                    .addLogoutHandler(
+                        (request, response, authentication) ->
+                            Arrays.stream(request.getCookies())
+                                .map(
+                                    cookie -> {
+                                      cookie.setMaxAge(0);
+                                      cookie.setValue(null);
+                                      return cookie;
+                                    })
+                                .forEach(response::addCookie))
+                    //                    .deleteCookies(Constants.ACCESS_TOKEN_KEY,
+                    // Constants.REFRESH_TOKEN_KEY) // secure cookie가 아니면 정상 제거 불가
                     .logoutSuccessHandler(
                         (request, response, authentication) ->
                             response.setStatus(HttpServletResponse.SC_OK)))
