@@ -39,10 +39,19 @@ class BrandQueryPersistenceAdapterTest {
     // given
     String brandName = "brand_name1";
     String brandStory = "story1";
+    String brandUrl = "https://brand.com";
     Long thumbnailId = 1L;
 
+    LocalDateTime now = LocalDateTime.now();
     BrandEntity brandEntity =
-        BrandEntity.builder().name(brandName).story(brandStory).thumbnailId(thumbnailId).build();
+        BrandEntity.builder()
+            .name(brandName)
+            .story(brandStory)
+            .brandUrl(brandUrl)
+            .thumbnailId(thumbnailId)
+            .createdAt(now)
+            .updatedAt(now)
+            .build();
     em.persist(brandEntity);
     em.flush();
     em.clear();
@@ -54,8 +63,8 @@ class BrandQueryPersistenceAdapterTest {
     // then
     assertNotNull(brand);
     assertThat(brand)
-        .extracting("id", "name", "story", "thumbnailId")
-        .containsExactly(brandEntity.getId(), brandName, brandStory, thumbnailId);
+        .extracting("id", "name", "story", "brandUrl", "thumbnailId")
+        .containsExactly(brandEntity.getId(), brandName, brandStory, brandUrl, thumbnailId);
   }
 
   @Test
@@ -65,14 +74,19 @@ class BrandQueryPersistenceAdapterTest {
     // given
     String brandName = "brand_name1";
     String brandStory = "story1";
+    String brandUrl = "https://brand.com";
     Long thumbnailId = 1L;
+    LocalDateTime now = LocalDateTime.now();
 
     BrandEntity brandEntity =
         BrandEntity.builder()
             .name(brandName)
             .story(brandStory)
+            .brandUrl(brandUrl)
             .thumbnailId(thumbnailId)
-            .deletedAt(LocalDateTime.now())
+            .createdAt(now)
+            .updatedAt(now)
+            .deletedAt(now)
             .build();
     em.persist(brandEntity);
     em.flush();
@@ -88,9 +102,18 @@ class BrandQueryPersistenceAdapterTest {
   @Test
   @DisplayName("Brand를 모두 조회한다.")
   void findAll() {
+    LocalDateTime now = LocalDateTime.now();
+
     for (int i = 0; i < 10; i++) {
       BrandEntity brandEntity =
-          BrandEntity.builder().name("브랜드" + i).story("브랜드 스토리" + i).thumbnailId((long) i).build();
+          BrandEntity.builder()
+              .name("브랜드" + i)
+              .story("브랜드 스토리" + i)
+              .brandUrl("https://brand.com/" + i)
+              .thumbnailId((long) i)
+              .createdAt(now)
+              .updatedAt(now)
+              .build();
       em.persist(brandEntity);
     }
     em.flush();

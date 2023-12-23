@@ -74,6 +74,7 @@ class MagazineControllerTest {
                 .updatedAt(now)
                 .name("test")
                 .story("test")
+                .brandUrl("test")
                 .build());
 
     var request =
@@ -113,7 +114,14 @@ class MagazineControllerTest {
     // given
     var now = LocalDateTime.now();
     var brand =
-        Brand.builder().id(1L).createdAt(now).updatedAt(now).name("test").story("test").build();
+        Brand.builder()
+            .id(1L)
+            .createdAt(now)
+            .updatedAt(now)
+            .name("test")
+            .story("test")
+            .brandUrl("test")
+            .build();
     brandRepository.save(brand);
     final List<Magazine> magazines =
         IntStream.range(0, 15)

@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.*;
 
@@ -37,9 +38,9 @@ public class BrandEntity extends BaseTimeEntity {
       String story,
       String brandUrl,
       Long thumbnailId,
-      LocalDateTime createdAt,
-      LocalDateTime updatedAt,
-      LocalDateTime deletedAt) {
+      @NotNull LocalDateTime createdAt,
+      @NotNull LocalDateTime updatedAt,
+      @NotNull LocalDateTime deletedAt) {
     super(createdAt, updatedAt, deletedAt);
     this.id = id;
     this.name = name;
