@@ -390,6 +390,14 @@ include::{snippets}/file-upload/http-request.adoc[]
 include::{snippets}/file-upload/http-response.adoc[]
 include::{snippets}/file-upload/response-fields.adoc[]
 
+== 파일 목록 업로드
+=== 요청
+include::{snippets}/files-upload/http-request.adoc[]
+
+=== 응답
+include::{snippets}/files-upload/http-response.adoc[]
+include::{snippets}/files-upload/response-fields.adoc[]
+
 == 알림 구독
 === 요청
 include::{snippets}/connect-sse/http-request.adoc[]

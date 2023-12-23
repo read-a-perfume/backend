@@ -5,6 +5,8 @@ import io.perfume.api.file.application.port.in.dto.FileResult;
 import io.perfume.api.file.application.service.FileService;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,24 +18,51 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/v1/files")
+@RequestMapping
 @PreAuthorize("isAuthenticated()")
 @RequiredArgsConstructor
 public class FileController {
 
   private final FileService fileService;
 
-  @PostMapping
-  public ResponseEntity<UpdateFileResponseDto> uploadFile(
+  @PostMapping("/v1/file")
+  public ResponseEntity<UpdateFileResponseDto> saveFile(
       @AuthenticationPrincipal final User user, final MultipartFile file) {
-    try {
-      final LocalDateTime now = LocalDateTime.now();
-      final long userId = Long.parseLong(user.getUsername());
-      final FileResult result = fileService.uploadFile(file.getBytes(), userId, now);
+    final LocalDateTime uploadTime = LocalDateTime.now();
+    final long userId = parseUserId(user);
+    final FileResult result = fileService.uploadFile(getFileContent(file), userId, uploadTime);
 
-      return ResponseEntity.ok(new UpdateFileResponseDto(result.id(), result.url()));
+    return ResponseEntity.ok(mapToFileResponseDto(result));
+  }
+
+  @PostMapping("/v1/files")
+  public ResponseEntity<List<UpdateFileResponseDto>> saveFiles(
+      @AuthenticationPrincipal final User user, final List<MultipartFile> files) {
+    final LocalDateTime uploadTime = LocalDateTime.now();
+    final long userId = parseUserId(user);
+    final List<FileResult> results =
+        fileService.uploadFiles(userId, getFileContentAsList(files), uploadTime);
+
+    return ResponseEntity.ok(results.stream().map(this::mapToFileResponseDto).toList());
+  }
+
+  private long parseUserId(User user) {
+    return Long.parseLong(user.getUsername());
+  }
+
+  private byte[] getFileContent(MultipartFile file) {
+    try {
+      return file.getBytes();
     } catch (IOException e) {
-      return ResponseEntity.internalServerError().build();
+      return null;
     }
+  }
+
+  private List<byte[]> getFileContentAsList(List<MultipartFile> files) {
+    return files.stream().map(this::getFileContent).filter(Objects::nonNull).toList();
+  }
+
+  private UpdateFileResponseDto mapToFileResponseDto(FileResult result) {
+    return new UpdateFileResponseDto(result.id(), result.url());
   }
 }
