@@ -1,6 +1,5 @@
 package io.perfume.api.file.adapter.in.http;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
@@ -29,7 +28,6 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-@SuppressWarnings("NonAsciiCharacters")
 class FileControllerTest {
 
   private MockMvc mockMvc;
@@ -49,7 +47,7 @@ class FileControllerTest {
   @Test
   @DisplayName("파일을 업로드한다.")
   @WithMockUser(username = "1", roles = "USER")
-  void uploadFile() throws Exception {
+  void testFileUpload() throws Exception {
     // given
     final MockMultipartFile file =
         new MockMultipartFile("file", "test.txt", "text/plain", "file".getBytes());
@@ -57,7 +55,7 @@ class FileControllerTest {
     // when & then
     mockMvc
         .perform(
-            multipart("/v1/files")
+            multipart("/v1/file")
                 .file(file)
                 .characterEncoding("UTF-8")
                 .contentType("multipart/form-data"))
@@ -68,5 +66,32 @@ class FileControllerTest {
                 responseFields(
                     fieldWithPath("id").description("파일 식별자"),
                     fieldWithPath("url").description("파일 URL"))));
+  }
+
+  @Test
+  @DisplayName("파일을 여러 개 업로드한다.")
+  @WithMockUser(username = "1", roles = "USER")
+  void testUploadMultipleFiles() throws Exception {
+    // given
+    final MockMultipartFile file1 =
+        new MockMultipartFile("files", "test1.txt", "text/plain", "file1".getBytes());
+    final MockMultipartFile file2 =
+        new MockMultipartFile("files", "test2.txt", "text/plain", "file2".getBytes());
+
+    // when & then
+    mockMvc
+        .perform(
+            multipart("/v1/files")
+                .file(file1)
+                .file(file2)
+                .characterEncoding("UTF-8")
+                .contentType("multipart/form-data"))
+        .andDo(
+            document(
+                "files-upload",
+                requestParts(partWithName("files").description("업로드할 파일")),
+                responseFields(
+                    fieldWithPath("[].id").description("파일 식별자"),
+                    fieldWithPath("[].url").description("파일 URL"))));
   }
 }
