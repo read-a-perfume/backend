@@ -4,9 +4,9 @@ import io.perfume.api.brand.application.port.in.dto.CreateBrandCommand;
 import jakarta.validation.constraints.NotEmpty;
 
 public record CreateBrandRequestDto(
-    @NotEmpty String name, @NotEmpty String story, Long thumbnailId) {
+    @NotEmpty String name, @NotEmpty String story, String brandUrl, Long thumbnailId) {
 
   public CreateBrandCommand toCommand() {
-    return new CreateBrandCommand(name, story, thumbnailId);
+    return new CreateBrandCommand(name, story, brandUrl, thumbnailId);
   }
 }

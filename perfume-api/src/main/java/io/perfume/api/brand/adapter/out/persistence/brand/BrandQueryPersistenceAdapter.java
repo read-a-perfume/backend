@@ -22,7 +22,7 @@ public class BrandQueryPersistenceAdapter implements BrandQueryRepository {
     BrandEntity result =
         jpaQueryFactory
             .selectFrom(brandEntity)
-            .where(brandEntity.id.eq(id).and(brandEntity.deletedAt.isNull()))
+            .where(brandEntity.id.eq(id), brandEntity.deletedAt.isNull())
             .fetchOne();
 
     return Optional.ofNullable(brandMapper.toDomain(result));
