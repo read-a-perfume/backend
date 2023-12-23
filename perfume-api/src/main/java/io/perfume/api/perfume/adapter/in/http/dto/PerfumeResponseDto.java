@@ -1,7 +1,6 @@
 package io.perfume.api.perfume.adapter.in.http.dto;
 
 import io.perfume.api.perfume.application.port.in.dto.PerfumeResult;
-import io.perfume.api.perfume.domain.Concentration;
 import java.util.List;
 import lombok.Builder;
 
@@ -9,7 +8,8 @@ import lombok.Builder;
 public record PerfumeResponseDto(
     String name,
     String story,
-    Concentration concentration,
+    String strength,
+    String duration,
     String perfumeShopUrl,
     String brandName,
     String categoryName,
@@ -19,11 +19,12 @@ public record PerfumeResponseDto(
     List<NoteResponseDto> middleNotes,
     List<NoteResponseDto> baseNotes) {
 
-  public static PerfumeResponseDto of(PerfumeResult perfumeResult) {
+  public static PerfumeResponseDto from(PerfumeResult perfumeResult) {
     return PerfumeResponseDto.builder()
         .name(perfumeResult.name())
         .story(perfumeResult.story())
-        .concentration(perfumeResult.concentration())
+        .strength(perfumeResult.concentration().getStrength())
+        .duration(perfumeResult.concentration().getDuration())
         .perfumeShopUrl(perfumeResult.perfumeShopUrl())
         .categoryName(perfumeResult.categoryName())
         .categoryTags(perfumeResult.categoryTags())

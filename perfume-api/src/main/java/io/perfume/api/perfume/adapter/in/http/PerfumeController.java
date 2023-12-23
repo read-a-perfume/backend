@@ -48,7 +48,7 @@ public class PerfumeController {
 
   @GetMapping("/{id}")
   public PerfumeResponseDto findPerfumeById(@PathVariable Long id) {
-    return PerfumeResponseDto.of(findPerfumeUseCase.findPerfumeById(id));
+    return PerfumeResponseDto.from(findPerfumeUseCase.findPerfumeById(id));
   }
 
   @PostMapping
