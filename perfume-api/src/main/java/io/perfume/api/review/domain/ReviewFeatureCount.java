@@ -13,4 +13,8 @@ public record ReviewFeatureCount(
     Map<Season, Long> seasonMap,
     Map<DayType, Long> dayTypeMap,
     Map<Sex, Long> sexMap,
-    Long totalReviews) {}
+    Long totalReviews) {
+
+  public static ReviewFeatureCount EMPTY =
+      new ReviewFeatureCount(Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), 0L);
+}

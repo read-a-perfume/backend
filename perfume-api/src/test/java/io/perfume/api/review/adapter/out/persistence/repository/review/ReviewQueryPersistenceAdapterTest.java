@@ -6,7 +6,6 @@ import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.domain.Concentration;
-import io.perfume.api.review.adapter.out.persistence.repository.tag.TagMapper;
 import io.perfume.api.review.application.out.review.ReviewQueryRepository;
 import io.perfume.api.review.application.out.review.ReviewRepository;
 import io.perfume.api.review.domain.Review;
@@ -17,7 +16,9 @@ import io.perfume.api.review.domain.type.Season;
 import io.perfume.api.review.domain.type.Strength;
 import io.perfume.api.user.adapter.out.persistence.user.Sex;
 import io.perfume.api.user.adapter.out.persistence.user.UserEntity;
+import io.perfume.api.user.adapter.out.persistence.user.UserMapper;
 import io.perfume.api.user.domain.Role;
+import io.perfume.api.user.domain.User;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -36,7 +37,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Import({
   ReviewQueryPersistenceAdapter.class,
   ReviewMapper.class,
-  TagMapper.class,
+  UserMapper.class,
   TestQueryDSLConfiguration.class,
   ReviewPersistenceAdapter.class
 })
@@ -45,11 +46,12 @@ import org.springframework.test.context.ActiveProfiles;
 class ReviewQueryPersistenceAdapterTest {
 
   @Autowired private ReviewQueryRepository queryRepository;
+
   @Autowired private ReviewRepository reviewRepository;
 
   @Autowired private ReviewMapper reviewMapper;
 
-  @Autowired private TagMapper tagMapper;
+  @Autowired private UserMapper userMapper;
 
   @Autowired private EntityManager entityManager;
 
@@ -328,5 +330,42 @@ class ReviewQueryPersistenceAdapterTest {
     assertThat(result.getTotalElements()).isEqualTo(15);
     assertThat(result.getContent().size()).isEqualTo(5);
     assertThat(result.isLast()).isTrue();
+  }
+
+  @Test
+  @DisplayName("향수에 대한 리뷰 통계를 조회한다.")
+  void testGetStatisticByPerfume() {
+    // given
+    final LocalDateTime now = LocalDateTime.now();
+    final long perfumeId = 1L;
+    final User user = User.createSocialUser("test", "test@mail.com", "123qwe", now);
+    final UserEntity userEntity = userMapper.toUserJpaEntity(user);
+    entityManager.persist(userEntity);
+    final Review review =
+        Review.create(
+            "test",
+            "test description",
+            Strength.LIGHT,
+            Duration.LONG,
+            DayType.DAILY,
+            perfumeId,
+            userEntity.getId(),
+            Season.SPRING,
+            now);
+    final ReviewEntity createdReview = reviewMapper.toEntity(review);
+    entityManager.persist(createdReview);
+    entityManager.flush();
+    entityManager.clear();
+
+    // when
+    final var result = queryRepository.getReviewFeatureCount(perfumeId);
+
+    // then
+    assertThat(result.totalReviews()).isEqualTo(1);
+    assertThat(result.strengthMap()).containsEntry(Strength.LIGHT, 1L);
+    assertThat(result.durationMap()).containsEntry(Duration.LONG, 1L);
+    assertThat(result.dayTypeMap()).containsEntry(DayType.DAILY, 1L);
+    assertThat(result.seasonMap()).containsEntry(Season.SPRING, 1L);
+    assertThat(result.sexMap()).containsEntry(Sex.OTHER, 1L);
   }
 }
