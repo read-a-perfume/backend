@@ -131,7 +131,8 @@ class PerfumeControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.name").value(perfumeResult.name()))
         .andExpect(jsonPath("$.story").value(perfumeResult.story()))
-        .andExpect(jsonPath("$.concentration").value(perfumeResult.concentration().toString()))
+        .andExpect(jsonPath("$.strength").value(perfumeResult.concentration().getStrength()))
+        .andExpect(jsonPath("$.duration").value(perfumeResult.concentration().getDuration()))
         .andExpect(jsonPath("$.perfumeShopUrl").value(perfumeResult.perfumeShopUrl()))
         .andExpect(jsonPath("$.brandName").value(perfumeResult.brandName()))
         .andExpect(jsonPath("$.categoryName").value(perfumeResult.categoryName()))
@@ -153,7 +154,8 @@ class PerfumeControllerTest {
                 responseFields(
                     fieldWithPath("name").type(JsonFieldType.STRING).description("향수 이름"),
                     fieldWithPath("story").type(JsonFieldType.STRING).description("향수 스토리"),
-                    fieldWithPath("concentration").type(JsonFieldType.STRING).description("향수 농도"),
+                    fieldWithPath("strength").type(JsonFieldType.STRING).description("향수 강도"),
+                    fieldWithPath("duration").type(JsonFieldType.STRING).description("향수 지속 시간"),
                     fieldWithPath("perfumeShopUrl")
                         .type(JsonFieldType.STRING)
                         .description("향수 쇼핑몰 URL"),
