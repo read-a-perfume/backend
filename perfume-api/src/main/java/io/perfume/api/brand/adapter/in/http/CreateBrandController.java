@@ -5,6 +5,7 @@ import io.perfume.api.brand.adapter.in.http.dto.CreateBrandResponseDto;
 import io.perfume.api.brand.application.port.in.CreateBrandUseCase;
 import io.perfume.api.brand.application.port.in.dto.BrandResult;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,9 +18,7 @@ public class CreateBrandController {
     this.createBrandUseCase = createBrandUseCase;
   }
 
-  /*
-  TODO : 브랜드를 추가할 수 있는 권한 체크
-  */
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public CreateBrandResponseDto createBrand(@RequestBody CreateBrandRequestDto requestDto) {
