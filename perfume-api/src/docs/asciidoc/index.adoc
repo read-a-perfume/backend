@@ -199,6 +199,17 @@ include::{snippets}/get-perfume/http-request.adoc[]
 include::{snippets}/get-perfume/http-response.adoc[]
 include::{snippets}/get-perfume/response-fields.adoc[]
 
+== 향수 테마 조회
+=== 요청
+include::{snippets}/get-perfume-theme/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-perfume-theme/http-response.adoc[]
+include::{snippets}/get-perfume-theme/response-fields.adoc[]
+
+=== 실패 응답
+include::{snippets}/get-perfume-theme-failed/http-response.adoc[]
+
 == 향수 검색
 === 요청
 include::{snippets}/search-perfume/http-request.adoc[]

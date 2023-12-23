@@ -59,6 +59,28 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
   }
 
   @Override
+  public List<SimplePerfumeResult> findPerfumesByIds(List<Long> ids) {
+    return jpaQueryFactory
+        .select(
+            Projections.constructor(
+                SimplePerfumeResult.class,
+                perfumeJpaEntity.id,
+                perfumeJpaEntity.name,
+                perfumeJpaEntity.concentration,
+                brandEntity.name,
+                fileJpaEntity.url))
+        .from(perfumeJpaEntity)
+        .where(perfumeJpaEntity.id.in(ids), perfumeJpaEntity.deletedAt.isNull())
+        .leftJoin(brandEntity)
+        .on(perfumeJpaEntity.brandId.eq(brandEntity.id))
+        .fetchJoin()
+        .leftJoin(fileJpaEntity)
+        .on(perfumeJpaEntity.thumbnailId.eq(fileJpaEntity.id))
+        .fetchJoin()
+        .fetch();
+  }
+
+  @Override
   public NotePyramid getNotePyramidByPerfume(Long perfumeId) {
     List<Tuple> result =
         jpaQueryFactory
