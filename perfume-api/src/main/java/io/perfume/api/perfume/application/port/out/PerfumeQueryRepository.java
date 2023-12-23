@@ -15,6 +15,8 @@ public interface PerfumeQueryRepository {
 
   Optional<Perfume> findPerfumeById(Long id);
 
+  List<SimplePerfumeResult> findPerfumesByIds(List<Long> ids);
+
   NotePyramid getNotePyramidByPerfume(Long perfumeId);
 
   CustomSlice<SimplePerfumeResult> findPerfumesByBrand(
