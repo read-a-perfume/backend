@@ -13,6 +13,7 @@ public class BrandMapper {
         .id(brandEntity.getId())
         .name(brandEntity.getName())
         .story(brandEntity.getStory())
+        .brandUrl(brandEntity.getBrandUrl())
         .thumbnailId(brandEntity.getThumbnailId())
         .createdAt(brandEntity.getCreatedAt())
         .updatedAt(brandEntity.getUpdatedAt())
@@ -28,6 +29,7 @@ public class BrandMapper {
         .id(brand.getId())
         .name(brand.getName())
         .story(brand.getStory())
+        .brandUrl(brand.getBrandUrl())
         .thumbnailId(brand.getThumbnailId())
         .build();
   }

@@ -26,6 +26,8 @@ public class BrandEntity extends BaseTimeEntity {
 
   @NotBlank private String story;
 
+  @NotBlank private String brandUrl;
+
   private Long thumbnailId;
 
   @Builder
@@ -33,6 +35,7 @@ public class BrandEntity extends BaseTimeEntity {
       Long id,
       String name,
       String story,
+      String brandUrl,
       Long thumbnailId,
       LocalDateTime createdAt,
       LocalDateTime updatedAt,
@@ -41,6 +44,7 @@ public class BrandEntity extends BaseTimeEntity {
     this.id = id;
     this.name = name;
     this.story = story;
+    this.brandUrl = brandUrl;
     this.thumbnailId = thumbnailId;
   }
 }
