@@ -10,5 +10,5 @@ import org.springframework.validation.annotation.Validated;
 public record JwtProperties(
     @NotEmpty String secretKey,
     @NotEmpty String redirectUri,
-    @Min(60 * 60 * 2) int accessTokenValidityInSeconds,
+    @Min(60) int accessTokenValidityInSeconds,
     @Min(60 * 60 * 24 * 7) int refreshTokenValidityInSeconds) {}
