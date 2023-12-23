@@ -39,7 +39,7 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
     testImplementation("io.rest-assured:rest-assured:5.4.0")
-    testImplementation("org.springframework.security:spring-security-test:6.2.0")
+    testImplementation("org.springframework.security:spring-security-test:6.2.1")
 }
 
 tasks.jar {
