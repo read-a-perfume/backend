@@ -131,7 +131,8 @@ class PerfumeQueryPersistenceAdapterTest {
   @DisplayName("Brand를 기준으로 향수 조회 시, 마지막 향수의 id가 없으면 첫 페이지를 조회한다.")
   void findPerfumesByBrand() {
     // given
-    BrandEntity brandEntity = BrandEntity.builder().name("Aesop").story("기업 소개").build();
+    BrandEntity brandEntity =
+        BrandEntity.builder().name("Aesop").story("기업 소개").brandUrl("https://brand.com").build();
     entityManager.persist(brandEntity);
 
     for (int i = 0; i < 5; i++) {
@@ -164,7 +165,8 @@ class PerfumeQueryPersistenceAdapterTest {
   @DisplayName("Brand를 기준으로 향수 조회 시, 마지막 향수의 id를 넘기면 그 이후의 향수를 조회한다.")
   void findPerfumesByBrandWithLastPerfumeId() {
     // given
-    BrandEntity brandEntity = BrandEntity.builder().name("Aesop").story("기업 소개").build();
+    BrandEntity brandEntity =
+        BrandEntity.builder().name("Aesop").story("기업 소개").brandUrl("https://brand.com").build();
     entityManager.persist(brandEntity);
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
@@ -307,7 +309,8 @@ class PerfumeQueryPersistenceAdapterTest {
   @DisplayName("브랜드 이름이 검색어로 들어올 때 향수 목록을 최대 10개 조회한다.")
   void searchPerfumesByQueryWithBrand() {
     // given
-    BrandEntity brandEntity = BrandEntity.builder().name("이솝").story("기업 소개").build();
+    BrandEntity brandEntity =
+        BrandEntity.builder().name("이솝").story("기업 소개").brandUrl("브랜드 URL").build();
     entityManager.persist(brandEntity);
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
@@ -327,7 +330,8 @@ class PerfumeQueryPersistenceAdapterTest {
       perfumeJpaEntities.add(perfumeJpaEntity);
     }
 
-    BrandEntity brandEntity2 = BrandEntity.builder().name("조말론").story("기업 소개").build();
+    BrandEntity brandEntity2 =
+        BrandEntity.builder().name("조말론").story("기업 소개").brandUrl("https://brand.com").build();
     entityManager.persist(brandEntity2);
 
     for (int i = 10; i < 20; i++) {
@@ -363,7 +367,8 @@ class PerfumeQueryPersistenceAdapterTest {
   void searchPerfumesByQueryWithPerfume() {
     // given
     String brandName = "이솝";
-    BrandEntity brandEntity = BrandEntity.builder().name(brandName).story("기업 소개").build();
+    BrandEntity brandEntity =
+        BrandEntity.builder().name(brandName).story("기업 소개").brandUrl("https://brand.com").build();
     entityManager.persist(brandEntity);
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
@@ -401,7 +406,8 @@ class PerfumeQueryPersistenceAdapterTest {
   void searchPerfumesByQueryWithBrandAndPerfume() {
     // given
     String brandName = "이솝";
-    BrandEntity brandEntity = BrandEntity.builder().name(brandName).story("기업 소개").build();
+    BrandEntity brandEntity =
+        BrandEntity.builder().name(brandName).story("기업 소개").brandUrl("https://brand.com").build();
     entityManager.persist(brandEntity);
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();
@@ -439,7 +445,8 @@ class PerfumeQueryPersistenceAdapterTest {
   void failToSearchPerfumesByQueryWithBrandAndPerfume() {
     // given
     String brandName = "이솝";
-    BrandEntity brandEntity = BrandEntity.builder().name(brandName).story("기업 소개").build();
+    BrandEntity brandEntity =
+        BrandEntity.builder().name(brandName).story("기업 소개").brandUrl("https://brand.com").build();
     entityManager.persist(brandEntity);
 
     List<PerfumeJpaEntity> perfumeJpaEntities = new ArrayList<>();

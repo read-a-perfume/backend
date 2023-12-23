@@ -59,9 +59,10 @@ class FindBrandControllerTest {
     String name = "CHANEL";
     String story =
         "샤넬 향수는 특별한 향과 함께 있는 그대로의 모습을 드러내는 작품입니다. 특별한 시리즈를 통해 샤넬 향수에 관련된 노하우와 전문 기술, 창의성을 끊임없이 추구하는 샤넬의 여정을 확인해 보세요.";
+    String brandUrl = "https://www.chanel.com/kr/fragrance/";
     String thumbnail = "testUrl.com";
 
-    BrandResult brandResult = new BrandResult(id, name, story, thumbnail);
+    BrandResult brandResult = new BrandResult(id, name, story, brandUrl, thumbnail);
 
     given(findBrandUseCase.findBrandById(anyLong())).willReturn(brandResult);
 
@@ -76,6 +77,7 @@ class FindBrandControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.name").value(brandResult.name()))
         .andExpect(jsonPath("$.story").value(brandResult.story()))
+        .andExpect(jsonPath("$.brandUrl").value(brandResult.brandUrl()))
         .andExpect(jsonPath("$.thumbnail").value(brandResult.thumbnail()))
         .andDo(
             document(
@@ -84,6 +86,7 @@ class FindBrandControllerTest {
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("브랜드 ID"),
                     fieldWithPath("name").type(JsonFieldType.STRING).description("브랜드 이름"),
                     fieldWithPath("story").type(JsonFieldType.STRING).description("브랜드 이야기"),
+                    fieldWithPath("brandUrl").type(JsonFieldType.STRING).description("브랜드 링크"),
                     fieldWithPath("thumbnail")
                         .type(JsonFieldType.STRING)
                         .description("브랜드 썸네일 이미지"))));
@@ -97,9 +100,10 @@ class FindBrandControllerTest {
     String name = "CHANEL";
     String story =
         "샤넬 향수는 특별한 향과 함께 있는 그대로의 모습을 드러내는 작품입니다. 특별한 시리즈를 통해 샤넬 향수에 관련된 노하우와 전문 기술, 창의성을 끊임없이 추구하는 샤넬의 여정을 확인해 보세요.";
+    String brandUrl = "https://www.chanel.com/kr/fragrance/";
     String thumbnail = "testUrl.com";
 
-    BrandResult brandResult = new BrandResult(id, name, story, thumbnail);
+    BrandResult brandResult = new BrandResult(id, name, story, brandUrl, thumbnail);
 
     given(findBrandUseCase.findBrandById(anyLong())).willThrow(new BrandNotFoundException(id));
 
@@ -119,8 +123,10 @@ class FindBrandControllerTest {
   void getAll() throws Exception {
     // given
     List<BrandResult> list = new ArrayList<>();
-    list.add(new BrandResult(1L, "샤넬", "브랜드 스토리", "testUrl.com"));
-    list.add(new BrandResult(2L, "조말론", "브랜드 스토리", "testUrl.com"));
+    list.add(
+        new BrandResult(
+            1L, "샤넬", "브랜드 스토리", "https://www.chanel.com/kr/fragrance/", "testUrl.com"));
+    list.add(new BrandResult(2L, "조말론", "브랜드 스토리", "https://www.jomalone.co.kr/", "testUrl.com"));
     given(findBrandUseCase.findAll()).willReturn(list);
 
     // when & then
@@ -131,6 +137,7 @@ class FindBrandControllerTest {
         .andExpect(jsonPath("$[0].id").value(list.get(0).id()))
         .andExpect(jsonPath("$[0].name").value(list.get(0).name()))
         .andExpect(jsonPath("$[0].story").value(list.get(0).story()))
+        .andExpect(jsonPath("$[0].brandUrl").value(list.get(0).brandUrl()))
         .andExpect(jsonPath("$[0].thumbnail").value(list.get(0).thumbnail()))
         .andDo(
             document(
@@ -139,6 +146,7 @@ class FindBrandControllerTest {
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("브랜드 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("브랜드 이름"),
                     fieldWithPath("[].story").type(JsonFieldType.STRING).description("브랜드 이야기"),
+                    fieldWithPath("[].brandUrl").type(JsonFieldType.STRING).description("브랜드 링크"),
                     fieldWithPath("[].thumbnail")
                         .type(JsonFieldType.STRING)
                         .description("브랜드 썸네일 이미지"))));
