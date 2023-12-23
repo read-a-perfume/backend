@@ -13,11 +13,11 @@ public interface ReviewQueryRepository {
 
   List<Review> findByPage(long page, long size);
 
-  ReviewFeatureCount getReviewFeatureCount(Long perfumeId);
+  ReviewFeatureCount getReviewFeatureCount(long perfumeId);
 
   Long findReviewCountByUserId(Long userId);
 
   boolean existsReviewById(Long reviewId);
 
-  CustomPage<Review> findByPerfumeId(final long perfumeId, final Pageable pageable);
+  CustomPage<Review> findByPerfumeId(long perfumeId, Pageable pageable);
 }

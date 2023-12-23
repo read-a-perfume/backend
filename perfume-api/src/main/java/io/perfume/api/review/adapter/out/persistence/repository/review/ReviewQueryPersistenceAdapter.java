@@ -61,8 +61,8 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
   }
 
   @Override
-  public ReviewFeatureCount getReviewFeatureCount(Long perfumeId) {
-    Long totalReviews =
+  public ReviewFeatureCount getReviewFeatureCount(final long perfumeId) {
+    final Long totalReviews =
         jpaQueryFactory
             .select(reviewEntity.id.count())
             .from(reviewEntity)
@@ -70,53 +70,43 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
             .fetchOne();
 
     if (totalReviews == null || totalReviews == 0) {
-      return new ReviewFeatureCount(
-          Collections.emptyMap(),
-          Collections.emptyMap(),
-          Collections.emptyMap(),
-          Collections.emptyMap(),
-          Collections.emptyMap(),
-          totalReviews);
+      return ReviewFeatureCount.EMPTY;
     }
 
     Map<Strength, Long> strengthMap =
         jpaQueryFactory
             .from(reviewEntity)
-            .where(reviewEntity.perfumeId.eq(perfumeId))
-            .leftJoin(userEntity)
-            .on(reviewEntity.userId.eq(userEntity.id))
-            .fetchJoin()
+            .where(reviewEntity.perfumeId.eq(perfumeId), reviewEntity.deletedAt.isNull())
             .groupBy(reviewEntity.strength)
             .transform(groupBy(reviewEntity.strength).as(reviewEntity.id.count()));
 
     Map<Duration, Long> durationMap =
         jpaQueryFactory
             .from(reviewEntity)
-            .where(reviewEntity.perfumeId.eq(perfumeId))
+            .where(reviewEntity.perfumeId.eq(perfumeId), reviewEntity.deletedAt.isNull())
             .groupBy(reviewEntity.duration)
             .transform(groupBy(reviewEntity.duration).as(reviewEntity.id.count()));
 
     Map<Season, Long> seasonMap =
         jpaQueryFactory
             .from(reviewEntity)
-            .where(reviewEntity.perfumeId.eq(perfumeId))
+            .where(reviewEntity.perfumeId.eq(perfumeId), reviewEntity.deletedAt.isNull())
             .groupBy(reviewEntity.season)
             .transform(groupBy(reviewEntity.season).as(reviewEntity.id.count()));
 
     Map<DayType, Long> dayTypeMap =
         jpaQueryFactory
             .from(reviewEntity)
-            .where(reviewEntity.perfumeId.eq(perfumeId))
+            .where(reviewEntity.perfumeId.eq(perfumeId), reviewEntity.deletedAt.isNull())
             .groupBy(reviewEntity.dayType)
             .transform(groupBy(reviewEntity.dayType).as(reviewEntity.id.count()));
 
     Map<Sex, Long> sexMap =
         jpaQueryFactory
             .from(reviewEntity)
-            .where(reviewEntity.perfumeId.eq(perfumeId))
             .leftJoin(userEntity)
-            .on(reviewEntity.userId.eq(userEntity.id))
-            .fetchJoin()
+            .on(reviewEntity.userId.eq(userEntity.id), userEntity.deletedAt.isNull())
+            .where(reviewEntity.perfumeId.eq(perfumeId), reviewEntity.deletedAt.isNull())
             .groupBy(userEntity.sex)
             .transform(groupBy(userEntity.sex).as(reviewEntity.id.count()));
 

@@ -30,11 +30,6 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
     return null;
   }
 
-  @Override
-  public ReviewFeatureCount getReviewFeatureCount(Long perfumeId) {
-    return null;
-  }
-
   public Long findReviewCountByUserId(Long userId) {
     return (long) reviews.size();
   }
@@ -46,6 +41,11 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
 
   @Override
   public CustomPage<Review> findByPerfumeId(long perfumeId, Pageable pageable) {
+    return null;
+  }
+
+  @Override
+  public ReviewFeatureCount getReviewFeatureCount(long perfumeId) {
     return null;
   }
 
