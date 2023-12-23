@@ -38,7 +38,7 @@ values (1, '조말론', '조말론은 18세기 영국에서 시작된 럭셔리 
        (13, '아쿠아 디파르마', '1916년부터 이탈리아 럭셔리를 상징하는 상징적인 향수와 코롱 컬렉션을 만들어 독특한 스타일을 키워온 브랜드입니다.', 1, now(), now()),
        (14, '논픽션', '논픽션은 향을 매개로 내면의 힘을 표현하는 라이프스타일 뷰티 브랜드입니다. 최상의 원료와 섬세한 조향을 바탕으로 신비롭고 독특한 무드를 빚어내는 향수, 하루의 시작과 끝을 더욱 정성스럽게 만드는 바디케어 제품군을 선보입니다.', 1, now(), now()),
        (15, '구찌', '1921년, 피렌체에서 설립된 세계적인 럭셔리 패션 브랜드 구찌는 창의성과 혁신, 이탈리아의 장인 정신으로 높은 명성을 얻고 있는 기업입니다.', 1, now(), now()),
-       (16, '르라보', '2006년 뉴욕에서 시작된 향수 브랜드로, 진정한 영혼과 정성을 담아 향수를 만들어 나갑니다.', 1, now(), now()),
+       (16, '르라보', '2006년 뉴욕에서 시작된 향수 브랜드로, 조향사의 연구실에서 일어나는 다양한 일에 영감을 받아 사람마다 특화된 향을 내는 향수를 만들어 나갑니다.', 1, now(), now()),
        (17, '에르메스',
         '1837년에 태어난 프랑스의 럭셔리 브랜드로, 고급 가죽 상품과 패션 제품으로 유명합니다. 수제 공예의 전통과 우아함을 자랑하는 브랜드로, 최상의 품질과 디자인으로 세계적으로 인정받고 있습니다.', 1,
         now(), now()),
@@ -72,7 +72,11 @@ values (1, '조말론', '조말론은 18세기 영국에서 시작된 럭셔리 
         '2009년 프랑스에서 시작된 향수 브랜드로, 고급스러운 향수로 유명합니다. 정교하게 조합된 향료와 독특한 블렌딩 기술로 세련된 향수를 선보이며, 높은 품질과 독특한 아트 디렉션으로 주목받고 있습니다.', 1,
         now(), now()),
        (30, '메모',
-        '파리지앵 하우스인 Memo는 여행지에서의 기억을 상상하게 만들어내는 향수를 추구하며 감각적인 향을 만들어냅니다.', 1, now(), now());
+        '파리지앵 하우스인 Memo는 여행지에서의 기억을 상상하게 만들어내는 향수를 추구하며 감각적인 향을 만들어냅니다.', 1, now(), now()),
+       (31, '딥티크',
+        '고대 그리스어로 두 판넬로 이루어진 미술 작품 혹은 조각품이라는 뜻을 가진 딥티크는 고급 원료를 사용한 독특한 향을 만들어냅니다.', 1, now(), now()),
+       (32, '이솝',
+        '"길이 아름답다면 어디로 가는지 묻지 말자"라는 모토를 가지며 식물성 재료와 연구실에서 제조된 성분들을 사용해 세심하게 고안한 지속 가능한 향수를 추구합니다.', 1, now(), now());
 
 insert into note (id, name, description, created_at, updated_at)
 values (1, '씨 솔트', '바삭바삭한 질감, 산뜻함과 순수함을 선사하는 향', now(), now()),
@@ -81,13 +85,13 @@ values (1, '씨 솔트', '바삭바삭한 질감, 산뜻함과 순수함을 선�
        (4, '페어', '달콤하고 상큼하며 시원한 서양 배의 향', now(), now()),
        (5, '프리지아', '향긋한 꽃 향', now(), now()),
        (6, '파출리', '흙내음과 이끼가 어우러진 어두운 느낌의 허브 향', now(), now()),
-       (7, '블랙베리', '과즙을 내뿜는 달콤한 블랙커런트 향', now(), now()),
+       (7, '블랙베리', '달콤한 과즙을 내뿜는 신선한 블랙베리의 향', now(), now()),
        (8, '월계수 잎', '선명함과 눈부신 녹음이 느껴지는 향', now(), now()),
        (9, '시더우드', '카리스마 있는 강렬한 느낌을 주는 우디 향', now(), now()),
        (10, '카시스', '풍부한 과즙과 잘 익은 카시스의 청량한 향', now(), now()),
        (11, '아카시아 허니', '부드럽고 달콤한 비즈왁스와 기분좋은 꿀 향과 만개한 꽃 향의 조화', now(), now()),
        (12, '복숭아', '감미로운 과즙이 가득하고 벨벳 같이 부드러운 향', now(), now()),
-       (13, '프티그레인', '쌉쌀한 오렌지 나무의 싱싱함과 깔끔한 광채가 느껴지는 향', now(), now()),
+       (13, '페티그레인', '쌉쌀한 오렌지 나무의 싱싱함과 깔끔한 광채가 느껴지는 향', now(), now()),
        (14, '라벤더', '장뇌, 꿀, 건초의 상쾌하고 아로마틱한 향', now(), now()),
        (15, '앰버', '우디한 따스함이 있는 관능적인 향', now(), now()),
        (16, '체리', '달콤 상큼한 체리의 싱싱함이 느껴지는 향', now(), now()),
@@ -104,14 +108,35 @@ values (1, '씨 솔트', '바삭바삭한 질감, 산뜻함과 순수함을 선�
        (27, '베티베르', '흙내음과 녹음이 은은하게 느껴지는 향', now(), now()),
        (28, '블러드 오렌지', '매우 달콤하고 과즙이 많은 오렌지와 비슷한 향', now(), now()),
        (29, '카다멈', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now()),
-       (30, '헬리오트로프', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now()),
-       (31, '럼', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now()),
-       (32, '꼬냑', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now()),
+       (30, '헬리오트로프', '바닐라, 진한 초콜렛의 향기가 은은하게 나는 꽃 향', now(), now()),
+       (31, '럼', '럼을 마신 후 숨결에서 느껴지는 씁쓸한 향', now(), now()),
+       (32, '꼬냑', '은은한 포도향이 올라오는 꼬냑의 씁쓸한 향', now(), now()),
        (33, '샌달우드', '밀키하고 부드러우며 클래식한 우디 향', now(), now()),
        (34, '벤조인', '바닐라를 연상시키는 따뜻한 발사믹 향', now(), now()),
        (35, '바닐라', '익히 알려진 달콤하고 편안하며 쿠키를 구울 때 나는 향', now(), now()),
        (36, '페루 발삼', '송진의 아로마틱함과 매콤함이 어우러진 씁쓸한 향', now(), now()),
-       (37, '통카', '달콤한 과일과 아몬드, 담배를 살짝 섞은듯한 편안한 향', now(), now());
+       (37, '통카', '달콤한 과일과 아몬드, 담배를 살짝 섞은듯한 편안한 향', now(), now()),
+       (38, '라즈베리', '새콤달콤한 라즈베리 향', now(), now()),
+       (39, '스트로베리', '달콤한 딸기 향', now(), now()),
+       (40, '블랙커런트', '매우 강렬하고 톡 쏘는 시원한 베리 향', now(), now()),
+       (41, '만다린 오렌지', '익히 알고 있는 정석적인 오렌지 향', now(), now()),
+       (42, '레몬', '생동감과 경쾌함을 주는 레몬의 향', now(), now()),
+       (43, '바이올렛', '달달하고 파우더리한 꽃의 향', now(), now()),
+       (44, '레몬', '생동감이 느껴지는 레몬의 향', now(), now()),
+       (45, '오크모스', '이끼의 초록빛이 느껴지는 독특한 향', now(), now()),
+       (46, '리치', '열대 과일의 풍부한 과즙이 워터리하게 느껴지는 향', now(), now()),
+       (47, '미모사', '노랗게 물든 미모사 꽃에서 나는 파우더리한 린넨의 향', now(), now()),
+       (48, '서양 배', '달달하면서도 시원한 배의 향', now(), now()),
+       (49, '사과', '상쾌하고 달콤한 사과 향', now(), now()),
+       (50, '세타록스', '앰버그라스를 대체하기 위해 발명된 살짝 짭짤하면서 몽환적이고 포근한 향', now(), now()),
+       (51, '이소 이 슈퍼', '부드럽고 무게감 있는 앰버와 비슷한 향', now(), now()),
+       (52, '아밀 살리실레이트', '플로럴과 클로버 냄새 사이 어딘가의 향', now(), now()),
+       (53, '암브레톨리트', '강한 동물적 느낌과 약간의 과일 향이 섞인 향', now(), now()),
+       (54, '헬베톨리드', '머스키함을 기본으로 시원한 배, 잘 마른 나무의 느낌을 지닌 향', now(), now()),
+       (55, '올리바넘', '프링킨센스 나무 수액으로 만들어져 우거진 숲의 흙빛과 매콤함이 느껴지는 향', now(), now()),
+       (56, '블랙 페퍼', '톡 쏘면서 알싸하고 따뜻한 나무의 향', now(), now()),
+       (57, '큐민', '스파이시하면서 따뜻한 느낌을 주는 향', now(), now())
+       ;
 
 insert into perfume (id, name, story, concentration, brand_id, category_id, perfume_shop_url,
                      created_at, updated_at)
@@ -233,6 +258,81 @@ insert into perfume (id, name, story, concentration, brand_id, category_id, perf
 values (9, 'Her', '강렬한 레드와 다크 베리 노트가 밝은 화이트 우디 어코드와 어우러져 조화로운 향을 선사합니다.',
         'EAU_DE_PARFUM', 2, 1, 'https://kr.burberry.com/her-eau-de-parfum-50ml-p40804581', now(), now());
 
+insert into perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+values (9, 7, 'TOP', now(), now()),
+       (9, 16, 'TOP', now(), now()),
+       (9, 38, 'TOP', now(), now()),
+       (9, 39, 'TOP', now(), now()),
+       (9, 40, 'TOP', now(), now()),
+       (9, 41, 'TOP', now(), now()),
+       (9, 42, 'TOP', now(), now()),
+       (9, 18, 'MIDDLE', now(), now()),
+       (9, 43, 'MIDDLE', now(), now()),
+       (9, 6, 'BASE', now(), now()),
+       (9, 15, 'BASE', now(), now()),
+       (9, 19, 'BASE', now(), now()),
+       (9, 35, 'BASE', now(), now()),
+       (9, 45, 'BASE', now(), now());
+
+insert into perfume (id, name, story, concentration, brand_id, category_id, perfume_shop_url,
+                     created_at, updated_at)
+values (10, '오 로즈', '자칫 지루할 수 있는 장미 향을 변덕스럽고 활기가 넘치며 화려한 면모를 뽐내도록 해석해낸 향수입니다.',
+        'EAU_DE_PARFUM', 31, 2, 'https://www.diptyqueparis.com/en_us/p/eau-de-parfum-eau-rose-75ml.html', now(), now());
+
+insert into perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+values (10, 21, 'TOP', now(), now()),
+       (10, 40, 'TOP', now(), now()),
+       (10, 46, 'TOP', now(), now()),
+       (10, 18, 'MIDDLE', now(), now()),
+       (10, 23, 'MIDDLE', now(), now()),
+       (10, 24, 'MIDDLE', now(), now()),
+       (10, 9, 'BASE', now(), now()),
+       (10, 11, 'BASE', now(), now()),
+       (10, 19, 'BASE', now(), now());
+
+insert into perfume (id, name, story, concentration, brand_id, category_id, perfume_shop_url,
+                     created_at, updated_at)
+values (11, '미모사 앤 카다멈', '골드빛 미모사의 달콤한 향이 이제 막 으깬 카다멈의 스파이시함 위로 안개처럼 피어 오릅니다. 새벽에 수확한 다마스크 로즈와 파우더리한 헬리토오프 아래 크리미한 통카와 부드러운 샌달우드 향이 물결치듯 퍼져 나가며 따뜻한 천상의 향으로 당신을 매혹시킵니다.',
+        'EAU_DE_COLOGNE', 1, 2, 'https://www.jomalone.co.kr/scents/floral/mimosa-cardomom', now(), now());
+
+insert into perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+values (11, 29, 'TOP', now(), now()),
+       (11, 46, 'MIDDLE', now(), now()),
+       (11, 37, 'BASE', now(), now());
+
+insert into perfume (id, name, story, concentration, brand_id, category_id, perfume_shop_url,
+                     created_at, updated_at)
+values (12, '어나더 13', '13개의 원자재로 향을 추출해 뇌쇄적이면서도 유니크한 암브록스 베이스 머스크 노트의 중독성 강한 묘약에 자스민, 모스 등 세심하게 선정된 성분들로 강렬함과 매혹을 더해 구성됩니다.',
+        'EAU_DE_PARFUM', 16, 11, 'https://www.lelabofragrances.co.kr/another-13-747.html', now(), now());
+
+insert into perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+values (12, 48, 'TOP', now(), now()),
+       (12, 49, 'TOP', now(), now()),
+       (12, 3, 'MIDDLE', now(), now()),
+       (12, 18, 'MIDDLE', now(), now()),
+       (12, 26, 'MIDDLE', now(), now()),
+       (12, 52, 'MIDDLE', now(), now()),
+       (12, 50, 'BASE', now(), now()),
+       (12, 51, 'BASE', now(), now()),
+       (12, 53, 'BASE', now(), now()),
+       (12, 54, 'BASE', now(), now());
+
+insert into perfume (id, name, story, concentration, brand_id, category_id, perfume_shop_url,
+                     created_at, updated_at)
+values (13, '이더시스', '이더시스는 거울 표면 너머에 있는 상상의 세계를 기립니다. 다양하게 빛나는 워터리한 플로럴 노트가 따뜻한 스파이시의 우디 베이스와 만나 연못이나 거울에서 느껴지는 물의 고요함을 연상시킵니다.',
+        'EAU_DE_PARFUM', 32, 8, 'https://www.lelabofragrances.co.kr/another-13-747.html', now(), now());
+
+insert into perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
+values (13, 13, 'TOP', now(), now()),
+       (13, 55, 'TOP', now(), now()),
+       (13, 56, 'TOP', now(), now()),
+       (13, 9, 'MIDDLE', now(), now()),
+       (13, 55, 'MIDDLE', now(), now()),
+       (13, 57, 'MIDDLE', now(), now()),
+       (13, 9, 'BASE', now(), now()),
+       (13, 27, 'BASE', now(), now()),
+       (13, 33, 'BASE', now(), now());
+
 insert into review (day_type, season, strength, duration, short_review, full_review, user_id, perfume_id, created_at,
                     updated_at)
 values ('DAILY', 'SPRING', 'MODERATE', 'SHORT', '달달한 향이라 너무 좋음', '딱 봄에 벚꽃놀이갈 때 뿌리면 진짜 좋을 것 같은 향수에요!', 1, 6, now(),
@@ -256,3 +356,9 @@ values (1, '자연스러운', now(), now()),
        (8, '시크한', now(), now()),
        (9, '섹시한', now(), now()),
        (10, '독특한', now(), now());
+
+insert into perfume_theme (id, title, content, thumbnail_id, perfume_ids, created_at, updated_at)
+values (1, '한겨울의 향기', '엄동설한에도 포근한 분위기를 선사하는 향수를 확인해보세요.', 1, '9,10,11,12', now(), now());
+
+insert into file(id, url, user_id, created_at, updated_at)
+values (1, 'https://picsum.photos/200/300', 1, now(), now());
