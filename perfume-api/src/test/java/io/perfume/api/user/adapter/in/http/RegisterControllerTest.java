@@ -2,6 +2,7 @@ package io.perfume.api.user.adapter.in.http;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -18,6 +19,7 @@ import io.perfume.api.user.adapter.in.http.dto.CheckUsernameRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.RegisterDto;
 import io.perfume.api.user.adapter.in.http.dto.SendEmailVerifyCodeRequestDto;
+import io.perfume.api.user.application.port.out.EmailCodeRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
 import java.time.LocalDateTime;
@@ -53,9 +55,11 @@ class RegisterControllerTest {
 
   @Autowired private AuthenticationKeyRepository authenticationKeyRepository;
 
+  @MockBean private TwoWayEncryptor twoWayEncryptor;
+
   @MockBean private MailSender mailSender;
 
-  @MockBean private TwoWayEncryptor twoWayEncryptor;
+  @MockBean private EmailCodeRepository emailCodeRepository;
 
   @BeforeEach
   void setUp(
@@ -109,6 +113,7 @@ class RegisterControllerTest {
     given(twoWayEncryptor.encrypt(any())).willReturn("");
     LocalDateTime now = LocalDateTime.now();
     given(mailSender.send(any(), any(), any())).willReturn(now);
+    doNothing().when(emailCodeRepository).save(any(), any(), any());
 
     // when & then
     mockMvc

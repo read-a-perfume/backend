@@ -9,11 +9,13 @@ import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.in.dto.SignUpSocialUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
+import io.perfume.api.user.application.port.out.EmailCodeRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.SocialProvider;
 import io.perfume.api.user.stub.StubCheckEmailCertificateUseCase;
 import io.perfume.api.user.stub.StubCreateVerificationCodeUseCase;
+import io.perfume.api.user.stub.StubEmailCodeRepository;
 import io.perfume.api.user.stub.StubEncryptor;
 import io.perfume.api.user.stub.StubMailSender;
 import io.perfume.api.user.stub.StubSocialAccountRepository;
@@ -32,6 +34,7 @@ class RegisterServiceTest {
   private UserRepository userRepository = new StubUserRepository();
 
   private UserQueryRepository userQueryRepository = new StubUserRepository();
+  private EmailCodeRepository emailCodeRepository = new StubEmailCodeRepository();
 
   private StubMailSender stubMailSender = new StubMailSender();
 
@@ -47,6 +50,7 @@ class RegisterServiceTest {
           userRepository,
           userQueryRepository,
           socialAccountRepository,
+          emailCodeRepository,
           checkEmailCertificateUseCase,
           createVerificationCodeUseCase,
           stubMailSender,

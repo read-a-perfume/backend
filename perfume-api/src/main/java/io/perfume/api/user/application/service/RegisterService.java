@@ -13,11 +13,13 @@ import io.perfume.api.user.application.port.in.dto.SendVerificationCodeResult;
 import io.perfume.api.user.application.port.in.dto.SignUpGeneralUserCommand;
 import io.perfume.api.user.application.port.in.dto.SignUpSocialUserCommand;
 import io.perfume.api.user.application.port.in.dto.UserResult;
+import io.perfume.api.user.application.port.out.EmailCodeRepository;
 import io.perfume.api.user.application.port.out.SocialAccountRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +36,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegisterService implements CreateUserUseCase {
 
   private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
+  private static final Duration duration = Duration.ofMinutes(10);
 
   private final UserRepository userRepository;
   private final UserQueryRepository userQueryRepository;
   private final SocialAccountRepository oauthRepository;
+  private final EmailCodeRepository emailCodeRepository;
+
   private final CheckEmailCertificateUseCase checkEmailCertificateUseCase;
   private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
   private final MailSender mailSender;
@@ -109,6 +114,8 @@ public class RegisterService implements CreateUserUseCase {
 
     logger.info(
         "sendEmailVerifyCode email = {}, code = {}, now = {}", command.email(), code, sentAt);
+
+    emailCodeRepository.save(command.email(), code, duration);
 
     return new SendVerificationCodeResult(code, sentAt);
   }
