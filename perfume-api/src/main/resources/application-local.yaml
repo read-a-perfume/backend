@@ -22,6 +22,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  redis:
+    host: localhost
+    port: 6379
+    password: very-strong-local-redis-password!@#$!%!@#
   data:
     web:
       pageable:
