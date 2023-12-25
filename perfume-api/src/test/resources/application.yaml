@@ -18,7 +18,18 @@ spring:
             scope:
               - profile
               - email
-
+  mail:
+    host: 'smtp.gmail.com'
+    port: 587
+    username: ''
+    password: ''
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 jwt:
   secret-key: 'readaperfumesecretkeyhelloletsma'
   redirect-uri: '/'

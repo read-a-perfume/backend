@@ -3,7 +3,6 @@ package io.perfume.api.user.application.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
-import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.auth.application.type.CheckEmailStatus;
 import io.perfume.api.user.application.port.in.dto.ConfirmEmailVerifyResult;
 import io.perfume.api.user.application.port.in.dto.SendVerificationCodeCommand;
@@ -105,9 +104,12 @@ class RegisterServiceTest {
     // given
     LocalDateTime now = LocalDateTime.now();
     SendVerificationCodeCommand command = new SendVerificationCodeCommand("email", now);
-    CreateVerificationCodeResult createVerificationCodeResult =
-        new CreateVerificationCodeResult("sample code", "", "sample key", now);
-    createVerificationCodeUseCase.setCreateVerificationCodeResult(createVerificationCodeResult);
+
+    // Code 생성을 UUID로 대체하여 주석 처리해두었습니다!
+    //    CreateVerificationCodeResult createVerificationCodeResult =
+    //        new CreateVerificationCodeResult("sample code", "", "sample key", now);
+    //
+    // createVerificationCodeUseCase.setCreateVerificationCodeResult(createVerificationCodeResult);
     stubMailSender.setSentAt(now);
 
     // when
@@ -115,7 +117,7 @@ class RegisterServiceTest {
 
     // then
     assertThat(result).isNotNull();
-    assertThat(result.key()).isEqualTo("sample key");
+    assertThat(result.key()).hasSize(6);
     assertThat(result.sentAt()).isEqualTo(now);
   }
 }

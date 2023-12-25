@@ -4,8 +4,6 @@ import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
 import io.perfume.api.auth.application.port.in.CreateVerificationCodeUseCase;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
 import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
-import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeCommand;
-import io.perfume.api.auth.application.port.in.dto.CreateVerificationCodeResult;
 import io.perfume.api.user.application.exception.FailedRegisterException;
 import io.perfume.api.user.application.exception.UserConflictException;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
@@ -21,6 +19,7 @@ import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.SocialAccount;
 import io.perfume.api.user.domain.User;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import mailer.MailSender;
 import org.slf4j.Logger;
@@ -99,21 +98,19 @@ public class RegisterService implements CreateUserUseCase {
 
   @Override
   public SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command) {
-    CreateVerificationCodeCommand createVerificationCodeCommand =
-        new CreateVerificationCodeCommand(command.email(), command.now());
-    CreateVerificationCodeResult result =
-        createVerificationCodeUseCase.createVerificationCode(createVerificationCodeCommand);
+    // code 생성을 UUID로 대체하여 주석 처리했습니다.
+    //    CreateVerificationCodeCommand createVerificationCodeCommand =
+    //        new CreateVerificationCodeCommand(command.email(), command.now());
+    //    CreateVerificationCodeResult result =
+    //        createVerificationCodeUseCase.createVerificationCode(createVerificationCodeCommand);
+    String code = UUID.randomUUID().toString().substring(0, 6);
 
-    LocalDateTime sentAt = mailSender.send(command.email(), "이메일 인증을 완료해주세요.", result.code());
+    LocalDateTime sentAt = mailSender.send(command.email(), "Read A Perfume 이메일을 인증해 주세요.", code);
 
     logger.info(
-        "sendEmailVerifyCode email = {}, code = {}, key = {}, now = {}",
-        command.email(),
-        result.code(),
-        result.signKey(),
-        sentAt);
+        "sendEmailVerifyCode email = {}, code = {}, now = {}", command.email(), code, sentAt);
 
-    return new SendVerificationCodeResult(result.signKey(), sentAt);
+    return new SendVerificationCodeResult(code, sentAt);
   }
 
   private User getUserByEmailOrCreateNew(SignUpSocialUserCommand command, LocalDateTime now) {
