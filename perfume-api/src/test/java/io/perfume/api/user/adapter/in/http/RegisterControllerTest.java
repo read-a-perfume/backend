@@ -93,10 +93,8 @@ class RegisterControllerTest {
             document(
                 "verify-email",
                 requestFields(
-                    fieldWithPath("code").type(JsonFieldType.STRING).description("본인 인증 코드"),
-                    fieldWithPath("key")
-                        .type(JsonFieldType.STRING)
-                        .description("본인 인증 요청 시 발급받은 키")),
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                    fieldWithPath("code").type(JsonFieldType.STRING).description("이메일 인증 코드")),
                 responseFields(
                     fieldWithPath("email").type(JsonFieldType.STRING).description("인증 완료된 이메일"),
                     fieldWithPath("verifiedAt")

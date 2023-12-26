@@ -16,4 +16,15 @@ public class EmailCodeAdapter implements EmailCodeRepository {
   public void save(String email, String code, Duration duration) {
     stringRedisTemplate.opsForValue().set(email, code, duration);
   }
+
+  @Override
+  public void verify(String email, String code) {
+    String savedCode = stringRedisTemplate.opsForValue().get(email);
+    if (savedCode == null) {
+      throw new CodeNotFoundException("이메일에 대한 인증 코드가 존재하지 않습니다. email : " + email);
+    }
+    if (!code.equals(savedCode)) {
+      throw new CodeNotFoundException("이메일 인증 코드가 일치하지 않습니다.");
+    }
+  }
 }

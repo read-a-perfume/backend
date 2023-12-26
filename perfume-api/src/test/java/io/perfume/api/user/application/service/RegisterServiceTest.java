@@ -90,16 +90,15 @@ class RegisterServiceTest {
   void testConfirmEmailVerify() {
     // given
     String code = "code";
-    String key = "key";
-    LocalDateTime now = LocalDateTime.now();
+    String email = "sample@mail.com";
     this.checkEmailCertificateUseCase.add(
-        new CheckEmailCertificateResult(CheckEmailStatus.MATCH, "sample@mail.com"));
+        new CheckEmailCertificateResult(CheckEmailStatus.MATCH, email));
 
     // when
-    ConfirmEmailVerifyResult result = registerService.confirmEmailVerify(code, key, now);
+    ConfirmEmailVerifyResult result = registerService.confirmEmailVerify(email, code);
 
     // then
-    assertThat(result.email()).isEqualTo("sample@mail.com");
+    assertThat(result.email()).isEqualTo(email);
   }
 
   @Test

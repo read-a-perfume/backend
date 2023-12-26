@@ -57,9 +57,7 @@ public class RegisterController {
   @PostMapping("/email-verify/confirm")
   public ResponseEntity<EmailVerifyConfirmResponseDto> confirmEmail(
       @RequestBody @Valid EmailVerifyConfirmRequestDto dto) {
-    LocalDateTime now = LocalDateTime.now();
-    ConfirmEmailVerifyResult result =
-        createUserUseCase.confirmEmailVerify(dto.key(), dto.code(), now);
+    ConfirmEmailVerifyResult result = createUserUseCase.confirmEmailVerify(dto.email(), dto.code());
 
     return ResponseEntity.ok(
         new EmailVerifyConfirmResponseDto(result.email(), result.verifiedAt()));
