@@ -16,7 +16,7 @@ public interface CreateUserUseCase {
 
   boolean validDuplicateUsername(String username);
 
-  ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now);
+  ConfirmEmailVerifyResult confirmEmailVerify(String email, String code);
 
   SendVerificationCodeResult sendEmailVerifyCode(SendVerificationCodeCommand command);
 }

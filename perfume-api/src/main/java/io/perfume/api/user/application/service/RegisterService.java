@@ -2,8 +2,6 @@ package io.perfume.api.user.application.service;
 
 import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
 import io.perfume.api.auth.application.port.in.CreateVerificationCodeUseCase;
-import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateCommand;
-import io.perfume.api.auth.application.port.in.dto.CheckEmailCertificateResult;
 import io.perfume.api.user.application.exception.FailedRegisterException;
 import io.perfume.api.user.application.exception.UserConflictException;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
@@ -91,14 +89,10 @@ public class RegisterService implements CreateUserUseCase {
   }
 
   @Override
-  public ConfirmEmailVerifyResult confirmEmailVerify(String code, String key, LocalDateTime now) {
-    logger.info("confirmEmailVerify code = {}, key = {}, now = {}", code, key, now);
-
-    CheckEmailCertificateCommand command = new CheckEmailCertificateCommand(code, key, now);
-    CheckEmailCertificateResult result =
-        checkEmailCertificateUseCase.checkEmailCertificate(command);
-
-    return new ConfirmEmailVerifyResult(result.email(), now);
+  public ConfirmEmailVerifyResult confirmEmailVerify(String email, String code) {
+    emailCodeRepository.verify(email, code);
+    LocalDateTime now = LocalDateTime.now();
+    return new ConfirmEmailVerifyResult(email, now);
   }
 
   @Override

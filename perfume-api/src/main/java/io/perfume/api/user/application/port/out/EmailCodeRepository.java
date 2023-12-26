@@ -4,4 +4,6 @@ import java.time.Duration;
 
 public interface EmailCodeRepository {
   void save(String email, String code, Duration duration);
+
+  void verify(String email, String code);
 }

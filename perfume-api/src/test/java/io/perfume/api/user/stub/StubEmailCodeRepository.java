@@ -8,4 +8,9 @@ public class StubEmailCodeRepository implements EmailCodeRepository {
   public void save(String email, String code, Duration duration) {
     // do nothing
   }
+
+  @Override
+  public void verify(String email, String code) {
+    // do nothing
+  }
 }
