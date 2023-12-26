@@ -5,17 +5,17 @@ values (100, 'OTHER', 'admin', 'admin@admin.com', '$2a$10$JqiVSGED0ceSJj7qMwXRmO
         now(), now());
 
 insert into category (id, name, description, tags, created_at, updated_at)
-values (1, '프루티', '달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.', '#달달한 #과즙미', now(), now()),
-       (2, '플로럴', '꽃 향기를 가득 담아 사랑스러운 느낌을 줍니다.', '#우아한 #사랑스러운 #꽃향기', now(), now()),
-       (3, '우디', '나무 향을 의미하며, 건조하고 성숙한 느낌을 전달합니다.', '#차분함 #릴렉스', now(), now()),
-       (4, '시트러스', '상큼하고 톡 쏘는 향으로 가볍고 산뜻한 느낌을 줍니다.', '#상큼한 #질리지않는', now(), now()),
-       (5, '스위트', '달달하고 크리미한 향으로 가볍고 중독적인 느낌을 줍니다.', '#달달함 #대중적 #행복감', now(), now()),
-       (6, '그린', '자연의 풀내음 향을 담아 싱그럽고 고급스러운 느낌을 줍니다.', '#자연스러운 #싱그러움', now(), now()),
-       (7, '머스크', '포근하고 부드러운 향으로 관능적인 느낌을 줍니다.', '#이불속 #포근한 #따뜻한', now(), now()),
-       (8, '스파이시', '매운듯한 자극적인 향으로 깊이감과 매혹적인 느낌을 줍니다.', '#톡쏘는 #독특함', now(), now()),
-       (9, '오리엔탈', '동양적인 향으로 성숙하고 강렬한 느낌을 줍니다.', '#동양미 #성숙함', now(), now()),
-       (10, '아쿠아', '맑고 깨끗한 물의 향으로 상쾌하고 청량감 있는 느낌을 줍니다.', '#시원한 #여름휴가', now(), now()),
-       (11, '애니멀', '동물적인 느낌 혹은 원초적인 본능을 이끌어내는 향으로 따뜻한 느낌을 줍니다.', '#독특함 #중독적 #이끌림', now(), now());
+values (1, 'Fruity', '달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.', '#달달한 #과즙미', now(), now()),
+       (2, 'Floral', '꽃 향기를 가득 담아 사랑스러운 느낌을 줍니다.', '#우아한 #사랑스러운 #꽃향기', now(), now()),
+       (3, 'Woody', '나무 향을 의미하며, 건조하고 성숙한 느낌을 전달합니다.', '#차분함 #릴렉스', now(), now()),
+       (4, 'Citrus', '상큼하고 톡 쏘는 향으로 가볍고 산뜻한 느낌을 줍니다.', '#상큼한 #질리지않는', now(), now()),
+       (5, 'Sweet', '달달하고 크리미한 향으로 가볍고 중독적인 느낌을 줍니다.', '#달달함 #대중적 #행복감', now(), now()),
+       (6, 'Green', '자연의 풀내음 향을 담아 싱그럽고 고급스러운 느낌을 줍니다.', '#자연스러운 #싱그러움', now(), now()),
+       (7, 'Musk', '포근하고 부드러운 향으로 관능적인 느낌을 줍니다.', '#이불속 #포근한 #따뜻한', now(), now()),
+       (8, 'Spicy', '매운듯한 자극적인 향으로 깊이감과 매혹적인 느낌을 줍니다.', '#톡쏘는 #독특함', now(), now()),
+       (9, 'Oriental', '동양적인 향으로 성숙하고 강렬한 느낌을 줍니다.', '#동양미 #성숙함', now(), now()),
+       (10, 'Aqua', '맑고 깨끗한 물의 향으로 상쾌하고 청량감 있는 느낌을 줍니다.', '#시원한 #여름휴가', now(), now()),
+       (11, 'Animal', '동물적인 느낌 혹은 원초적인 본능을 이끌어내는 향으로 따뜻한 느낌을 줍니다.', '#독특함 #중독적 #이끌림', now(), now());
 
 insert into file (id, url, created_at, updated_at)
 values (1, "test-url.com", now(), now());
@@ -274,7 +274,7 @@ values (8, 12, 'TOP', now(), now()),
 insert into perfume (id, name, story, concentration, brand_id, category_id, perfume_shop_url,
                      created_at, updated_at)
 values (9, 'Her', '강렬한 레드와 다크 베리 노트가 밝은 화이트 우디 어코드와 어우러져 조화로운 향을 선사합니다.',
-        'EAU_DE_PARFUM', 2, 1, 'https://kr.burberry.com/her-eau-de-parfum-50ml-p40804581', now(), now());
+        'EAU_DE_PARFUM', 6, 1, 'https://kr.burberry.com/her-eau-de-parfum-50ml-p40804581', now(), now());
 
 insert into perfume_note (perfume_id, note_id, note_level, created_at, updated_at)
 values (9, 7, 'TOP', now(), now()),
