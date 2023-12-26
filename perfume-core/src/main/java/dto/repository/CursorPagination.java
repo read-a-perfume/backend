@@ -51,8 +51,8 @@ public class CursorPagination<T> {
             paginatedItems,
             hasMoreItemsThanPage,
             hasRequestedWithCursor,
-            nextToken,
-            prevToken
+            hasMoreItemsThanPage ? nextToken : null,
+            hasRequestedWithCursor ? prevToken : null
     );
   }
 
