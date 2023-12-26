@@ -70,7 +70,8 @@ public class CursorPagination<T> {
       return null;
     }
 
-    return new String(Base64.getEncoder().encode(tokenSelector.apply(items.getLast()).getBytes()));
+    final T lastItem = items.get(items.size() - 1);
+    return new String(Base64.getEncoder().encode(tokenSelector.apply(lastItem).getBytes()));
   }
 
   private static <T> String encodePreviousToken(final List<T> items, final Function<T, String> tokenSelector) {
@@ -78,7 +79,8 @@ public class CursorPagination<T> {
       return null;
     }
 
-    return new String(Base64.getEncoder().encode(tokenSelector.apply(items.getFirst()).getBytes()));
+    final T firstItem = items.get(0);
+    return new String(Base64.getEncoder().encode(tokenSelector.apply(firstItem).getBytes()));
   }
 
   public List<T> getItems() {
