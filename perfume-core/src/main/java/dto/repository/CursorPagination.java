@@ -95,11 +95,11 @@ public class CursorPagination<T> {
     return hasPrevious;
   }
 
-  public String getLastCursor() {
+  public String getNextCursor() {
     return nextCursor;
   }
 
-  public String getFirstCursor() {
+  public String getPreviousCursor() {
     return prevCursor;
   }
 }

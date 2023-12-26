@@ -36,8 +36,8 @@ public class MagazineController {
             responseItems,
             magazines.hasNext(),
             magazines.hasPrevious(),
-            magazines.getFirstCursor(),
-            magazines.getLastCursor()));
+            magazines.getNextCursor(),
+            magazines.getPreviousCursor()));
   }
 
   @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")

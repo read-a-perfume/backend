@@ -117,8 +117,8 @@ public class ReviewController {
             responseItems,
             comments.hasNext(),
             comments.hasPrevious(),
-            comments.getFirstCursor(),
-            comments.getLastCursor()));
+            comments.getNextCursor(),
+            comments.getPreviousCursor()));
   }
 
   @PreAuthorize("isAuthenticated()")
