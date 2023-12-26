@@ -61,8 +61,8 @@ public class SupportUserService
   @Override
   public void leave(Long userId) {
     try {
-      User user = userQueryRepository.loadUser(userId)
-              .orElseThrow(() -> new UserNotFoundException(userId));
+      User user =
+          userQueryRepository.loadUser(userId).orElseThrow(() -> new UserNotFoundException(userId));
       LocalDateTime now = LocalDateTime.now();
       user.softDelete(now);
       userRepository.save(user);

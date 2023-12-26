@@ -8,10 +8,9 @@ import io.perfume.api.user.application.port.in.dto.UpdateProfilePicResult;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.application.port.out.UserRepository;
 import io.perfume.api.user.domain.User;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -22,8 +21,9 @@ public class UpdateProfilePicService implements UpdateProfilePicUseCase {
   private final FileService fileUploadService;
 
   public UpdateProfilePicService(
-          UserQueryRepository userQueryRepository,
-          UserRepository userRepository, FileService fileUploadService) {
+      UserQueryRepository userQueryRepository,
+      UserRepository userRepository,
+      FileService fileUploadService) {
     this.userQueryRepository = userQueryRepository;
     this.userRepository = userRepository;
     this.fileUploadService = fileUploadService;
@@ -33,7 +33,10 @@ public class UpdateProfilePicService implements UpdateProfilePicUseCase {
   @Transactional
   public UpdateProfilePicResult update(Long userId, byte[] imageFileContent, LocalDateTime now) {
     FileResult fileResult = fileUploadService.uploadFile(imageFileContent, userId, now);
-    User user = userQueryRepository.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    User user =
+        userQueryRepository
+            .findUserById(userId)
+            .orElseThrow(() -> new UserNotFoundException(userId));
     user.updateThumbnailId(fileResult.id());
     userRepository.save(user);
     return UpdateProfilePicResult.from(userId, fileResult);

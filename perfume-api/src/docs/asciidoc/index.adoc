@@ -87,6 +87,13 @@ include::{snippets}/update-user-profile/http-response.adoc[]
 === 실패 응답
 include::{snippets}/update-user-profile-failed/http-response.adoc[]
 
+== 프로필 사진 수정
+=== 요청
+include::{snippets}/update-user-profile-pic/http-request.adoc[]
+
+=== 응답
+include::{snippets}/update-user-profile-pic/http-response.adoc[]
+
 == 로그인 중인 회원 탈퇴
 === 요청
 include::{snippets}/leave-user/http-request.adoc[]
