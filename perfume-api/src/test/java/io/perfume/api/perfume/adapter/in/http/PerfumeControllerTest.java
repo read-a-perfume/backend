@@ -652,10 +652,8 @@ class PerfumeControllerTest {
             RestDocumentationRequestBuilders.get("/v1/perfumes/{id}/reviews", 1L)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("page", "0")
-                .param("size", "10")
-                .param("sort", "RECENT", "LIKE"))
-        .andDo(print())
+                .param("page", "1")
+                .param("size", "10"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.content[0].id").value(contents.get(0).id()))
@@ -672,10 +670,11 @@ class PerfumeControllerTest {
                 "get-perfume-reviews",
                 pathParameters(parameterWithName("id").description("향수 ID")),
                 queryParameters(
-                    parameterWithName("page").description("페이지 번호 (0부터 시작)"),
-                    parameterWithName("size").description("페이지에 존재하는 리뷰 개수"),
+                    parameterWithName("page").description("페이지 번호 (0부터 시작)").optional(),
+                    parameterWithName("size").description("페이지에 존재하는 리뷰 개수").optional(),
                     parameterWithName("sort")
-                        .description("정렬 기준. \"RECENT\" 또는 \"LIKE\"를 입력한다. (기본값: RECENT)")),
+                        .description("정렬 기준. \"RECENT\" 또는 \"LIKE\"를 입력한다. (기본값: RECENT)")
+                        .optional()),
                 responseFields(
                     fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("페이지 처음인지 여부"),
                     fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("페이지 마지막인지 여부"),
