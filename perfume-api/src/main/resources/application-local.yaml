@@ -17,7 +17,7 @@ spring:
       pool-name: 'perfume-db-pool'
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -35,16 +35,16 @@ spring:
       client:
         registration:
           google:
-            client-id: ''
-            client-secret: ''
+            client-id: 'test'
+            client-secret: 'test'
             scope:
               - profile
               - email
   mail:
     host: 'smtp.gmail.com'
     port: 587
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    username: ''
+    password: ''
     properties:
       mail:
         smtp:
