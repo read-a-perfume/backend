@@ -107,6 +107,27 @@ public class UserSupportController {
     updateAccountUseCase.updateUserProfile(updateProfileCommand);
   }
 
+  @PatchMapping("/user/profile-pic")
+  @PreAuthorize("isAuthenticated()")
+  public void updateProfilePic(@AuthenticationPrincipal User user, final MultipartFile file) {
+    var now = LocalDateTime.now();
+    checkAuthenticatedUser(user);
+    long userId = parseUserId(user);
+    updateProfilePicUseCase.update(userId, getFileContent(file), now);
+  }
+
+  private long parseUserId(User user) {
+    return Long.parseLong(user.getUsername());
+  }
+
+  private byte[] getFileContent(MultipartFile file) {
+    try {
+      return file.getBytes();
+    } catch (IOException e) {
+      return null;
+    }
+  }
+
   private void checkAuthenticatedUser(User user) {
     if (user == null || user.getUsername() == null) {
       throw new UserNotAuthenticatedException();
