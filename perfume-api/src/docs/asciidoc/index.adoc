@@ -327,6 +327,15 @@ include::{snippets}/delete-review/http-request.adoc[]
 include::{snippets}/delete-review/http-response.adoc[]
 include::{snippets}/delete-review/response-fields.adoc[]
 
+== 리뷰 댓글 조회
+=== 요청
+include::{snippets}/get-review-comments/http-request.adoc[]
+include::{snippets}/get-review-comments/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/get-review-comments/http-response.adoc[]
+include::{snippets}/get-review-comments/response-fields.adoc[]
+
 == 리뷰 댓글 추가
 === 요청
 include::{snippets}/create-review-comment/http-request.adoc[]

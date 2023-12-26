@@ -3,6 +3,8 @@ package io.perfume.api.review.application.facade;
 import dto.repository.CursorPagination;
 import io.perfume.api.common.notify.EventPublisher;
 import io.perfume.api.common.page.CustomPage;
+import io.perfume.api.file.application.port.in.FindFileUseCase;
+import io.perfume.api.file.application.port.in.dto.FileResult;
 import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailCommand;
 import io.perfume.api.review.application.facade.dto.ReviewCommentDetailResult;
@@ -58,6 +60,7 @@ public class ReviewDetailFacadeService
   private final ReviewThumbnailService reviewThumbnailService;
   private final FindUserUseCase findUserUseCase;
   private final EventPublisher eventPublisher;
+  private final FindFileUseCase findFileUseCase;
 
   @Override
   public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
@@ -76,6 +79,13 @@ public class ReviewDetailFacadeService
     return items.stream()
         .map(createReviewDetailResultMapper(authors, tags, commentCountsMap, likeCountsMap))
         .toList();
+  }
+
+  private Map<Long, FileResult> getUserThumbnailsMap(final Map<Long, UserResult> usersMap) {
+    final List<Long> fileIds = usersMap.values().stream().map(UserResult::thumbnailId).toList();
+    return findFileUseCase.findFilesByIds(fileIds).stream()
+        .map(file -> Map.entry(file.id(), file))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a));
   }
 
   private Map<Long, ReviewLikeCount> getReviewLikeCountMap(final List<ReviewResult> items) {
@@ -166,9 +176,10 @@ public class ReviewDetailFacadeService
     final CursorPagination<ReviewComment> reviewComments =
         reviewCommentService.getReviewComments(command.toGetReviewCommentsCommand());
     final Map<Long, UserResult> authorsMap = getCommentAuthorsMap(reviewComments.getItems());
+    final Map<Long, FileResult> thumbnailsMap = getUserThumbnailsMap(authorsMap);
     final List<ReviewCommentDetailResult> result =
         reviewComments.getItems().stream()
-            .map(createReviewCommentDetailResultMapper(authorsMap))
+            .map(createReviewCommentDetailResultMapper(authorsMap, thumbnailsMap))
             .toList();
 
     return CursorPagination.of(result, reviewComments);
@@ -180,10 +191,12 @@ public class ReviewDetailFacadeService
   }
 
   private Function<ReviewComment, ReviewCommentDetailResult> createReviewCommentDetailResultMapper(
-      Map<Long, UserResult> usersMap) {
+      final Map<Long, UserResult> usersMap, final Map<Long, FileResult> thumbnailsMap) {
     return comment -> {
-      final var author = usersMap.getOrDefault(comment.getUserId(), UserResult.EMPTY);
-      return ReviewCommentDetailResult.from(comment, author);
+      final UserResult author = usersMap.getOrDefault(comment.getUserId(), UserResult.EMPTY);
+      final FileResult thumbnail =
+          thumbnailsMap.getOrDefault(author.thumbnailId(), FileResult.DEFAULT_THUMBNAIL);
+      return ReviewCommentDetailResult.from(comment, author, thumbnail);
     };
   }
 

@@ -130,7 +130,12 @@ public class RegisterService implements CreateUserUseCase {
   }
 
   private UserResult toDto(User user) {
-    return new UserResult(user.getId(), user.getUsername(), user.getEmail(), user.getCreatedAt());
+    return new UserResult(
+        user.getId(),
+        user.getUsername(),
+        user.getThumbnailId(),
+        user.getEmail(),
+        user.getCreatedAt());
   }
 
   private UserResult toSocialAccountDto(SocialAccount socialAccount) {

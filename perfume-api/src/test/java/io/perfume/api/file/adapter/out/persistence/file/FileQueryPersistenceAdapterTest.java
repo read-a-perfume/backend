@@ -8,6 +8,7 @@ import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.file.domain.File;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,5 +59,24 @@ class FileQueryPersistenceAdapterTest {
 
     // then
     assertFalse(optionalFile.isPresent());
+  }
+
+  @Test
+  @DisplayName("특정 id 목록 조회")
+  void testFindByIds() {
+    // given
+    String url = "testUrl.com";
+    LocalDateTime now = LocalDateTime.now();
+    File file = File.createFile(url, 1L, now);
+    FileJpaEntity fileJpaEntity = fileMapper.toEntity(file);
+    entityManager.persist(fileJpaEntity);
+    entityManager.clear();
+
+    // when
+    var findFile = fileQueryRepository.findByIds(List.of(fileJpaEntity.getId()));
+
+    // then
+    assertThat(findFile).isNotEmpty();
+    assertEquals(fileJpaEntity.getId(), findFile.get(0).getId());
   }
 }

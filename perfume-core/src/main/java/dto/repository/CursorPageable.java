@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public class CursorPageable {
 
-  private final long size;
+  private final int size;
 
   private final String cursor;
 
@@ -14,13 +14,13 @@ public class CursorPageable {
 
   private static final int PADDING_SIZE = 1;
 
-  public CursorPageable(final long size, final CursorDirection direction, final String cursor) {
+  public CursorPageable(final int size, final CursorDirection direction, final String cursor) {
     this.size = size;
     this.cursor = cursor;
     this.direction = direction;
   }
 
-  public long getSize() {
+  public int getSize() {
     return size;
   }
 
