@@ -3,6 +3,7 @@ package io.perfume.api.user.application.service;
 import encryptor.OneWayEncryptor;
 import io.perfume.api.user.application.exception.FailedToLeaveException;
 import io.perfume.api.user.application.exception.NotFoundUserException;
+import io.perfume.api.user.application.exception.UserNotFoundException;
 import io.perfume.api.user.application.port.in.FindEncryptedUsernameUseCase;
 import io.perfume.api.user.application.port.in.LeaveUserUseCase;
 import io.perfume.api.user.application.port.in.SendResetPasswordMailUseCase;
@@ -59,24 +60,16 @@ public class SupportUserService
 
   @Override
   public void leave(Long userId) {
-
     try {
-
-      User user = userQueryRepository.loadUser(userId).orElseThrow(NotFoundUserException::new);
-
+      User user = userQueryRepository.loadUser(userId)
+              .orElseThrow(() -> new UserNotFoundException(userId));
       LocalDateTime now = LocalDateTime.now();
-
       user.softDelete(now);
-
       userRepository.save(user);
-
     } catch (NotFoundUserException e) {
-
       FailedToLeaveException failedLeaveException =
           new FailedToLeaveException("회원탈퇴 실패", "user id : " + userId + ", 회원탈퇴 실패");
-
       failedLeaveException.initCause(e);
-
       throw failedLeaveException;
     }
   }
