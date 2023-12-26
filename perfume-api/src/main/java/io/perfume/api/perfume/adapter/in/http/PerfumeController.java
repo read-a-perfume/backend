@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -139,9 +140,9 @@ public class PerfumeController {
 
   @GetMapping("/{id}/reviews")
   public CustomPage<GetPerfumeReviewsResponseDto> getPerfumeReviews(
-      @PathVariable Long id, @RequestParam int page, @RequestParam int size) {
+      @PathVariable final long id, @Validated final GetPerfumeReviewsRequestDto dto) {
     final CustomPage<ReviewDetailResult> reviews =
-        getPerfumeReviewsUseCase.getPaginatedPerfumeReviews(id, page, size);
+        getPerfumeReviewsUseCase.getPaginatedPerfumeReviews(id, dto.page(), dto.size());
     final List<GetPerfumeReviewsResponseDto> reviewResults =
         GetPerfumeReviewsResponseDto.from(reviews.getContent());
 
