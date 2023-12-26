@@ -1,9 +1,7 @@
 package io.perfume.api.user.application.port.in;
 
-import java.time.LocalDateTime;
-
 import io.perfume.api.user.application.port.in.dto.UpdateProfilePicResult;
-import org.springframework.web.multipart.MultipartFile;
+import java.time.LocalDateTime;
 
 public interface UpdateProfilePicUseCase {
 

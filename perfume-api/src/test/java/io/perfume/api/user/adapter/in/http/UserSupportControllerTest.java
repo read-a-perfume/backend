@@ -1,11 +1,25 @@
 package io.perfume.api.user.adapter.in.http;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdateProfileRequestDto;
 import io.perfume.api.user.application.port.in.*;
 import io.perfume.api.user.application.port.in.dto.UserProfileResult;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,21 +40,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.time.LocalDate;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
@@ -214,25 +213,26 @@ class UserSupportControllerTest {
   void updateProfilePic() throws Exception {
     // given
     final MockMultipartFile profilePic =
-            new MockMultipartFile("file", "test.png", "text/plain", "file".getBytes());
+        new MockMultipartFile("file", "test.txt", "text/plain", "file".getBytes());
 
     // when & then
     mockMvc
-            .perform(
-                    multipart("/v1/user/profile-pic")
-                            .file(profilePic)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .characterEncoding("UTF-8")
-                            .contentType(MediaType.MULTIPART_FORM_DATA)
-                            .with(request -> {
-                              request.setMethod("PATCH");
-                              return request;
-                            }))
-            .andExpect(status().isOk())
-            .andDo(
-                  document(
-                          "update-user-profile-pic",
-                          requestParts(partWithName("file").description("업로드할 프로필 사진"))));
+        .perform(
+            multipart("/v1/user/profile-pic")
+                .file(profilePic)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .with(
+                    request -> {
+                      request.setMethod("PATCH");
+                      return request;
+                    }))
+        .andExpect(status().isOk())
+        .andDo(
+            document(
+                "update-user-profile-pic",
+                requestParts(partWithName("file").description("업로드할 프로필 사진"))));
   }
 
   @Test
