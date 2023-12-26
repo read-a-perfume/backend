@@ -5,8 +5,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -259,6 +258,77 @@ class ReviewControllerTest {
                     fieldWithPath("[].commentCount")
                         .type(JsonFieldType.NUMBER)
                         .description("댓글 수"))));
+  }
+
+  @Test
+  @DisplayName("리뷰 댓글을 조회한다.")
+  @WithMockUser(username = "1", roles = "USER")
+  void testGetReviewComments() throws Exception {
+    // given
+    var now = LocalDateTime.now();
+    var user =
+        userRepository
+            .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
+            .orElseThrow();
+    var review =
+        reviewRepository.save(
+            Review.create(
+                "test",
+                "test description",
+                Strength.LIGHT,
+                Duration.TOO_SHORT,
+                DayType.DAILY,
+                1L,
+                user.getId(),
+                Season.SPRING,
+                now));
+    reviewCommentRepository.save(ReviewComment.create(review.getId(), user.getId(), "test", now));
+
+    // when & then
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders.get("/v1/reviews/{id}/comments", review.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document(
+                "get-review-comments",
+                pathParameters(parameterWithName("id").description("리뷰 ID")),
+                queryParameters(
+                    parameterWithName("size").description("조회할 댓글 수").optional(),
+                    parameterWithName("before").description("이전 댓글 조회").optional(),
+                    parameterWithName("after").description("이후 댓글 조회").optional()),
+                responseFields(
+                    fieldWithPath("items").type(JsonFieldType.ARRAY).description("리뷰 댓글 목록"),
+                    fieldWithPath("items[].id").type(JsonFieldType.NUMBER).description("리뷰 댓글 ID"),
+                    fieldWithPath("items[].content")
+                        .type(JsonFieldType.STRING)
+                        .description("리뷰 댓글 내용"),
+                    fieldWithPath("items[].author.id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("리뷰 댓글 작성자 ID"),
+                    fieldWithPath("items[].author.name")
+                        .type(JsonFieldType.STRING)
+                        .description("리뷰 댓글 작성자 이름"),
+                    fieldWithPath("items[].author.thumbnail")
+                        .type(JsonFieldType.STRING)
+                        .description("리뷰 댓글 작성자 프로필 이미지"),
+                    fieldWithPath("items[].createdAt")
+                        .type(JsonFieldType.STRING)
+                        .description("리뷰 댓글 작성 시간"),
+                    fieldWithPath("hasNext")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("다음 페이지 존재 여부"),
+                    fieldWithPath("hasPrev")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("이전 페이지 존재 여부"),
+                    fieldWithPath("nextCursor").type(JsonFieldType.STRING).description("다음 페이지 토큰"),
+                    fieldWithPath("prevCursor")
+                        .type(JsonFieldType.STRING)
+                        .description("이전 페이지 토큰"))));
   }
 
   @Test
