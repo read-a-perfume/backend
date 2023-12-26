@@ -641,8 +641,10 @@ class PerfumeControllerTest {
     // given
     final List<ReviewDetailResult> contents =
         List.of(
-            new ReviewDetailResult(1L, "", new ReviewDetailUserResult(1L, ""), List.of(), 1L, 1L),
-            new ReviewDetailResult(1L, "", new ReviewDetailUserResult(1L, ""), List.of(), 1L, 1L));
+            new ReviewDetailResult(
+                1L, "", new ReviewDetailUserResult(1L, "", ""), List.of(), 1L, 1L),
+            new ReviewDetailResult(
+                1L, "", new ReviewDetailUserResult(1L, "", ""), List.of(), 1L, 1L));
     given(mockReviewFacadeService.getPaginatedPerfumeReviews(anyLong(), anyInt(), anyInt()))
         .willReturn(new CustomPage<>(new PageImpl<>(contents)));
 
