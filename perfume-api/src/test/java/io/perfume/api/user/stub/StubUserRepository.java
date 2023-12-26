@@ -20,7 +20,13 @@ public class StubUserRepository implements UserRepository, UserQueryRepository {
 
   @Override
   public Optional<User> save(User user) {
-    return Optional.of(user);
+    return Optional.of(
+        User.builder()
+            .id(1L)
+            .username(user.getUsername())
+            .email(user.getEmail())
+            .password(user.getPassword())
+            .build());
   }
 
   @Override
