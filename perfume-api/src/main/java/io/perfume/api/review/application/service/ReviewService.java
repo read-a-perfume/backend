@@ -78,12 +78,6 @@ public class ReviewService {
     return reviewQueryRepository.findReviewCountByUserId(userId);
   }
 
-  private <V extends Enum<V>> Map<V, Long> createEmptyMap(Class<V> enumClass) {
-    Map<V, Long> map = new HashMap<>();
-    EnumSet.allOf(enumClass).forEach(enumValue -> map.putIfAbsent(enumValue, 0L));
-    return map;
-  }
-
   @Transactional(readOnly = true)
   public List<ReviewResult> getPaginatedReviews(long page, long size) {
     return reviewQueryRepository.findByPage(page, size).stream().map(ReviewResult::from).toList();
@@ -106,31 +100,28 @@ public class ReviewService {
 
   @Transactional(readOnly = true)
   public ReviewStatisticResult getStatisticByPerfume(Long perfumeId) {
-    ReviewFeatureCount reviewFeatureCount = reviewQueryRepository.getReviewFeatureCount(perfumeId);
+    final ReviewFeatureCount reviewFeatureCount =
+        reviewQueryRepository.getReviewFeatureCount(perfumeId);
 
-    Long totalReviews = reviewFeatureCount.totalReviews();
-    if (totalReviews == 0) {
-      return new ReviewStatisticResult(
-          createEmptyMap(Strength.class),
-          createEmptyMap(Duration.class),
-          createEmptyMap(Season.class),
-          createEmptyMap(DayType.class),
-          createEmptyMap(Sex.class));
-    }
+    final long totalReviewCount = reviewFeatureCount.totalReviews();
     return new ReviewStatisticResult(
-        calculatePercentage(reviewFeatureCount.strengthMap(), totalReviews),
-        calculatePercentage(reviewFeatureCount.durationMap(), totalReviews),
-        calculatePercentage(reviewFeatureCount.seasonMap(), totalReviews),
-        calculatePercentage(reviewFeatureCount.dayTypeMap(), totalReviews),
-        calculatePercentage(reviewFeatureCount.sexMap(), totalReviews));
+        calculateUserReviewStatisticsPercentage(
+            Strength.class, reviewFeatureCount.strengthMap(), totalReviewCount),
+        calculateUserReviewStatisticsPercentage(
+            Duration.class, reviewFeatureCount.durationMap(), totalReviewCount),
+        calculateUserReviewStatisticsPercentage(
+            Season.class, reviewFeatureCount.seasonMap(), totalReviewCount),
+        calculateUserReviewStatisticsPercentage(
+            DayType.class, reviewFeatureCount.dayTypeMap(), totalReviewCount),
+        calculateUserReviewStatisticsPercentage(
+            Sex.class, reviewFeatureCount.sexMap(), totalReviewCount));
   }
 
-  private <V extends Enum<V>> Map<V, Long> calculatePercentage(
-      Map<V, Long> map, Long totalReviews) {
-    EnumSet.allOf(map.keySet().iterator().next().getDeclaringClass())
-        .forEach(enumValue -> map.putIfAbsent(enumValue, 0L));
-
-    return map.entrySet().stream()
+  private <V extends Enum<V>> Map<V, Long> calculateUserReviewStatisticsPercentage(
+      final Class<V> enumClazz, final Map<V, Long> map, final long totalReviews) {
+    Map<V, Long> mutableMap = new HashMap<>(map);
+    EnumSet.allOf(enumClazz).forEach(enumValue -> mutableMap.putIfAbsent(enumValue, 0L));
+    return mutableMap.entrySet().stream()
         .collect(
             Collectors.toMap(
                 Map.Entry::getKey, e -> Math.round((double) e.getValue() / totalReviews * 100)));
