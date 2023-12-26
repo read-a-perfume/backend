@@ -325,9 +325,13 @@ class ReviewControllerTest {
                     fieldWithPath("hasPrev")
                         .type(JsonFieldType.BOOLEAN)
                         .description("이전 페이지 존재 여부"),
-                    fieldWithPath("nextCursor").type(JsonFieldType.STRING).description("다음 페이지 토큰"),
+                    fieldWithPath("nextCursor")
+                        .type(JsonFieldType.STRING)
+                        .optional()
+                        .description("다음 페이지 토큰"),
                     fieldWithPath("prevCursor")
                         .type(JsonFieldType.STRING)
+                        .optional()
                         .description("이전 페이지 토큰"))));
   }
 

@@ -165,9 +165,11 @@ class MagazineControllerTest {
                     fieldWithPath("hasPrev").type(JsonFieldType.BOOLEAN).description("이전 데이터 유무"),
                     fieldWithPath("nextCursor")
                         .type(JsonFieldType.STRING)
+                        .optional()
                         .description("이후 데이터 조회 커서"),
                     fieldWithPath("prevCursor")
                         .type(JsonFieldType.STRING)
+                        .optional()
                         .description("이전 데이터 조회 커서"),
                     fieldWithPath("items[].id").type(JsonFieldType.NUMBER).description("매거진 ID"),
                     fieldWithPath("items[].title").type(JsonFieldType.STRING).description("매거진 제목"),
