@@ -36,23 +36,49 @@ public class CursorPagination<T> {
   }
 
   public static <T> CursorPagination<T> of(
-      final List<T> items, final CursorPageable pageable, final Function<T, String> tokenSelector) {
-    final long size = pageable.getSize();
-    final var hasMoreItem = items.size() > size;
-    final var resizedItems = hasMoreItem ? items.subList(0, (int) size) : items;
-    final boolean hasCursor = pageable.hasCursor();
+          final List<T> items,
+          final CursorPageable pageable,
+          final Function<T, String> tokenSelector) {
 
-    final String nextToken =
-        new String(
-            Base64.getEncoder()
-                .encode(tokenSelector.apply(resizedItems.get(resizedItems.size() - 1)).getBytes()));
-    final String prevToken =
-        new String(Base64.getEncoder().encode(tokenSelector.apply(resizedItems.get(0)).getBytes()));
+    final List<T> paginatedItems = paginateItems(items, pageable);
+    final String nextToken = encodeNextToken(paginatedItems, tokenSelector);
+    final String prevToken = encodePreviousToken(paginatedItems, tokenSelector);
 
-    if (pageable.isNext()) {
-      return new CursorPagination<>(resizedItems, hasMoreItem, hasCursor, nextToken, prevToken);
+    final boolean hasRequestedWithCursor = pageable.hasCursor();
+    final boolean hasMoreItemsThanPage = isItemsSizeGreaterThanPageSize(items, pageable);
+
+    return new CursorPagination<> (
+            paginatedItems,
+            hasMoreItemsThanPage,
+            hasRequestedWithCursor,
+            nextToken,
+            prevToken
+    );
+  }
+
+  private static <T> List<T> paginateItems(final List<T> items, final CursorPageable pageable) {
+    return isItemsSizeGreaterThanPageSize(items, pageable) ? items.subList(0, pageable.getSize()) : items;
+  }
+
+  private static <T> boolean isItemsSizeGreaterThanPageSize(final List<T> items, final CursorPageable pageable) {
+    final long pageSize = pageable.getSize();
+    return items.size() > pageSize;
+  }
+
+  private static <T> String encodeNextToken(final List<T> items, final Function<T, String> tokenSelector) {
+    if (items.isEmpty()) {
+      return null;
     }
-    return new CursorPagination<>(resizedItems, hasCursor, hasMoreItem, nextToken, prevToken);
+
+    return new String(Base64.getEncoder().encode(tokenSelector.apply(items.getLast()).getBytes()));
+  }
+
+  private static <T> String encodePreviousToken(final List<T> items, final Function<T, String> tokenSelector) {
+    if (items.isEmpty()) {
+      return null;
+    }
+
+    return new String(Base64.getEncoder().encode(tokenSelector.apply(items.getFirst()).getBytes()));
   }
 
   public List<T> getItems() {
