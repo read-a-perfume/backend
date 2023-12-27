@@ -36,9 +36,7 @@ public class CursorPagination<T> {
   }
 
   public static <T> CursorPagination<T> of(
-          final List<T> items,
-          final CursorPageable pageable,
-          final Function<T, String> tokenSelector) {
+      final List<T> items, final CursorPageable pageable, final Function<T, String> tokenSelector) {
 
     final List<T> paginatedItems = paginateItems(items, pageable);
     final String nextToken = encodeNextToken(paginatedItems, tokenSelector);
@@ -47,25 +45,28 @@ public class CursorPagination<T> {
     final boolean hasRequestedWithCursor = pageable.hasCursor();
     final boolean hasMoreItemsThanPage = isItemsSizeGreaterThanPageSize(items, pageable);
 
-    return new CursorPagination<> (
-            paginatedItems,
-            hasMoreItemsThanPage,
-            hasRequestedWithCursor,
-            hasMoreItemsThanPage ? nextToken : null,
-            hasRequestedWithCursor ? prevToken : null
-    );
+    return new CursorPagination<>(
+        paginatedItems,
+        hasMoreItemsThanPage,
+        hasRequestedWithCursor,
+        hasMoreItemsThanPage ? nextToken : null,
+        hasRequestedWithCursor ? prevToken : null);
   }
 
   private static <T> List<T> paginateItems(final List<T> items, final CursorPageable pageable) {
-    return isItemsSizeGreaterThanPageSize(items, pageable) ? items.subList(0, pageable.getSize()) : items;
+    return isItemsSizeGreaterThanPageSize(items, pageable)
+        ? items.subList(0, pageable.getSize())
+        : items;
   }
 
-  private static <T> boolean isItemsSizeGreaterThanPageSize(final List<T> items, final CursorPageable pageable) {
+  private static <T> boolean isItemsSizeGreaterThanPageSize(
+      final List<T> items, final CursorPageable pageable) {
     final long pageSize = pageable.getSize();
     return items.size() > pageSize;
   }
 
-  private static <T> String encodeNextToken(final List<T> items, final Function<T, String> tokenSelector) {
+  private static <T> String encodeNextToken(
+      final List<T> items, final Function<T, String> tokenSelector) {
     if (items.isEmpty()) {
       return null;
     }
@@ -74,7 +75,8 @@ public class CursorPagination<T> {
     return new String(Base64.getEncoder().encode(tokenSelector.apply(lastItem).getBytes()));
   }
 
-  private static <T> String encodePreviousToken(final List<T> items, final Function<T, String> tokenSelector) {
+  private static <T> String encodePreviousToken(
+      final List<T> items, final Function<T, String> tokenSelector) {
     if (items.isEmpty()) {
       return null;
     }
