@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -169,12 +170,16 @@ public class ReviewDetailFacadeService
   @Override
   @Transactional
   public ReviewCommentResult createComment(CreateReviewCommentCommand command, LocalDateTime now) {
-    reviewService
-        .getReview(command.reviewId())
-        .orElseThrow(() -> new NotFoundReviewException(command.reviewId()));
+    ReviewResult reviewResult =
+        reviewService
+            .getReview(command.reviewId())
+            .orElseThrow(() -> new NotFoundReviewException(command.reviewId()));
     ReviewCommentResult comment = reviewCommentService.createComment(command, now);
-    ReviewCommentEvent reviewCommentEvent = new ReviewCommentEvent(comment.reviewId(), 103L);
-    eventPublisher.publishEvent(reviewCommentEvent);
+
+    if (!Objects.equals(command.userId(), reviewResult.authorId())) {
+      ReviewCommentEvent reviewCommentEvent = new ReviewCommentEvent(reviewResult.authorId());
+      eventPublisher.publishEvent(reviewCommentEvent);
+    }
     return comment;
   }
 

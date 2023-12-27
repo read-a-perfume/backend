@@ -2,8 +2,7 @@ package io.perfume.api.notification.domain;
 
 public enum NotificationType {
   REVIEW(""),
-  COMMENT("리뷰/댓글")
-  ;
+  COMMENT("리뷰/댓글");
 
   private final String type;
 

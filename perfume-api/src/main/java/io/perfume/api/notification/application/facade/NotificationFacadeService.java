@@ -28,16 +28,11 @@ public class NotificationFacadeService {
   }
 
   public void reviewCommentNotifyOnEvent(ReviewCommentEvent event) {
-    var command = createReviewCommandNotification(event);
+    var now = LocalDateTime.now();
+    var type = NotificationType.COMMENT;
+    var command =
+        new CreateNotificationCommand(event.content(), null, event.receiveUserId(), type, now);
     var notificationResult = createNotificationService.create(command);
     sendNotificationService.send(notificationResult);
-  }
-
-  private CreateNotificationCommand createReviewCommandNotification(ReviewCommentEvent event) {
-    var now = LocalDateTime.now();
-    var content = event.reviewId() + "번 리뷰에 답글이 추가되었습니다.";
-    var type = NotificationType.COMMENT;
-
-    return CreateNotificationCommand.create(content, null, event.receiveUserId(), type, now);
   }
 }
