@@ -8,14 +8,4 @@ public record CreateNotificationCommand(
     String redirectUrl,
     Long receiveUserId,
     NotificationType notificationType,
-    LocalDateTime now) {
-  public static CreateNotificationCommand create(
-      String content,
-      String redirectUrl,
-      Long receiveUserId,
-      NotificationType notificationType,
-      LocalDateTime now) {
-    return new CreateNotificationCommand(
-        content, redirectUrl, receiveUserId, notificationType, now);
-  }
-}
+    LocalDateTime now) {}
