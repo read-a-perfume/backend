@@ -4,10 +4,10 @@ import io.perfume.api.file.application.port.in.FindFileUseCase;
 import io.perfume.api.user.adapter.in.http.dto.*;
 import io.perfume.api.user.adapter.in.http.exception.UserNotAuthenticatedException;
 import io.perfume.api.user.application.port.in.*;
+import io.perfume.api.user.application.port.in.dto.MyInfoResult;
 import io.perfume.api.user.application.port.in.dto.UpdateEmailCommand;
 import io.perfume.api.user.application.port.in.dto.UpdatePasswordCommand;
 import io.perfume.api.user.application.port.in.dto.UpdateProfileCommand;
-import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import java.io.IOException;
@@ -53,12 +53,12 @@ public class UserSupportController {
   }
 
   @GetMapping("/me")
-  public UserProfileDto me(@AuthenticationPrincipal User user) {
+  public MyInfoDto me(@AuthenticationPrincipal User user) {
     checkAuthenticatedUser(user);
 
     long userId = Long.parseLong(user.getUsername());
-    UserProfileResult userProfileResult = findUserUseCase.findUserProfileById(userId);
-    return UserProfileDto.of(userProfileResult);
+    MyInfoResult myInfoResult = findUserUseCase.findUserProfileById(userId);
+    return MyInfoDto.of(myInfoResult);
   }
 
   @DeleteMapping("/user")

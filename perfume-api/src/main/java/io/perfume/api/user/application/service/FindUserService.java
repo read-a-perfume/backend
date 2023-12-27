@@ -4,7 +4,7 @@ import io.perfume.api.file.application.port.in.FindFileUseCase;
 import io.perfume.api.file.domain.File;
 import io.perfume.api.user.application.exception.UserNotFoundException;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
-import io.perfume.api.user.application.port.in.dto.UserProfileResult;
+import io.perfume.api.user.application.port.in.dto.MyInfoResult;
 import io.perfume.api.user.application.port.in.dto.UserResult;
 import io.perfume.api.user.application.port.out.SocialAccountQueryRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
@@ -51,7 +51,7 @@ public class FindUserService implements FindUserUseCase {
   }
 
   @Override
-  public UserProfileResult findUserProfileById(long userId) {
+  public MyInfoResult findUserProfileById(long userId) {
     User user =
         userQueryRepository
             .findUserById(userId)
@@ -61,7 +61,7 @@ public class FindUserService implements FindUserUseCase {
     if (fileById.isPresent()) {
       thumbnail = fileById.get().getUrl();
     }
-    return new UserProfileResult(user.getId(), user.getUsername(), thumbnail);
+    return new MyInfoResult(user.getId(), user.getUsername(), thumbnail);
   }
 
   private UserResult toDto(User user) {

@@ -18,7 +18,7 @@ import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdateProfileRequestDto;
 import io.perfume.api.user.application.port.in.*;
-import io.perfume.api.user.application.port.in.dto.UserProfileResult;
+import io.perfume.api.user.application.port.in.dto.MyInfoResult;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -70,18 +70,17 @@ class UserSupportControllerTest {
   void me() throws Exception {
     // given
     Long userId = 1L;
-    UserProfileResult userProfileResult =
-        new UserProfileResult(userId, "username", "thumbnail.com");
-    given(findUserUseCase.findUserProfileById(anyLong())).willReturn(userProfileResult);
+    MyInfoResult myInfoResult = new MyInfoResult(userId, "username", "thumbnail.com");
+    given(findUserUseCase.findUserProfileById(anyLong())).willReturn(myInfoResult);
 
     // when & then
     mockMvc
         .perform(
             RestDocumentationRequestBuilders.get("/v1/me").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.userId").value(userProfileResult.userId()))
-        .andExpect(jsonPath("$.username").value(userProfileResult.username()))
-        .andExpect(jsonPath("$.thumbnail").value(userProfileResult.thumbnail()))
+        .andExpect(jsonPath("$.userId").value(myInfoResult.userId()))
+        .andExpect(jsonPath("$.username").value(myInfoResult.username()))
+        .andExpect(jsonPath("$.thumbnail").value(myInfoResult.thumbnail()))
         .andDo(
             document(
                 "get-me",
