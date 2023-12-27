@@ -62,7 +62,7 @@ public class FindUserService implements FindUserUseCase {
     if (fileById.isPresent()) {
       thumbnail = fileById.get().getUrl();
     }
-    return new MyInfoResult(user.getId(), user.getUsername(), thumbnail);
+    return MyInfoResult.from(user, thumbnail);
   }
 
   @Override
