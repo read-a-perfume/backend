@@ -75,7 +75,15 @@ class UserSupportControllerTest {
   void me() throws Exception {
     // given
     Long userId = 1L;
-    MyInfoResult myInfoResult = new MyInfoResult(userId, "username", "thumbnail.com");
+    MyInfoResult myInfoResult =
+        new MyInfoResult(
+            userId,
+            "username",
+            "email@email.com",
+            "반가워요-!",
+            LocalDate.of(1999, 12, 23),
+            Sex.OTHER,
+            "thumbnail.com");
     given(findUserUseCase.findMyInfoById(anyLong())).willReturn(myInfoResult);
 
     // when & then
@@ -85,6 +93,9 @@ class UserSupportControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.userId").value(myInfoResult.userId()))
         .andExpect(jsonPath("$.username").value(myInfoResult.username()))
+        .andExpect(jsonPath("$.email").value(myInfoResult.email()))
+        .andExpect(jsonPath("$.bio").value(myInfoResult.bio()))
+        .andExpect(jsonPath("$.sex").value(myInfoResult.sex().name()))
         .andExpect(jsonPath("$.thumbnail").value(myInfoResult.thumbnail()))
         .andDo(
             document(
@@ -92,6 +103,10 @@ class UserSupportControllerTest {
                 responseFields(
                     fieldWithPath("userId").description("현재 로그인 중인 유저의 PK"),
                     fieldWithPath("username").description("현재 로그인 중인 유저의 이름"),
+                    fieldWithPath("email").description("현재 로그인 중인 유저의 이메일"),
+                    fieldWithPath("bio").description("현재 로그인 중인 유저의 한줄 소개"),
+                    fieldWithPath("birthday").description("현재 로그인 중인 유저의 생일"),
+                    fieldWithPath("sex").description("현재 로그인 중인 유저의 성별"),
                     fieldWithPath("thumbnail").description("현재 로그인 중인 유저의 프로필 사진 URL"))));
   }
 
