@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.given;
 
 import io.perfume.api.file.application.port.in.FindFileUseCase;
 import io.perfume.api.file.domain.File;
-import io.perfume.api.user.application.port.in.dto.UserProfileResult;
+import io.perfume.api.user.application.port.in.dto.MyInfoResult;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
 import io.perfume.api.user.domain.User;
 import java.util.Optional;
@@ -35,7 +35,7 @@ class FindUserServiceTest {
     given(findFileUseCase.findFileById(anyLong())).willReturn(Optional.ofNullable(file));
 
     // when
-    UserProfileResult userProfile = findUserService.findUserProfileById(userId);
+    MyInfoResult userProfile = findUserService.findUserProfileById(userId);
 
     // then
     assertEquals(userId, userProfile.userId());
