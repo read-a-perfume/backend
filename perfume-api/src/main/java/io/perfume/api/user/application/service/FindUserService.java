@@ -5,6 +5,7 @@ import io.perfume.api.file.domain.File;
 import io.perfume.api.user.application.exception.UserNotFoundException;
 import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.dto.MyInfoResult;
+import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import io.perfume.api.user.application.port.in.dto.UserResult;
 import io.perfume.api.user.application.port.out.SocialAccountQueryRepository;
 import io.perfume.api.user.application.port.out.UserQueryRepository;
@@ -51,7 +52,7 @@ public class FindUserService implements FindUserUseCase {
   }
 
   @Override
-  public MyInfoResult findUserProfileById(long userId) {
+  public MyInfoResult findMyInfoById(long userId) {
     User user =
         userQueryRepository
             .findUserById(userId)
@@ -62,6 +63,20 @@ public class FindUserService implements FindUserUseCase {
       thumbnail = fileById.get().getUrl();
     }
     return new MyInfoResult(user.getId(), user.getUsername(), thumbnail);
+  }
+
+  @Override
+  public UserProfileResult findUserProfileById(long userId) {
+    User user =
+        userQueryRepository
+            .findUserById(userId)
+            .orElseThrow(() -> new UserNotFoundException(userId));
+    Optional<File> fileById = findFileUseCase.findFileById(user.getThumbnailId());
+    String thumbnail = "";
+    if (fileById.isPresent()) {
+      thumbnail = fileById.get().getUrl();
+    }
+    return UserProfileResult.from(user, thumbnail);
   }
 
   private UserResult toDto(User user) {

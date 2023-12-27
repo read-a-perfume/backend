@@ -35,11 +35,11 @@ class FindUserServiceTest {
     given(findFileUseCase.findFileById(anyLong())).willReturn(Optional.ofNullable(file));
 
     // when
-    MyInfoResult userProfile = findUserService.findUserProfileById(userId);
+    MyInfoResult myInfoResult = findUserService.findMyInfoById(userId);
 
     // then
-    assertEquals(userId, userProfile.userId());
-    assertEquals(user.getUsername(), userProfile.username());
-    assertEquals(file.getUrl(), userProfile.thumbnail());
+    assertEquals(userId, myInfoResult.userId());
+    assertEquals(user.getUsername(), myInfoResult.username());
+    assertEquals(file.getUrl(), myInfoResult.thumbnail());
   }
 }

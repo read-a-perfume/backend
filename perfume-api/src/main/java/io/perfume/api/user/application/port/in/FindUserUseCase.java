@@ -1,6 +1,7 @@
 package io.perfume.api.user.application.port.in;
 
 import io.perfume.api.user.application.port.in.dto.MyInfoResult;
+import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import io.perfume.api.user.application.port.in.dto.UserResult;
 import java.util.List;
 import java.util.Optional;
@@ -15,5 +16,7 @@ public interface FindUserUseCase {
 
   Optional<UserResult> findUserById(long userId);
 
-  MyInfoResult findUserProfileById(long userId);
+  MyInfoResult findMyInfoById(long userId);
+
+  UserProfileResult findUserProfileById(long userId);
 }
