@@ -11,8 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.perfume.api.perfume.application.exception.PerfumeThemeNotFoundException;
 import io.perfume.api.perfume.application.port.in.GetPerfumeThemeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeThemeResult;
-import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
-import io.perfume.api.perfume.domain.Concentration;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeThemeResult;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,11 +48,11 @@ class PerfumeThemeControllerTest {
 
   @Test
   void getRecentTheme() throws Exception {
-    List<SimplePerfumeResult> perfumes = new ArrayList<>();
+    List<SimplePerfumeThemeResult> perfumes = new ArrayList<>();
     for (int i = 1; i < 4; i++) {
       perfumes.add(
-          new SimplePerfumeResult(
-              (long) i, "No." + i, Concentration.EAU_DE_TOILETTE, "샤넬", "test-url.com/" + i));
+          new SimplePerfumeThemeResult(
+              (long) i, "No." + i, "이 향수의 유래는 ...", "샤넬", "test-url.com/" + i));
     }
     PerfumeThemeResult perfumeThemeResult =
         new PerfumeThemeResult(
@@ -78,10 +77,9 @@ class PerfumeThemeControllerTest {
                     fieldWithPath("thumbnail").description("테마 썸네일 URL"),
                     fieldWithPath("perfumes[].id").description("테마에 포함된 향수 ID"),
                     fieldWithPath("perfumes[].name").description("테마에 포함된 향수 이름"),
+                    fieldWithPath("perfumes[].story").description("테마에 포함된 향수 스토리"),
                     fieldWithPath("perfumes[].thumbnail").description("테마에 포함된 향수 썸네일 URL"),
-                    fieldWithPath("perfumes[].brandName").description("테마에 포함된 향수 브랜드 이름"),
-                    fieldWithPath("perfumes[].strength").description("테마에 포함된 향수 강도"),
-                    fieldWithPath("perfumes[].duration").description("테마에 포함된 향수 지속력"))));
+                    fieldWithPath("perfumes[].brandName").description("테마에 포함된 향수 브랜드 이름"))));
   }
 
   @Test

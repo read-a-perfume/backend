@@ -1,5 +1,6 @@
 package io.perfume.api.perfume.adapter.out.persistence.perfume;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,6 +20,7 @@ import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeThemeResult;
 import io.perfume.api.perfume.domain.Concentration;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
@@ -83,6 +85,43 @@ class PerfumeQueryPersistenceAdapterTest {
     assertNotNull(resultPerfume.getCreatedAt());
     assertNotNull(resultPerfume.getUpdatedAt());
     assertNull(resultPerfume.getDeletedAt());
+  }
+
+  @Test
+  void findPerfumesByIds() {
+    // given
+    List<PerfumeJpaEntity> list = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      list.add(
+          PerfumeJpaEntity.builder()
+              .name("perfume" + i)
+              .story("story" + i)
+              .concentration(Concentration.EAU_DE_PARFUM)
+              .perfumeShopUrl("https://www.aesop.com/kr/p/fragrance/fresh/tacit-eau-de-parfum/")
+              .brandId(1L)
+              .categoryId(1L)
+              .thumbnailId(1L)
+              .build());
+    }
+    List<PerfumeJpaEntity> perfumeJpaEntities = perfumeJpaRepository.saveAll(list);
+    assertThat(perfumeJpaEntities).hasSize(5);
+
+    // when
+    List<SimplePerfumeThemeResult> perfumesByIds =
+        perfumeQueryPersistenceAdapter.findPerfumesByIds(
+            List.of(perfumeJpaEntities.get(0).getId(), perfumeJpaEntities.get(1).getId()));
+
+    // then
+    assertThat(perfumesByIds).hasSize(2);
+    assertThat(perfumesByIds.get(0).id()).isEqualTo(perfumeJpaEntities.get(0).getId());
+    assertThat(perfumesByIds.get(1).id()).isEqualTo(perfumeJpaEntities.get(1).getId());
+  }
+
+  @Test
+  void returnEmptyListIfFindPerfumesByNotExistingIds() {
+    List<SimplePerfumeThemeResult> perfumesByIds =
+        perfumeQueryPersistenceAdapter.findPerfumesByIds(List.of(1L, 3L));
+    assertThat(perfumesByIds).isEmpty();
   }
 
   @Test

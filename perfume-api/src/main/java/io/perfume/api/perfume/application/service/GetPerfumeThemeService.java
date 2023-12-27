@@ -5,7 +5,7 @@ import io.perfume.api.file.application.port.in.FindFileUseCase;
 import io.perfume.api.perfume.application.exception.PerfumeThemeNotFoundException;
 import io.perfume.api.perfume.application.port.in.GetPerfumeThemeUseCase;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeThemeResult;
-import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeThemeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.application.port.out.PerfumeThemeQueryRepository;
 import io.perfume.api.perfume.domain.PerfumeTheme;
@@ -26,7 +26,7 @@ public class GetPerfumeThemeService implements GetPerfumeThemeUseCase {
         perfumeThemeQueryRepository
             .getRecentTheme()
             .orElseThrow(PerfumeThemeNotFoundException::new);
-    List<SimplePerfumeResult> perfumes =
+    List<SimplePerfumeThemeResult> perfumes =
         perfumeQueryRepository.findPerfumesByIds(perfumeTheme.getPerfumeIds());
     String thumbnail =
         findFileUseCase
