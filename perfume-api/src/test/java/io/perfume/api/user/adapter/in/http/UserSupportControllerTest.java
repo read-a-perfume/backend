@@ -258,26 +258,24 @@ class UserSupportControllerTest {
   @DisplayName("유저의 프로필 정보를 조회할 수 있다.")
   void getUser() throws Exception {
     // given
-    UserProfileResult userProfileResult = new UserProfileResult(1L, "useruser", "반가워요-!", Sex.MALE, "file.com/1");
+    UserProfileResult userProfileResult =
+        new UserProfileResult(1L, "useruser", "반가워요-!", Sex.MALE, "file.com/1");
     given(findUserUseCase.findUserProfileById(anyLong())).willReturn(userProfileResult);
 
     // when & then
-    mockMvc.perform(RestDocumentationRequestBuilders.get( "/v1/user/{id}", 1))
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/user/{id}", 1))
         .andExpect(status().isOk())
         .andDo(
-            document( "get-user",
-                pathParameters(
-                    parameterWithName("id").description("유저 ID")
-                ),
+            document(
+                "get-user",
+                pathParameters(parameterWithName("id").description("유저 ID")),
                 responseFields(
                     fieldWithPath("id").description("유저 ID(PK)"),
                     fieldWithPath("username").description("유저 이름"),
                     fieldWithPath("bio").description("유저 한줄 소개"),
                     fieldWithPath("sex").description("유저 성별"),
-                    fieldWithPath("thumbnail").description("유저 썸네일 이미지")
-                )
-            )
-        );
+                    fieldWithPath("thumbnail").description("유저 썸네일 이미지"))));
   }
 
   @Test
@@ -285,11 +283,9 @@ class UserSupportControllerTest {
   void getUserNotFound() throws Exception {
     given(findUserUseCase.findUserProfileById(anyLong())).willThrow(new UserNotFoundException(1L));
 
-    mockMvc.perform(RestDocumentationRequestBuilders.get( "/v1/user/{id}", 1))
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/user/{id}", 1))
         .andExpect(status().isNotFound())
-        .andDo(
-            document( "get-user-failed"
-            )
-        );
+        .andDo(document("get-user-failed"));
   }
 }
