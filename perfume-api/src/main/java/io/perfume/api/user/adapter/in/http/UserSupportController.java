@@ -8,6 +8,7 @@ import io.perfume.api.user.application.port.in.dto.MyInfoResult;
 import io.perfume.api.user.application.port.in.dto.UpdateEmailCommand;
 import io.perfume.api.user.application.port.in.dto.UpdatePasswordCommand;
 import io.perfume.api.user.application.port.in.dto.UpdateProfileCommand;
+import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import java.io.IOException;
@@ -57,8 +58,14 @@ public class UserSupportController {
     checkAuthenticatedUser(user);
 
     long userId = Long.parseLong(user.getUsername());
-    MyInfoResult myInfoResult = findUserUseCase.findUserProfileById(userId);
+    MyInfoResult myInfoResult = findUserUseCase.findMyInfoById(userId);
     return MyInfoDto.of(myInfoResult);
+  }
+
+  @GetMapping("/user/{id}")
+  public UserProfileDto getUser(@PathVariable Long id) {
+    UserProfileResult userProfileResult = findUserUseCase.findUserProfileById(id);
+    return UserProfileDto.of(userProfileResult);
   }
 
   @DeleteMapping("/user")

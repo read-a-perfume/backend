@@ -8,7 +8,9 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,8 +19,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.user.adapter.in.http.dto.UpdateEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdatePasswordRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UpdateProfileRequestDto;
+import io.perfume.api.user.adapter.out.persistence.user.Sex;
+import io.perfume.api.user.application.exception.UserNotFoundException;
 import io.perfume.api.user.application.port.in.*;
 import io.perfume.api.user.application.port.in.dto.MyInfoResult;
+import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -71,7 +76,7 @@ class UserSupportControllerTest {
     // given
     Long userId = 1L;
     MyInfoResult myInfoResult = new MyInfoResult(userId, "username", "thumbnail.com");
-    given(findUserUseCase.findUserProfileById(anyLong())).willReturn(myInfoResult);
+    given(findUserUseCase.findMyInfoById(anyLong())).willReturn(myInfoResult);
 
     // when & then
     mockMvc
@@ -247,5 +252,44 @@ class UserSupportControllerTest {
                 .content(objectMapper.writeValueAsString(updateProfileRequestDto)))
         .andExpect(status().isUnauthorized())
         .andDo(document("update-user-profile-failed"));
+  }
+
+  @Test
+  @DisplayName("유저의 프로필 정보를 조회할 수 있다.")
+  void getUser() throws Exception {
+    // given
+    UserProfileResult userProfileResult = new UserProfileResult(1L, "useruser", "반가워요-!", Sex.MALE, "file.com/1");
+    given(findUserUseCase.findUserProfileById(anyLong())).willReturn(userProfileResult);
+
+    // when & then
+    mockMvc.perform(RestDocumentationRequestBuilders.get( "/v1/user/{id}", 1))
+        .andExpect(status().isOk())
+        .andDo(
+            document( "get-user",
+                pathParameters(
+                    parameterWithName("id").description("유저 ID")
+                ),
+                responseFields(
+                    fieldWithPath("id").description("유저 ID(PK)"),
+                    fieldWithPath("username").description("유저 이름"),
+                    fieldWithPath("bio").description("유저 한줄 소개"),
+                    fieldWithPath("sex").description("유저 성별"),
+                    fieldWithPath("thumbnail").description("유저 썸네일 이미지")
+                )
+            )
+        );
+  }
+
+  @Test
+  @DisplayName("유저가 존재하지 않으면 프로필 정보를 조회할 수 없다.")
+  void getUserNotFound() throws Exception {
+    given(findUserUseCase.findUserProfileById(anyLong())).willThrow(new UserNotFoundException(1L));
+
+    mockMvc.perform(RestDocumentationRequestBuilders.get( "/v1/user/{id}", 1))
+        .andExpect(status().isNotFound())
+        .andDo(
+            document( "get-user-failed"
+            )
+        );
   }
 }
