@@ -17,6 +17,7 @@ import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeThemeResult;
 import io.perfume.api.perfume.application.port.out.PerfumeQueryRepository;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
@@ -59,14 +60,14 @@ public class PerfumeQueryPersistenceAdapter implements PerfumeQueryRepository {
   }
 
   @Override
-  public List<SimplePerfumeResult> findPerfumesByIds(List<Long> ids) {
+  public List<SimplePerfumeThemeResult> findPerfumesByIds(List<Long> ids) {
     return jpaQueryFactory
         .select(
             Projections.constructor(
-                SimplePerfumeResult.class,
+                SimplePerfumeThemeResult.class,
                 perfumeJpaEntity.id,
                 perfumeJpaEntity.name,
-                perfumeJpaEntity.concentration,
+                perfumeJpaEntity.story,
                 brandEntity.name,
                 fileJpaEntity.url))
         .from(perfumeJpaEntity)

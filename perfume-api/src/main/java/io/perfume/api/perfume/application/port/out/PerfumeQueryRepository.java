@@ -4,6 +4,7 @@ import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.common.page.CustomSlice;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
 import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeResult;
+import io.perfume.api.perfume.application.port.in.dto.SimplePerfumeThemeResult;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface PerfumeQueryRepository {
 
   Optional<Perfume> findPerfumeById(Long id);
 
-  List<SimplePerfumeResult> findPerfumesByIds(List<Long> ids);
+  List<SimplePerfumeThemeResult> findPerfumesByIds(List<Long> ids);
 
   NotePyramid getNotePyramidByPerfume(Long perfumeId);
 
