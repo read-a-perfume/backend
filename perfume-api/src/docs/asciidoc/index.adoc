@@ -159,6 +159,14 @@ include::{snippets}/create-magazine/http-request.adoc[]
 include::{snippets}/create-magazine/http-response.adoc[]
 include::{snippets}/create-magazine/response-fields.adoc[]
 
+== 브랜드 매거진 조회
+=== 요청
+include::{snippets}/get-magazines/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-magazines/response-body.adoc[]
+include::{snippets}/get-magazines/response-fields.adoc[]
+
 == 노트 조회
 === 요청
 include::{snippets}/get-note-by-id/http-request.adoc[]
