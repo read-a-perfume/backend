@@ -1,6 +1,7 @@
 package io.perfume.api.review.adapter.in.http;
 
 import dto.ui.CursorResponse;
+import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewCommentRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewCommentResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewRequestDto;
@@ -23,7 +24,6 @@ import io.perfume.api.review.application.in.review.CreateReviewUseCase;
 import io.perfume.api.review.application.in.review.DeleteReviewUseCase;
 import io.perfume.api.review.application.in.review.GetReviewInViewUseCase;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,10 +61,13 @@ public class ReviewController {
   }
 
   @GetMapping
-  public List<GetReviewsResponseDto> getReviews(GetReviewsRequestDto dto) {
-    final var results = reviewDetailFacadeService.getPaginatedReviews(dto.offset(), dto.limit());
+  public ResponseEntity<CustomPage<GetReviewsResponseDto>> getReviews(
+      final GetReviewsRequestDto dto) {
+    final var results = reviewDetailFacadeService.getPaginatedReviews(dto.getPage(), dto.getSize());
+    final var responseItems =
+        results.getContent().stream().map(GetReviewsResponseDto::from).toList();
 
-    return GetReviewsResponseDto.from(results);
+    return ResponseEntity.ok(new CustomPage<>(responseItems, results));
   }
 
   @PreAuthorize("isAuthenticated()")
