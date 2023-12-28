@@ -77,7 +77,7 @@ class JwtAuthenticationFilterTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.status").value("Unauthorized"))
         .andExpect(jsonPath("$.statusCode").value("401"))
-        .andExpect(jsonPath("$.message").value("Access Token Expired."))
+        .andExpect(jsonPath("$.message").value("User Not Authenticated. Please login."))
         .andDo(
             document(
                 "token-expired",
