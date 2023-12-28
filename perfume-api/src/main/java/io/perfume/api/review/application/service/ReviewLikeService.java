@@ -1,7 +1,9 @@
 package io.perfume.api.review.application.service;
 
+import io.perfume.api.common.notify.EventPublisher;
 import io.perfume.api.review.application.exception.NotFoundReviewException;
 import io.perfume.api.review.application.exception.NotPermittedLikeReviewException;
+import io.perfume.api.review.application.facade.dto.ReviewLikeEvent;
 import io.perfume.api.review.application.out.like.ReviewLikeQueryRepository;
 import io.perfume.api.review.application.out.like.ReviewLikeRepository;
 import io.perfume.api.review.application.out.like.dto.ReviewLikeCount;
@@ -14,6 +16,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -23,7 +26,9 @@ public class ReviewLikeService {
   private final ReviewLikeQueryRepository reviewLikeQueryRepository;
   private final ReviewLikeRepository reviewLikeRepository;
   private final ReviewQueryRepository reviewQueryRepository;
+  private final EventPublisher eventPublisher;
 
+  @Transactional
   public long toggleLikeReview(long userId, long reviewId, LocalDateTime now) {
     Review review = findReviewById(reviewId);
     verifyReviewOwnership(userId, review);
@@ -31,7 +36,8 @@ public class ReviewLikeService {
     Optional<ReviewLike> reviewLike =
         reviewLikeQueryRepository.findByUserIdAndReviewId(userId, reviewId);
     reviewLike.ifPresentOrElse(
-        like -> deleteReviewLike(like, now), () -> addReviewLike(userId, reviewId, now));
+        like -> deleteReviewLike(like, now),
+        () -> addReviewLike(userId, reviewId, review.getUserId(), now));
 
     return reviewId;
   }
@@ -53,8 +59,10 @@ public class ReviewLikeService {
     reviewLikeRepository.save(like);
   }
 
-  private void addReviewLike(long userId, long reviewId, LocalDateTime now) {
+  private void addReviewLike(long userId, long reviewId, long receiveUserId, LocalDateTime now) {
     ReviewLike newReviewLike = ReviewLike.create(userId, reviewId, now);
+    ReviewLikeEvent reviewLikeEvent = new ReviewLikeEvent(receiveUserId);
+    eventPublisher.publishEvent(reviewLikeEvent);
     reviewLikeRepository.save(newReviewLike);
   }
 

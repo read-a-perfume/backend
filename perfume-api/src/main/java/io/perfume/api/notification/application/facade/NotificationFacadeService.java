@@ -6,6 +6,7 @@ import io.perfume.api.notification.application.service.SendNotificationService;
 import io.perfume.api.notification.application.service.SubscribeService;
 import io.perfume.api.notification.domain.NotificationType;
 import io.perfume.api.review.application.facade.dto.ReviewCommentEvent;
+import io.perfume.api.review.application.facade.dto.ReviewLikeEvent;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,15 @@ public class NotificationFacadeService {
   public void reviewCommentNotifyOnEvent(ReviewCommentEvent event) {
     var now = LocalDateTime.now();
     var type = NotificationType.COMMENT;
+    var command =
+        new CreateNotificationCommand(event.content(), null, event.receiveUserId(), type, now);
+    var notificationResult = createNotificationService.create(command);
+    sendNotificationService.send(notificationResult);
+  }
+
+  public void reviewLikeNotifyOnEvent(ReviewLikeEvent event) {
+    var now = LocalDateTime.now();
+    var type = NotificationType.REVIEW_LIKE;
     var command =
         new CreateNotificationCommand(event.content(), null, event.receiveUserId(), type, now);
     var notificationResult = createNotificationService.create(command);
