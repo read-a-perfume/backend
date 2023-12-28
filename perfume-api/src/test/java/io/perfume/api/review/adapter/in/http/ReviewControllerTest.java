@@ -213,18 +213,17 @@ class ReviewControllerTest {
         userRepository
             .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
             .orElseThrow();
-    var review =
-        reviewRepository.save(
-            Review.create(
-                "test",
-                "test description",
-                Strength.LIGHT,
-                Duration.TOO_SHORT,
-                DayType.DAILY,
-                1L,
-                user.getId(),
-                Season.SPRING,
-                now));
+    reviewRepository.save(
+        Review.create(
+            "test",
+            "test description",
+            Strength.LIGHT,
+            Duration.TOO_SHORT,
+            DayType.DAILY,
+            1L,
+            user.getId(),
+            Season.SPRING,
+            now));
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("page", "1");
     params.add("size", "10");
@@ -236,26 +235,45 @@ class ReviewControllerTest {
                 .params(params)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-        .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(
             document(
                 "get-reviews",
                 responseFields(
-                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
-                    fieldWithPath("[].shortReview").type(JsonFieldType.STRING).description("향수 느낌"),
-                    fieldWithPath("[].user.id").type(JsonFieldType.NUMBER).description("리뷰 작성자 ID"),
-                    fieldWithPath("[].user.username")
+                    fieldWithPath("content").type(JsonFieldType.ARRAY).description("리뷰 목록"),
+                    fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫번째 페이지"),
+                    fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지"),
+                    fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지"),
+                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("전체 페이지"),
+                    fieldWithPath("totalElements")
+                        .type(JsonFieldType.NUMBER)
+                        .description("전체 요소 수"),
+                    fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                    fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 크기"),
+                    fieldWithPath("content.[].id").type(JsonFieldType.NUMBER).description("리뷰 ID"),
+                    fieldWithPath("content.[].shortReview")
+                        .type(JsonFieldType.STRING)
+                        .description("한줄 리뷰"),
+                    fieldWithPath("content.[].author.id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("리뷰 작성자 ID"),
+                    fieldWithPath("content.[].author.username")
                         .type(JsonFieldType.STRING)
                         .description("리뷰 작성자 이름"),
-                    fieldWithPath("[].user.thumbnail")
+                    fieldWithPath("content.[].author.thumbnail")
                         .type(JsonFieldType.STRING)
                         .description("리뷰 작성자 프로필 이미지"),
-                    fieldWithPath("[].thumbnails").type(JsonFieldType.ARRAY).description("리뷰 썸네일"),
-                    fieldWithPath("[].keywords").type(JsonFieldType.ARRAY).description("리뷰 태그"),
-                    fieldWithPath("[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
-                    fieldWithPath("[].commentCount")
+                    fieldWithPath("content.[].keywords")
+                        .type(JsonFieldType.ARRAY)
+                        .description("리뷰 태그"),
+                    fieldWithPath("content.[].thumbnails")
+                        .type(JsonFieldType.ARRAY)
+                        .description("리뷰 이미지"),
+                    fieldWithPath("content.[].likeCount")
+                        .type(JsonFieldType.NUMBER)
+                        .description("좋아요 수"),
+                    fieldWithPath("content.[].commentCount")
                         .type(JsonFieldType.NUMBER)
                         .description("댓글 수"))));
   }

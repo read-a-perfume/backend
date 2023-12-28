@@ -26,7 +26,7 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
   }
 
   @Override
-  public List<Review> findByPage(long page, long size) {
+  public CustomPage<Review> findByPage(Pageable pageable) {
     return null;
   }
 
