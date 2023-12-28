@@ -1,5 +1,6 @@
 package jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -42,13 +43,18 @@ public class JsonWebTokenGenerator {
     assert jwt != null;
     assert !jwt.isEmpty();
 
-    return Jwts.parser()
-        .verifyWith((SecretKey) secret)
-        .build()
-        .parseSignedClaims(jwt)
-        .getPayload()
-        .getExpiration()
-        .before(toDate(now));
+    try {
+      return Jwts.parser()
+          .verifyWith((SecretKey) secret)
+          .build()
+          .parseSignedClaims(jwt)
+          .getPayload()
+          .getExpiration()
+          .before(toDate(now)); // 만료 시각이 지금 시각 전이라면 expire된 토큰이다.
+    } catch (ExpiredJwtException e) {
+      // 실제로 expire된 토큰은 Jwt를 parsing할 때 ExpiredJwtException이 발생하기 때문에 catch로 처리해주어야 한다.
+      return true;
+    }
   }
 
   public String getSubject(String jwt) {
@@ -63,6 +69,10 @@ public class JsonWebTokenGenerator {
         .getSubject();
   }
 
+  /**
+   * JJWT only converts simple String, Date, Long, Integer, Short and Byte types automatically. Be
+   * careful to set requiredType.
+   */
   public <T> T getClaim(String jwt, String key, Class<T> requiredType) {
     assert jwt != null;
     assert !jwt.isEmpty();

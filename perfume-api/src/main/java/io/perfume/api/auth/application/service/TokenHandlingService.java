@@ -1,7 +1,6 @@
 package io.perfume.api.auth.application.service;
 
 import io.perfume.api.auth.application.exception.FailedMakeNewAccessTokenException;
-import io.perfume.api.auth.application.exception.NotFoundRefreshTokenException;
 import io.perfume.api.auth.application.port.in.MakeNewTokenUseCase;
 import io.perfume.api.auth.application.port.in.dto.ReissuedTokenResult;
 import io.perfume.api.auth.application.port.out.RememberMeQueryRepository;
@@ -22,35 +21,39 @@ public class TokenHandlingService implements MakeNewTokenUseCase {
   @Override
   public ReissuedTokenResult reissueAccessToken(
       String accessToken, String refreshToken, LocalDateTime now) {
-    boolean isValidTokens = authenticationTokenService.isValid(refreshToken, now);
-    if (isValidTokens) {
-      throw new IllegalArgumentException("Invalid tokens");
-    }
+    validateToken(accessToken, refreshToken, now);
 
     RefreshToken refreshTokenDomain =
         authenticationTokenService.getRefreshTokenFromClient(refreshToken);
     verifyTokenMatch(refreshTokenDomain);
-    RefreshToken newRefreshToken = reissueRefreshToken(refreshTokenDomain);
-    return getReissuedTokenResult(accessToken, newRefreshToken, now);
+
+    String newAccessToken =
+        authenticationTokenService.reissueAccessToken(refreshTokenDomain.getUserId(), now);
+    String newRefreshToken = reissueRefreshToken(refreshTokenDomain);
+
+    return new ReissuedTokenResult(newAccessToken, newRefreshToken);
+  }
+
+  private void validateToken(String accessToken, String refreshToken, LocalDateTime now) {
+    boolean isExpiredAccessToken = authenticationTokenService.isExpired(accessToken, now);
+    if (!isExpiredAccessToken) {
+      throw new IllegalArgumentException("Access token not expired yet.");
+    }
+
+    boolean isValidRefreshToken = authenticationTokenService.isValid(refreshToken, now);
+    if (!isValidRefreshToken) {
+      throw new IllegalArgumentException("Refresh token is invalid.");
+    }
   }
 
   @NotNull
-  private ReissuedTokenResult getReissuedTokenResult(
-      String accessToken, RefreshToken newRefreshToken, LocalDateTime now) {
-    String accessTokenResult = authenticationTokenService.reissueAccessToken(accessToken, now);
-    String refreshTokenResult =
-        authenticationTokenService.createRefreshToken(
-            newRefreshToken.getTokenId(), newRefreshToken.getUserId(), LocalDateTime.now());
-
-    return new ReissuedTokenResult(accessTokenResult, refreshTokenResult);
-  }
-
-  @NotNull
-  private RefreshToken reissueRefreshToken(RefreshToken refreshToken) {
+  private String reissueRefreshToken(RefreshToken refreshToken) {
     rememberMeRepository.removeRefreshToken(refreshToken.getTokenId());
     RefreshToken newRefreshToken = new RefreshToken(refreshToken.getUserId());
     rememberMeRepository.saveRefreshToken(newRefreshToken);
-    return newRefreshToken;
+
+    return authenticationTokenService.createRefreshToken(
+        newRefreshToken.getTokenId(), newRefreshToken.getUserId(), LocalDateTime.now());
   }
 
   @Override
@@ -67,11 +70,9 @@ public class TokenHandlingService implements MakeNewTokenUseCase {
 
   private void verifyTokenMatch(RefreshToken refreshToken) {
     RefreshToken refreshTokenFromRedis =
-        rememberMeQueryRepository
-            .getRefreshTokenById(refreshToken.getTokenId())
-            .orElseThrow(NotFoundRefreshTokenException::new);
+        rememberMeQueryRepository.getRefreshTokenById(refreshToken.getTokenId()).orElse(null);
 
-    if (!refreshTokenFromRedis.equals(refreshToken)) {
+    if (!refreshToken.equals(refreshTokenFromRedis)) {
       throw new FailedMakeNewAccessTokenException();
     }
   }

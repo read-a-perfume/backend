@@ -10,6 +10,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -89,6 +90,19 @@ public class GlobalExceptionHandler {
             .build();
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+  }
+
+  @ExceptionHandler(MissingRequestCookieException.class)
+  ResponseEntity<ErrorResponse> handleMissingRequestCookieException(
+      MissingRequestCookieException exception) {
+    ErrorResponse errorResponse =
+        ErrorResponse.builder()
+            .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .message(exception.getMessage())
+            .build();
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
   private void printLog(String logMessage, LogLevel logLevel) {
