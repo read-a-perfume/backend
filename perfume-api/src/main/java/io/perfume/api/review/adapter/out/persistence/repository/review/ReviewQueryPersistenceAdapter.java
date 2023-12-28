@@ -47,17 +47,33 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
   }
 
   @Override
-  public List<Review> findByPage(long page, long size) {
+  public CustomPage<Review> findByPage(final Pageable pageable) {
+    final List<Review> reviews = fetchReviews(pageable);
+    final Long totalReviewCount = countReviews();
+    final long totalReviews = totalReviewCount == null ? 0L : totalReviewCount;
+
+    return new CustomPage<>(new PageImpl<>(reviews, pageable, totalReviews));
+  }
+
+  private List<Review> fetchReviews(final Pageable pageable) {
     return jpaQueryFactory
         .selectFrom(reviewEntity)
         .where(reviewEntity.deletedAt.isNull())
         .orderBy(reviewEntity.id.desc())
-        .offset(page * size)
-        .limit(size)
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
         .fetch()
         .stream()
         .map(reviewMapper::toDomain)
         .toList();
+  }
+
+  private Long countReviews() {
+    return jpaQueryFactory
+        .select(reviewEntity.count())
+        .from(reviewEntity)
+        .where(reviewEntity.deletedAt.isNull())
+        .fetchOne();
   }
 
   @Override

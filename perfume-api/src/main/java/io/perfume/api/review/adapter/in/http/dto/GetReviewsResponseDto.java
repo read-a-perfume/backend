@@ -7,24 +7,20 @@ import java.util.List;
 public record GetReviewsResponseDto(
     Long id,
     String shortReview,
-    ReviewUser user,
+    ReviewUser author,
     List<String> keywords,
     List<String> thumbnails,
     long likeCount,
     long commentCount) {
 
-  public static List<GetReviewsResponseDto> from(List<ReviewDetailResult> results) {
-    return results.stream()
-        .map(
-            result ->
-                new GetReviewsResponseDto(
-                    result.id(),
-                    result.shortReview(),
-                    new ReviewUser(result.user().id(), result.user().name(), ""),
-                    result.tags(),
-                    Collections.emptyList(),
-                    result.likeCount(),
-                    result.commentCount()))
-        .toList();
+  public static GetReviewsResponseDto from(final ReviewDetailResult result) {
+    return new GetReviewsResponseDto(
+        result.id(),
+        result.shortReview(),
+        new ReviewUser(result.user().id(), result.user().name(), ""),
+        result.tags(),
+        Collections.emptyList(),
+        result.likeCount(),
+        result.commentCount());
   }
 }

@@ -63,11 +63,12 @@ public class ReviewDetailFacadeService
   private final FindFileUseCase findFileUseCase;
 
   @Override
-  public List<ReviewDetailResult> getPaginatedReviews(long page, long size) {
-    final List<ReviewResult> reviews =
-        reviewService.getPaginatedReviews(page, size).stream().toList();
+  public CustomPage<ReviewDetailResult> getPaginatedReviews(final int page, final int size) {
+    final CustomPage<ReviewResult> reviews =
+        reviewService.getPaginatedReviews(new GetPaginatedReviewsCommand(page, size));
+    final List<ReviewDetailResult> items = transformToReviewDetailResults(reviews.getContent());
 
-    return transformToReviewDetailResults(reviews);
+    return new CustomPage<>(items, reviews);
   }
 
   private List<ReviewDetailResult> transformToReviewDetailResults(final List<ReviewResult> items) {

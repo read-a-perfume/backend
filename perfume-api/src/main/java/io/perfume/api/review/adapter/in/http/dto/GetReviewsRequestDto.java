@@ -2,14 +2,14 @@ package io.perfume.api.review.adapter.in.http.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.Data;
 
-public record GetReviewsRequestDto(@Min(1) Long page, @Min(1) @Max(20) Long size) {
+@Data
+public class GetReviewsRequestDto {
+  @Min(1)
+  Integer page = 1;
 
-  public Long offset() {
-    return (page - 1) * size;
-  }
-
-  public Long limit() {
-    return size;
-  }
+  @Min(1)
+  @Max(20)
+  Integer size = 20;
 }
