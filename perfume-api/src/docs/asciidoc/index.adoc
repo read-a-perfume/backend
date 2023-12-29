@@ -448,6 +448,7 @@ include::{snippets}/files-upload/response-fields.adoc[]
 == 알림 구독
 === 요청
 include::{snippets}/connect-sse/http-request.adoc[]
+include::{snippets}/connect-sse/request-headers.adoc[]
 
 === 응답
 include::{snippets}/connect-sse/http-response.adoc[]
