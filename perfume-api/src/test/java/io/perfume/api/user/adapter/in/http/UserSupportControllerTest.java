@@ -8,10 +8,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -302,5 +299,33 @@ class UserSupportControllerTest {
         .perform(RestDocumentationRequestBuilders.get("/v1/user/{id}", 1))
         .andExpect(status().isNotFound())
         .andDo(document("get-user-failed"));
+  }
+
+  @Test
+  @DisplayName("유저가 작성한 리뷰를 조회할 수 있다.")
+  void testGetUserReviews() throws Exception {
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/users/{id}/reviews", 1))
+        .andExpect(status().isOk())
+        .andDo(
+            document(
+                "get-user-reviews",
+                pathParameters(parameterWithName("id").description("유저 ID")),
+                queryParameters(
+                    parameterWithName("page").description("페이지 번호").optional(),
+                    parameterWithName("size").description("페이지 사이즈").optional()),
+                responseFields(
+                    fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 여부"),
+                    fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫번째 페이지 여부"),
+                    fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+                    fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                    fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
+                    fieldWithPath("totalElements")
+                        .type(JsonFieldType.NUMBER)
+                        .description("전체 요소 수"),
+                    fieldWithPath("content")
+                        .type(JsonFieldType.ARRAY)
+                        .description("현재 페이지의 요소 수"))));
   }
 }
