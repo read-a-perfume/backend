@@ -51,7 +51,8 @@ public class ReviewDetailFacadeService
         GetReviewInViewUseCase,
         ReviewStatisticUseCase,
         GetReviewCountUseCase,
-        GetPerfumeReviewsUseCase {
+        GetPerfumeReviewsUseCase,
+        GetUserReviewsUseCase {
 
   private final ReviewService reviewService;
   private final ReviewLikeService reviewLikeService;
@@ -61,6 +62,17 @@ public class ReviewDetailFacadeService
   private final FindUserUseCase findUserUseCase;
   private final EventPublisher eventPublisher;
   private final FindFileUseCase findFileUseCase;
+
+  @Override
+  public CustomPage<ReviewDetailResult> getUserReviews(
+      final long userId, final int page, final int size) {
+    final CustomPage<ReviewResult> reviews =
+        reviewService.getPaginatedUserReviews(
+            userId, new GetPaginatedUserReviewsCommand(page, size));
+    final List<ReviewDetailResult> items = transformToReviewDetailResults(reviews.getContent());
+
+    return new CustomPage<>(items, reviews);
+  }
 
   @Override
   public CustomPage<ReviewDetailResult> getPaginatedReviews(final int page, final int size) {

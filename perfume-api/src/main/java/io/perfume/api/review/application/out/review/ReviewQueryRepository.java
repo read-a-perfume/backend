@@ -12,6 +12,8 @@ public interface ReviewQueryRepository {
 
   CustomPage<Review> findByPage(Pageable pageable);
 
+  CustomPage<Review> findByUserId(long userId, Pageable pageable);
+
   ReviewFeatureCount getReviewFeatureCount(long perfumeId);
 
   Long findReviewCountByUserId(Long userId);

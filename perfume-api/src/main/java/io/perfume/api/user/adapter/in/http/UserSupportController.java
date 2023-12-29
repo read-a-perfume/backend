@@ -1,6 +1,7 @@
 package io.perfume.api.user.adapter.in.http;
 
 import io.perfume.api.file.application.port.in.FindFileUseCase;
+import io.perfume.api.review.application.in.review.GetUserReviewsUseCase;
 import io.perfume.api.user.adapter.in.http.dto.*;
 import io.perfume.api.user.adapter.in.http.exception.UserNotAuthenticatedException;
 import io.perfume.api.user.application.port.in.*;
@@ -33,8 +34,8 @@ public class UserSupportController {
   private final SendResetPasswordMailUseCase resetPasswordUserCase;
   private final UpdateAccountUseCase updateAccountUseCase;
   private final UpdateProfilePicUseCase updateProfilePicUseCase;
-
   private final LeaveUserUseCase leaveUserUseCase;
+  private final GetUserReviewsUseCase getUserReviewsUseCase;
 
   /** TODO OAUTH 가입자의 경우 uesrname도 같이 넣는 흐름이 이상하다. */
   @GetMapping("/email/reset-password")
@@ -120,6 +121,13 @@ public class UserSupportController {
     checkAuthenticatedUser(user);
     long userId = parseUserId(user);
     updateProfilePicUseCase.update(userId, getFileContent(file), now);
+  }
+
+  @GetMapping("/users/{id}/reviews")
+  public ResponseEntity<Object> getUserReviews(
+      @PathVariable final long id, final GetUserReviewsRequestDto dto) {
+    return ResponseEntity.ok(
+        getUserReviewsUseCase.getUserReviews(id, dto.getPage(), dto.getSize()));
   }
 
   private long parseUserId(User user) {

@@ -15,6 +15,11 @@ public class StubReviewRepository implements ReviewRepository, ReviewQueryReposi
   private final List<Review> reviews = new ArrayList<>();
 
   @Override
+  public CustomPage<Review> findByUserId(long userId, Pageable pageable) {
+    return null;
+  }
+
+  @Override
   public Optional<Review> findById(Long id) {
     return reviews.stream().filter(review -> review.getId().equals(id)).findFirst();
   }

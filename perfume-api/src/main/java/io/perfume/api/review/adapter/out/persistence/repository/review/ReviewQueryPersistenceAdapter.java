@@ -32,6 +32,37 @@ public class ReviewQueryPersistenceAdapter implements ReviewQueryRepository {
   }
 
   @Override
+  public CustomPage<Review> findByUserId(long userId, Pageable pageable) {
+    final List<Review> results = fetchReviewsByUserId(userId, pageable);
+    final long total = countReviewsByUserId(userId);
+
+    return new CustomPage<>(new PageImpl<>(results, pageable, total));
+  }
+
+  private List<Review> fetchReviewsByUserId(long userId, Pageable pageable) {
+    return jpaQueryFactory
+        .selectFrom(reviewEntity)
+        .where(reviewEntity.userId.eq(userId), reviewEntity.deletedAt.isNull())
+        .orderBy(reviewEntity.id.desc())
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch()
+        .stream()
+        .map(reviewMapper::toDomain)
+        .toList();
+  }
+
+  private long countReviewsByUserId(long userId) {
+    return Objects.requireNonNullElseGet(
+        jpaQueryFactory
+            .select(reviewEntity.count())
+            .from(reviewEntity)
+            .where(reviewEntity.userId.eq(userId), reviewEntity.deletedAt.isNull())
+            .fetchOne(),
+        () -> 0L);
+  }
+
+  @Override
   public Optional<Review> findById(Long id) {
     var entity =
         jpaQueryFactory

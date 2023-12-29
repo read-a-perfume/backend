@@ -3,10 +3,7 @@ package io.perfume.api.review.application.service;
 import io.perfume.api.common.page.CustomPage;
 import io.perfume.api.review.application.exception.DeleteReviewPermissionDeniedException;
 import io.perfume.api.review.application.exception.NotFoundReviewException;
-import io.perfume.api.review.application.in.dto.CreateReviewCommand;
-import io.perfume.api.review.application.in.dto.GetPaginatedReviewsCommand;
-import io.perfume.api.review.application.in.dto.ReviewResult;
-import io.perfume.api.review.application.in.dto.ReviewStatisticResult;
+import io.perfume.api.review.application.in.dto.*;
 import io.perfume.api.review.application.out.comment.ReviewCommentQueryRepository;
 import io.perfume.api.review.application.out.like.ReviewLikeQueryRepository;
 import io.perfume.api.review.application.out.review.ReviewQueryRepository;
@@ -83,6 +80,18 @@ public class ReviewService {
   public CustomPage<ReviewResult> getPaginatedReviews(final GetPaginatedReviewsCommand command) {
     final Pageable pageable = Pageable.ofSize(command.limit()).withPage(command.offset());
     final CustomPage<Review> paginatedReviews = reviewQueryRepository.findByPage(pageable);
+    final List<ReviewResult> mappedReviews =
+        paginatedReviews.getContent().stream().map(ReviewResult::from).toList();
+
+    return new CustomPage<>(mappedReviews, paginatedReviews);
+  }
+
+  @Transactional(readOnly = true)
+  public CustomPage<ReviewResult> getPaginatedUserReviews(
+      final long userId, final GetPaginatedUserReviewsCommand command) {
+    final Pageable pageable = Pageable.ofSize(command.limit()).withPage(command.offset());
+    final CustomPage<Review> paginatedReviews =
+        reviewQueryRepository.findByUserId(userId, pageable);
     final List<ReviewResult> mappedReviews =
         paginatedReviews.getContent().stream().map(ReviewResult::from).toList();
 
