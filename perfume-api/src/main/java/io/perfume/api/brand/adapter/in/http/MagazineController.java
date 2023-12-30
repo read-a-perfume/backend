@@ -40,7 +40,7 @@ public class MagazineController {
             magazines.getPreviousCursor()));
   }
 
-  @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
+  @PreAuthorize("isAuthenticated()")
   @PostMapping
   public CreateMagazineResponseDto createMagazine(
       @AuthenticationPrincipal final User user,
