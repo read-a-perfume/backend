@@ -6,5 +6,6 @@ import io.perfume.api.notification.application.port.in.dto.GetNotificationResult
 
 public interface GetNotificationUseCase {
 
-    CursorPagination<GetNotificationResult> getNotifications(long userId, GetNotificationCommand command);
+  CursorPagination<GetNotificationResult> getNotifications(
+      long userId, GetNotificationCommand command);
 }

@@ -11,8 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.perfume.api.brand.domain.Brand;
-import io.perfume.api.brand.domain.Magazine;
 import io.perfume.api.notification.application.port.out.notification.NotificationRepository;
 import io.perfume.api.notification.domain.Notification;
 import io.perfume.api.notification.domain.NotificationType;
@@ -20,7 +18,6 @@ import io.perfume.api.user.application.port.out.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -144,59 +141,52 @@ class NotificationControllerTest {
     // given
     var now = LocalDateTime.now();
     final List<Notification> notifications =
-            IntStream.range(1, 15)
-                    .mapToObj(
-                            (index) ->
-                                    Notification.create(
-                                    "새로운 댓글이 달렸습니다.",
-                                    null,
-                                            (long) index,
-                                    NotificationType.REVIEW,
-                                    now)
-                    ).map(notificationRepository::save)
-                    .toList();
+        IntStream.range(1, 15)
+            .mapToObj(
+                (index) ->
+                    Notification.create(
+                        "새로운 댓글이 달렸습니다.", null, (long) index, NotificationType.REVIEW, now))
+            .map(notificationRepository::save)
+            .toList();
 
     final String cursor =
-            Base64.encodeBase64String(notifications.get(2).getCreatedAt().toString().getBytes());
+        Base64.encodeBase64String(notifications.get(2).getCreatedAt().toString().getBytes());
 
     // when & then
     mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get("/v1/notification")
-                            .queryParam("pageSize", "5")
-                            .queryParam("after", cursor)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andDo(
-                    document(
-                            "get-notifications",
-                            queryParameters(
-                                    parameterWithName("pageSize").optional().description("조회 데이터 개수"),
-                                    parameterWithName("after").optional().description("이후 데이터 조회 시 커서"),
-                                    parameterWithName("before").optional().description("이전 데이터 조회 시 커서")),
-                            responseFields(
-                                    fieldWithPath("items").type(JsonFieldType.ARRAY).description("이후 데이터 유무"),
-                                    fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("이후 데이터 유무"),
-                                    fieldWithPath("hasPrev").type(JsonFieldType.BOOLEAN).description("이전 데이터 유무"),
-                                    fieldWithPath("nextCursor")
-                                            .type(JsonFieldType.STRING)
-                                            .optional()
-                                            .description("이후 데이터 조회 커서"),
-                                    fieldWithPath("prevCursor")
-                                            .type(JsonFieldType.STRING)
-                                            .optional()
-                                            .description("이전 데이터 조회 커서"),
-                                    fieldWithPath("items[].id")
-                                            .type(JsonFieldType.NUMBER)
-                                            .description("알림 ID"),
-                                    fieldWithPath("items[].content")
-                                            .type(JsonFieldType.STRING)
-                                            .description("알림 메시지"),
-                                    fieldWithPath("items[].notificationType")
-                                            .type(JsonFieldType.STRING)
-                                            .description("알림 타입"))));
+        .perform(
+            MockMvcRequestBuilders.get("/v1/notification")
+                .queryParam("pageSize", "5")
+                .queryParam("after", cursor)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            document(
+                "get-notifications",
+                queryParameters(
+                    parameterWithName("pageSize").optional().description("조회 데이터 개수"),
+                    parameterWithName("after").optional().description("이후 데이터 조회 시 커서"),
+                    parameterWithName("before").optional().description("이전 데이터 조회 시 커서")),
+                responseFields(
+                    fieldWithPath("items").type(JsonFieldType.ARRAY).description("이후 데이터 유무"),
+                    fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("이후 데이터 유무"),
+                    fieldWithPath("hasPrev").type(JsonFieldType.BOOLEAN).description("이전 데이터 유무"),
+                    fieldWithPath("nextCursor")
+                        .type(JsonFieldType.STRING)
+                        .optional()
+                        .description("이후 데이터 조회 커서"),
+                    fieldWithPath("prevCursor")
+                        .type(JsonFieldType.STRING)
+                        .optional()
+                        .description("이전 데이터 조회 커서"),
+                    fieldWithPath("items[].id").type(JsonFieldType.NUMBER).description("알림 ID"),
+                    fieldWithPath("items[].content")
+                        .type(JsonFieldType.STRING)
+                        .description("알림 메시지"),
+                    fieldWithPath("items[].notificationType")
+                        .type(JsonFieldType.STRING)
+                        .description("알림 타입"))));
   }
-
 }

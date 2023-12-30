@@ -453,6 +453,14 @@ include::{snippets}/connect-sse/request-headers.adoc[]
 === 응답
 include::{snippets}/connect-sse/http-response.adoc[]
 
+== 알림 조회
+=== 요청
+include::{snippets}/get-notifications/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-notifications/http-response.adoc[]
+include::{snippets}/get-notifications/response-fields.adoc[]
+
 == 알림 확인
 === 요청
 include::{snippets}/read-notification/http-request.adoc[]
