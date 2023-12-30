@@ -1,10 +1,13 @@
 package io.perfume.api.notification.adapter.port.in;
 
+import dto.ui.CursorResponse;
 import io.perfume.api.notification.adapter.port.in.dto.DeleteNotificationResponseDto;
+import io.perfume.api.notification.adapter.port.in.dto.GetNotificationRequestDto;
+import io.perfume.api.notification.adapter.port.in.dto.GetNotificationResponseDto;
 import io.perfume.api.notification.application.facade.NotificationFacadeService;
 import io.perfume.api.notification.application.port.in.DeleteNotificationUseCase;
+import io.perfume.api.notification.application.port.in.GetNotificationUseCase;
 import io.perfume.api.notification.application.port.in.ReadNotificationUseCase;
-import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/v1/notification")
@@ -24,16 +29,35 @@ public class NotificationController {
 
   private final DeleteNotificationUseCase deleteNotificationUseCase;
 
+  private final GetNotificationUseCase getNotificationUseCase;
+
   public NotificationController(
-      NotificationFacadeService notificationService,
-      ReadNotificationUseCase readNotificationUseCase,
-      DeleteNotificationUseCase deleteNotificationUseCase) {
+          NotificationFacadeService notificationService,
+          ReadNotificationUseCase readNotificationUseCase,
+          DeleteNotificationUseCase deleteNotificationUseCase, GetNotificationUseCase getNotificationUseCase) {
     this.notificationService = notificationService;
     this.readNotificationUseCase = readNotificationUseCase;
     this.deleteNotificationUseCase = deleteNotificationUseCase;
+    this.getNotificationUseCase = getNotificationUseCase;
   }
 
-  // TODO : 알림 조회 pagination
+
+  @PreAuthorize("isAuthenticated()")
+  @GetMapping()
+  public ResponseEntity<CursorResponse<GetNotificationResponseDto>> getNotifications(
+          @AuthenticationPrincipal User user, GetNotificationRequestDto request) {
+    var userId = Long.parseLong(user.getUsername());
+    var notifications = getNotificationUseCase.getNotifications(userId, request.toCommand());
+    final var responseItems =
+            notifications.getItems().stream().map(GetNotificationResponseDto::from).toList();
+    return ResponseEntity.ok(
+            CursorResponse.of(
+                    responseItems,
+                    notifications.hasNext(),
+                    notifications.hasPrevious(),
+                    notifications.getNextCursor(),
+                    notifications.getPreviousCursor()));
+  }
 
   @PreAuthorize("isAuthenticated()")
   @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
