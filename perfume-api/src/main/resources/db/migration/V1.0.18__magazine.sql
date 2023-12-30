@@ -11,5 +11,5 @@ create table brand_magazine
     created_at         datetime not null,
     updated_at         datetime not null,
     deleted_at         datetime null,
-    constraint pk_notification primary key (id)
+    constraint pk_brand_magazine primary key (id)
 )
