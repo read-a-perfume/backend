@@ -8,6 +8,7 @@ import io.perfume.api.notification.application.facade.NotificationFacadeService;
 import io.perfume.api.notification.application.port.in.DeleteNotificationUseCase;
 import io.perfume.api.notification.application.port.in.GetNotificationUseCase;
 import io.perfume.api.notification.application.port.in.ReadNotificationUseCase;
+import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -63,7 +64,9 @@ public class NotificationController {
   public ResponseEntity<SseEmitter> subscriber(
       @AuthenticationPrincipal User user,
       @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "")
-          String lastEventId) {
+          String lastEventId,
+      HttpServletResponse response) {
+    response.addHeader("X-Accel-Buffering", "no");
     var userId = Long.parseLong(user.getUsername());
     var resEmitter = notificationService.subscribe(userId, lastEventId);
     return ResponseEntity.status(HttpStatus.OK).body(resEmitter);
