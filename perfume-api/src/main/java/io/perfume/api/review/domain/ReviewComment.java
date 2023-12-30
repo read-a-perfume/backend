@@ -49,10 +49,6 @@ public class ReviewComment extends BaseTimeDomain {
         .build();
   }
 
-  public void markDelete(final LocalDateTime now) {
-    this.markDelete(now);
-  }
-
   public boolean isOwned(final long userId) {
     return this.userId == userId;
   }
