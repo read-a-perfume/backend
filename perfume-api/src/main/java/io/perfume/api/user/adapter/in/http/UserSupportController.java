@@ -12,7 +12,6 @@ import io.perfume.api.user.application.port.in.dto.UpdateProfileCommand;
 import io.perfume.api.user.application.port.in.dto.UserProfileResult;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -120,7 +119,7 @@ public class UserSupportController {
     var now = LocalDateTime.now();
     checkAuthenticatedUser(user);
     long userId = parseUserId(user);
-    updateProfilePicUseCase.update(userId, getFileContent(file), now);
+    updateProfilePicUseCase.update(userId, file, now);
   }
 
   @GetMapping("/users/{id}/reviews")
@@ -132,14 +131,6 @@ public class UserSupportController {
 
   private long parseUserId(User user) {
     return Long.parseLong(user.getUsername());
-  }
-
-  private byte[] getFileContent(MultipartFile file) {
-    try {
-      return file.getBytes();
-    } catch (IOException e) {
-      return null;
-    }
   }
 
   private void checkAuthenticatedUser(User user) {

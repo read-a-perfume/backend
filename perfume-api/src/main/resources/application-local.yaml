@@ -69,3 +69,10 @@ encryption:
 flyway:
   enabled: false
   validate-on-migrate: false
+
+aws:
+  s3:
+    access-key: 'test'
+    private-key: 'test'
+    bucket: 'read-a-perfume'
+    cloudFrontPath: 'test'

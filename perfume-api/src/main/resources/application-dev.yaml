@@ -86,3 +86,10 @@ flyway:
   validate-on-migrate: true
   baseline-on-migrate: true
   baseline-version: 1
+
+aws:
+  s3:
+    access-key: ${ACCESS_KEY}
+    private-key: ${PRIVATE_KEY}
+    bucket: ${BUCKET_NAME}
+    cloudFrontPath: ${CLOUDFRONT_PATH}
