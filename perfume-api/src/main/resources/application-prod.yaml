@@ -48,3 +48,10 @@ flyway:
   validate-on-migrate: true
   baseline-on-migrate: true
   baseline-version: 1
+
+aws:
+  s3:
+    access-key: 'test'
+    private-key: 'test'
+    bucket: 'read-a-perfume'
+    cloudFrontPath: 'test'
