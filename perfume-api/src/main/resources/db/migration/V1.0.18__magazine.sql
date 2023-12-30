@@ -1,4 +1,4 @@
-create table magazine
+create table brand_magazine
 (
     id                 bigint auto_increment not null,
     title              VARCHAR(255),
