@@ -11,27 +11,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetNotificationService implements GetNotificationUseCase {
 
-    private final NotificationQueryRepository notificationQueryRepository;
+  private final NotificationQueryRepository notificationQueryRepository;
 
-    public GetNotificationService(NotificationQueryRepository notificationQueryRepository) {
-        this.notificationQueryRepository = notificationQueryRepository;
-    }
+  public GetNotificationService(NotificationQueryRepository notificationQueryRepository) {
+    this.notificationQueryRepository = notificationQueryRepository;
+  }
 
-    @Override
-    public CursorPagination<GetNotificationResult> getNotifications(long userId, GetNotificationCommand command) {
-        var pageable =
-                new CursorPageable(command.pageSize(), command.getDirection(), command.getCursor());
-        var notifications = notificationQueryRepository.findByreceiveUserId(pageable, userId);
-        var result =
-                notifications.getItems().stream()
-                        .map(
-                                item ->
-                                        new GetNotificationResult(
-                                                item.getId(),
-                                                item.getContent(),
-                                                item.getNotificationType().getType()))
-                        .toList();
+  @Override
+  public CursorPagination<GetNotificationResult> getNotifications(
+      long userId, GetNotificationCommand command) {
+    var pageable =
+        new CursorPageable(command.pageSize(), command.getDirection(), command.getCursor());
+    var notifications = notificationQueryRepository.findByreceiveUserId(pageable, userId);
+    var result =
+        notifications.getItems().stream()
+            .map(
+                item ->
+                    new GetNotificationResult(
+                        item.getId(), item.getContent(), item.getNotificationType().getType()))
+            .toList();
 
-        return CursorPagination.of(result, notifications);
-    }
+    return CursorPagination.of(result, notifications);
+  }
 }
