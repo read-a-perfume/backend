@@ -1,5 +1,6 @@
 package io.perfume.api.brand.adapter.in.http;
 
+import dto.repository.CursorPagination;
 import dto.ui.CursorResponse;
 import io.perfume.api.brand.adapter.in.http.dto.CreateMagazineRequestDto;
 import io.perfume.api.brand.adapter.in.http.dto.CreateMagazineResponseDto;
@@ -7,6 +8,7 @@ import io.perfume.api.brand.adapter.in.http.dto.GetMagazineRequestDto;
 import io.perfume.api.brand.adapter.in.http.dto.GetMagazinesResponseDto;
 import io.perfume.api.brand.application.port.in.CreateMagazineUseCase;
 import io.perfume.api.brand.application.port.in.GetMagazineUseCase;
+import io.perfume.api.brand.application.port.in.dto.GetMagazineResult;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,8 @@ public class MagazineController {
   @GetMapping
   public ResponseEntity<CursorResponse<GetMagazinesResponseDto>> getMagazines(
       @PathVariable("id") Long brandId, GetMagazineRequestDto request) {
-    final var magazines = getMagazineUseCase.getMagazines(request.toCommand(brandId));
+    CursorPagination<GetMagazineResult> magazines =
+        getMagazineUseCase.getMagazines(request.toCommand(brandId));
     final var responseItems =
         magazines.getItems().stream().map(GetMagazinesResponseDto::from).toList();
     return ResponseEntity.ok(
