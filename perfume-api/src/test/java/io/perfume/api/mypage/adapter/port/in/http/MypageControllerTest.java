@@ -94,7 +94,7 @@ class MypageControllerTest {
             .save(User.generalUserJoin("test", "test@mail.com", "test", false, false))
             .orElseThrow();
 
-    followUserUseCase.followAndUnFollow(2L, user.getId());
+    followUserUseCase.followAndUnFollow(100L, user.getId());
 
     // when & then
     mockMvc
