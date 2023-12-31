@@ -5,6 +5,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -14,7 +15,12 @@ import io.perfume.api.brand.application.port.out.BrandRepository;
 import io.perfume.api.brand.application.port.out.MagazineRepository;
 import io.perfume.api.brand.domain.Brand;
 import io.perfume.api.brand.domain.Magazine;
+import io.perfume.api.file.application.port.out.FileRepository;
+import io.perfume.api.file.domain.File;
+import io.perfume.api.user.adapter.out.persistence.user.Sex;
 import io.perfume.api.user.application.port.out.UserRepository;
+import io.perfume.api.user.domain.Role;
+import io.perfume.api.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -50,6 +56,8 @@ class MagazineControllerTest {
   @Autowired private BrandRepository brandRepository;
 
   @Autowired private MagazineRepository magazineRepository;
+
+  @Autowired private FileRepository fileRepository;
 
   @BeforeEach
   void setUp(
@@ -112,6 +120,24 @@ class MagazineControllerTest {
   void testGetMagazines() throws Exception {
     // given
     var now = LocalDateTime.now();
+    var userThum = File.createFile("user.png", 1L, now);
+    var file = fileRepository.save(userThum);
+
+    var user =
+        User.builder()
+            .email("test@test.com")
+            .username("test")
+            .password("test")
+            .thumbnailId(file.getId())
+            .role(Role.USER)
+            .sex(Sex.OTHER)
+            .createdAt(now)
+            .updatedAt(now)
+            .deletedAt(null)
+            .build();
+    var userResult = userRepository.save(user).orElseThrow();
+
+    var coverFile = fileRepository.save(File.createFile("cover.png", userResult.getId(), now));
     var brand =
         Brand.builder()
             .id(1L)
@@ -130,9 +156,9 @@ class MagazineControllerTest {
                         "test",
                         "test",
                         "test",
+                        coverFile.getId(),
                         1L,
-                        1L,
-                        1L,
+                        userResult.getId(),
                         brand.getId(),
                         now.plusSeconds(1000 * index)))
             .map(magazineRepository::save)
@@ -151,6 +177,7 @@ class MagazineControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
         .andDo(
             document(
                 "get-magazines",
@@ -175,9 +202,12 @@ class MagazineControllerTest {
                     fieldWithPath("items[].content")
                         .type(JsonFieldType.STRING)
                         .description("매거진 내용"),
-                    fieldWithPath("items[].coverThumbnailId")
-                        .type(JsonFieldType.NUMBER)
-                        .description("매거진 커버 썸네일 ID"),
+                    fieldWithPath("items[].coverThumbnail")
+                        .type(JsonFieldType.STRING)
+                        .description("매거진 커버 썸네일 URL"),
+                    fieldWithPath("items[].userThumbnail")
+                        .type(JsonFieldType.STRING)
+                        .description("유저 썸네일 URL"),
                     fieldWithPath("items[].tags")
                         .type(JsonFieldType.ARRAY)
                         .description("매거진 태그"))));
