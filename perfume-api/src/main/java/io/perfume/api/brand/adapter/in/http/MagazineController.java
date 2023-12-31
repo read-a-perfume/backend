@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/{id}/magazines")
+@RequestMapping("/v1/brand/{id}/magazines")
 public class MagazineController {
 
   private final CreateMagazineUseCase createMagazineUsecase;
 
   private final GetMagazineUseCase getMagazineUseCase;
 
-  @PreAuthorize("isAuthenticated()")
   @GetMapping
   public ResponseEntity<CursorResponse<GetMagazinesResponseDto>> getMagazines(
       @PathVariable("id") Long brandId, GetMagazineRequestDto request) {
