@@ -84,7 +84,7 @@ class MagazineControllerTest {
     // when & then
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/v1/{id}/magazines", brand.getId())
+            MockMvcRequestBuilders.post("/v1/brand/{id}/magazines", brand.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -109,7 +109,6 @@ class MagazineControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "1", roles = "ADMIN")
   void testGetMagazines() throws Exception {
     // given
     var now = LocalDateTime.now();
@@ -145,7 +144,7 @@ class MagazineControllerTest {
     // when & then
     mockMvc
         .perform(
-            MockMvcRequestBuilders.get("/v1/{id}/magazines", 1L)
+            MockMvcRequestBuilders.get("/v1/brand/{id}/magazines", 1L)
                 .queryParam("pageSize", "5")
                 .queryParam("after", cursor)
                 .accept(MediaType.APPLICATION_JSON)
