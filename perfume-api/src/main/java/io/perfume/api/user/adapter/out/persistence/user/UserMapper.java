@@ -35,6 +35,7 @@ public class UserMapper {
         .username(user.getUsername())
         .email(user.getEmail())
         .password(user.getPassword())
+        .thumbnailId(user.getThumbnailId())
         .role(user.getRole())
         .bio(user.getBio())
         .birthday(user.getBirthday())
