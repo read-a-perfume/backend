@@ -1,10 +1,10 @@
 package io.perfume.api.user.adapter.in.http;
 
-import io.perfume.api.user.adapter.in.http.dto.CreateUserTasteRequestDto;
-import io.perfume.api.user.adapter.in.http.dto.GetUserTasteResponseDto;
-import io.perfume.api.user.application.port.in.CreateUserTasteUseCase;
-import io.perfume.api.user.application.port.in.FindUserTasteUseCase;
+import io.perfume.api.user.adapter.in.http.dto.CreateUserTypeRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.UserTypeResponseDto;
+import io.perfume.api.user.application.port.in.UserTypeUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,38 +18,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/user/tastes")
-public class UserTasteController {
+@RequestMapping("/v1/user/types")
+@RequiredArgsConstructor
+public class UserTypeController {
 
-  private final FindUserTasteUseCase findUserTasteUseCase;
-
-  private final CreateUserTasteUseCase createUserTasteUseCase;
-
-  public UserTasteController(
-      FindUserTasteUseCase findUserTasteUseCase, CreateUserTasteUseCase createUserTasteUseCase) {
-    this.findUserTasteUseCase = findUserTasteUseCase;
-    this.createUserTasteUseCase = createUserTasteUseCase;
-  }
+  private final UserTypeUseCase userTypeUseCase;
 
   @GetMapping
   @PreAuthorize("isAuthenticated()")
-  public List<GetUserTasteResponseDto> getTastes() {
+  public List<UserTypeResponseDto> getTypes() {
     UserDetails authentication =
         (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    return findUserTasteUseCase.getUserTastes(Long.parseLong(authentication.getUsername())).stream()
-        .map(GetUserTasteResponseDto::from)
+    return userTypeUseCase.getUserTypes(Long.parseLong(authentication.getUsername())).stream()
+        .map(UserTypeResponseDto::from)
         .toList();
   }
 
   @PostMapping
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<Object> createTaste(@RequestBody CreateUserTasteRequestDto dto) {
+  public ResponseEntity<Object> createType(@RequestBody CreateUserTypeRequestDto dto) {
     UserDetails authentication =
         (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    createUserTasteUseCase.createUserTaste(
-        Long.parseLong(authentication.getUsername()), dto.noteId());
+    userTypeUseCase.createUserType(Long.parseLong(authentication.getUsername()), dto.noteId());
 
     return ResponseEntity.status(HttpStatus.CREATED)
         .contentType(MediaType.APPLICATION_JSON)

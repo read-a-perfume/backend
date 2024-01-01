@@ -211,11 +211,11 @@ include::{snippets}/get-category-by-id/response-fields.adoc[]
 
 == 유저 타입 조회
 === 요청
-include::{snippets}/get-user-tastes/http-request.adoc[]
+include::{snippets}/get-user-types/http-request.adoc[]
 
 === 응답
-include::{snippets}/get-user-tastes/http-response.adoc[]
-include::{snippets}/get-user-tastes/response-fields.adoc[]
+include::{snippets}/get-user-types/http-response.adoc[]
+include::{snippets}/get-user-types/response-fields.adoc[]
 
 == 향수 조회
 === 요청

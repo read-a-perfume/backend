@@ -17,7 +17,7 @@ public class StubFindUseCase implements FindCategoryUseCase {
   }
 
   @Override
-  public List<CategoryResult> findTasteByUserId(Long id) {
+  public List<CategoryResult> findTypeByUserId(Long id) {
     return null;
   }
 }
