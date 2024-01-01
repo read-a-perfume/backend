@@ -9,5 +9,5 @@ public interface FindCategoryUseCase {
 
   CategoryResult findCategoryById(Long id);
 
-  List<CategoryResult> findTasteByUserId(Long id);
+  List<CategoryResult> findTypeByUserId(Long id);
 }

@@ -72,6 +72,6 @@ public class MypageController {
   public ResponseEntity<List<CategoryResult>> getCategories(@AuthenticationPrincipal User user) {
     var userId = Long.parseLong(user.getUsername());
 
-    return ResponseEntity.status(HttpStatus.OK).body(findCategoryUseCase.findTasteByUserId(userId));
+    return ResponseEntity.status(HttpStatus.OK).body(findCategoryUseCase.findTypeByUserId(userId));
   }
 }

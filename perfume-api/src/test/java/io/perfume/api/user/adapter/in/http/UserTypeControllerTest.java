@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.note.application.port.out.CategoryRepository;
 import io.perfume.api.note.domain.Category;
 import io.perfume.api.note.domain.CategoryUser;
-import io.perfume.api.user.adapter.in.http.dto.CreateUserTasteRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.CreateUserTypeRequestDto;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @Transactional
 @SpringBootTest
-class UserTasteControllerTest {
+class UserTypeControllerTest {
 
   private MockMvc mockMvc;
 
@@ -60,7 +60,7 @@ class UserTasteControllerTest {
 
   @Test
   @WithMockUser(username = "1", roles = "USER")
-  void testGetTastes() throws Exception {
+  void testGetTypes() throws Exception {
     // given
     LocalDateTime now = LocalDateTime.now();
     Category category = categoryRepository.save(sampleCategory);
@@ -69,7 +69,7 @@ class UserTasteControllerTest {
     // when & then
     mockMvc
         .perform(
-            MockMvcRequestBuilders.get("/v1/user/tastes")
+            MockMvcRequestBuilders.get("/v1/user/types")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -80,7 +80,7 @@ class UserTasteControllerTest {
         .andExpect(jsonPath("[0].thumbnail").value(""))
         .andDo(
             document(
-                "get-user-tastes",
+                "get-user-types",
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
@@ -94,16 +94,16 @@ class UserTasteControllerTest {
 
   @Test
   @WithMockUser(username = "1", roles = "USER")
-  void testCreateUserTaste() throws Exception {
+  void testCreateUserType() throws Exception {
     // given
     LocalDateTime now = LocalDateTime.now();
     Category category = categoryRepository.save(sampleCategory);
-    CreateUserTasteRequestDto dto = new CreateUserTasteRequestDto(category.getId());
+    CreateUserTypeRequestDto dto = new CreateUserTypeRequestDto(category.getId());
 
     // when & then
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/v1/user/tastes")
+            MockMvcRequestBuilders.post("/v1/user/types")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
