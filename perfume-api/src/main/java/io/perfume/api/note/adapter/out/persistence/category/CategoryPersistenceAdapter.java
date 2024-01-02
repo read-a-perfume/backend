@@ -7,7 +7,6 @@ import io.perfume.api.note.adapter.out.persistence.categoryUser.CategoryUserMapp
 import io.perfume.api.note.application.port.out.CategoryRepository;
 import io.perfume.api.note.domain.Category;
 import io.perfume.api.note.domain.CategoryUser;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
