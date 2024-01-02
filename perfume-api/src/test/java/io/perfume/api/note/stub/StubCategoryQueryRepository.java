@@ -21,4 +21,9 @@ public class StubCategoryQueryRepository implements CategoryQueryRepository {
   public List<Category> findCategoryUserByUserId(Long id) {
     return null;
   }
+
+  @Override
+  public List<Category> findByIds(List<Long> longs) {
+    return null;
+  }
 }

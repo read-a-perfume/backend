@@ -11,4 +11,6 @@ public interface CategoryQueryRepository {
   Optional<Category> findById(Long id);
 
   List<Category> findCategoryUserByUserId(Long id);
+
+  List<Category> findByIds(List<Long> longs);
 }
