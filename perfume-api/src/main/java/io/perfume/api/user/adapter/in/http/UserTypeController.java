@@ -10,34 +10,28 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/user/types")
+@RequestMapping("/v1/user")
 @RequiredArgsConstructor
 public class UserTypeController {
 
   private final UserTypeUseCase userTypeUseCase;
 
-  @GetMapping
+  @GetMapping("/{id}/types")
   @PreAuthorize("isAuthenticated()")
-  public List<UserTypeResponseDto> getTypes() {
-    UserDetails authentication =
-        (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-    return userTypeUseCase.getUserTypes(Long.parseLong(authentication.getUsername())).stream()
-        .map(UserTypeResponseDto::from)
-        .toList();
+  public List<UserTypeResponseDto> getTypes(@PathVariable Long id) {
+    return userTypeUseCase.getUserTypes(id).stream().map(UserTypeResponseDto::from).toList();
   }
 
-  @PostMapping
+  @PostMapping("/types")
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Object> addUserTypes(
       @AuthenticationPrincipal User user, @RequestBody AddUserTypeRequestDto dto) {

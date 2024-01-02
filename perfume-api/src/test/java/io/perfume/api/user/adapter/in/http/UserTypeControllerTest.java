@@ -5,6 +5,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,6 +16,8 @@ import io.perfume.api.note.application.port.out.CategoryRepository;
 import io.perfume.api.note.domain.Category;
 import io.perfume.api.note.domain.CategoryUser;
 import io.perfume.api.user.adapter.in.http.dto.AddUserTypeRequestDto;
+import io.perfume.api.user.application.port.out.UserRepository;
+import io.perfume.api.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -41,6 +46,8 @@ class UserTypeControllerTest {
   private MockMvc mockMvc;
 
   @Autowired private CategoryRepository categoryRepository;
+
+  @Autowired private UserRepository userRepository;
 
   @Autowired private ObjectMapper objectMapper;
 
@@ -65,16 +72,20 @@ class UserTypeControllerTest {
 
   @Test
   @WithMockUser(username = "1", roles = "USER")
-  void testGetTypes() throws Exception {
+  void getTypes() throws Exception {
     // given
+    User user = User.generalUserJoin("user", "user@user.com", "useruser", false, false);
+    User savedUser = userRepository.save(user).get();
+
     Category category = categoryRepository.save(sampleCategories.get(0));
     categoryRepository.saveUserTypes(
-        1L, List.of(CategoryUser.create(1L, category, LocalDateTime.now())));
+        savedUser.getId(),
+        List.of(CategoryUser.create(savedUser.getId(), category, LocalDateTime.now())));
 
     // when & then
     mockMvc
         .perform(
-            MockMvcRequestBuilders.get("/v1/user/types")
+            RestDocumentationRequestBuilders.get("/v1/user/{id}/types", savedUser.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -86,6 +97,7 @@ class UserTypeControllerTest {
         .andDo(
             document(
                 "get-user-types",
+                pathParameters(parameterWithName("id").description("유저 ID(PK)")),
                 responseFields(
                     fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 ID"),
                     fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름"),
@@ -95,6 +107,24 @@ class UserTypeControllerTest {
                     fieldWithPath("[].thumbnail")
                         .type(JsonFieldType.STRING)
                         .description("카테고리 이미지"))));
+  }
+
+  @Test
+  @WithMockUser(username = "1", roles = "USER")
+  void getTypesFail() throws Exception {
+    // given
+    Category category = categoryRepository.save(sampleCategories.get(0));
+    categoryRepository.saveUserTypes(
+        1L, List.of(CategoryUser.create(1L, category, LocalDateTime.now())));
+
+    // when & then
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/v1/user/{id}/types", 100)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound())
+        .andDo(document("get-user-types-failed"));
   }
 
   @Test

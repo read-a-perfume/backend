@@ -4,6 +4,8 @@ import io.perfume.api.note.application.port.in.FindCategoryUseCase;
 import io.perfume.api.note.application.port.in.SaveUserTypeUseCase;
 import io.perfume.api.note.application.port.in.dto.AddMyTypeCommand;
 import io.perfume.api.user.application.exception.AddMyTypeException;
+import io.perfume.api.user.application.exception.UserNotFoundException;
+import io.perfume.api.user.application.port.in.FindUserUseCase;
 import io.perfume.api.user.application.port.in.UserTypeUseCase;
 import io.perfume.api.user.application.port.in.dto.UserTypeResult;
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ public class UserTypeService implements UserTypeUseCase {
 
   private final FindCategoryUseCase findCategoryUseCase;
   private final SaveUserTypeUseCase saveUserTypeUseCase;
+  private final FindUserUseCase findUserUseCase;
 
   @Override
   public void addUserTypes(Long userId, List<Long> categoryIds) {
@@ -32,6 +35,9 @@ public class UserTypeService implements UserTypeUseCase {
 
   @Override
   public List<UserTypeResult> getUserTypes(Long userId) {
+    if (findUserUseCase.findUserById(userId).isEmpty()) {
+      throw new UserNotFoundException(userId);
+    }
     return findCategoryUseCase.findTypeByUserId(userId).stream().map(UserTypeResult::from).toList();
   }
 }
