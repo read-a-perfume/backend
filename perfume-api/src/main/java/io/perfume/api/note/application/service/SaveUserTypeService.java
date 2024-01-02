@@ -33,6 +33,7 @@ public class SaveUserTypeService implements SaveUserTypeUseCase {
     if (categories.size() != command.categoryIds().size()) {
       throw new CategoryNotFoundException();
     }
+    categoryRepository.deleteUserTypes(command.userId());
 
     List<CategoryUser> categoryUsers =
         categories.stream()
