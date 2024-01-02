@@ -3,7 +3,7 @@ package io.perfume.api.note.application.port.in;
 import io.perfume.api.note.application.port.in.dto.AddMyTypeCommand;
 import java.time.LocalDateTime;
 
-public interface CreateUserTypeUseCase {
+public interface SaveUserTypeUseCase {
 
-  void create(AddMyTypeCommand command, LocalDateTime now);
+  void save(AddMyTypeCommand command, LocalDateTime now);
 }

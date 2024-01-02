@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.note.application.port.out.CategoryRepository;
 import io.perfume.api.note.domain.Category;
 import io.perfume.api.note.domain.CategoryUser;
-import io.perfume.api.user.adapter.in.http.dto.CreateUserTypeRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.AddUserTypeRequestDto;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,10 +99,10 @@ class UserTypeControllerTest {
 
   @Test
   @WithMockUser(username = "1", roles = "USER")
-  void testCreateUserType() throws Exception {
+  void addUserType() throws Exception {
     // given
     Category category = categoryRepository.save(sampleCategories.get(0));
-    CreateUserTypeRequestDto dto = new CreateUserTypeRequestDto(List.of(category.getId()));
+    AddUserTypeRequestDto dto = new AddUserTypeRequestDto(List.of(category.getId()));
 
     // when & then
     mockMvc
@@ -113,20 +113,21 @@ class UserTypeControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andDo(document(
-            "add-user-types",
-            requestFields(
-                fieldWithPath("categoryIds").type(JsonFieldType.ARRAY).description("카테고리 아이디 목록")
-            )
-        ));
+        .andDo(
+            document(
+                "add-user-types",
+                requestFields(
+                    fieldWithPath("categoryIds")
+                        .type(JsonFieldType.ARRAY)
+                        .description("카테고리 아이디 목록"))));
   }
 
   @Test
   @WithMockUser(username = "1", roles = "USER")
-  void testCreateUserTypeFail() throws Exception {
+  void addUserTypeFailByBadRequest() throws Exception {
     // given
     Category category = categoryRepository.save(sampleCategories.get(0));
-    CreateUserTypeRequestDto dto = new CreateUserTypeRequestDto(List.of(1L, 2L, 3L, category.getId()));
+    AddUserTypeRequestDto dto = new AddUserTypeRequestDto(List.of(1L, 2L, 3L, category.getId()));
 
     // when & then
     mockMvc
@@ -137,16 +138,14 @@ class UserTypeControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andDo(document(
-            "add-user-types-failed-bad-request"
-        ));
+        .andDo(document("add-user-types-failed-bad-request"));
   }
 
   @Test
   @WithMockUser(username = "1", roles = "USER")
-  void testCreateUserTypeFail2() throws Exception {
+  void addUserTypeFailByCategoryNotFound() throws Exception {
     // given
-    CreateUserTypeRequestDto dto = new CreateUserTypeRequestDto(List.of(1L));
+    AddUserTypeRequestDto dto = new AddUserTypeRequestDto(List.of(1L));
 
     // when & then
     mockMvc
@@ -157,8 +156,6 @@ class UserTypeControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andDo(document(
-            "add-user-types-failed-not-found"
-        ));
+        .andDo(document("add-user-types-failed-not-found"));
   }
 }

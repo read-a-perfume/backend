@@ -1,7 +1,7 @@
 package io.perfume.api.note.application.service;
 
 import io.perfume.api.note.application.exception.CategoryNotFoundException;
-import io.perfume.api.note.application.port.in.CreateUserTypeUseCase;
+import io.perfume.api.note.application.port.in.SaveUserTypeUseCase;
 import io.perfume.api.note.application.port.in.dto.AddMyTypeCommand;
 import io.perfume.api.note.application.port.out.CategoryQueryRepository;
 import io.perfume.api.note.application.port.out.CategoryRepository;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CreateUserTypeService implements CreateUserTypeUseCase {
+public class SaveUserTypeService implements SaveUserTypeUseCase {
 
   private final CategoryRepository categoryRepository;
 
@@ -23,7 +23,7 @@ public class CreateUserTypeService implements CreateUserTypeUseCase {
 
   @Override
   @Transactional
-  public void create(AddMyTypeCommand command, LocalDateTime now) {
+  public void save(AddMyTypeCommand command, LocalDateTime now) {
     if (command.categoryIds().isEmpty()) {
       categoryRepository.deleteUserTypes(command.userId());
       return;

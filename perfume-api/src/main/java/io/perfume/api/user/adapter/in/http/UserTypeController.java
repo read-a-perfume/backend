@@ -1,6 +1,6 @@
 package io.perfume.api.user.adapter.in.http;
 
-import io.perfume.api.user.adapter.in.http.dto.CreateUserTypeRequestDto;
+import io.perfume.api.user.adapter.in.http.dto.AddUserTypeRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.UserTypeResponseDto;
 import io.perfume.api.user.application.port.in.UserTypeUseCase;
 import java.util.List;
@@ -39,11 +39,10 @@ public class UserTypeController {
 
   @PostMapping
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<Object> addUserTypes(@AuthenticationPrincipal User user, @RequestBody CreateUserTypeRequestDto dto) {
+  public ResponseEntity<Object> addUserTypes(
+      @AuthenticationPrincipal User user, @RequestBody AddUserTypeRequestDto dto) {
     userTypeUseCase.addUserTypes(Long.parseLong(user.getUsername()), dto.categoryIds());
 
-    return ResponseEntity.status(HttpStatus.OK)
-        .contentType(MediaType.APPLICATION_JSON)
-        .build();
+    return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).build();
   }
 }
