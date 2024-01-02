@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,13 +39,10 @@ public class UserTypeController {
 
   @PostMapping
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<Object> createType(@RequestBody CreateUserTypeRequestDto dto) {
-    UserDetails authentication =
-        (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  public ResponseEntity<Object> addUserTypes(@AuthenticationPrincipal User user, @RequestBody CreateUserTypeRequestDto dto) {
+    userTypeUseCase.addUserTypes(Long.parseLong(user.getUsername()), dto.categoryIds());
 
-    userTypeUseCase.createUserType(Long.parseLong(authentication.getUsername()), dto.noteId());
-
-    return ResponseEntity.status(HttpStatus.CREATED)
+    return ResponseEntity.status(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
         .build();
   }

@@ -3,6 +3,7 @@ package io.perfume.api.user.adapter.in.http;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -14,6 +15,7 @@ import io.perfume.api.note.domain.Category;
 import io.perfume.api.note.domain.CategoryUser;
 import io.perfume.api.user.adapter.in.http.dto.CreateUserTypeRequestDto;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,8 +47,11 @@ class UserTypeControllerTest {
   private static final String categoryName = "프루티";
   private static final String categoryDesc = "달콤한 과일의 향이 지속되어 생동감과 매력적인 느낌을 줍니다.";
   private static final String categoryTags = "#달달한 #과즙미";
-  private static final Category sampleCategory =
-      Category.create(categoryName, categoryDesc, categoryTags, 1L, LocalDateTime.now());
+  private static final List<Category> sampleCategories =
+      List.of(
+          Category.create(categoryName, categoryDesc, categoryTags, 1L, LocalDateTime.now()),
+          Category.create(
+              categoryName + 1, categoryDesc + 1, categoryTags + 1, 2L, LocalDateTime.now()));
 
   @BeforeEach
   void setUp(
@@ -62,9 +67,9 @@ class UserTypeControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testGetTypes() throws Exception {
     // given
-    LocalDateTime now = LocalDateTime.now();
-    Category category = categoryRepository.save(sampleCategory);
-    categoryRepository.save(CategoryUser.create(1L, category, LocalDateTime.now()));
+    Category category = categoryRepository.save(sampleCategories.get(0));
+    categoryRepository.saveUserTypes(
+        1L, List.of(CategoryUser.create(1L, category, LocalDateTime.now())));
 
     // when & then
     mockMvc
@@ -96,9 +101,8 @@ class UserTypeControllerTest {
   @WithMockUser(username = "1", roles = "USER")
   void testCreateUserType() throws Exception {
     // given
-    LocalDateTime now = LocalDateTime.now();
-    Category category = categoryRepository.save(sampleCategory);
-    CreateUserTypeRequestDto dto = new CreateUserTypeRequestDto(category.getId());
+    Category category = categoryRepository.save(sampleCategories.get(0));
+    CreateUserTypeRequestDto dto = new CreateUserTypeRequestDto(List.of(category.getId()));
 
     // when & then
     mockMvc
@@ -107,7 +111,54 @@ class UserTypeControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
-        .andExpect(status().isCreated())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(document(
+            "add-user-types",
+            requestFields(
+                fieldWithPath("categoryIds").type(JsonFieldType.ARRAY).description("카테고리 아이디 목록")
+            )
+        ));
+  }
+
+  @Test
+  @WithMockUser(username = "1", roles = "USER")
+  void testCreateUserTypeFail() throws Exception {
+    // given
+    Category category = categoryRepository.save(sampleCategories.get(0));
+    CreateUserTypeRequestDto dto = new CreateUserTypeRequestDto(List.of(1L, 2L, 3L, category.getId()));
+
+    // when & then
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/v1/user/types")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(document(
+            "add-user-types-failed-bad-request"
+        ));
+  }
+
+  @Test
+  @WithMockUser(username = "1", roles = "USER")
+  void testCreateUserTypeFail2() throws Exception {
+    // given
+    CreateUserTypeRequestDto dto = new CreateUserTypeRequestDto(List.of(1L));
+
+    // when & then
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/v1/user/types")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isNotFound())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(document(
+            "add-user-types-failed-not-found"
+        ));
   }
 }

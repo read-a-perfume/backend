@@ -1,5 +1,7 @@
 package io.perfume.api.note.adapter.out.persistence.category;
 
+import static io.perfume.api.note.adapter.out.persistence.category.QCategoryJpaEntity.categoryJpaEntity;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.note.adapter.out.persistence.categoryUser.QCategoryUserJpaEntity;
@@ -25,8 +27,8 @@ public class CategoryQueryPersistenceAdapter implements CategoryQueryRepository 
   @Override
   public List<Category> find() {
     return jpaQueryFactory
-        .selectFrom(QCategoryJpaEntity.categoryJpaEntity)
-        .where(QCategoryJpaEntity.categoryJpaEntity.deletedAt.isNull())
+        .selectFrom(categoryJpaEntity)
+        .where(categoryJpaEntity.deletedAt.isNull())
         .fetch()
         .stream()
         .map(categoryMapper::toDomain)
@@ -37,12 +39,8 @@ public class CategoryQueryPersistenceAdapter implements CategoryQueryRepository 
   public Optional<Category> findById(Long id) {
     var category =
         jpaQueryFactory
-            .selectFrom(QCategoryJpaEntity.categoryJpaEntity)
-            .where(
-                QCategoryJpaEntity.categoryJpaEntity
-                    .id
-                    .eq(id)
-                    .and(QCategoryJpaEntity.categoryJpaEntity.deletedAt.isNull()))
+            .selectFrom(categoryJpaEntity)
+            .where(categoryJpaEntity.id.eq(id).and(categoryJpaEntity.deletedAt.isNull()))
             .fetchOne();
 
     if (Objects.isNull(category)) {
@@ -55,19 +53,30 @@ public class CategoryQueryPersistenceAdapter implements CategoryQueryRepository 
   @Override
   public List<Category> findCategoryUserByUserId(Long id) {
     return jpaQueryFactory
-        .select(QCategoryJpaEntity.categoryJpaEntity)
+        .select(categoryJpaEntity)
         .from(QCategoryUserJpaEntity.categoryUserJpaEntity)
-        .innerJoin(QCategoryJpaEntity.categoryJpaEntity)
+        .innerJoin(categoryJpaEntity)
         .on(
-            QCategoryJpaEntity.categoryJpaEntity
+            categoryJpaEntity
                 .id
                 .eq(QCategoryUserJpaEntity.categoryUserJpaEntity.category.id)
-                .and(QCategoryJpaEntity.categoryJpaEntity.deletedAt.isNull()))
+                .and(categoryJpaEntity.deletedAt.isNull()))
         .where(
             QCategoryUserJpaEntity.categoryUserJpaEntity
                 .userId
                 .eq(id)
                 .and(QCategoryUserJpaEntity.categoryUserJpaEntity.deletedAt.isNull()))
+        .fetch()
+        .stream()
+        .map(categoryMapper::toDomain)
+        .toList();
+  }
+
+  @Override
+  public List<Category> findByIds(List<Long> ids) {
+    return jpaQueryFactory
+        .selectFrom(categoryJpaEntity)
+        .where(categoryJpaEntity.deletedAt.isNull(), categoryJpaEntity.id.in(ids))
         .fetch()
         .stream()
         .map(categoryMapper::toDomain)

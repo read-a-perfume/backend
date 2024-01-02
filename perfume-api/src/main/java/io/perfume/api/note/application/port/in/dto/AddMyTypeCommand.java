@@ -1,3 +1,5 @@
 package io.perfume.api.note.application.port.in.dto;
 
-public record AddMyTypeCommand(Long userId, Long categoryId) {}
+import java.util.List;
+
+public record AddMyTypeCommand(Long userId, List<Long> categoryIds) {}

@@ -5,11 +5,7 @@ import io.perfume.api.base.LogLevel;
 import org.springframework.http.HttpStatus;
 
 public class CategoryNotFoundException extends CustomHttpException {
-  public CategoryNotFoundException(Long id) {
-    super(
-        HttpStatus.NOT_FOUND,
-        "id (" + id + ")에 해당하는 카테고리를 찾을 수 없습니다.",
-        "id (" + id + ")에 해당하는 카테고리를 찾을 수 없습니다.",
-        LogLevel.INFO);
+  public CategoryNotFoundException() {
+    super(HttpStatus.NOT_FOUND, "요청한 카테고리를 찾을 수 없습니다.", "요청한 카테고리를 찾을 수 없습니다.", LogLevel.INFO);
   }
 }

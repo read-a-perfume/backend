@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface UserTypeUseCase {
 
-  void createUserType(Long userId, Long noteId);
+  void addUserTypes(Long userId, List<Long> categoryIds);
 
   List<UserTypeResult> getUserTypes(Long userId);
 }
