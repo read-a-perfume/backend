@@ -4,8 +4,8 @@ import static io.perfume.api.note.adapter.out.persistence.note.QNoteJpaEntity.no
 import static io.perfume.api.perfume.adapter.out.persistence.perfumeNote.QPerfumeNoteEntity.perfumeNoteEntity;
 
 import com.querydsl.core.Tuple;
-import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeImageEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
+import io.perfume.api.perfume.adapter.out.persistence.perfumeImage.PerfumeImageEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
 import io.perfume.api.perfume.domain.NotePyramid;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PerfumeMapper {
-  public Perfume toPerfume(PerfumeJpaEntity perfumeJpaEntity) {
+  public Perfume toPerfumeWithImages(PerfumeJpaEntity perfumeJpaEntity, List<Long> imageIds) {
     return Perfume.builder()
         .id(perfumeJpaEntity.getId())
         .name(perfumeJpaEntity.getName())
@@ -31,6 +31,7 @@ public class PerfumeMapper {
         .brandId(perfumeJpaEntity.getBrandId())
         .categoryId(perfumeJpaEntity.getCategoryId())
         .thumbnailId(perfumeJpaEntity.getThumbnailId())
+        .imageIds(imageIds)
         .deletedAt(perfumeJpaEntity.getDeletedAt())
         .updatedAt(perfumeJpaEntity.getUpdatedAt())
         .createdAt(perfumeJpaEntity.getCreatedAt())

@@ -16,6 +16,7 @@ import io.perfume.api.note.adapter.out.persistence.note.NoteJpaEntity;
 import io.perfume.api.note.adapter.out.persistence.note.NoteJpaRepository;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeFavorite.PerfumeFavoriteJpaEntity;
+import io.perfume.api.perfume.adapter.out.persistence.perfumeImage.PerfumeImageEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
 import io.perfume.api.perfume.application.port.in.dto.PerfumeNameResult;
@@ -65,10 +66,15 @@ class PerfumeQueryPersistenceAdapterTest {
             .brandId(1L)
             .categoryId(1L)
             .thumbnailId(1L)
+            .imageIds(List.of(2L, 3L))
             .build();
 
     PerfumeJpaEntity perfumeJpaEntity =
         perfumeJpaRepository.save(perfumeMapper.toPerfumeJpaEntity(perfume));
+    PerfumeImageEntity perfumeImageEntity1 = new PerfumeImageEntity(perfumeJpaEntity.getId(), 2L);
+    PerfumeImageEntity perfumeImageEntity2 = new PerfumeImageEntity(perfumeJpaEntity.getId(), 3L);
+    entityManager.persist(perfumeImageEntity1);
+    entityManager.persist(perfumeImageEntity2);
     entityManager.flush();
     entityManager.clear();
 
@@ -82,6 +88,7 @@ class PerfumeQueryPersistenceAdapterTest {
     assertEquals(perfume.getStory(), resultPerfume.getStory());
     assertEquals(perfume.getConcentration(), resultPerfume.getConcentration());
     assertEquals(perfume.getPerfumeShopUrl(), resultPerfume.getPerfumeShopUrl());
+    assertEquals(perfume.getImageIds(), List.of(2L, 3L));
     assertNotNull(resultPerfume.getCreatedAt());
     assertNotNull(resultPerfume.getUpdatedAt());
     assertNull(resultPerfume.getDeletedAt());
