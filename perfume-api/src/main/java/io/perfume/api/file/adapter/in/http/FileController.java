@@ -16,13 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping
-@PreAuthorize("isAuthenticated()")
 @RequiredArgsConstructor
 public class FileController {
 
   private final UploadFileService uploadFileService;
 
   @PostMapping("/v1/file")
+  @PreAuthorize("isAuthenticated()")
   public UpdateFileResponseDto saveFile(
       @AuthenticationPrincipal final User user, final MultipartFile file) {
     final LocalDateTime uploadTime = LocalDateTime.now();
