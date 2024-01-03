@@ -4,6 +4,7 @@ import static io.perfume.api.note.adapter.out.persistence.note.QNoteJpaEntity.no
 import static io.perfume.api.perfume.adapter.out.persistence.perfumeNote.QPerfumeNoteEntity.perfumeNoteEntity;
 
 import com.querydsl.core.Tuple;
+import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeImageEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.PerfumeJpaEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.NoteLevel;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
@@ -146,5 +147,9 @@ public class PerfumeMapper {
             .noteId(noteId)
             .noteLevel(noteLevel)
             .build();
+  }
+
+  public List<PerfumeImageEntity> toPerfumeImageEntities(Long id, List<Long> imageIds) {
+    return imageIds.stream().map(imageId -> new PerfumeImageEntity(id, imageId)).toList();
   }
 }

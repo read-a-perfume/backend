@@ -49,7 +49,8 @@ public class FindPerfumeService implements FindPerfumeUseCase {
       thumbnail = fileById.get().getUrl();
     }
 
-    return PerfumeResult.from(perfume, categoryResult, brandResult, thumbnail, notePyramid);
+    return PerfumeResult.from(
+        perfume, categoryResult, brandResult, List.of(thumbnail), notePyramid);
   }
 
   @Override

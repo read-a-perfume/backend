@@ -5,6 +5,7 @@ import io.perfume.api.note.application.port.in.dto.CategoryResult;
 import io.perfume.api.perfume.domain.Concentration;
 import io.perfume.api.perfume.domain.NotePyramid;
 import io.perfume.api.perfume.domain.Perfume;
+import java.util.List;
 import lombok.Builder;
 
 @Builder
@@ -16,14 +17,14 @@ public record PerfumeResult(
     String brandName,
     String categoryName,
     String categoryTags,
-    String thumbnail,
+    List<String> thumbnails,
     NotePyramidResult notePyramidResult) {
 
   public static PerfumeResult from(
       Perfume perfume,
       CategoryResult categoryResult,
       BrandForPerfumeResult brandResult,
-      String thumbnail,
+      List<String> thumbnails,
       NotePyramid notePyramid) {
     return PerfumeResult.builder()
         .name(perfume.getName())
@@ -33,7 +34,7 @@ public record PerfumeResult(
         .brandName(brandResult.name())
         .categoryName(categoryResult.name())
         .categoryTags(categoryResult.tags())
-        .thumbnail(thumbnail)
+        .thumbnails(thumbnails)
         .notePyramidResult(NotePyramidResult.from(notePyramid))
         .build();
   }

@@ -14,7 +14,7 @@ public record PerfumeResponseDto(
     String brandName,
     String categoryName,
     String categoryTags,
-    String thumbnail,
+    List<String> thumbnails,
     List<NoteResponseDto> topNotes,
     List<NoteResponseDto> middleNotes,
     List<NoteResponseDto> baseNotes) {
@@ -29,7 +29,7 @@ public record PerfumeResponseDto(
         .categoryName(perfumeResult.categoryName())
         .categoryTags(perfumeResult.categoryTags())
         .brandName(perfumeResult.brandName())
-        .thumbnail(perfumeResult.thumbnail())
+        .thumbnails(perfumeResult.thumbnails())
         .topNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().topNotes()))
         .middleNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().middleNotes()))
         .baseNotes(NoteResponseDto.of(perfumeResult.notePyramidResult().baseNotes()))
