@@ -15,6 +15,7 @@ import io.perfume.api.review.adapter.in.http.dto.GetReviewOptionItemResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.GetReviewsResponseDto;
 import io.perfume.api.review.adapter.in.http.dto.ReviewLikeResponseDto;
+import io.perfume.api.review.adapter.in.http.dto.TagResponseDto;
 import io.perfume.api.review.application.facade.ReviewDetailFacadeService;
 import io.perfume.api.review.application.in.comment.CreateReviewCommentUseCase;
 import io.perfume.api.review.application.in.comment.DeleteReviewCommentUseCase;
@@ -23,7 +24,9 @@ import io.perfume.api.review.application.in.like.ReviewLikeUseCase;
 import io.perfume.api.review.application.in.review.CreateReviewUseCase;
 import io.perfume.api.review.application.in.review.DeleteReviewUseCase;
 import io.perfume.api.review.application.in.review.GetReviewInViewUseCase;
+import io.perfume.api.review.application.in.tag.GetTagUseCase;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ReviewController {
 
+  private final GetTagUseCase getTagUseCase;
   private final CreateReviewUseCase createReviewUseCase;
   private final DeleteReviewUseCase deleteReviewUseCase;
   private final ReviewDetailFacadeService reviewDetailFacadeService;
@@ -68,6 +72,11 @@ public class ReviewController {
         results.getContent().stream().map(GetReviewsResponseDto::from).toList();
 
     return ResponseEntity.ok(new CustomPage<>(responseItems, results));
+  }
+
+  @GetMapping("/tags")
+  public List<TagResponseDto> getAllTags() {
+    return getTagUseCase.getAll().stream().map(TagResponseDto::from).toList();
   }
 
   @PreAuthorize("isAuthenticated()")

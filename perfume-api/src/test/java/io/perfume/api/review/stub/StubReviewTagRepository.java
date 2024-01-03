@@ -1,22 +1,17 @@
 package io.perfume.api.review.stub;
 
-import io.perfume.api.review.application.out.tag.TagQueryRepository;
-import io.perfume.api.review.application.out.tag.TagRepository;
+import io.perfume.api.review.application.out.tag.ReviewTagQueryRepository;
+import io.perfume.api.review.application.out.tag.ReviewTagRepository;
 import io.perfume.api.review.domain.ReviewTag;
 import io.perfume.api.review.domain.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StubTagRepository implements TagRepository, TagQueryRepository {
+public class StubReviewTagRepository implements ReviewTagRepository, ReviewTagQueryRepository {
 
   private final List<Tag> tags = new ArrayList<>();
 
   private final List<ReviewTag> reviewTags = new ArrayList<>();
-
-  @Override
-  public List<Tag> findByIds(List<Long> ids) {
-    return tags;
-  }
 
   @Override
   public List<ReviewTag> findReviewTags(Long reviewId) {

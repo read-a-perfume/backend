@@ -2,7 +2,7 @@ package io.perfume.api.review.application.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import io.perfume.api.review.adapter.out.persistence.repository.tag.ReviewTagEntity;
+import io.perfume.api.review.adapter.out.persistence.repository.reviewtag.ReviewTagEntity;
 import io.perfume.api.review.adapter.out.persistence.repository.tag.TagEntity;
 import io.perfume.api.review.application.in.dto.ReviewTagResult;
 import jakarta.persistence.EntityManager;
