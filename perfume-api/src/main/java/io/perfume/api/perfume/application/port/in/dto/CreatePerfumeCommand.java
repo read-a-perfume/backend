@@ -10,6 +10,7 @@ public record CreatePerfumeCommand(
     Long brandId,
     Long categoryId,
     Long thumbnailId,
+    List<Long> imageIds,
     String perfumeShopUrl,
     List<Long> topNoteIds,
     List<Long> middleNoteIds,

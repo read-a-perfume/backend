@@ -2,6 +2,7 @@ package io.perfume.api.perfume.domain;
 
 import io.perfume.api.base.BaseTimeDomain;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class Perfume extends BaseTimeDomain {
   private Long brandId;
   private Long categoryId;
   private Long thumbnailId;
+  private List<Long> imageIds;
   private NotePyramidIds notePyramidIds;
 
   @Builder
@@ -27,6 +29,7 @@ public class Perfume extends BaseTimeDomain {
       String perfumeShopUrl,
       Long brandId,
       Long thumbnailId,
+      List<Long> imageIds,
       NotePyramidIds notePyramidIds,
       Long categoryId,
       LocalDateTime createdAt,
@@ -41,6 +44,7 @@ public class Perfume extends BaseTimeDomain {
     this.brandId = brandId;
     this.categoryId = categoryId;
     this.thumbnailId = thumbnailId;
+    this.imageIds = imageIds;
     this.notePyramidIds = notePyramidIds;
   }
 }

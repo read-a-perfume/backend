@@ -114,7 +114,7 @@ class PerfumeControllerTest {
             .brandName("CHANEL")
             .categoryName("플로럴")
             .categoryTags("#달달한 #우아한 #꽃")
-            .thumbnail("testUrl.com")
+            .thumbnails(List.of("testUrl.com/1", "testUrl.com/11"))
             .notePyramidResult(notePyramidResult)
             .build();
 
@@ -137,7 +137,7 @@ class PerfumeControllerTest {
         .andExpect(jsonPath("$.brandName").value(perfumeResult.brandName()))
         .andExpect(jsonPath("$.categoryName").value(perfumeResult.categoryName()))
         .andExpect(jsonPath("$.categoryTags").value(perfumeResult.categoryTags()))
-        .andExpect(jsonPath("$.thumbnail").value(perfumeResult.thumbnail()))
+        .andExpect(jsonPath("$.thumbnails[0]").value(perfumeResult.thumbnails().get(0)))
         .andExpect(
             jsonPath("$.topNotes[0].name")
                 .value(perfumeResult.notePyramidResult().topNotes().get(0).name()))
@@ -166,7 +166,9 @@ class PerfumeControllerTest {
                     fieldWithPath("categoryTags")
                         .type(JsonFieldType.STRING)
                         .description("향수 카테고리 태그"),
-                    fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("향수 썸네일 URL"),
+                    fieldWithPath("thumbnails")
+                        .type(JsonFieldType.ARRAY)
+                        .description("향수 썸네일 URL 목록"),
                     fieldWithPath("topNotes").type(JsonFieldType.ARRAY).description("향수 탑 노트"),
                     fieldWithPath("topNotes[].id")
                         .type(JsonFieldType.NUMBER)
@@ -223,6 +225,7 @@ class PerfumeControllerTest {
             1L,
             1L,
             1L,
+            List.of(2L, 3L, 4L),
             "https://www.chanel.com/kr/fragrance/p/126520/chance-eau-de-parfum-spray/",
             List.of(1L, 2L, 3L),
             List.of(4L, 5L, 6L),
@@ -254,6 +257,9 @@ class PerfumeControllerTest {
                     fieldWithPath("thumbnailId")
                         .type(JsonFieldType.NUMBER)
                         .description("향수 썸네일 ID(PK)"),
+                    fieldWithPath("imageIds")
+                        .type(JsonFieldType.ARRAY)
+                        .description("향수 이미지 ID(PK) 배열"),
                     fieldWithPath("perfumeShopUrl")
                         .type(JsonFieldType.STRING)
                         .description("향수 쇼핑몰 URL"),

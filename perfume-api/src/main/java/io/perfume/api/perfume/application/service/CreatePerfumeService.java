@@ -31,6 +31,7 @@ public class CreatePerfumeService implements CreatePerfumeUseCase {
             .brandId(createPerfumeCommand.brandId())
             .categoryId(createPerfumeCommand.categoryId())
             .thumbnailId(createPerfumeCommand.thumbnailId())
+            .imageIds(createPerfumeCommand.imageIds())
             .notePyramidIds(notePyramidIds)
             .build();
 
