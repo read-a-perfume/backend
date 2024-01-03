@@ -17,14 +17,14 @@ public record PerfumeResult(
     String brandName,
     String categoryName,
     String categoryTags,
-    List<String> thumbnails,
+    List<String> images,
     NotePyramidResult notePyramidResult) {
 
   public static PerfumeResult from(
       Perfume perfume,
       CategoryResult categoryResult,
       BrandForPerfumeResult brandResult,
-      List<String> thumbnails,
+      List<String> images,
       NotePyramid notePyramid) {
     return PerfumeResult.builder()
         .name(perfume.getName())
@@ -34,7 +34,7 @@ public record PerfumeResult(
         .brandName(brandResult.name())
         .categoryName(categoryResult.name())
         .categoryTags(categoryResult.tags())
-        .thumbnails(thumbnails)
+        .images(images)
         .notePyramidResult(NotePyramidResult.from(notePyramid))
         .build();
   }

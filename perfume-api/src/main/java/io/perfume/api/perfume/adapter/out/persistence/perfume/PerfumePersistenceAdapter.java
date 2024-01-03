@@ -2,6 +2,8 @@ package io.perfume.api.perfume.adapter.out.persistence.perfume;
 
 import io.perfume.api.base.PersistenceAdapter;
 import io.perfume.api.perfume.adapter.out.persistence.perfume.mapper.PerfumeMapper;
+import io.perfume.api.perfume.adapter.out.persistence.perfumeImage.PerfumeImageEntity;
+import io.perfume.api.perfume.adapter.out.persistence.perfumeImage.PerfumeImageJpaRepository;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteEntity;
 import io.perfume.api.perfume.adapter.out.persistence.perfumeNote.PerfumeNoteJpaRepository;
 import io.perfume.api.perfume.application.port.out.PerfumeRepository;

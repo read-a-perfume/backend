@@ -1,4 +1,4 @@
-package io.perfume.api.perfume.adapter.out.persistence.perfume;
+package io.perfume.api.perfume.adapter.out.persistence.perfumeImage;
 
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;

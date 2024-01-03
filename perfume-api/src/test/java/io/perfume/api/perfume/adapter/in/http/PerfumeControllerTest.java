@@ -114,7 +114,7 @@ class PerfumeControllerTest {
             .brandName("CHANEL")
             .categoryName("플로럴")
             .categoryTags("#달달한 #우아한 #꽃")
-            .thumbnails(List.of("testUrl.com/1", "testUrl.com/11"))
+            .images(List.of("testUrl.com/1", "testUrl.com/11"))
             .notePyramidResult(notePyramidResult)
             .build();
 
@@ -137,7 +137,7 @@ class PerfumeControllerTest {
         .andExpect(jsonPath("$.brandName").value(perfumeResult.brandName()))
         .andExpect(jsonPath("$.categoryName").value(perfumeResult.categoryName()))
         .andExpect(jsonPath("$.categoryTags").value(perfumeResult.categoryTags()))
-        .andExpect(jsonPath("$.thumbnails[0]").value(perfumeResult.thumbnails().get(0)))
+        .andExpect(jsonPath("$.images[0]").value(perfumeResult.images().get(0)))
         .andExpect(
             jsonPath("$.topNotes[0].name")
                 .value(perfumeResult.notePyramidResult().topNotes().get(0).name()))
@@ -166,9 +166,7 @@ class PerfumeControllerTest {
                     fieldWithPath("categoryTags")
                         .type(JsonFieldType.STRING)
                         .description("향수 카테고리 태그"),
-                    fieldWithPath("thumbnails")
-                        .type(JsonFieldType.ARRAY)
-                        .description("향수 썸네일 URL 목록"),
+                    fieldWithPath("images").type(JsonFieldType.ARRAY).description("향수 썸네일 URL 목록"),
                     fieldWithPath("topNotes").type(JsonFieldType.ARRAY).description("향수 탑 노트"),
                     fieldWithPath("topNotes[].id")
                         .type(JsonFieldType.NUMBER)

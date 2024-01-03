@@ -1,4 +1,4 @@
-package io.perfume.api.perfume.adapter.out.persistence.perfume;
+package io.perfume.api.perfume.adapter.out.persistence.perfumeImage;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class PerfumeImageEntity extends BaseTimeEntity {
-  @EmbeddedId private PerfumeImageId perfumeId;
+  @EmbeddedId private PerfumeImageId perfumeImageId;
 
   public PerfumeImageEntity(Long perfumeId, Long imageId) {
-    this.perfumeId = new PerfumeImageId(perfumeId, imageId);
+    this.perfumeImageId = new PerfumeImageId(perfumeId, imageId);
   }
 }
