@@ -26,7 +26,6 @@ public class UserTypeController {
   private final UserTypeUseCase userTypeUseCase;
 
   @GetMapping("/{id}/types")
-  @PreAuthorize("isAuthenticated()")
   public List<UserTypeResponseDto> getTypes(@PathVariable Long id) {
     return userTypeUseCase.getUserTypes(id).stream().map(UserTypeResponseDto::from).toList();
   }
