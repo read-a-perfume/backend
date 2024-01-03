@@ -1,9 +1,12 @@
 package io.perfume.api.review.adapter.out.persistence.repository.tag;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.perfume.api.configuration.TestQueryDSLConfiguration;
 import io.perfume.api.review.adapter.out.persistence.repository.review.ReviewEntity;
+import io.perfume.api.review.adapter.out.persistence.repository.reviewtag.ReviewTagEntity;
+import io.perfume.api.review.adapter.out.persistence.repository.reviewtag.ReviewTagMapper;
+import io.perfume.api.review.adapter.out.persistence.repository.reviewtag.ReviewTagQueryPersistenceAdapter;
 import io.perfume.api.review.domain.Tag;
 import io.perfume.api.review.domain.type.DayType;
 import io.perfume.api.review.domain.type.Duration;
@@ -23,6 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @Import({
+  ReviewTagQueryPersistenceAdapter.class,
   TagQueryPersistenceAdapter.class,
   TagMapper.class,
   ReviewTagMapper.class,
@@ -30,13 +34,15 @@ import org.springframework.test.context.ActiveProfiles;
 })
 @DataJpaTest
 @EnableJpaAuditing
-class TagQueryPersistenceAdapterTest {
+class ReviewTagQueryPersistenceAdapterTest {
 
   @Autowired private TagMapper tagMapper;
 
   @Autowired private EntityManager entityManager;
 
-  @Autowired private TagQueryPersistenceAdapter queryRepository;
+  @Autowired private TagQueryPersistenceAdapter tagQueryRepository;
+
+  @Autowired private ReviewTagQueryPersistenceAdapter reviewQueryRepository;
 
   @Test
   @DisplayName("태그 id를 조회한다.")
@@ -48,10 +54,10 @@ class TagQueryPersistenceAdapterTest {
     var ids = List.of(entity.getId());
 
     // when
-    var result = queryRepository.findByIds(ids);
+    var result = tagQueryRepository.findByIds(ids);
 
     // then
-    assertThat(result.size()).isEqualTo(1L);
+    assertThat(result).hasSize(1);
     assertThat(result.get(0).getId()).isEqualTo(entity.getId());
   }
 
@@ -62,10 +68,10 @@ class TagQueryPersistenceAdapterTest {
     var ids = new ArrayList<Long>();
 
     // when
-    var result = queryRepository.findByIds(ids);
+    var result = tagQueryRepository.findByIds(ids);
 
     // then
-    assertThat(result.size()).isEqualTo(0);
+    assertThat(result).isEmpty();
   }
 
   @Test
@@ -93,9 +99,9 @@ class TagQueryPersistenceAdapterTest {
     entityManager.persist(new ReviewTagEntity(review.getId(), tag.getId(), now, now, null));
 
     // when
-    var result = queryRepository.findReviewTags(1L);
+    var result = reviewQueryRepository.findReviewTags(1L);
 
     // then
-    assertThat(result.size()).isEqualTo(1L);
+    assertThat(result).hasSize(1);
   }
 }

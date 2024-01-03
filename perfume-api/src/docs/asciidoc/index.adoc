@@ -347,6 +347,14 @@ include::{snippets}/get-reviews/http-request.adoc[]
 include::{snippets}/get-reviews/http-response.adoc[]
 include::{snippets}/get-reviews/response-fields.adoc[]
 
+== 리뷰 작성을 위한 태그 조회
+=== 요청
+include::{snippets}/get-all-tags/http-request.adoc[]
+
+=== 응답
+include::{snippets}/get-all-tags/http-response.adoc[]
+include::{snippets}/get-all-tags/response-fields.adoc[]
+
 == 리뷰 생성
 === 요청
 include::{snippets}/create-review/http-request.adoc[]

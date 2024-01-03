@@ -1,5 +1,6 @@
 package io.perfume.api.review.adapter.in.http;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -14,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewCommentRequestDto;
 import io.perfume.api.review.adapter.in.http.dto.CreateReviewRequestDto;
+import io.perfume.api.review.application.in.dto.TagResult;
+import io.perfume.api.review.application.in.tag.GetTagUseCase;
 import io.perfume.api.review.application.out.comment.ReviewCommentRepository;
 import io.perfume.api.review.application.out.review.ReviewRepository;
 import io.perfume.api.review.domain.Review;
@@ -32,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -64,6 +68,8 @@ class ReviewControllerTest {
 
   @Autowired private ReviewCommentRepository reviewCommentRepository;
 
+  @MockBean private GetTagUseCase getTagUseCase;
+
   @BeforeEach
   void setUp(
       WebApplicationContext webApplicationContext,
@@ -72,6 +78,27 @@ class ReviewControllerTest {
         MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .apply(documentationConfiguration(restDocumentation))
             .build();
+  }
+
+  @Test
+  @DisplayName("리뷰 작성에 필요한 태그를 조회한다.")
+  void getAllTags() throws Exception {
+    // given
+    given(getTagUseCase.getAll())
+        .willReturn(List.of(new TagResult(1L, "싱그러운"), new TagResult(1L, "화려한")));
+
+    // when & then
+    mockMvc
+        .perform(RestDocumentationRequestBuilders.get("/v1/reviews/tags"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].id").value(1))
+        .andExpect(jsonPath("$[0].name").value("싱그러운"))
+        .andDo(
+            document(
+                "get-all-tags",
+                responseFields(
+                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("태그 ID(PK)"),
+                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("태그 내용"))));
   }
 
   @Test

@@ -1,4 +1,4 @@
-package io.perfume.api.review.adapter.out.persistence.repository.tag;
+package io.perfume.api.review.adapter.out.persistence.repository.reviewtag;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

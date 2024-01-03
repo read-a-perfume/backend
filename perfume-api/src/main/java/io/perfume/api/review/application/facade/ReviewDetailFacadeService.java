@@ -231,7 +231,7 @@ public class ReviewDetailFacadeService
   @Override
   public ReviewResult create(Long authorId, CreateReviewCommand command) {
     final ReviewResult reviewDetailResult = reviewService.create(authorId, command);
-    reviewTagService.addTags(reviewDetailResult.id(), command.keywords());
+    reviewTagService.addReviewTags(reviewDetailResult.id(), command.keywords());
     reviewThumbnailService.addThumbnails(
         reviewDetailResult.id(), command.thumbnailIds(), command.now());
     return reviewDetailResult;

@@ -1,19 +1,19 @@
-package io.perfume.api.review.adapter.out.persistence.repository.tag;
+package io.perfume.api.review.adapter.out.persistence.repository.reviewtag;
 
 import io.perfume.api.base.PersistenceAdapter;
-import io.perfume.api.review.application.out.tag.TagRepository;
+import io.perfume.api.review.application.out.tag.ReviewTagRepository;
 import io.perfume.api.review.domain.ReviewTag;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
 @PersistenceAdapter
-public class TagPersistenceAdapter implements TagRepository {
+public class ReviewTagPersistenceAdapter implements ReviewTagRepository {
 
   private final ReviewTagJpaRepository reviewTagRepository;
 
   private final ReviewTagMapper reviewTagMapper;
 
-  public TagPersistenceAdapter(
+  public ReviewTagPersistenceAdapter(
       ReviewTagJpaRepository reviewTagRepository, ReviewTagMapper reviewTagMapper) {
     this.reviewTagRepository = reviewTagRepository;
     this.reviewTagMapper = reviewTagMapper;
