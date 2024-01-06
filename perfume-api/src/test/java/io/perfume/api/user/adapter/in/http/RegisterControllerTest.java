@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import encryptor.TwoWayEncryptor;
 import io.perfume.api.auth.application.port.out.AuthenticationKeyRepository;
 import io.perfume.api.auth.domain.AuthenticationKey;
+import io.perfume.api.user.adapter.in.http.dto.CheckEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.CheckUsernameRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.RegisterDto;
@@ -137,6 +138,31 @@ class RegisterControllerTest {
   }
 
   @Test
+  @DisplayName("이메일 인증 요청 시 이미 이메일을 가진 사용자가 있다면 예외를 반환한다.")
+  void testEmailVerifyRequestFail() throws Exception {
+    // given
+    String email = "sample@mail.com";
+    SendEmailVerifyCodeRequestDto dto = new SendEmailVerifyCodeRequestDto(email);
+    given(twoWayEncryptor.encrypt(any())).willReturn("");
+    LocalDateTime now = LocalDateTime.now();
+    given(mailSender.send(any(), any(), any())).willReturn(now);
+    doNothing().when(emailCodeRepository).save(any(), any(), any());
+    userRepository.save(
+        User.generalUserJoin("sample", "sample@mail.com", "password!@#$", false, false));
+
+    // when & then
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/v1/signup/email-verify/request")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(document("send-verify-code-failed"));
+  }
+
+  @Test
   @DisplayName("이메일 회원가입을 요청한다.")
   void testSignUpByEmail() throws Exception {
     // given
@@ -211,6 +237,29 @@ class RegisterControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isConflict())
         .andDo(document("check-username-failed"));
+  }
+
+  @Test
+  @DisplayName("이메일 중복 확인을 요청한다.")
+  void testCheckEmail() throws Exception {
+    // given
+    CheckEmailRequestDto dto = new CheckEmailRequestDto("sample@samlple.com");
+
+    // when & then
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/v1/signup/check-email")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isOk())
+        .andDo(
+            document(
+                "check-email",
+                requestFields(
+                    fieldWithPath("email")
+                        .type(JsonFieldType.STRING)
+                        .description("중복 확인을 요청할 이메일"))));
   }
 
   @Test

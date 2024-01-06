@@ -1,5 +1,6 @@
 package io.perfume.api.user.adapter.in.http;
 
+import io.perfume.api.user.adapter.in.http.dto.CheckEmailRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.CheckUsernameRequestDto;
 import io.perfume.api.user.adapter.in.http.dto.EmailSignUpResponseDto;
 import io.perfume.api.user.adapter.in.http.dto.EmailVerifyConfirmRequestDto;
@@ -48,6 +49,15 @@ public class RegisterController {
   @PostMapping("/check-username")
   public ResponseEntity<Void> checkUsername(@RequestBody @Valid CheckUsernameRequestDto dto) {
     if (createUserUseCase.validDuplicateUsername(dto.username())) {
+      return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+  }
+
+  @PostMapping("/check-email")
+  public ResponseEntity<Void> checkEmail(@RequestBody @Valid CheckEmailRequestDto dto) {
+    if (createUserUseCase.validDuplicateEmail(dto.email())) {
       return ResponseEntity.status(HttpStatus.OK).build();
     }
 

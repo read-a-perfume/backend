@@ -24,6 +24,9 @@ include::{snippets}/send-verify-code/request-fields.adoc[]
 include::{snippets}/send-verify-code/http-response.adoc[]
 include::{snippets}/send-verify-code/response-fields.adoc[]
 
+=== 실패 응답
+include::{snippets}/send-verify-code-failed/http-response.adoc[]
+
 == 아이디 중복 확인
 === 요청
 include::{snippets}/check-username/http-request.adoc[]
