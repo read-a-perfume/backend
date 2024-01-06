@@ -2,6 +2,7 @@ package io.perfume.api.user.application.service;
 
 import io.perfume.api.auth.application.port.in.CheckEmailCertificateUseCase;
 import io.perfume.api.auth.application.port.in.CreateVerificationCodeUseCase;
+import io.perfume.api.user.application.exception.DuplicateEmailException;
 import io.perfume.api.user.application.exception.FailedRegisterException;
 import io.perfume.api.user.application.exception.UserConflictException;
 import io.perfume.api.user.application.port.in.CreateUserUseCase;
@@ -89,6 +90,15 @@ public class RegisterService implements CreateUserUseCase {
   }
 
   @Override
+  public boolean validDuplicateEmail(String email) {
+    try {
+      return userQueryRepository.findOneByEmail(email).isEmpty();
+    } catch (Exception e) {
+      return true;
+    }
+  }
+
+  @Override
   public ConfirmEmailVerifyResult confirmEmailVerify(String email, String code) {
     emailCodeRepository.verify(email, code);
     LocalDateTime now = LocalDateTime.now();
@@ -102,6 +112,10 @@ public class RegisterService implements CreateUserUseCase {
     //        new CreateVerificationCodeCommand(command.email(), command.now());
     //    CreateVerificationCodeResult result =
     //        createVerificationCodeUseCase.createVerificationCode(createVerificationCodeCommand);
+    if (!validDuplicateEmail(command.email())) {
+      throw new DuplicateEmailException();
+    }
+
     String code = UUID.randomUUID().toString().substring(0, 6);
 
     LocalDateTime sentAt = mailSender.send(command.email(), "Read A Perfume 이메일을 인증해 주세요.", code);
