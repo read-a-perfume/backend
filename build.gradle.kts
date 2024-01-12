@@ -40,7 +40,7 @@ subprojects {
         // kotlin
         implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22")
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
 
         // spring boot
         implementation("org.springframework.boot:spring-boot-starter:3.2.1")
