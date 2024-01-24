@@ -35,7 +35,7 @@ dependencies {
     annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
 
     testImplementation("com.h2database:h2:2.2.224")
-    testImplementation("org.mockito:mockito-core:5.9.0")
+    testImplementation("org.mockito:mockito-core:5.10.0")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
     testImplementation("io.rest-assured:rest-assured:5.4.0")
