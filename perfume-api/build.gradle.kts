@@ -7,7 +7,7 @@ dependencies {
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
 
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.1")
-    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
 
     implementation("org.springframework.boot:spring-boot-starter-validation:3.2.1")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.1")
@@ -22,7 +22,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     implementation("mysql:mysql-connector-java:8.0.33")
     implementation("com.zaxxer:HikariCP:5.1.0")
-    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
     implementation("org.flywaydb:flyway-mysql:9.22.3")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.1")
