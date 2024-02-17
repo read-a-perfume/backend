@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.2.1"
+    id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.4"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
     id("org.graalvm.buildtools.native") version "0.9.28"
@@ -43,10 +43,10 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
 
         // spring boot
-        implementation("org.springframework.boot:spring-boot-starter:3.2.1")
+        implementation("org.springframework.boot:spring-boot-starter:3.2.2")
 
         // test
-        testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.1")
+        testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.2")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
         testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
