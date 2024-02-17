@@ -9,11 +9,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.1")
     implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
 
+    implementation("org.springframework.boot:spring-boot-starter-actuator:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.2.1")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.1")
     implementation("org.springframework.boot:spring-boot-starter-security:3.2.1")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.2.1")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.0.4")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.1")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.1")
