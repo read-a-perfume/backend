@@ -58,7 +58,7 @@ jobs:
           path: /home/ubuntu/backend/build/
 
       - name: 배포하기
-        run: /home/ubuntu/backend/deploy.sh
+        run: sh /home/ubuntu/backend/deploy.sh
 
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
