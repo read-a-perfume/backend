@@ -1,10 +1,11 @@
 # Read a perfume Backend
 
-## CI/CD
+## 💭 서비스 소개
+Read A Perfume은 향수에 대한 리뷰를 남길 수 있는 플랫폼으로, 사용자의 리뷰를 기반으로 향수가 어떤지 한눈에 확인하고 더 나은 향수 선택을 할 수 있도록 하면 어떨까 라는 생각에서 시작되었습니다. 🍾
 
-![image](https://github.com/read-a-perfume/backend/assets/72547111/e33f6a85-bfc0-43df-ae67-f4a591be2ff9)
+다양한 향수를 내 취향에 맞는 카테고리 별로 살펴보고, 다양한 사용자가 작성한 향수에 대한 리뷰로 합리적인 향수를 구매해보아요!
 
-## 사용 툴
+## ⚒️ 사용 툴
 - Java 17
 - Spring Boot
 - Spring Data JPA
@@ -16,8 +17,11 @@
 - Mockito
 - Renovate
 
+## 🎞️ ERD
+![erd](https://github.com/read-a-perfume/backend/assets/56705221/32312877-d92d-4289-85c4-f6f6ace363be?size=300)
 
-## 개발 환경 준비
+
+## 🏃🏻‍♀️ 실행 방법
 
 ### 프로젝트 자바 설치&적용
 
@@ -38,13 +42,11 @@ docker-compose up -d
 ./gradlew :perfume-core:clean :perfume-api:clean :perfume-api:bootRun
 ```
 
-## 도구 링크
+## ✅ CI/CD
 
-- [Jabba](https://github.com/shyiko/jabba)
-- [Docker](https://www.docker.com/)
-- [IntelliJ](https://www.jetbrains.com/idea/)
+![image](https://github.com/read-a-perfume/backend/assets/72547111/e33f6a85-bfc0-43df-ae67-f4a591be2ff9)
 
-## 로컬 환경 개발 가이드
+## ⚠️ 로컬 환경 개발 가이드
 ### PathVariable 값 못 읽어오는 현상
 - Spring 6.X 버전을 사용함으로 인해 인텔리제이에서 어플리케이션 구동 시 @PathVariable으로 값을 못읽어오는 현상이 발생할 수 있습니다.
 - 이럴 경우에는 인텔리제이에서 `Preferences > Build, Execution, Deployment > Compiler > Java Complier` 에서 `addditional command line parameters`에 `-parameters`를 추가해주세요.
