@@ -38,7 +38,7 @@ jobs:
       run: ./gradlew :perfume-core:clean :perfume-api:clean :perfume-api:bootJar
         
     - name: Upload jar file to artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: BackendApplication
         path: perfume-api/build/libs/perfume-api-0.0.1.jar
@@ -52,7 +52,7 @@ jobs:
         run: rm -rf /home/ubuntu/backend/build/*.jar 
 
       - name: Download jar file from artifact
-        uses: actions/download-artifact@v3 
+        uses: actions/download-artifact@v4 
         with:
           name: BackendApplication
           path: /home/ubuntu/backend/build/
