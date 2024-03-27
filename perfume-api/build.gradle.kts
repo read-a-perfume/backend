@@ -6,18 +6,18 @@ dependencies {
 
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
 
-    implementation("org.springframework.boot:spring-boot-starter-web:3.2.2")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.2.4")
     implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
 
-    implementation("org.springframework.boot:spring-boot-starter-actuator:3.2.2")
-    implementation("org.springframework.boot:spring-boot-starter-validation:3.2.2")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.2")
-    implementation("org.springframework.boot:spring-boot-starter-security:3.2.2")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.2.2")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.2.2")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.2")
+    implementation("org.springframework.boot:spring-boot-starter-actuator:3.2.4")
+    implementation("org.springframework.boot:spring-boot-starter-validation:3.2.4")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.4")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.2.4")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.2.4")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.2.4")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.4")
 
-    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.2")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.4")
 
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
@@ -26,11 +26,11 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
     implementation("org.flywaydb:flyway-mysql:9.22.3")
 
-    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.2")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.4")
     compileOnly("org.projectlombok:lombok:1.18.30")
 
     annotationProcessor("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.2")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.4")
     annotationProcessor("com.querydsl:querydsl-apt:5.1.0:jakarta")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api:2.1.1")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
