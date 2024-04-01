@@ -10,7 +10,7 @@ plugins {
     id("com.diffplug.spotless") version "6.25.0"
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
-    kotlin("plugin.jpa") version "1.9.22"
+    kotlin("plugin.jpa") version "1.9.23"
 }
 
 group = "io.perfume"
