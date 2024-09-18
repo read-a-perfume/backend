@@ -19,17 +19,17 @@ dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.4")
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
     implementation("mysql:mysql-connector-java:8.0.33")
     implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
     implementation("org.flywaydb:flyway-mysql:9.22.3")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.4")
-    compileOnly("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok:1.18.34")
 
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.4")
     annotationProcessor("com.querydsl:querydsl-apt:5.1.0:jakarta")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api:2.1.1")
