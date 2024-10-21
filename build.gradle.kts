@@ -47,8 +47,8 @@ subprojects {
 
         // test
         testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.4")
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
         testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
         testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
     }
