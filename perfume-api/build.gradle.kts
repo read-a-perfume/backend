@@ -40,7 +40,7 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
     testImplementation("io.rest-assured:rest-assured:5.4.0")
-    testImplementation("org.springframework.security:spring-security-test:6.2.1")
+    testImplementation("org.springframework.security:spring-security-test:6.3.4")
 
     implementation(platform("software.amazon.awssdk:bom:2.23.9"))
     implementation("software.amazon.awssdk:s3:2.23.9")
