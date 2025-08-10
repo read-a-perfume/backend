@@ -9,7 +9,7 @@ plugins {
     id("org.asciidoctor.jvm.convert") version "3.3.2"
     id("com.diffplug.spotless") version "6.25.0"
     kotlin("jvm") version "1.9.23"
-    kotlin("plugin.spring") version "1.9.22"
+    kotlin("plugin.spring") version "1.9.25"
     kotlin("plugin.jpa") version "1.9.23"
 }
 
