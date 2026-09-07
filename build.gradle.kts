@@ -8,9 +8,9 @@ plugins {
     id("org.graalvm.buildtools.native") version "0.9.28"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
     id("com.diffplug.spotless") version "6.25.0"
-    kotlin("jvm") version "1.9.23"
+    kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.22"
-    kotlin("plugin.jpa") version "1.9.23"
+    kotlin("plugin.jpa") version "1.9.25"
 }
 
 group = "io.perfume"
@@ -38,8 +38,8 @@ subprojects {
 
     dependencies {
         // kotlin
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.25")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
 
         // spring boot
